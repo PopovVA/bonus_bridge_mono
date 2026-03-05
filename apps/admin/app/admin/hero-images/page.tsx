@@ -1,12 +1,12 @@
 import { ResourceTable } from '@/components/resource-table'
 import { createAdminApiClient } from '@/lib/api/admin-client'
-import { getAccessToken } from '@/lib/auth'
+import { getAccessToken, getAccessTokenForMutation } from '@/lib/auth'
 import { HeroImageCreateSchema, HeroImageUpdateSchema, type HeroImage } from '@bonusbridge/shared'
 import { revalidatePath } from 'next/cache'
 
 async function createHeroImageAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }
@@ -23,7 +23,7 @@ async function createHeroImageAction(formData: FormData) {
 
 async function updateHeroImageAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }
@@ -46,7 +46,7 @@ async function updateHeroImageAction(formData: FormData) {
 
 async function deleteHeroImageAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }

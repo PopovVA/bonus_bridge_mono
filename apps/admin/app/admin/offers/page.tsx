@@ -1,12 +1,12 @@
 import { ResourceTable } from '@/components/resource-table'
 import { createAdminApiClient } from '@/lib/api/admin-client'
-import { getAccessToken } from '@/lib/auth'
+import { getAccessToken, getAccessTokenForMutation } from '@/lib/auth'
 import { OfferCreateSchema, OfferUpdateSchema, type Offer, type Service } from '@bonusbridge/shared'
 import { revalidatePath } from 'next/cache'
 
 async function createCouponAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }
@@ -31,7 +31,7 @@ async function createCouponAction(formData: FormData) {
 
 async function updateCouponAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }

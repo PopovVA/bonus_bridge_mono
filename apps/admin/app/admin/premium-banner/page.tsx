@@ -1,12 +1,12 @@
 import { ResourceTable } from '@/components/resource-table'
 import { createAdminApiClient } from '@/lib/api/admin-client'
-import { getAccessToken } from '@/lib/auth'
+import { getAccessToken, getAccessTokenForMutation } from '@/lib/auth'
 import { PremiumBannerCreateSchema, PremiumBannerUpdateSchema, type PremiumBanner } from '@bonusbridge/shared'
 import { revalidatePath } from 'next/cache'
 
 async function createPremiumBannerAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }
@@ -27,7 +27,7 @@ async function createPremiumBannerAction(formData: FormData) {
 
 async function updatePremiumBannerAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }
@@ -54,7 +54,7 @@ async function updatePremiumBannerAction(formData: FormData) {
 
 async function deletePremiumBannerAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }

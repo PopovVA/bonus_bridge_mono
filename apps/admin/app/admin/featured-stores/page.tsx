@@ -1,12 +1,12 @@
 import { ResourceTable } from '@/components/resource-table'
 import { createAdminApiClient } from '@/lib/api/admin-client'
-import { getAccessToken } from '@/lib/auth'
+import { getAccessToken, getAccessTokenForMutation } from '@/lib/auth'
 import { FeaturedStoreCreateSchema, FeaturedStoreUpdateSchema, type FeaturedStore, type Service } from '@bonusbridge/shared'
 import { revalidatePath } from 'next/cache'
 
 async function createFeaturedStoreAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }
@@ -23,7 +23,7 @@ async function createFeaturedStoreAction(formData: FormData) {
 
 async function updateFeaturedStoreAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }
@@ -46,7 +46,7 @@ async function updateFeaturedStoreAction(formData: FormData) {
 
 async function deleteFeaturedStoreAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }

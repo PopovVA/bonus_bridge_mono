@@ -1,12 +1,12 @@
 import { ResourceTable } from '@/components/resource-table'
 import { createAdminApiClient } from '@/lib/api/admin-client'
-import { getAccessToken } from '@/lib/auth'
+import { getAccessToken, getAccessTokenForMutation } from '@/lib/auth'
 import { CategoryCreateSchema, CategoryUpdateSchema, toSlug, type Category } from '@bonusbridge/shared'
 import { revalidatePath } from 'next/cache'
 
 async function createCategoryAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }
@@ -25,7 +25,7 @@ async function createCategoryAction(formData: FormData) {
 
 async function updateCategoryAction(formData: FormData) {
   'use server'
-  const accessToken = await getAccessToken()
+  const accessToken = await getAccessTokenForMutation()
   if (!accessToken) {
     return
   }
