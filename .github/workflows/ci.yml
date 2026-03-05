@@ -23,14 +23,17 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Build shared (pre-lint)
+        run: pnpm --filter @bonusbridge/shared build
+
+      - name: Generate Prisma Client (pre-lint)
+        run: pnpm --filter api prisma:generate
+
       - name: Lint
         run: pnpm lint
 
       - name: Test
         run: pnpm test
-
-      - name: Build shared
-        run: pnpm --filter @bonusbridge/shared build
 
       - name: Build api
         run: pnpm --filter api build
