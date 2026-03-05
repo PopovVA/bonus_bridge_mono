@@ -34,3 +34,9 @@ From repo root:
 - src/schemas/\* (OfferSchema, ServiceSchema, etc.)
 - src/types/\* (if any extra types)
 - src/index.ts (re-exports)
+
+## Multi-agent trigger
+
+- If user writes `действуйте командой` or `Командой делаем`, execution MUST switch to strict multi-agent mode with role chain:
+  PM -> User approval -> Full-Stack Dev -> UI/UX -> Architect -> QA.
+- Single-agent execution is forbidden for this trigger.

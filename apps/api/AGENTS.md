@@ -41,6 +41,12 @@ From repo root:
 
 ## Notes for multi-agent handoff
 
+Trigger rule:
+
+- If user writes `действуйте командой` or `Командой делаем`, execution MUST switch to strict multi-agent mode with role chain:
+  PM -> User approval -> Full-Stack Dev -> UI/UX -> Architect -> QA.
+- Single-agent execution is forbidden for this trigger.
+
 If you changed an endpoint:
 
 - Update packages/shared schema/types

@@ -39,5 +39,8 @@ From repo root:
 
 ## Multi-agent boundary
 
+- If user writes `действуйте командой` or `Командой делаем`, execution MUST switch to strict multi-agent mode with role chain:
+  PM -> User approval -> Full-Stack Dev -> UI/UX -> Architect -> QA.
+- Single-agent execution is forbidden for this trigger.
 - Do not modify apps/api or apps/web.
 - If you need an API change, request it and specify the exact contract needed.
