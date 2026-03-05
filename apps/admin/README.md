@@ -4,7 +4,8 @@ Internal Next.js admin panel with Supabase auth scaffold and typed API client.
 
 ## Notes
 - `/admin/*` requires authenticated user with `admin` role claim in Next.js proxy.
-- Current CRUD pages are read-only operational previews (no fake action buttons).
+- Services page supports create/update for name, slug, category, website (service link), logoUrl (icon), and description.
+- Coupons page supports create/update for offers including required `previewText` and optional `couponCode`.
 
 ## Commands
 - `pnpm --filter admin dev`

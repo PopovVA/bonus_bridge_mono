@@ -9,3 +9,6 @@ Public SEO web app built with Next.js App Router.
 
 ## Env
 - `NEXT_PUBLIC_API_BASE_URL`
+
+## Coupon Route
+- `/services/[slug]/coupons` renders service-specific coupons with preview text, service link, and copy button (code or referral URL fallback).

@@ -6,7 +6,8 @@ vi.mock('@/lib/api-client', () => ({
   getCountries: vi.fn(),
   getServices: vi.fn(),
   getOffers: vi.fn(),
-  getOfferById: vi.fn()
+  getOfferById: vi.fn(),
+  getServiceBySlug: vi.fn()
 }))
 
 import HomePage from './page'
@@ -15,8 +16,9 @@ import CountriesPage from './countries/page'
 import ServicesPage from './services/page'
 import OffersPage from './offers/page'
 import OfferDetailsPage, { generateMetadata } from './offers/[offerId]/page'
+import ServiceCouponsPage, { generateMetadata as generateServiceCouponsMetadata } from './services/[slug]/coupons/page'
 import { EmptyState } from '@/components/empty-state'
-import { getCountries, getOfferById, getOffers, getServices } from '@/lib/api-client'
+import { getCountries, getOfferById, getOffers, getServiceBySlug, getServices } from '@/lib/api-client'
 
 (globalThis as { React?: typeof React }).React = React
 
@@ -42,7 +44,7 @@ describe('web routes', () => {
   it('renders countries/services/offers pages', async () => {
     vi.mocked(getCountries).mockResolvedValue([{ id: 'c1', name: 'US', code: 'US' } as never])
     vi.mocked(getServices).mockResolvedValue([
-      { id: 's1', name: 'Service', slug: 'service', description: 'Desc' } as never,
+      { id: 's1', name: 'Service', slug: 'service', description: 'Desc', website: 'https://service.example' } as never,
       { id: 's2', name: 'No Description', slug: 'no-description' } as never
     ])
     vi.mocked(getOffers).mockResolvedValue([
@@ -149,5 +151,82 @@ describe('web routes', () => {
     )
     expect(html).toContain('BonusBridge')
     expect(html).toContain('Countries')
+  })
+
+  it('renders service coupons page and metadata', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's1',
+      name: 'Service',
+      slug: 'service',
+      categoryId: 'c1',
+      website: 'https://service.example',
+      logoUrl: 'https://service.example/logo.svg',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([
+      {
+        id: 'o1',
+        serviceId: 's1',
+        countryId: 'c1',
+        title: 'Coupon One',
+        previewText: 'Preview text',
+        couponCode: 'CODE10',
+        referralUrl: 'https://coupon.example',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      } as never,
+      {
+        id: 'o2',
+        serviceId: 's1',
+        countryId: 'c1',
+        title: 'Coupon Two',
+        previewText: 'Fallback copy to referral URL',
+        referralUrl: 'https://coupon.example/fallback',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      } as never
+    ])
+
+    const html = renderToStaticMarkup(await ServiceCouponsPage({ params: Promise.resolve({ slug: 'service' }) }))
+    expect(html).toContain('Service coupons')
+    expect(html).toContain('Preview text')
+    await expect(
+      generateServiceCouponsMetadata({ params: Promise.resolve({ slug: 'service' }) })
+    ).resolves.toMatchObject({ title: 'Service coupons | BonusBridge' })
+  })
+
+  it('renders fallback branches for service coupons page', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's1',
+      name: 'Service',
+      slug: 'service',
+      categoryId: 'c1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([])
+    const noCouponsHtml = renderToStaticMarkup(await ServiceCouponsPage({ params: Promise.resolve({ slug: 'service' }) }))
+    expect(noCouponsHtml).toContain('No active coupons for this service yet.')
+
+    vi.mocked(getServiceBySlug).mockResolvedValueOnce(null as never).mockResolvedValueOnce(null as never)
+    const missingHtml = renderToStaticMarkup(await ServiceCouponsPage({ params: Promise.resolve({ slug: 'missing' }) }))
+    expect(missingHtml).toContain('Service not found')
+    await expect(
+      generateServiceCouponsMetadata({ params: Promise.resolve({ slug: 'missing' }) })
+    ).resolves.toMatchObject({ title: 'Service coupons not found | BonusBridge' })
+  })
+
+  it('handles rejected service coupon data fetches', async () => {
+    vi.mocked(getServiceBySlug).mockRejectedValueOnce(new Error('down')).mockRejectedValueOnce(new Error('down'))
+    vi.mocked(getOffers).mockRejectedValueOnce(new Error('down'))
+
+    const html = renderToStaticMarkup(await ServiceCouponsPage({ params: Promise.resolve({ slug: 'service' }) }))
+    expect(html).toContain('Service not found or API is unavailable.')
+    await expect(
+      generateServiceCouponsMetadata({ params: Promise.resolve({ slug: 'service' }) })
+    ).resolves.toMatchObject({ title: 'Service coupons not found | BonusBridge' })
   })
 })

@@ -26,15 +26,38 @@ async function main() {
     }
   })
 
-  await prisma.offer.create({
-    data: {
-      title: 'Welcome bonus',
+  const existingOffer = await prisma.offer.findFirst({
+    where: {
       serviceId: service.id,
       countryId: us.id,
-      referralUrl: 'https://example.com/r/bonus',
-      status: 'active'
-    }
+      referralUrl: 'https://example.com/r/bonus'
+    },
+    select: { id: true }
   })
+
+  if (existingOffer) {
+    await prisma.offer.update({
+      where: { id: existingOffer.id },
+      data: {
+        title: 'Welcome bonus',
+        previewText: 'Sign up and enter the code to receive a welcome coupon bonus.',
+        couponCode: 'WELCOME10',
+        status: 'active'
+      }
+    })
+  } else {
+    await prisma.offer.create({
+      data: {
+        title: 'Welcome bonus',
+        previewText: 'Sign up and enter the code to receive a welcome coupon bonus.',
+        couponCode: 'WELCOME10',
+        serviceId: service.id,
+        countryId: us.id,
+        referralUrl: 'https://example.com/r/bonus',
+        status: 'active'
+      }
+    })
+  }
 }
 
 main()

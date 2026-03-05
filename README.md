@@ -6,6 +6,10 @@ Referral and bonus aggregator with:
 - `apps/admin` admin panel (Next.js)
 - `packages/shared` shared Zod contracts and TypeScript types
 
+## New Coupon Flow
+- Web route: `/services/[slug]/coupons` shows coupons by service with copy-to-clipboard.
+- Admin supports creating/updating services (name, icon/logoUrl, service link) and coupons (including `previewText` and optional `couponCode`).
+
 ## Stack
 - Node.js `22.22.0` via nvm (`.nvmrc`)
 - pnpm workspaces

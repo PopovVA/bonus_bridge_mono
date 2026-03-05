@@ -31,6 +31,8 @@ describe('shared contracts', () => {
       serviceId: '550e8400-e29b-41d4-a716-446655440000',
       countryId: '550e8400-e29b-41d4-a716-446655440001',
       title: 'Get welcome bonus',
+      previewText: 'Use this code during checkout to receive the bonus.',
+      couponCode: 'WELCOME10',
       referralUrl: 'https://example.com/r/bonus'
     })
     const referral = ReferralCreateSchema.parse({
@@ -39,6 +41,7 @@ describe('shared contracts', () => {
     })
 
     expect(offer.status).toBe('draft')
+    expect(offer.couponCode).toBe('WELCOME10')
     expect(referral.email).toBe('user@example.com')
   })
 

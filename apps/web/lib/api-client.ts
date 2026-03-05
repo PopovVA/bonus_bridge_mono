@@ -49,6 +49,10 @@ export async function getServices(): Promise<Service[]> {
   return unwrapList(parsed)
 }
 
+export async function getServiceBySlug(slug: string): Promise<Service> {
+  return requestJson(`/services/${slug}`, ServiceSchema)
+}
+
 export async function getOffers(query: Partial<z.infer<typeof OffersListQuerySchema>> = {}): Promise<Offer[]> {
   const normalized = OffersListQuerySchema.partial().parse(query)
   const parsed = await requestJson('/offers', listEnvelopeSchema(OfferSchema), normalized)

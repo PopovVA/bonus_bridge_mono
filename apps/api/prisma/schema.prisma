@@ -48,6 +48,8 @@ model Offer {
   service     Service     @relation(fields: [serviceId], references: [id], onDelete: Restrict)
   country     Country     @relation(fields: [countryId], references: [id], onDelete: Restrict)
   title       String
+  previewText String
+  couponCode  String?
   bonusAmount String?
   description String?
   referralUrl String

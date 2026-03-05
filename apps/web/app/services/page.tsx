@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { EmptyState } from '@/components/empty-state'
 import { getServices } from '@/lib/api-client'
 
@@ -24,6 +25,14 @@ export default async function ServicesPage() {
               <p className="meta" style={{ marginTop: 0 }}>
                 Slug: {service.slug}
               </p>
+              <div className="row">
+                <Link href={`/services/${service.slug}/coupons`}>View coupons</Link>
+                {service.website ? (
+                  <a href={service.website} target="_blank" rel="noreferrer">
+                    Service link
+                  </a>
+                ) : null}
+              </div>
               {service.description ? <p>{service.description}</p> : null}
             </article>
           ))}

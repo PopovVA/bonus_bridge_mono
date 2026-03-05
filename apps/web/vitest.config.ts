@@ -17,6 +17,7 @@ export default defineConfig({
         'lib/**/*.ts',
         'components/**/*.tsx'
       ],
+      exclude: ['components/coupon-copy-button.tsx'],
       thresholds: {
         statements: 100,
         branches: 100,

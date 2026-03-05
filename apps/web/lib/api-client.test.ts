@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { getCountries, getOfferById, getOffers, getServices } from './api-client'
+import { getCountries, getOfferById, getOffers, getServiceBySlug, getServices } from './api-client'
 
 describe('web api-client', () => {
   beforeEach(() => {
@@ -10,6 +10,21 @@ describe('web api-client', () => {
         if (url.includes('/countries')) {
           return new Response(JSON.stringify([{ id: '550e8400-e29b-41d4-a716-446655440010', name: 'US', code: 'US', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }]), { status: 200 })
         }
+        if (url.includes('/services/') && !url.endsWith('/services')) {
+          return new Response(
+            JSON.stringify({
+              id: '550e8400-e29b-41d4-a716-446655440011',
+              name: 'Service',
+              slug: 'service',
+              categoryId: '550e8400-e29b-41d4-a716-446655440000',
+              website: 'https://service.example',
+              logoUrl: 'https://service.example/logo.svg',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            }),
+            { status: 200 }
+          )
+        }
         if (url.includes('/services')) {
           return new Response(
             JSON.stringify({ items: [{ id: '550e8400-e29b-41d4-a716-446655440011', name: 'Service', slug: 'service', categoryId: '550e8400-e29b-41d4-a716-446655440000', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }], total: 1 }),
@@ -18,13 +33,13 @@ describe('web api-client', () => {
         }
         if (url.includes('/offers/')) {
           return new Response(
-            JSON.stringify({ id: '550e8400-e29b-41d4-a716-446655440000', serviceId: '550e8400-e29b-41d4-a716-446655440001', countryId: '550e8400-e29b-41d4-a716-446655440002', title: 'Offer', referralUrl: 'https://example.com', status: 'active', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }),
+            JSON.stringify({ id: '550e8400-e29b-41d4-a716-446655440000', serviceId: '550e8400-e29b-41d4-a716-446655440001', countryId: '550e8400-e29b-41d4-a716-446655440002', title: 'Offer', previewText: 'Preview', couponCode: 'CODE10', referralUrl: 'https://example.com', status: 'active', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }),
             { status: 200 }
           )
         }
 
         return new Response(
-          JSON.stringify({ items: [{ id: '550e8400-e29b-41d4-a716-446655440000', serviceId: '550e8400-e29b-41d4-a716-446655440001', countryId: '550e8400-e29b-41d4-a716-446655440002', title: 'Offer', referralUrl: 'https://example.com', status: 'active', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] }),
+          JSON.stringify({ items: [{ id: '550e8400-e29b-41d4-a716-446655440000', serviceId: '550e8400-e29b-41d4-a716-446655440001', countryId: '550e8400-e29b-41d4-a716-446655440002', title: 'Offer', previewText: 'Preview', couponCode: 'CODE10', referralUrl: 'https://example.com', status: 'active', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] }),
           { status: 200 }
         )
       }) as never
@@ -34,6 +49,7 @@ describe('web api-client', () => {
   it('parses list and details payloads', async () => {
     await expect(getCountries()).resolves.toHaveLength(1)
     await expect(getServices()).resolves.toHaveLength(1)
+    await expect(getServiceBySlug('service')).resolves.toMatchObject({ slug: 'service' })
     await expect(getOffers()).resolves.toHaveLength(1)
     await expect(getOfferById('550e8400-e29b-41d4-a716-446655440000')).resolves.toMatchObject({ title: 'Offer' })
   })
