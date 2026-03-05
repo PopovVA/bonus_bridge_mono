@@ -1,0 +1,13 @@
+{
+  "name": "bonusbridge",
+  "private": true,
+  "packageManager": "pnpm@10.6.5",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "lint": "pnpm -r lint",
+    "test": "pnpm --filter @bonusbridge/shared build && pnpm -r test",
+    "build": "pnpm --filter @bonusbridge/shared build && pnpm --filter api build && pnpm --filter web build && pnpm --filter admin build"
+  }
+}

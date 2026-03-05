@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Country {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  code      String   @unique @db.Char(2)
+  offers    Offer[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id        String    @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String    @unique
+  services  Service[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Service {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String   @unique
+  categoryId  String   @db.Uuid
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  website     String?
+  description String?
+  logoUrl     String?
+  offers      Offer[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([categoryId])
+}
+
+model Offer {
+  id          String      @id @default(uuid()) @db.Uuid
+  serviceId   String      @db.Uuid
+  countryId   String      @db.Uuid
+  service     Service     @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  country     Country     @relation(fields: [countryId], references: [id], onDelete: Restrict)
+  title       String
+  bonusAmount String?
+  description String?
+  referralUrl String
+  terms       String?
+  status      OfferStatus @default(draft)
+  referrals   Referral[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([serviceId])
+  @@index([countryId])
+  @@index([status])
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique
+  role      UserRole @default(user)
+  referrals Referral[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Referral {
+  id           String         @id @default(uuid()) @db.Uuid
+  offerId      String         @db.Uuid
+  userId       String?        @db.Uuid
+  offer        Offer          @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  user         User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  referralUrl  String?
+  referralCode String?
+  email        String?
+  status       ReferralStatus @default(pending)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([offerId])
+  @@index([status])
+}
+
+enum OfferStatus {
+  draft
+  active
+  expired
+}
+
+enum ReferralStatus {
+  pending
+  approved
+  rejected
+}
+
+enum UserRole {
+  user
+  admin
+}
