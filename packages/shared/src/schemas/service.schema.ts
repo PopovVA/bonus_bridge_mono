@@ -1,6 +1,14 @@
 import { z } from 'zod'
 import { SlugSchema, UrlSchema, UuidSchema } from './common.schema'
 
+const SvgSchema = z
+  .string()
+  .max(65536)
+  .optional()
+  .nullable()
+  .transform((v) => (v?.trim() ? v.trim() : undefined))
+  .refine((v) => !v || v.startsWith('<svg'), { message: 'Must be valid SVG markup' })
+
 export const ServiceSchema = z.object({
   id: UuidSchema,
   name: z.string().min(1).max(120),
@@ -8,7 +16,7 @@ export const ServiceSchema = z.object({
   categoryId: UuidSchema,
   website: UrlSchema.optional().nullable(),
   description: z.string().max(4000).optional().nullable(),
-  logoUrl: UrlSchema.optional().nullable(),
+  logoSvg: SvgSchema,
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime()
 })
@@ -19,13 +27,12 @@ export const ServiceCreateSchema = z.object({
   categoryId: UuidSchema,
   website: UrlSchema.optional(),
   description: z.string().max(4000).optional(),
-  logoUrl: UrlSchema.optional()
+  logoSvg: SvgSchema
 })
 
 export const ServiceUpdateSchema = ServiceCreateSchema.partial()
 
 export const ServicesListQuerySchema = z.object({
-  country: z.string().length(2).optional(),
   category: SlugSchema.optional(),
   q: z.string().min(1).max(120).optional(),
   limit: z.coerce.number().int().min(1).max(100).default(20),

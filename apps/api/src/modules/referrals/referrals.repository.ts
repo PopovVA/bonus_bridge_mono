@@ -21,7 +21,6 @@ export class ReferralsRepository {
         include: {
           offer: {
             include: {
-              country: true,
               service: { include: { category: true } }
             }
           },

@@ -4,7 +4,7 @@
 
 Internal admin panel:
 
-- CRUD: countries, categories, services, offers
+- CRUD: categories, services, offers
 - Moderation: user-submitted referrals/offers (approve/reject)
 - Audit: track updates (updated_at/updated_by where applicable)
 - Must follow shared style guide: `docs/design-references.md` (repo root).

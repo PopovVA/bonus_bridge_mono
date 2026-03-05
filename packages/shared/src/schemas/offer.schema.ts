@@ -4,7 +4,6 @@ import { OfferSortSchema, OfferStatusSchema, UrlSchema, UuidSchema } from './com
 export const OfferSchema = z.object({
   id: UuidSchema,
   serviceId: UuidSchema,
-  countryId: UuidSchema,
   title: z.string().min(2).max(180),
   previewText: z.string().min(1).max(500),
   couponCode: z.string().max(120).optional().nullable(),
@@ -19,7 +18,6 @@ export const OfferSchema = z.object({
 
 export const OfferCreateSchema = z.object({
   serviceId: UuidSchema,
-  countryId: UuidSchema,
   title: z.string().min(2).max(180),
   previewText: z.string().min(1).max(500),
   couponCode: z.string().max(120).optional().nullable(),
@@ -33,7 +31,6 @@ export const OfferCreateSchema = z.object({
 export const OfferUpdateSchema = OfferCreateSchema.partial()
 
 export const OffersListQuerySchema = z.object({
-  country: z.string().length(2).optional(),
   service: z.string().min(2).max(120).optional(),
   category: z.string().min(2).max(120).optional(),
   status: OfferStatusSchema.default('active'),

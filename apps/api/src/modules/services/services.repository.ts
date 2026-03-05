@@ -11,8 +11,7 @@ export class ServicesRepository {
   async findMany(query: ServicesListQuery) {
     const where: Prisma.ServiceWhereInput = {
       name: query.q ? { contains: query.q, mode: 'insensitive' } : undefined,
-      category: query.category ? { slug: query.category } : undefined,
-      offers: query.country ? { some: { country: { code: query.country.toUpperCase() } } } : undefined
+      category: query.category ? { slug: query.category } : undefined
     }
 
     const [items, total] = await this.prisma.$transaction([

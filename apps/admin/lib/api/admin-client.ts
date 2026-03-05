@@ -2,14 +2,23 @@ import {
   CategoryCreateSchema,
   CategorySchema,
   CategoryUpdateSchema,
-  CountryCreateSchema,
-  CountrySchema,
-  CountryUpdateSchema,
+  FeaturedOfferCreateSchema,
+  FeaturedOfferSchema,
+  FeaturedOfferUpdateSchema,
+  FeaturedStoreCreateSchema,
+  FeaturedStoreSchema,
+  FeaturedStoreUpdateSchema,
+  HeroImageCreateSchema,
+  HeroImageSchema,
+  HeroImageUpdateSchema,
   listEnvelopeSchema,
   OfferCreateSchema,
   OffersListQuerySchema,
   OfferSchema,
   OfferUpdateSchema,
+  PremiumBannerCreateSchema,
+  PremiumBannerSchema,
+  PremiumBannerUpdateSchema,
   ReferralsListQuerySchema,
   ReferralSchema,
   ReferralUpdateSchema,
@@ -19,13 +28,22 @@ import {
   type Category,
   type CategoryCreateInput,
   type CategoryUpdateInput,
-  type Country,
-  type CountryCreateInput,
-  type CountryUpdateInput,
+  type FeaturedOffer,
+  type FeaturedOfferCreateInput,
+  type FeaturedOfferUpdateInput,
+  type FeaturedStore,
+  type FeaturedStoreCreateInput,
+  type FeaturedStoreUpdateInput,
+  type HeroImage,
+  type HeroImageCreateInput,
+  type HeroImageUpdateInput,
   type Offer,
   type OfferCreateInput,
   type OffersListQuery,
   type OfferUpdateInput,
+  type PremiumBanner,
+  type PremiumBannerCreateInput,
+  type PremiumBannerUpdateInput,
   type Referral,
   type ReferralUpdateInput,
   type Service,
@@ -79,15 +97,6 @@ export function createAdminApiClient(accessToken?: string) {
   }
 
   return {
-    listCountries: async (): Promise<Country[]> =>
-      unwrapList(await request('/countries', { method: 'GET' }, listEnvelopeSchema(CountrySchema))),
-    createCountry: (payload: CountryCreateInput): Promise<Country> =>
-      request('/countries', { method: 'POST', body: JSON.stringify(CountryCreateSchema.parse(payload)) }, CountrySchema),
-    updateCountry: (id: string, payload: CountryUpdateInput): Promise<Country> =>
-      request(`/countries/${id}`, { method: 'PATCH', body: JSON.stringify(CountryUpdateSchema.parse(payload)) }, CountrySchema),
-    deleteCountry: (id: string): Promise<{ ok: true }> =>
-      request(`/countries/${id}`, { method: 'DELETE' }, z.object({ ok: z.literal(true) })),
-
     listCategories: async (): Promise<Category[]> =>
       unwrapList(await request('/categories', { method: 'GET' }, listEnvelopeSchema(CategorySchema))),
     createCategory: (payload: CategoryCreateInput): Promise<Category> =>
@@ -96,6 +105,42 @@ export function createAdminApiClient(accessToken?: string) {
       request(`/categories/${id}`, { method: 'PATCH', body: JSON.stringify(CategoryUpdateSchema.parse(payload)) }, CategorySchema),
     deleteCategory: (id: string): Promise<{ ok: true }> =>
       request(`/categories/${id}`, { method: 'DELETE' }, z.object({ ok: z.literal(true) })),
+
+    listHeroImages: async (): Promise<HeroImage[]> =>
+      unwrapList(await request('/hero-images', { method: 'GET' }, listEnvelopeSchema(HeroImageSchema))),
+    createHeroImage: (payload: HeroImageCreateInput): Promise<HeroImage> =>
+      request('/hero-images', { method: 'POST', body: JSON.stringify(HeroImageCreateSchema.parse(payload)) }, HeroImageSchema),
+    updateHeroImage: (id: string, payload: HeroImageUpdateInput): Promise<HeroImage> =>
+      request(`/hero-images/${id}`, { method: 'PATCH', body: JSON.stringify(HeroImageUpdateSchema.parse(payload)) }, HeroImageSchema),
+    deleteHeroImage: (id: string): Promise<{ ok: true }> =>
+      request(`/hero-images/${id}`, { method: 'DELETE' }, z.object({ ok: z.literal(true) })),
+
+    listPremiumBanners: async (): Promise<PremiumBanner[]> =>
+      unwrapList(await request('/premium-banner/all', { method: 'GET' }, listEnvelopeSchema(PremiumBannerSchema))),
+    createPremiumBanner: (payload: PremiumBannerCreateInput): Promise<PremiumBanner> =>
+      request('/premium-banner', { method: 'POST', body: JSON.stringify(PremiumBannerCreateSchema.parse(payload)) }, PremiumBannerSchema),
+    updatePremiumBanner: (id: string, payload: PremiumBannerUpdateInput): Promise<PremiumBanner> =>
+      request(`/premium-banner/${id}`, { method: 'PATCH', body: JSON.stringify(PremiumBannerUpdateSchema.parse(payload)) }, PremiumBannerSchema),
+    deletePremiumBanner: (id: string): Promise<{ ok: true }> =>
+      request(`/premium-banner/${id}`, { method: 'DELETE' }, z.object({ ok: z.literal(true) })),
+
+    listFeaturedStores: async (): Promise<FeaturedStore[]> =>
+      unwrapList(await request('/featured-stores/admin', { method: 'GET' }, listEnvelopeSchema(FeaturedStoreSchema))),
+    createFeaturedStore: (payload: FeaturedStoreCreateInput): Promise<FeaturedStore> =>
+      request('/featured-stores', { method: 'POST', body: JSON.stringify(FeaturedStoreCreateSchema.parse(payload)) }, FeaturedStoreSchema),
+    updateFeaturedStore: (id: string, payload: FeaturedStoreUpdateInput): Promise<FeaturedStore> =>
+      request(`/featured-stores/${id}`, { method: 'PATCH', body: JSON.stringify(FeaturedStoreUpdateSchema.parse(payload)) }, FeaturedStoreSchema),
+    deleteFeaturedStore: (id: string): Promise<{ ok: true }> =>
+      request(`/featured-stores/${id}`, { method: 'DELETE' }, z.object({ ok: z.literal(true) })),
+
+    listFeaturedOffers: async (): Promise<FeaturedOffer[]> =>
+      unwrapList(await request('/featured-offers/admin', { method: 'GET' }, listEnvelopeSchema(FeaturedOfferSchema))),
+    createFeaturedOffer: (payload: FeaturedOfferCreateInput): Promise<FeaturedOffer> =>
+      request('/featured-offers', { method: 'POST', body: JSON.stringify(FeaturedOfferCreateSchema.parse(payload)) }, FeaturedOfferSchema),
+    updateFeaturedOffer: (id: string, payload: FeaturedOfferUpdateInput): Promise<FeaturedOffer> =>
+      request(`/featured-offers/${id}`, { method: 'PATCH', body: JSON.stringify(FeaturedOfferUpdateSchema.parse(payload)) }, FeaturedOfferSchema),
+    deleteFeaturedOffer: (id: string): Promise<{ ok: true }> =>
+      request(`/featured-offers/${id}`, { method: 'DELETE' }, z.object({ ok: z.literal(true) })),
 
     listServices: async (): Promise<Service[]> =>
       unwrapList(await request('/services', { method: 'GET' }, listEnvelopeSchema(ServiceSchema))),

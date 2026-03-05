@@ -1,11 +1,19 @@
 import {
-  CountrySchema,
+  CategorySchema,
+  FeaturedOfferWithOfferSchema,
+  FeaturedStoreWithStoreSchema,
+  HeroImageSchema,
   listEnvelopeSchema,
-  type Country,
   OffersListQuerySchema,
   OfferSchema,
-  type Offer,
+  PremiumBannerSchema,
   ServiceSchema,
+  type Category,
+  type FeaturedOfferWithOffer,
+  type FeaturedStoreWithStore,
+  type HeroImage,
+  type Offer,
+  type PremiumBanner,
   type Service
 } from '@bonusbridge/shared'
 import { z } from 'zod'
@@ -39,13 +47,33 @@ async function requestJson<T>(path: string, schema: z.ZodSchema<T>, query?: Reco
   return schema.parse(json)
 }
 
-export async function getCountries(): Promise<Country[]> {
-  const parsed = await requestJson('/countries', listEnvelopeSchema(CountrySchema))
+export async function getCategories(): Promise<Category[]> {
+  const parsed = await requestJson('/categories', listEnvelopeSchema(CategorySchema))
   return unwrapList(parsed)
 }
 
-export async function getServices(): Promise<Service[]> {
-  const parsed = await requestJson('/services', listEnvelopeSchema(ServiceSchema))
+export async function getHeroImages(): Promise<HeroImage[]> {
+  const parsed = await requestJson('/hero-images', listEnvelopeSchema(HeroImageSchema))
+  return unwrapList(parsed)
+}
+
+export async function getPremiumBanner(): Promise<PremiumBanner | null> {
+  const parsed = await requestJson('/premium-banner', PremiumBannerSchema.nullable())
+  return parsed
+}
+
+export async function getFeaturedStores(): Promise<FeaturedStoreWithStore[]> {
+  const parsed = await requestJson('/featured-stores', listEnvelopeSchema(FeaturedStoreWithStoreSchema))
+  return unwrapList(parsed)
+}
+
+export async function getFeaturedOffers(): Promise<FeaturedOfferWithOffer[]> {
+  const parsed = await requestJson('/featured-offers', listEnvelopeSchema(FeaturedOfferWithOfferSchema))
+  return unwrapList(parsed)
+}
+
+export async function getServices(query?: { category?: string; q?: string }): Promise<Service[]> {
+  const parsed = await requestJson('/services', listEnvelopeSchema(ServiceSchema), query)
   return unwrapList(parsed)
 }
 

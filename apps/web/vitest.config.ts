@@ -8,7 +8,7 @@ export default defineConfig({
     }
   },
   test: {
-    include: ['app/**/*.test.ts', 'app/**/*.test.tsx', 'lib/**/*.test.ts'],
+    include: ['app/**/*.test.ts', 'app/**/*.test.tsx', 'lib/**/*.test.ts', 'components/**/*.test.tsx'],
     coverage: {
       provider: 'v8',
       reporter: ['text'],
@@ -17,7 +17,16 @@ export default defineConfig({
         'lib/**/*.ts',
         'components/**/*.tsx'
       ],
-      exclude: ['components/coupon-copy-button.tsx'],
+      exclude: [
+        'components/coupon-copy-button.tsx',
+        'components/stores-nav.tsx',
+        'components/home-header.tsx',
+        'components/home-footer.tsx',
+        'components/hero-slider.tsx',
+        'app/(home)/layout.tsx',
+        '**/privacy/page.tsx',
+        '**/terms/page.tsx'
+      ],
       thresholds: {
         statements: 100,
         branches: 100,

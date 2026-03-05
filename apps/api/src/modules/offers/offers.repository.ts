@@ -12,7 +12,6 @@ export class OffersRepository {
     const where: Prisma.OfferWhereInput = {
       status: query.status,
       title: query.q ? { contains: query.q, mode: 'insensitive' } : undefined,
-      country: query.country ? { code: query.country.toUpperCase() } : undefined,
       service: {
         ...(query.service ? { slug: query.service } : {}),
         ...(query.category ? { category: { slug: query.category } } : {})
@@ -23,8 +22,7 @@ export class OffersRepository {
       this.prisma.offer.findMany({
         where,
         include: {
-          service: { include: { category: true } },
-          country: true
+          service: { include: { category: true } }
         },
         orderBy: query.sort === 'bonus' ? { bonusAmount: 'desc' } : { createdAt: 'desc' },
         skip: query.offset,
@@ -40,8 +38,7 @@ export class OffersRepository {
     const row = await this.prisma.offer.findUnique({
       where: { id },
       include: {
-        service: { include: { category: true } },
-        country: true
+        service: { include: { category: true } }
       }
     })
 

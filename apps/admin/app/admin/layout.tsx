@@ -1,10 +1,13 @@
 import Link from 'next/link'
 
 const links = [
-  { href: '/admin/countries', label: 'Countries' },
   { href: '/admin/categories', label: 'Categories' },
-  { href: '/admin/services', label: 'Services' },
-  { href: '/admin/offers', label: 'Offers' },
+  { href: '/admin/hero-images', label: 'Hero Images' },
+  { href: '/admin/premium-banner', label: 'Premium Banner' },
+  { href: '/admin/featured-stores', label: 'Top Stores' },
+  { href: '/admin/featured-offers', label: 'Top Promo Codes' },
+  { href: '/admin/services', label: 'Stores' },
+  { href: '/admin/offers', label: 'Coupons' },
   { href: '/admin/referrals', label: 'Referrals' }
 ]
 

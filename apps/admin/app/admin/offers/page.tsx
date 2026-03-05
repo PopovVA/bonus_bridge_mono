@@ -2,7 +2,7 @@ import { ResourceTable } from '@/components/resource-table'
 import { createAdminApiClient } from '@/lib/api/admin-client'
 import { hasSupabaseEnv } from '@/lib/env'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
-import { OfferCreateSchema, OfferUpdateSchema, type Country, type Offer, type Service } from '@bonusbridge/shared'
+import { OfferCreateSchema, OfferUpdateSchema, type Offer, type Service } from '@bonusbridge/shared'
 import { revalidatePath } from 'next/cache'
 
 async function getAccessToken() {
@@ -31,7 +31,6 @@ async function createCouponAction(formData: FormData) {
     previewText: String(formData.get('previewText') ?? ''),
     couponCode: couponCodeRaw || undefined,
     serviceId: String(formData.get('serviceId') ?? ''),
-    countryId: String(formData.get('countryId') ?? ''),
     referralUrl: String(formData.get('referralUrl') ?? ''),
     bonusAmount: String(formData.get('bonusAmount') ?? '').trim() || undefined,
     description: String(formData.get('description') ?? '').trim() || undefined,
@@ -71,29 +70,23 @@ export default async function OffersAdminPage() {
 
   let offers: Offer[] = []
   let services: Service[] = []
-  let countries: Country[] = []
   let loadError: string | null = null
   try {
-    ;[offers, services, countries] = await Promise.all([
-      api.listOffers({}),
-      api.listServices(),
-      api.listCountries()
-    ])
+    ;[offers, services] = await Promise.all([api.listOffers({}), api.listServices()])
   } catch {
-    loadError = 'Offers API is unavailable.'
+    loadError = 'Coupons API is unavailable.'
   }
 
   return (
     <ResourceTable
       title="Coupons"
-      subtitle="Create and manage coupons with preview text, service link flow, and copy-ready code."
-      columns={['Title', 'Preview', 'Coupon Code', 'Service ID', 'Country ID', 'Status', 'Actions']}
+      subtitle="Create and manage promo codes with preview text and copy-ready code."
+      columns={['Title', 'Preview', 'Coupon Code', 'Store', 'Status', 'Actions']}
       rows={offers.map((offer) => [
         offer.title,
         offer.previewText,
         offer.couponCode ?? '-',
-        offer.serviceId,
-        offer.countryId,
+        services.find((s) => s.id === offer.serviceId)?.name ?? offer.serviceId,
         offer.status,
         <form action={updateCouponAction} key={offer.id} className="actions">
           <input type="hidden" name="id" value={offer.id} />
@@ -136,23 +129,13 @@ export default async function OffersAdminPage() {
             <input name="previewText" placeholder="Preview text" aria-label="Coupon preview text" required />
             <input name="couponCode" placeholder="Coupon code (optional)" aria-label="Coupon code" />
             <input name="referralUrl" placeholder="https://referral.example" aria-label="Coupon referral URL" required />
-            <select name="serviceId" defaultValue="" aria-label="Service for coupon" required>
+            <select name="serviceId" defaultValue="" aria-label="Store for coupon" required>
               <option value="" disabled>
-                Select service
+                Select store
               </option>
               {services.map((service) => (
                 <option key={service.id} value={service.id}>
                   {service.name} ({service.slug})
-                </option>
-              ))}
-            </select>
-            <select name="countryId" defaultValue="" aria-label="Country for coupon" required>
-              <option value="" disabled>
-                Select country
-              </option>
-              {countries.map((country) => (
-                <option key={country.id} value={country.id}>
-                  {country.name} ({country.code})
                 </option>
               ))}
             </select>

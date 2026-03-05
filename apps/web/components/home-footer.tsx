@@ -1,0 +1,33 @@
+import Link from 'next/link'
+import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react'
+
+export function HomeFooter() {
+  return (
+    <footer className="home-footer">
+      <div className="home-footer-inner">
+        <div className="home-footer-top">
+          <div className="home-footer-links">
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Service</Link>
+          </div>
+          <div className="home-footer-social">
+            <a href="#facebook" aria-label="Facebook">
+              <Facebook size={20} />
+            </a>
+            <a href="#twitter" aria-label="Twitter">
+              <Twitter size={20} />
+            </a>
+            <a href="#instagram" aria-label="Instagram">
+              <Instagram size={20} />
+            </a>
+            <a href="#youtube" aria-label="YouTube">
+              <Youtube size={20} />
+            </a>
+          </div>
+        </div>
+        <hr className="home-footer-divider" />
+        <p className="home-footer-copy">© 2026 BonusBridge. All rights reserved.</p>
+      </div>
+    </footer>
+  )
+}

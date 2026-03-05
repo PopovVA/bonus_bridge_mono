@@ -6,7 +6,7 @@ afterEach(() => {
 })
 
 describe('createAdminApiClient', () => {
-  it('lists countries from envelope response', async () => {
+  it('lists categories from envelope response', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -16,8 +16,8 @@ describe('createAdminApiClient', () => {
           items: [
             {
               id: '11111111-1111-1111-8111-111111111111',
-              name: 'United States',
-              code: 'US',
+              name: 'Fintech',
+              slug: 'fintech',
               createdAt: '2026-03-05T00:00:00.000Z',
               updatedAt: '2026-03-05T00:00:00.000Z'
             }
@@ -30,11 +30,11 @@ describe('createAdminApiClient', () => {
     )
 
     const client = createAdminApiClient('token')
-    await expect(client.listCountries()).resolves.toEqual([
+    await expect(client.listCategories()).resolves.toEqual([
       {
         id: '11111111-1111-1111-8111-111111111111',
-        name: 'United States',
-        code: 'US',
+        name: 'Fintech',
+        slug: 'fintech',
         createdAt: '2026-03-05T00:00:00.000Z',
         updatedAt: '2026-03-05T00:00:00.000Z'
       }
@@ -51,6 +51,6 @@ describe('createAdminApiClient', () => {
     )
 
     const client = createAdminApiClient('token')
-    await expect(client.listCountries()).rejects.toThrow('Admin API failed with 401')
+    await expect(client.listCategories()).rejects.toThrow('Admin API failed with 401')
   })
 })

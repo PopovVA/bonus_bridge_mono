@@ -2,7 +2,7 @@ import { ResourceTable } from '@/components/resource-table'
 import { createAdminApiClient } from '@/lib/api/admin-client'
 import { hasSupabaseEnv } from '@/lib/env'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
-import { ServiceCreateSchema, ServiceUpdateSchema, type Service } from '@bonusbridge/shared'
+import { ServiceCreateSchema, ServiceUpdateSchema, type Category, type Service } from '@bonusbridge/shared'
 import { revalidatePath } from 'next/cache'
 
 async function getAccessToken() {
@@ -30,7 +30,7 @@ async function createServiceAction(formData: FormData) {
     slug: String(formData.get('slug') ?? ''),
     categoryId: String(formData.get('categoryId') ?? ''),
     website: String(formData.get('website') ?? '').trim() || undefined,
-    logoUrl: String(formData.get('logoUrl') ?? '').trim() || undefined,
+    logoSvg: String(formData.get('logoSvg') ?? '').trim() || undefined,
     description: String(formData.get('description') ?? '').trim() || undefined
   })
 
@@ -50,7 +50,7 @@ async function updateServiceAction(formData: FormData) {
   const payload = ServiceUpdateSchema.parse({
     name: String(formData.get('name') ?? '').trim() || undefined,
     website: String(formData.get('website') ?? '').trim() || undefined,
-    logoUrl: String(formData.get('logoUrl') ?? '').trim() || undefined
+    logoSvg: String(formData.get('logoSvg') ?? '').trim() || undefined
   })
 
   await api.updateService(id, payload)
@@ -61,22 +61,23 @@ export default async function ServicesAdminPage() {
   const accessToken = await getAccessToken()
   const api = createAdminApiClient(accessToken)
   let services: Service[] = []
+  let categories: Category[] = []
   let loadError: string | null = null
   try {
-    services = await api.listServices()
+    ;[services, categories] = await Promise.all([api.listServices(), api.listCategories()])
   } catch {
-    loadError = 'Services API is unavailable.'
+    loadError = 'Stores API is unavailable.'
   }
 
   return (
     <ResourceTable
-      title="Services"
-      subtitle="Create and edit service name, icon, and outbound service link."
-      columns={['Name', 'Slug', 'Category ID', 'Website', 'Logo', 'Actions']}
+      title="Stores"
+      subtitle="Create and edit store name, icon, and outbound link."
+      columns={['Name', 'Slug', 'Category', 'Website', 'Logo', 'Actions']}
       rows={services.map((service) => [
         service.name,
         service.slug,
-        service.categoryId,
+        categories.find((c) => c.id === service.categoryId)?.name ?? service.categoryId,
         service.website ? (
           <a key={`${service.id}-website`} href={service.website} target="_blank" rel="noreferrer">
             Open
@@ -84,27 +85,29 @@ export default async function ServicesAdminPage() {
         ) : (
           '-'
         ),
-        service.logoUrl ? (
-          <a key={`${service.id}-logo`} href={service.logoUrl} target="_blank" rel="noreferrer">
-            Icon
-          </a>
+        service.logoSvg ? (
+          <span key={`${service.id}-logo`} title="SVG logo" style={{ fontSize: 12 }}>
+            SVG
+          </span>
         ) : (
           '-'
         ),
         <form action={updateServiceAction} key={service.id} className="actions">
           <input type="hidden" name="id" value={service.id} />
-          <input name="name" defaultValue={service.name} placeholder="Service name" aria-label="Service name" required />
+          <input name="name" defaultValue={service.name} placeholder="Store name" aria-label="Store name" required />
           <input
             name="website"
             defaultValue={service.website ?? ''}
             placeholder="https://service.com"
-            aria-label="Service website URL"
+            aria-label="Store website URL"
           />
-          <input
-            name="logoUrl"
-            defaultValue={service.logoUrl ?? ''}
-            placeholder="https://cdn/logo.svg"
-            aria-label="Service logo URL"
+          <textarea
+            name="logoSvg"
+            defaultValue={service.logoSvg ?? ''}
+            placeholder="<svg>...</svg>"
+            aria-label="Store logo SVG"
+            rows={2}
+            style={{ minWidth: 120 }}
           />
           <button className="btn" type="submit">
             Save
@@ -115,14 +118,27 @@ export default async function ServicesAdminPage() {
         <>
           {loadError ? <span className="subtle">{loadError}</span> : null}
           <form action={createServiceAction} className="actions">
-            <input name="name" placeholder="Service name" aria-label="Service name" required />
-            <input name="slug" placeholder="service-slug" aria-label="Service slug" required />
-            <input name="categoryId" placeholder="Category UUID" aria-label="Category ID" required />
-            <input name="website" placeholder="https://service.com" aria-label="Service website URL" />
-            <input name="logoUrl" placeholder="https://cdn/logo.svg" aria-label="Service logo URL" />
-            <input name="description" placeholder="Description (optional)" aria-label="Service description" />
+            <input name="name" placeholder="Store name" aria-label="Store name" required />
+            <input name="slug" placeholder="service-slug" aria-label="Store slug" required />
+            <select name="categoryId" aria-label="Category" required>
+              <option value="">Select category</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name} ({cat.slug})
+                </option>
+              ))}
+            </select>
+            <input name="website" placeholder="https://service.com" aria-label="Store website URL" />
+            <textarea
+              name="logoSvg"
+              placeholder="<svg xmlns='...'>...</svg>"
+              aria-label="Store logo SVG"
+              rows={2}
+              style={{ minWidth: 120 }}
+            />
+            <input name="description" placeholder="Description (optional)" aria-label="Store description" />
             <button className="btn primary" type="submit">
-              Add service
+              Add store
             </button>
           </form>
         </>

@@ -132,18 +132,25 @@ a {
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
-select:focus-visible {
+select:focus-visible,
+textarea:focus-visible {
   outline: 2px solid #2d7a66;
   outline-offset: 2px;
 }
 
 input,
-select {
+select,
+textarea {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 0.92rem;
   min-width: 180px;
+}
+
+textarea {
+  resize: vertical;
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
 }
 
 @media (max-width: 760px) {
@@ -162,7 +169,8 @@ select {
   }
 
   input,
-  select {
+  select,
+  textarea {
     min-width: 0;
     width: 100%;
   }

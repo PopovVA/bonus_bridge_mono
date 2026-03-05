@@ -6,6 +6,15 @@
     "node": ">=22.0.0"
   },
   "scripts": {
+    "dev": "pnpm dev:all",
+    "dev:all": "pnpm --filter @bonusbridge/shared build && pnpm -r --parallel --filter api --filter web --filter admin dev",
+    "dev:local": "pnpm dev:all",
+    "dev:api": "pnpm --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:admin": "pnpm --filter admin dev",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down",
+    "db:migrate": "pnpm --filter api prisma:migrate:deploy",
     "lint": "pnpm -r lint",
     "test": "pnpm --filter @bonusbridge/shared build && pnpm -r test",
     "build": "pnpm --filter @bonusbridge/shared build && pnpm --filter api build && pnpm --filter web build && pnpm --filter admin build"

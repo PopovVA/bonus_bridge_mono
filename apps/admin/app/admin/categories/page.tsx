@@ -2,17 +2,64 @@ import { ResourceTable } from '@/components/resource-table'
 import { createAdminApiClient } from '@/lib/api/admin-client'
 import { hasSupabaseEnv } from '@/lib/env'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
-import type { Category } from '@bonusbridge/shared'
+import { CategoryCreateSchema, CategoryUpdateSchema, toSlug, type Category } from '@bonusbridge/shared'
+import { revalidatePath } from 'next/cache'
+
+async function getAccessToken() {
+  if (!hasSupabaseEnv()) {
+    return undefined
+  }
+
+  const supabase = await createSupabaseServerClient()
+  const {
+    data: { session }
+  } = await supabase.auth.getSession()
+  return session?.access_token
+}
+
+async function createCategoryAction(formData: FormData) {
+  'use server'
+  const accessToken = await getAccessToken()
+  if (!accessToken) {
+    return
+  }
+
+  const api = createAdminApiClient(accessToken)
+  const name = String(formData.get('name') ?? '').trim()
+  const slugRaw = String(formData.get('slug') ?? '').trim()
+  const payload = CategoryCreateSchema.parse({
+    name,
+    slug: slugRaw || toSlug(name)
+  })
+
+  await api.createCategory(payload)
+  revalidatePath('/admin/categories')
+}
+
+async function updateCategoryAction(formData: FormData) {
+  'use server'
+  const accessToken = await getAccessToken()
+  if (!accessToken) {
+    return
+  }
+
+  const id = String(formData.get('id') ?? '')
+  const api = createAdminApiClient(accessToken)
+  const name = String(formData.get('name') ?? '').trim()
+  const slugRaw = String(formData.get('slug') ?? '').trim()
+  const payload = CategoryUpdateSchema.parse({
+    ...(name ? { name } : {}),
+    ...(slugRaw ? { slug: slugRaw } : {})
+  })
+
+  if (Object.keys(payload).length === 0) return
+
+  await api.updateCategory(id, payload)
+  revalidatePath('/admin/categories')
+}
 
 export default async function CategoriesAdminPage() {
-  let accessToken: string | undefined
-  if (hasSupabaseEnv()) {
-    const supabase = await createSupabaseServerClient()
-    const {
-      data: { session }
-    } = await supabase.auth.getSession()
-    accessToken = session?.access_token
-  }
+  const accessToken = await getAccessToken()
   const api = createAdminApiClient(accessToken)
   let categories: Category[] = []
   let loadError: string | null = null
@@ -25,23 +72,30 @@ export default async function CategoriesAdminPage() {
   return (
     <ResourceTable
       title="Categories"
-      subtitle="Group services by a stable taxonomy used in web filters."
+      subtitle="Group stores by a stable taxonomy used in web filters."
       columns={['Name', 'Slug', 'Actions']}
       rows={categories.map((category) => [
         category.name,
         category.slug,
-        <span className="subtle" key={category.id}>
-          Read-only preview
-        </span>
+        <form action={updateCategoryAction} key={category.id} className="actions">
+          <input type="hidden" name="id" value={category.id} />
+          <input name="name" defaultValue={category.name} placeholder="Category name" aria-label="Category name" required />
+          <input name="slug" defaultValue={category.slug} placeholder="category-slug" aria-label="Category slug" required />
+          <button className="btn" type="submit">
+            Save
+          </button>
+        </form>
       ])}
       actions={
         <>
           {loadError ? <span className="subtle">{loadError}</span> : null}
-          <label className="sr-only" htmlFor="categories-search">
-            Search category
-          </label>
-          <input id="categories-search" placeholder="Search category" name="q" />
-          <span className="subtle">Create flow: planned</span>
+          <form action={createCategoryAction} className="actions">
+            <input name="name" placeholder="Category name" aria-label="Category name" required />
+            <input name="slug" placeholder="category-slug (optional, auto from name)" aria-label="Category slug" />
+            <button className="btn primary" type="submit">
+              Add category
+            </button>
+          </form>
         </>
       }
     />

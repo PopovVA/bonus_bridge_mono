@@ -20,10 +20,9 @@ From repo root:
 
 - Prefer server-rendered or statically generated pages where possible.
 - Stable URL structure:
-  - /:country
-  - /:country/:category
-  - /:country/:service
-  - /:country/:offerSlug (or equivalent)
+  - /:category
+  - /:category/:service
+  - /:offerSlug (or equivalent)
 - Every SEO page should include:
   - title/meta
   - clear H1
