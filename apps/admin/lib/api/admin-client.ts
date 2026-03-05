@@ -86,7 +86,14 @@ export function createAdminApiClient(accessToken?: string) {
     })
 
     if (!response.ok) {
-      throw new Error(`Admin API failed with ${response.status}`)
+      let detail = ''
+      try {
+        const body = await response.json()
+        if (body?.message) detail = `: ${body.message}`
+      } catch {
+        // ignore
+      }
+      throw new Error(`Admin API failed with ${response.status}${detail}`)
     }
 
     if (response.status === 204) {

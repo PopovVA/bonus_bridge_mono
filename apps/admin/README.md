@@ -28,6 +28,19 @@ Copy `.env.example` to `.env.local`:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
+The API (`apps/api`) must have matching Supabase JWT config for admin auth:
+- `SUPABASE_JWT_SECRET` — from Supabase Dashboard → Project Settings → API → JWT Secret
+- `SUPABASE_JWT_ISSUER` — `https://<project-ref>.supabase.co/auth/v1`
+- `SUPABASE_JWT_AUDIENCE` — `authenticated`
+
+User must have `app_metadata.role = "admin"` in Supabase Auth.
+
+### 401 from Admin API
+If creating/updating resources returns 401:
+1. Ensure API has correct `SUPABASE_JWT_SECRET` (same as Supabase project).
+2. Log out and sign in again to refresh the session.
+3. Verify user has admin role in Supabase Dashboard → Authentication → Users → edit user → set `app_metadata.role` to `"admin"`.
+
 Security note:
 - Use `.env.example` as templates only.
 - Never commit real Supabase keys or other secrets to repository.

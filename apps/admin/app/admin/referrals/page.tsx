@@ -1,18 +1,10 @@
 import { ResourceTable } from '@/components/resource-table'
 import { createAdminApiClient } from '@/lib/api/admin-client'
-import { hasSupabaseEnv } from '@/lib/env'
-import { createSupabaseServerClient } from '@/lib/supabase/server'
+import { getAccessToken } from '@/lib/auth'
 import type { Referral } from '@bonusbridge/shared'
 
 export default async function ReferralsAdminPage() {
-  let accessToken: string | undefined
-  if (hasSupabaseEnv()) {
-    const supabase = await createSupabaseServerClient()
-    const {
-      data: { session }
-    } = await supabase.auth.getSession()
-    accessToken = session?.access_token
-  }
+  const accessToken = await getAccessToken()
   const api = createAdminApiClient(accessToken)
   let referrals: Referral[] = []
   let loadError: string | null = null

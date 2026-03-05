@@ -1,21 +1,8 @@
 import { ResourceTable } from '@/components/resource-table'
 import { createAdminApiClient } from '@/lib/api/admin-client'
-import { hasSupabaseEnv } from '@/lib/env'
-import { createSupabaseServerClient } from '@/lib/supabase/server'
+import { getAccessToken } from '@/lib/auth'
 import { FeaturedOfferCreateSchema, FeaturedOfferUpdateSchema, type FeaturedOffer, type Offer } from '@bonusbridge/shared'
 import { revalidatePath } from 'next/cache'
-
-async function getAccessToken() {
-  if (!hasSupabaseEnv()) {
-    return undefined
-  }
-
-  const supabase = await createSupabaseServerClient()
-  const {
-    data: { session }
-  } = await supabase.auth.getSession()
-  return session?.access_token
-}
 
 async function createFeaturedOfferAction(formData: FormData) {
   'use server'
