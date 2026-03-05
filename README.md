@@ -30,6 +30,9 @@ Each app has its own `.env.example`:
 - `apps/web/.env.example`
 - `apps/admin/.env.example`
 
+## Design Reference
+- UI style guide for web/admin: `docs/design-references.md`
+
 ## Deploy
 - Database/Auth: Supabase
 - Runtime/API/Web/Admin: Railway

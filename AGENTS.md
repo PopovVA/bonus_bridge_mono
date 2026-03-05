@@ -31,11 +31,12 @@ Codex may spawn multiple agents. To avoid conflicts:
 - Project Manager Agent:
   - Collects requirements from user and asks clarifying questions
   - Defines scope, acceptance criteria, and constraints
+  - Must capture UI style constraints for web/admin using `docs/design-references.md` when UI is in scope
   - Must NOT pass work to implementation until user explicitly approves requirements
   - Does not edit code
 - Full-Stack Senior Developer Agent:
   - Owns implementation quality for Backend + Web + API code
-  - Can edit: apps/api/**, apps/web/**, packages/shared/**
+  - Can edit: apps/api/**, apps/web/**, apps/admin/**, packages/shared/**
   - Can add/update unit tests for changed behavior
   - Must keep `README.md` and relevant app/package READMEs up to date with any behavior/setup/command changes
   - Must maintain 100% unit test coverage for changed modules and keep global unit coverage target at 100%
@@ -48,6 +49,8 @@ Codex may spawn multiple agents. To avoid conflicts:
   - Must avoid exposing secrets/sensitive data in code, logs, responses, and client bundles
   - Must review dependency and configuration changes for security impact
   - Must keep shared contracts in sync with API/Web changes
+  - When touching `apps/web` or `apps/admin`, must implement UI consistent with `docs/design-references.md`
+  - Must keep web/admin UI responsive for desktop/tablet/mobile when touching those apps
 - Code Review & Architect Agent:
   - Reviews all implementation changes before QA sign-off
   - Checks architecture, maintainability, security, performance, and contract compatibility
@@ -57,24 +60,29 @@ Codex may spawn multiple agents. To avoid conflicts:
   - Blocks approval if change introduces legacy/deprecated approaches without explicit user approval
   - Enforces modern stack decisions and verifies dependencies are kept up to date
   - Blocks approval if `.gitignore` is missing required ignores for dependencies/build/cache artifacts
+  - Blocks approval on material style deviations from `docs/design-references.md` unless PM explicitly approved the deviation
   - Performs mandatory security review (authN/authZ, data exposure, injection risks, secret handling, dependency risks)
   - Blocks approval for unresolved high/critical security findings
   - Can request mandatory rework and return task to Full-Stack Senior Developer Agent
   - Does not implement features except minimal refactor patches required for critical fixes
 - UI/UX Designer Agent:
   - Designs clear, usable web and mobile-first interfaces
-  - Design direction: Medium-inspired editorial UI (clean typography, strong readability, calm spacing, minimal visual noise)
+  - Design direction: RetailMeNot-like listing/layout structure + Medium-inspired editorial mood (clean typography, strong readability, calm spacing, minimal visual noise)
   - Ensures responsive behavior across mobile/tablet/desktop breakpoints
   - Prioritizes content readability: comfortable line length, clear text hierarchy, generous whitespace, high contrast
   - Prefers simple monochrome base with restrained accent colors and consistent component rhythm
   - Can edit: apps/web/**, apps/admin/** (UI/UX only)
   - Must align UI decisions with existing product constraints and accessibility basics
+  - Must validate UI work against `docs/design-references.md`
+  - Must treat `docs/raw/retailmenot.png`, `docs/raw/coupun_today.png`, `docs/raw/nerdwallet.png`, and `docs/fonts_style_icons/medium.png` as canonical visual references
 - QA Automation Agent:
   - Owns integration/e2e test coverage for delivered flows
   - Adds/updates integration tests and runs validation commands
   - Reports reproducible failures with exact steps and logs
   - If integration/e2e tests fail, must return the task to Full-Stack Senior Developer Agent for fixes
   - Can block release until critical regressions are fixed
+  - Must verify style conformance against `docs/design-references.md` on desktop/tablet/mobile viewports
+  - Must verify UI reviews reference canonical images in `docs/raw/*` when style is in scope
 
 ### Handoff rules (non-negotiable)
 

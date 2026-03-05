@@ -7,6 +7,8 @@ Internal admin panel:
 - CRUD: countries, categories, services, offers
 - Moderation: user-submitted referrals/offers (approve/reject)
 - Audit: track updates (updated_at/updated_by where applicable)
+- Must follow shared style guide: `docs/design-references.md` (repo root).
+- Canonical visual refs to follow: `docs/raw/retailmenot.png`, `docs/raw/coupun_today.png`, `docs/raw/nerdwallet.png`, `docs/fonts_style_icons/medium.png`.
 
 ## Commands
 
@@ -36,6 +38,13 @@ From repo root:
   - simple tables + search + filters
   - clear status labels (draft/active/expired)
   - safe destructive actions (confirm dialogs)
+- Use RetailMeNot-like listing structure for admin resources: predictable filters, sortable lists, clear card/table hierarchy.
+- Use `docs/raw/retailmenot.png` as the primary structural reference for list/table + action hierarchy.
+- Keep Medium-like visual mood: restrained color usage, readable typography, consistent spacing rhythm.
+- Use `docs/fonts_style_icons/medium.png` as the source for font and icon style decisions.
+- Use semantic color tokens and consistent spacing scale; avoid one-off colors/spacing.
+- Validate responsive behavior on desktop/tablet/mobile, including table overflow handling and filter access.
+- Enforce accessibility basics: keyboard support, visible focus, labeled controls, and text-backed status/error states.
 
 ## Multi-agent boundary
 

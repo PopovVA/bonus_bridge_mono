@@ -4,6 +4,8 @@
 
 - Public SEO website for offers/services/categories/countries.
 - Must be fast, crawlable, and consistent URLs.
+- Must follow shared style guide: `docs/design-references.md` (repo root).
+- Canonical visual refs to follow: `docs/raw/retailmenot.png`, `docs/raw/coupun_today.png`, `docs/raw/nerdwallet.png`, `docs/fonts_style_icons/medium.png`.
 
 ## Commands
 
@@ -39,6 +41,13 @@ From repo root:
 - Keep components simple and reusable.
 - Avoid heavy client-side JS on SEO pages.
 - No secrets on the client.
+- Use listing-first structure inspired by RetailMeNot patterns: clear filters + scannable cards + stable pagination/sorting.
+- Follow Medium-like readability mood: calm palette, strong hierarchy, comfortable spacing, high contrast text.
+- Use `docs/fonts_style_icons/medium.png` as the source for font and icon style decisions.
+- Use `docs/raw/retailmenot.png` as the primary structural reference when choosing listing/card composition.
+- Use semantic color tokens and consistent spacing scale; avoid ad-hoc visual values.
+- Keep responsive behavior explicit for desktop/tablet/mobile and verify filter/card usability on small screens.
+- Enforce accessibility basics: keyboard navigation, visible focus states, labeled inputs, non-color-only status cues.
 
 ## Multi-agent boundary
 
