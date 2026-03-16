@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "pnpm dev:all",
-    "dev:all": "pnpm --filter @bonusbridge/shared build && pnpm -r --parallel --filter api --filter web --filter admin dev",
+    "dev:all": "pnpm --filter @bonusbridge/shared build && pnpm dev:api:wait && pnpm -r --parallel --filter web --filter admin dev",
+    "dev:api:wait": "pnpm --filter api dev & pnpm exec wait-on -t 60000 http://localhost:3001/health",
     "dev:local": "pnpm dev:all",
     "dev:api": "pnpm --filter api dev",
     "dev:web": "pnpm --filter web dev",
@@ -18,5 +19,8 @@
     "lint": "pnpm -r lint",
     "test": "pnpm --filter @bonusbridge/shared build && pnpm -r test",
     "build": "pnpm --filter @bonusbridge/shared build && pnpm --filter api build && pnpm --filter web build && pnpm --filter admin build"
+  },
+  "devDependencies": {
+    "wait-on": "^8.0.5"
   }
 }

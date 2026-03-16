@@ -55,6 +55,7 @@ cp apps/admin/.env.example apps/admin/.env.local
 ```bash
 pnpm dev:local
 ```
+API starts first; web and admin wait for it to be ready (avoids ECONNREFUSED on first load).
 
 ### Ports
 
