@@ -222,6 +222,18 @@
   transform: scale(1.08);
 }
 
+.hero-section[data-active-slide='uber'] .hero-floating-dot.active {
+  background: #000;
+  border-color: rgba(255, 255, 255, 0.98);
+  transform: scale(1.08);
+}
+
+.hero-section[data-active-slide='ubereats'] .hero-floating-dot.active {
+  background: #06c167;
+  border-color: rgba(255, 255, 255, 0.98);
+  transform: scale(1.08);
+}
+
 .hero-floating-dot:focus-visible {
   outline: 2px solid #00e889;
   outline-offset: 3px;
@@ -230,7 +242,9 @@
 /* Room for overlaid dots on promo + image slides */
 .hero-carousel-shell:has(.hero-floating-dots) .hero-chime-panel-inner,
 .hero-carousel-shell:has(.hero-floating-dots) .hero-coinbase-panel-inner,
-.hero-carousel-shell:has(.hero-floating-dots) .hero-paypal-panel-inner {
+.hero-carousel-shell:has(.hero-floating-dots) .hero-paypal-panel-inner,
+.hero-carousel-shell:has(.hero-floating-dots) .hero-uber-panel-inner,
+.hero-carousel-shell:has(.hero-floating-dots) .hero-ubereats-panel-inner {
   padding-bottom: clamp(32px, 5vw, 52px);
 }
 
@@ -253,6 +267,21 @@
 .hero-promo-brand-row--chime .hero-promo-brand-logo {
   max-width: min(100%, 240px);
   max-height: clamp(32px, 6.5vw, 46px);
+}
+
+/* Bundled asset: white wordmark on black square (1:1) */
+.hero-promo-brand-row--uber .hero-promo-brand-logo {
+  width: clamp(40px, 11vw, 56px);
+  height: clamp(40px, 11vw, 56px);
+  max-width: min(100%, 56px);
+  max-height: clamp(40px, 11vw, 56px);
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.hero-promo-brand-row--ubereats .hero-promo-brand-logo {
+  max-width: 5.5rem;
+  max-height: clamp(40px, 8vw, 52px);
 }
 
 /* ar21 wordmarks: height cap + intrinsic width — flex row centers the img box */
@@ -754,6 +783,278 @@
 .hero-paypal-cta-primary:hover {
   background: #1e293b;
   box-shadow: 0 6px 24px rgba(15, 23, 42, 0.28);
+  transform: translateY(-1px);
+}
+
+/* Uber Eats — light panel, green accents (stacked wordmark logo) */
+.hero-slide-ubereats {
+  --ue-green: #06c167;
+  --ue-green-dark: #048848;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  min-height: 0;
+  border-radius: 0;
+  font-family: var(--font-chime-ui), system-ui, sans-serif;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.hero-ubereats-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(250, 255, 252, 0.93) 100%),
+    url('/hero/hero-ubereats-bg.png') center/cover no-repeat #ecfdf5;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.hero-ubereats-panel-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+  padding: clamp(12px, 2.2vw, 22px) clamp(14px, 3vw, 36px) clamp(10px, 1.8vw, 18px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.hero-ubereats-stack {
+  width: 100%;
+  max-width: min(100%, 52rem);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  row-gap: 0;
+}
+
+.hero-ubereats-eyebrow {
+  margin: 0 0 5px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ue-green-dark);
+}
+
+.hero-ubereats-headline {
+  margin: 0 0 6px;
+  max-width: min(100%, 44rem);
+  font-size: clamp(1.1rem, 2.6vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.hero-ubereats-money-accent {
+  color: var(--ue-green-dark);
+  font-weight: 800;
+}
+
+.hero-ubereats-promo-highlight {
+  margin: 0 0 6px;
+  max-width: min(100%, 48rem);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: clamp(0.76rem, 1.5vw, 0.86rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: #14532d;
+  background: rgba(6, 193, 103, 0.12);
+  border: 1px solid rgba(6, 193, 103, 0.28);
+  text-align: left;
+}
+
+.hero-ubereats-sub {
+  margin: 0 0 8px;
+  max-width: min(100%, 48rem);
+  font-size: clamp(0.72rem, 1.45vw, 0.82rem);
+  line-height: 1.4;
+  color: #475569;
+  text-align: center;
+}
+
+.hero-ubereats-terms-link {
+  color: var(--ue-green-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+
+.hero-ubereats-terms-link:hover {
+  color: var(--ue-green);
+}
+
+.hero-ubereats-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: min(100%, 22rem);
+  margin: 0 auto 2px;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  color: #fff;
+  background: #000;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.hero-ubereats-cta-primary:hover {
+  background: #1a1a1a;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
+  transform: translateY(-1px);
+}
+
+/* Uber rides — light panel, black + green accents (Brandfetch uber.com library) */
+.hero-slide-uber {
+  --uber-green: #06c167;
+  --uber-green-dark: #048848;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  min-height: 0;
+  border-radius: 0;
+  font-family: var(--font-chime-ui), system-ui, sans-serif;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.hero-uber-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.hero-uber-panel-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+  padding: clamp(12px, 2.2vw, 22px) clamp(14px, 3vw, 36px) clamp(10px, 1.8vw, 18px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.hero-uber-stack {
+  width: 100%;
+  max-width: min(100%, 52rem);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  row-gap: 0;
+}
+
+.hero-uber-eyebrow {
+  margin: 0 0 5px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--uber-green-dark);
+}
+
+.hero-uber-headline {
+  margin: 0 0 6px;
+  max-width: min(100%, 44rem);
+  font-size: clamp(1.1rem, 2.6vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.hero-uber-money-accent {
+  color: var(--uber-green-dark);
+  font-weight: 800;
+}
+
+.hero-uber-promo-highlight {
+  margin: 0 0 6px;
+  max-width: min(100%, 48rem);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: clamp(0.76rem, 1.5vw, 0.86rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: #14532d;
+  background: rgba(6, 193, 103, 0.1);
+  border: 1px solid rgba(6, 193, 103, 0.25);
+  text-align: left;
+}
+
+.hero-uber-sub {
+  margin: 0 0 8px;
+  max-width: min(100%, 48rem);
+  font-size: clamp(0.72rem, 1.45vw, 0.82rem);
+  line-height: 1.4;
+  color: #475569;
+  text-align: center;
+}
+
+.hero-uber-terms-link {
+  color: var(--uber-green-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+
+.hero-uber-terms-link:hover {
+  color: var(--uber-green);
+}
+
+.hero-uber-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: min(100%, 22rem);
+  margin: 0 auto 2px;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  color: #fff;
+  background: #000;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.hero-uber-cta-primary:hover {
+  background: #1a1a1a;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.26);
   transform: translateY(-1px);
 }
 

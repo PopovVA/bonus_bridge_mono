@@ -1,6 +1,6 @@
 # Design References
 
-This document defines the UI style baseline for BonusBridge web and admin.
+This document defines the UI style baseline for BonusBridge (`apps/web`).
 
 ## Canonical Visual References
 
@@ -18,7 +18,7 @@ This document defines the UI style baseline for BonusBridge web and admin.
 ## Fonts, Icons, and Style Source
 
 - For font pairing, icon weight/shape, and UI style cues, use `docs/fonts_style_icons/medium.png` as the source reference.
-- Keep icon style consistent across web/admin (stroke/filled choice, corner softness, visual weight).
+- Keep icon style consistent (stroke/filled choice, corner softness, visual weight).
 - Keep typography choices consistent with Medium-like readability priorities from this reference.
 
 ## Practical Rules
@@ -65,13 +65,13 @@ This document defines the UI style baseline for BonusBridge web and admin.
 
 - Use a consistent spacing scale (e.g. 4/8/12/16/24/32).
 - Keep vertical rhythm stable between sections, cards, and form controls.
-- Avoid overly compact controls in admin tables; preserve click/tap comfort.
+- Avoid overly compact controls in dense lists or tables; preserve click/tap comfort.
 
 ### Responsiveness
 
 - Support desktop, tablet, and mobile intentionally; no layout breakpoints left implicit.
 - On tablet/mobile, collapse side filters into a clear drawer/sheet pattern.
-- Ensure table-heavy admin views provide horizontal scroll fallback and key-column visibility.
+- For table-heavy layouts, provide horizontal scroll fallback and key-column visibility.
 - Keep core CTA and filter controls accessible within first viewport on mobile.
 
 ### Accessibility
@@ -86,7 +86,7 @@ This document defines the UI style baseline for BonusBridge web and admin.
 ### Do
 
 - Do keep list pages highly scannable with clear visual hierarchy.
-- Do align web and admin spacing, color semantics, and component rhythm.
+- Do align spacing, color semantics, and component rhythm across pages.
 - Do reuse shared UI patterns for cards, filters, badges, and status labels.
 - Do validate responsive behavior on desktop, tablet, and mobile before approval.
 

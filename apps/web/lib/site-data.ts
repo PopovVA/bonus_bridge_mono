@@ -119,9 +119,26 @@ const heroSlides: HeroSlide[] = [
     ctaText: 'Get your $125'
   },
   {
+    kind: 'uber',
+    id: 'ffffffff-ffff-4fff-8fff-fffffffffff1',
+    sortOrder: 1,
+    createdAt: ISO,
+    updatedAt: ISO,
+    eyebrow: 'Uber referral',
+    headline: 'Get $25 off your first 2 rides',
+    promoHighlight:
+      'New to Uber? Use our link — errands, appointments, or visiting friends, without the parking hassle. The discount applies when you sign up through the button below.',
+    subtext:
+      "Uber is a simple, reliable way to get where you need to go. Savings and eligibility follow Uber's current referral offer and terms.",
+    termsLabel: 'Uber terms & help',
+    termsUrl: 'https://www.uber.com/legal/',
+    referralUrl: 'https://referrals.uber.com/refer?id=zfj232q2gjsx',
+    ctaText: 'Ride with $25 off'
+  },
+  {
     kind: 'coinbase',
     id: 'cccccccc-cccc-4ccc-8ccc-cccccccccc01',
-    sortOrder: 1,
+    sortOrder: 2,
     createdAt: ISO,
     updatedAt: ISO,
     eyebrow: 'Limited-time crypto offer',
@@ -137,7 +154,7 @@ const heroSlides: HeroSlide[] = [
   {
     kind: 'paypal',
     id: 'dddddddd-dddd-4ddd-8ddd-dddddddddd01',
-    sortOrder: 2,
+    sortOrder: 3,
     createdAt: ISO,
     updatedAt: ISO,
     eyebrow: 'PayPal Rewards offer',
@@ -150,6 +167,23 @@ const heroSlides: HeroSlide[] = [
     termsUrl: 'https://www.paypal.com/us/legalhub/paypal/referral-program',
     referralUrl: 'https://py.pl/29jzHS',
     ctaText: 'Open the PayPal offer'
+  },
+  {
+    kind: 'ubereats',
+    id: 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeee01',
+    sortOrder: 4,
+    createdAt: ISO,
+    updatedAt: ISO,
+    eyebrow: 'First order on Uber Eats',
+    headline: 'Get $20 off your next delivery orders',
+    promoHighlight:
+      'New to Uber Eats? Place your first delivery order today — tap below to open Uber Eats with this offer applied.',
+    subtext:
+      'Delivery orders; minimum spend, eligibility, and expiry follow Uber Eats. Terms apply.',
+    termsLabel: 'Offer terms',
+    termsUrl: 'https://www.ubereats.com/legal',
+    referralUrl: 'https://ubereats.com/feed?promoCode=eats-zywrn58e0v',
+    ctaText: 'Order with $20 off'
   }
 ]
 

@@ -9,12 +9,15 @@ import type { HeroSlide } from '@/lib/schemas'
 /** Time each hero slide stays visible before auto-advance (ms). */
 const HERO_AUTOPLAY_INTERVAL_MS = 30000
 
-type PromoKind = 'chime' | 'coinbase' | 'paypal'
+type PromoKind = 'chime' | 'coinbase' | 'paypal' | 'uber' | 'ubereats'
 
 type PromoSlide = Extract<HeroSlide, { kind: PromoKind }>
 
-/** Wide wordmarks (ar21) from vectorlogo.zone — keep sizing in CSS for consistent centering */
-const BRAND_LOGO: Record<PromoKind, { src: string }> = {
+type BrandfetchLogoKind = 'ubereats'
+
+type VectorLogoKind = Exclude<PromoKind, BrandfetchLogoKind | 'uber'>
+
+const VECTOR_BRAND_LOGO: Record<VectorLogoKind, { src: string }> = {
   chime: {
     src: 'https://www.vectorlogo.zone/logos/chimebank/chimebank-ar21.svg'
   },
@@ -24,6 +27,24 @@ const BRAND_LOGO: Record<PromoKind, { src: string }> = {
   paypal: {
     src: 'https://www.vectorlogo.zone/logos/paypal/paypal-ar21.svg'
   }
+}
+
+/**
+ * Uber Eats: [Brandfetch Logo API](https://docs.brandfetch.com/docs/logo-link/guidelines) needs
+ * `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (free tier). Uber rides uses bundled `/brands/uber-logo.png`.
+ */
+function promoBrandLogoSrc(kind: PromoKind): string {
+  if (kind === 'uber') {
+    return '/brands/uber-logo.png'
+  }
+  if (kind === 'ubereats') {
+    const id = process.env.NEXT_PUBLIC_BRANDFETCH_CLIENT_ID?.trim()
+    if (id) {
+      return `https://cdn.brandfetch.io/ubereats.com/w/320/h/120?c=${encodeURIComponent(id)}`
+    }
+    return '/brands/ubereats-logo.png'
+  }
+  return VECTOR_BRAND_LOGO[kind].src
 }
 
 const PROMO_UI: Record<
@@ -112,6 +133,48 @@ const PROMO_UI: Record<
     stepTitle: 'hero-paypal-step-title',
     stepHint: 'hero-paypal-step-hint',
     brandAlt: 'PayPal'
+  },
+  uber: {
+    slide: 'hero-slide-uber',
+    panel: 'hero-uber-panel',
+    panelInner: 'hero-uber-panel-inner',
+    stack: 'hero-uber-stack',
+    eyebrow: 'hero-uber-eyebrow',
+    headline: 'hero-uber-headline',
+    moneyAccent: 'hero-uber-money-accent',
+    promoHl: 'hero-uber-promo-highlight',
+    sub: 'hero-uber-sub',
+    terms: 'hero-uber-terms-link',
+    cta: 'hero-uber-cta-primary',
+    stepsTitle: 'hero-paypal-steps-title',
+    steps: 'hero-paypal-steps',
+    step: 'hero-paypal-step',
+    stepNum: 'hero-paypal-step-num',
+    stepBody: 'hero-paypal-step-body',
+    stepTitle: 'hero-paypal-step-title',
+    stepHint: 'hero-paypal-step-hint',
+    brandAlt: 'Uber'
+  },
+  ubereats: {
+    slide: 'hero-slide-ubereats',
+    panel: 'hero-ubereats-panel',
+    panelInner: 'hero-ubereats-panel-inner',
+    stack: 'hero-ubereats-stack',
+    eyebrow: 'hero-ubereats-eyebrow',
+    headline: 'hero-ubereats-headline',
+    moneyAccent: 'hero-ubereats-money-accent',
+    promoHl: 'hero-ubereats-promo-highlight',
+    sub: 'hero-ubereats-sub',
+    terms: 'hero-ubereats-terms-link',
+    cta: 'hero-ubereats-cta-primary',
+    stepsTitle: 'hero-paypal-steps-title',
+    steps: 'hero-paypal-steps',
+    step: 'hero-paypal-step',
+    stepNum: 'hero-paypal-step-num',
+    stepBody: 'hero-paypal-step-body',
+    stepTitle: 'hero-paypal-step-title',
+    stepHint: 'hero-paypal-step-hint',
+    brandAlt: 'Uber Eats'
   }
 }
 
@@ -129,14 +192,14 @@ function moneyAccentSpans(text: string, accentClass: string): ReactNode[] {
 
 function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], kind: PromoKind) {
   const headlineId = `hero-promo-${slide.id}-headline`
-  const logo = BRAND_LOGO[kind]
+  const logoSrc = promoBrandLogoSrc(kind)
   return (
     <div className={ui.panel} role="group" aria-labelledby={headlineId}>
       <div className={ui.panelInner}>
         <div className={ui.stack}>
           <div className={`hero-promo-brand-row hero-promo-brand-row--${kind}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="hero-promo-brand-logo" src={logo.src} alt={ui.brandAlt} />
+            <img className="hero-promo-brand-logo" src={logoSrc} alt={ui.brandAlt} />
           </div>
           {slide.eyebrow ? <p className={ui.eyebrow}>{slide.eyebrow}</p> : null}
           <h2 id={headlineId} className={ui.headline}>
@@ -255,7 +318,11 @@ export function HeroSlider({ slides = [] }: { slides?: HeroSlide[] }) {
                         ? 'hero-slide-chime'
                         : slide.kind === 'coinbase'
                           ? 'hero-slide-coinbase'
-                          : 'hero-slide-paypal'
+                          : slide.kind === 'paypal'
+                            ? 'hero-slide-paypal'
+                            : slide.kind === 'uber'
+                              ? 'hero-slide-uber'
+                              : 'hero-slide-ubereats'
                   }`}
                 >
                   {slide.kind === 'image' ? (

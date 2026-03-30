@@ -69,16 +69,50 @@ export const HeroSlidePaypalSchema = z.object({
   steps: z.array(HeroChimeStepSchema).max(6).optional()
 })
 
+export const HeroSlideUberSchema = z.object({
+  kind: z.literal('uber'),
+  ...heroSlideMeta,
+  eyebrow: z.string().max(100).optional(),
+  headline: z.string().min(1).max(200),
+  promoHighlight: z.string().max(280).optional(),
+  subtext: z.string().min(1).max(2000),
+  termsLabel: z.string().max(80).optional(),
+  termsUrl: z.string().url().optional(),
+  referralUrl: z.string().url(),
+  ctaText: z.string().min(1).max(80),
+  stepsTitle: z.string().max(200).optional(),
+  steps: z.array(HeroChimeStepSchema).max(6).optional()
+})
+
+export const HeroSlideUbereatsSchema = z.object({
+  kind: z.literal('ubereats'),
+  ...heroSlideMeta,
+  eyebrow: z.string().max(100).optional(),
+  headline: z.string().min(1).max(200),
+  promoHighlight: z.string().max(280).optional(),
+  subtext: z.string().min(1).max(2000),
+  termsLabel: z.string().max(80).optional(),
+  termsUrl: z.string().url().optional(),
+  referralUrl: z.string().url(),
+  ctaText: z.string().min(1).max(80),
+  stepsTitle: z.string().max(200).optional(),
+  steps: z.array(HeroChimeStepSchema).max(6).optional()
+})
+
 export const HeroSlideSchema = z.discriminatedUnion('kind', [
   HeroSlideImageSchema,
   HeroSlideChimeSchema,
   HeroSlideCoinbaseSchema,
-  HeroSlidePaypalSchema
+  HeroSlidePaypalSchema,
+  HeroSlideUberSchema,
+  HeroSlideUbereatsSchema
 ])
 
 export type HeroSlideImage = z.infer<typeof HeroSlideImageSchema>
 export type HeroSlideChime = z.infer<typeof HeroSlideChimeSchema>
 export type HeroSlideCoinbase = z.infer<typeof HeroSlideCoinbaseSchema>
 export type HeroSlidePaypal = z.infer<typeof HeroSlidePaypalSchema>
+export type HeroSlideUber = z.infer<typeof HeroSlideUberSchema>
+export type HeroSlideUbereats = z.infer<typeof HeroSlideUbereatsSchema>
 export type HeroSlide = z.infer<typeof HeroSlideSchema>
 export type HeroChimeStep = z.infer<typeof HeroChimeStepSchema>

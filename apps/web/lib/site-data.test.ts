@@ -22,17 +22,27 @@ describe('site-data', () => {
     const heroes = await getHeroSlides()
     expect(heroes.length).toBeGreaterThan(0)
     expect(heroes[0]?.kind).toBe('chime')
-    expect(heroes[1]?.kind).toBe('coinbase')
-    expect(heroes[2]?.kind).toBe('paypal')
+    expect(heroes[1]?.kind).toBe('uber')
+    expect(heroes[2]?.kind).toBe('coinbase')
+    expect(heroes[3]?.kind).toBe('paypal')
     if (heroes[0]?.kind === 'chime') {
       expect(heroes[0].headline).toContain('$125')
       expect(heroes[0].referralUrl).toContain('chime.com')
     }
-    if (heroes[1]?.kind === 'coinbase') {
-      expect(heroes[1].referralUrl).toContain('coinbase.com')
+    if (heroes[1]?.kind === 'uber') {
+      expect(heroes[1].referralUrl).toContain('referrals.uber.com')
+      expect(heroes[1].headline).toContain('$25')
     }
-    if (heroes[2]?.kind === 'paypal') {
-      expect(heroes[2].referralUrl).toContain('py.pl')
+    if (heroes[2]?.kind === 'coinbase') {
+      expect(heroes[2].referralUrl).toContain('coinbase.com')
+    }
+    if (heroes[3]?.kind === 'paypal') {
+      expect(heroes[3].referralUrl).toContain('py.pl')
+    }
+    expect(heroes[4]?.kind).toBe('ubereats')
+    if (heroes[4]?.kind === 'ubereats') {
+      expect(heroes[4].referralUrl).toContain('ubereats.com')
+      expect(heroes[4].referralUrl).toContain('promoCode=')
     }
     const banner = await getPremiumBanner()
     expect(banner?.title).toBeTruthy()

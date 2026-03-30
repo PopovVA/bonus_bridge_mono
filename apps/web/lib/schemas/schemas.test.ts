@@ -204,4 +204,36 @@ describe('site schemas', () => {
     expect(pp.kind).toBe('paypal')
     expect(pp.referralUrl).toContain('py.pl')
   })
+
+  it('parses hero uber slide', () => {
+    const u = HeroSlideSchema.parse({
+      kind: 'uber',
+      id: '550e8400-e29b-41d4-a716-446655440096',
+      sortOrder: 1,
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
+      headline: '$25 off first rides',
+      subtext: 'Terms apply.',
+      referralUrl: 'https://referrals.uber.com/refer?id=test',
+      ctaText: 'Ride'
+    })
+    expect(u.kind).toBe('uber')
+    expect(u.referralUrl).toContain('uber.com')
+  })
+
+  it('parses hero ubereats slide', () => {
+    const ue = HeroSlideSchema.parse({
+      kind: 'ubereats',
+      id: '550e8400-e29b-41d4-a716-446655440097',
+      sortOrder: 3,
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
+      headline: '$20 off delivery',
+      subtext: 'Terms apply.',
+      referralUrl: 'https://ubereats.com/feed?promoCode=test',
+      ctaText: 'Order'
+    })
+    expect(ue.kind).toBe('ubereats')
+    expect(ue.referralUrl).toContain('ubereats.com')
+  })
 })

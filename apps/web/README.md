@@ -1,6 +1,6 @@
 # BonusBridge Web
 
-Public SEO site (Next.js App Router). **Data is static** — edit `lib/site-data.ts` to change stores, coupons, hero images, and home sections.
+Public SEO site (Next.js App Router). **Data is static** — edit `lib/site-data.ts` to change stores, coupons, hero promo copy/links, and home sections. Hero backgrounds and brand marks live under `public/hero/` and `public/brands/` (referenced from CSS/components).
 
 ## Local setup
 
@@ -13,6 +13,8 @@ pnpm dev
 ```
 
 Port: `http://localhost:3000`
+
+Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](https://developers.brandfetch.com/register)) so the Uber Eats hero logo can load from `cdn.brandfetch.io/ubereats.com`. Without it, `/brands/ubereats-logo.png`. The Uber rides slide always uses `/brands/uber-logo.png`.
 
 ## Commands
 
