@@ -1,0 +1,11 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "buildCommand": "pnpm install --frozen-lockfile && pnpm --filter @bonusbridge/shared build && pnpm --filter web build"
+  },
+  "deploy": {
+    "startCommand": "pnpm --filter web start",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 300
+  }
+}
