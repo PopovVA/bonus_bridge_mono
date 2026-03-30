@@ -3,7 +3,7 @@ import {
   getCategories,
   getFeaturedOffers,
   getFeaturedStores,
-  getHeroImages,
+  getHeroSlides,
   getOfferById,
   getOffers,
   getPremiumBanner,
@@ -18,9 +18,14 @@ describe('site-data', () => {
     expect(list[0]).toMatchObject({ slug: expect.any(String), name: expect.any(String) })
   })
 
-  it('returns hero images and premium banner', async () => {
-    const heroes = await getHeroImages()
+  it('returns hero slides and premium banner', async () => {
+    const heroes = await getHeroSlides()
     expect(heroes.length).toBeGreaterThan(0)
+    expect(heroes[0]?.kind).toBe('chime')
+    if (heroes[0]?.kind === 'chime') {
+      expect(heroes[0].headline).toContain('$125')
+      expect(heroes[0].referralUrl).toContain('chime.com')
+    }
     const banner = await getPremiumBanner()
     expect(banner?.title).toBeTruthy()
   })

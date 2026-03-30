@@ -8,6 +8,7 @@ export default defineConfig({
     }
   },
   test: {
+    setupFiles: ['./vitest.setup.ts'],
     include: ['app/**/*.test.ts', 'app/**/*.test.tsx', 'lib/**/*.test.ts', 'components/**/*.test.tsx'],
     coverage: {
       provider: 'v8',
@@ -23,6 +24,7 @@ export default defineConfig({
         'components/stores-nav.tsx',
         'components/home-header.tsx',
         'components/home-footer.tsx',
+        /* Embla + client effects: smoke-tested in hero-slider.test.tsx; v8 cannot execute hooks in SSR markup */
         'components/hero-slider.tsx',
         'app/(home)/layout.tsx',
         '**/privacy/page.tsx',

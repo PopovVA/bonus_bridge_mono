@@ -4,7 +4,7 @@ import { StoreCard } from '@/components/store-card'
 import { CouponCard } from '@/components/coupon-card'
 import { PromoBanner } from '@/components/promo-banner'
 import {
-  getHeroImages,
+  getHeroSlides,
   getPremiumBanner,
   getFeaturedStores,
   getFeaturedOffers
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [heroImages, premiumBanner, featuredStores, featuredOffers] = await Promise.all([
-    getHeroImages().catch(() => []),
+  const [heroSlides, premiumBanner, featuredStores, featuredOffers] = await Promise.all([
+    getHeroSlides().catch(() => []),
     getPremiumBanner().catch(() => null),
     getFeaturedStores().catch(() => []),
     getFeaturedOffers().catch(() => [])
@@ -25,7 +25,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSlider images={heroImages} />
+      <HeroSlider slides={heroSlides} />
 
       <section id="stores" className="stores-section">
         <div className="section-head">

@@ -8,7 +8,7 @@ vi.mock('@/lib/site-data', () => ({
   getOffers: vi.fn(),
   getOfferById: vi.fn(),
   getServiceBySlug: vi.fn(),
-  getHeroImages: vi.fn(),
+  getHeroSlides: vi.fn(),
   getPremiumBanner: vi.fn(),
   getFeaturedStores: vi.fn(),
   getFeaturedOffers: vi.fn()
@@ -27,7 +27,7 @@ import {
   getCategories,
   getOfferById,
   getOffers,
-  getHeroImages,
+  getHeroSlides,
   getPremiumBanner,
   getFeaturedStores,
   getFeaturedOffers,
@@ -39,8 +39,15 @@ import {
 
 describe('web routes', () => {
   it('renders home with fetched aggregates', async () => {
-    vi.mocked(getHeroImages).mockResolvedValue([
-      { id: 'h1', imageUrl: 'https://example.com/hero.jpg', sortOrder: 0, createdAt: '', updatedAt: '' }
+    vi.mocked(getHeroSlides).mockResolvedValue([
+      {
+        kind: 'image',
+        id: 'h1',
+        imageUrl: 'https://example.com/hero.jpg',
+        sortOrder: 0,
+        createdAt: '',
+        updatedAt: ''
+      }
     ] as never)
     vi.mocked(getPremiumBanner).mockResolvedValue({
       id: 'pb1',
@@ -101,7 +108,7 @@ describe('web routes', () => {
   })
 
   it('renders home fallback state when APIs fail', async () => {
-    vi.mocked(getHeroImages).mockRejectedValue(new Error('down'))
+    vi.mocked(getHeroSlides).mockRejectedValue(new Error('down'))
     vi.mocked(getPremiumBanner).mockRejectedValue(new Error('down'))
     vi.mocked(getFeaturedStores).mockRejectedValue(new Error('down'))
     vi.mocked(getFeaturedOffers).mockRejectedValue(new Error('down'))

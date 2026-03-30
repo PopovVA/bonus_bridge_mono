@@ -6,7 +6,7 @@ import {
   type Category,
   type FeaturedOfferWithOffer,
   type FeaturedStoreWithStore,
-  type HeroImage,
+  type HeroSlide,
   type Offer,
   type PremiumBanner,
   type Service
@@ -102,18 +102,36 @@ const offers: Offer[] = [
   }
 ]
 
-const heroImages: HeroImage[] = [
+const heroSlides: HeroSlide[] = [
   {
+    kind: 'chime',
+    id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb1',
+    sortOrder: 0,
+    createdAt: ISO,
+    updatedAt: ISO,
+    eyebrow: 'Limited-time bank bonus',
+    headline: 'Get up to $125 when you open Chime',
+    promoHighlight: 'New account + qualifying direct deposit — tap the button to start in one step.',
+    subtext:
+      "Amounts and eligibility follow Chime's current promo. Friends may qualify for separate offers. SpotMe® extras may apply.",
+    termsLabel: 'View terms',
+    termsUrl: 'https://www.chime.com/legal/all-policies/',
+    referralUrl: 'https://www.chime.com/r/vadimpopov1/',
+    ctaText: 'Get your $125'
+  },
+  {
+    kind: 'image',
     id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1',
     imageUrl: 'https://picsum.photos/id/29/1200/600',
-    sortOrder: 0,
+    sortOrder: 1,
     createdAt: ISO,
     updatedAt: ISO
   },
   {
+    kind: 'image',
     id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2',
     imageUrl: 'https://picsum.photos/id/48/1200/600',
-    sortOrder: 1,
+    sortOrder: 2,
     createdAt: ISO,
     updatedAt: ISO
   }
@@ -173,8 +191,8 @@ export async function getCategories(): Promise<Category[]> {
   return structuredClone(categories)
 }
 
-export async function getHeroImages(): Promise<HeroImage[]> {
-  return structuredClone(heroImages)
+export async function getHeroSlides(): Promise<HeroSlide[]> {
+  return structuredClone(heroSlides)
 }
 
 export async function getPremiumBanner(): Promise<PremiumBanner | null> {

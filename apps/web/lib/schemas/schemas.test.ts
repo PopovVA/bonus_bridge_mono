@@ -5,6 +5,7 @@ import {
   FeaturedStoreCreateSchema,
   FeaturedStoreWithStoreSchema,
   HeroImageCreateSchema,
+  HeroSlideSchema,
   OfferCreateSchema,
   PremiumBannerCreateSchema,
   ServiceCreateSchema,
@@ -139,5 +140,36 @@ describe('site schemas', () => {
       }
     })
     expect(parsed.offer?.title).toBe('Deal')
+  })
+
+  it('parses hero slide image and chime variants', () => {
+    const img = HeroSlideSchema.parse({
+      kind: 'image',
+      id: '550e8400-e29b-41d4-a716-446655440000',
+      sortOrder: 1,
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
+      imageUrl: 'https://example.com/h.jpg'
+    })
+    expect(img.kind).toBe('image')
+    const chime = HeroSlideSchema.parse({
+      kind: 'chime',
+      id: '550e8400-e29b-41d4-a716-446655440001',
+      sortOrder: 0,
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
+      headline: '$125 for you',
+      promoHighlight: 'Open via link to qualify.',
+      subtext: 'Bonus when they enroll.',
+      termsUrl: 'https://example.com/terms',
+      referralUrl: 'https://example.com/r/x',
+      ctaText: 'Start offer',
+      stepsTitle: 'How it works',
+      steps: [{ title: 'One' }, { title: 'Two', hint: 'Hint' }]
+    })
+    expect(chime.kind).toBe('chime')
+    expect(chime.promoHighlight).toBe('Open via link to qualify.')
+    expect(chime.ctaText).toBe('Start offer')
+    expect(chime.steps).toHaveLength(2)
   })
 })
