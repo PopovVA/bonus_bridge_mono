@@ -112,5 +112,20 @@ Ensure the API is running locally (`pnpm dev:api`) and admin uses `NEXT_PUBLIC_A
 - Database/Auth: Supabase
 - Runtime/API/Web/Admin: Railway
 
+### Railway: admin (502 / "Application failed to respond")
+
+Usually the process is **not listening on Railway's `PORT`**, or the service was built **from a subfolder** without the pnpm workspace.
+
+1. **Root Directory** for the admin service: repository root **`.`** (not `apps/admin`).
+2. **Build command:**  
+   `pnpm install --frozen-lockfile && pnpm --filter @bonusbridge/shared build && pnpm --filter admin build`
+3. **Start command:**  
+   `pnpm --filter admin start`
+4. **Node:** `22` (see `.nvmrc`). If needed, set `NIXPACKS_NODE_VERSION=22` or `NODE_VERSION=22` in variables.
+5. Env vars from `apps/admin/.env.example` (`NEXT_PUBLIC_SUPABASE_*`, `NEXT_PUBLIC_API_BASE_URL`, …).
+6. Optional **Healthcheck path:** `/health` (lightweight route, no Supabase).
+
+If Root Directory is `apps/admin`, `@bonusbridge/shared` will not resolve correctly — use the monorepo root and the commands above.
+
 ## CI
 GitHub Actions workflow runs lockfile install + lint + test + build for shared/api/web/admin.
