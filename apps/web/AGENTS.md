@@ -31,9 +31,8 @@ From repo root:
 
 ## Data/typing
 
-- Do not duplicate DTOs.
-- Use packages/shared types and schemas.
-- Keep `lib/site-data.ts` typed; use shared schemas if you add runtime validation for static data.
+- Do not duplicate DTOs: use `lib/schemas` and inferred types.
+- Keep `lib/site-data.ts` typed; use `lib/schemas` if you add runtime validation for static data.
 
 ## UI rules
 

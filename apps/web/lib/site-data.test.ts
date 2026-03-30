@@ -40,6 +40,10 @@ describe('site-data', () => {
     expect(finance.every((s) => s.categoryId === '11111111-1111-4111-8111-111111111101')).toBe(true)
     const q = await getServices({ q: 'Acme' })
     expect(q.some((s) => s.name.includes('Acme'))).toBe(true)
+    const byDescription = await getServices({ q: 'Cashback' })
+    expect(byDescription.some((s) => s.slug === 'acme-cash')).toBe(true)
+    const noDesc = await getServices({ q: 'No Desc' })
+    expect(noDesc.some((s) => s.slug === 'no-desc-mart')).toBe(true)
   })
 
   it('resolves service by slug', async () => {

@@ -5,17 +5,15 @@ import {
   FeaturedStoreCreateSchema,
   FeaturedStoreWithStoreSchema,
   HeroImageCreateSchema,
-  listEnvelopeSchema,
   OfferCreateSchema,
   PremiumBannerCreateSchema,
-  ReferralCreateSchema,
   ServiceCreateSchema,
-  ServicesListQuerySchema,
-  normalizeText,
-  toSlug
+  ServicesListQuerySchema
 } from './index'
+import { normalizeText } from '../utils/normalize'
+import { toSlug } from '../utils/slug'
 
-describe('shared contracts', () => {
+describe('site schemas', () => {
   it('normalizes text and slugs values', () => {
     expect(normalizeText('  hello   world  ')).toBe('hello world')
     expect(toSlug('Hello World !!')).toBe('hello-world')
@@ -29,6 +27,21 @@ describe('shared contracts', () => {
       logoSvg: '<svg xmlns="http://www.w3.org/2000/svg"><circle r="10"/></svg>'
     })
     expect(parsed.logoSvg).toContain('<svg')
+    const noLogo = ServiceCreateSchema.parse({
+      name: 'Test',
+      slug: 'test',
+      categoryId: '550e8400-e29b-41d4-a716-446655440000',
+      logoSvg: '   '
+    })
+    expect(noLogo.logoSvg).toBeUndefined()
+    expect(() =>
+      ServiceCreateSchema.parse({
+        name: 'Test',
+        slug: 'test',
+        categoryId: '550e8400-e29b-41d4-a716-446655440000',
+        logoSvg: 'not-svg'
+      })
+    ).toThrow()
   })
 
   it('applies defaults for list query', () => {
@@ -37,7 +50,7 @@ describe('shared contracts', () => {
     expect(parsed.offset).toBe(0)
   })
 
-  it('accepts valid offer and referral input', () => {
+  it('accepts valid offer create input', () => {
     const offer = OfferCreateSchema.parse({
       serviceId: '550e8400-e29b-41d4-a716-446655440000',
       title: 'Get welcome bonus',
@@ -45,20 +58,9 @@ describe('shared contracts', () => {
       couponCode: 'WELCOME10',
       referralUrl: 'https://example.com/r/bonus'
     })
-    const referral = ReferralCreateSchema.parse({
-      offerId: '550e8400-e29b-41d4-a716-446655440002',
-      email: 'user@example.com'
-    })
 
     expect(offer.status).toBe('draft')
     expect(offer.couponCode).toBe('WELCOME10')
-    expect(referral.email).toBe('user@example.com')
-  })
-
-  it('parses list envelope helper', () => {
-    const schema = listEnvelopeSchema(ServiceCreateSchema)
-    const parsed = schema.parse([{ name: 'Test', slug: 'test', categoryId: '550e8400-e29b-41d4-a716-446655440000' }])
-    expect(parsed).toHaveLength(1)
   })
 
   it('validates hero image create input', () => {

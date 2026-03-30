@@ -10,8 +10,9 @@ import {
   type Offer,
   type PremiumBanner,
   type Service
-} from '@bonusbridge/shared'
+} from '@/lib/schemas'
 import type { z } from 'zod'
+import { offerWithService, serviceWithCategory } from '@/lib/site-data-relations'
 
 const ISO = '2026-03-01T12:00:00.000Z'
 const LOGO =
@@ -53,6 +54,17 @@ const services: Service[] = [
     categoryId: '11111111-1111-4111-8111-111111111102',
     website: 'https://example.com/bonus-shop',
     description: 'Deals and promo codes for online shopping.',
+    logoSvg: LOGO,
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222203',
+    name: 'No Desc Mart',
+    slug: 'no-desc-mart',
+    categoryId: '11111111-1111-4111-8111-111111111102',
+    website: 'https://example.com/no-desc',
+    description: null,
     logoSvg: LOGO,
     createdAt: ISO,
     updatedAt: ISO
@@ -119,26 +131,6 @@ const premiumBanner: PremiumBanner = {
   updatedAt: ISO
 }
 
-function serviceWithCategory(s: Service): Service & {
-  category?: { id: string; name: string; slug: string; createdAt: string; updatedAt: string }
-} {
-  const cat = categories.find((c) => c.id === s.categoryId)
-  return {
-    ...s,
-    category: cat
-      ? { id: cat.id, name: cat.name, slug: cat.slug, createdAt: cat.createdAt, updatedAt: cat.updatedAt }
-      : undefined
-  }
-}
-
-function offerWithService(o: Offer) {
-  const svc = services.find((s) => s.id === o.serviceId)
-  return {
-    ...o,
-    service: svc ? serviceWithCategory(svc) : undefined
-  }
-}
-
 const featuredStores: FeaturedStoreWithStore[] = [
   {
     id: '44444444-4444-4444-8444-444444444401',
@@ -146,7 +138,7 @@ const featuredStores: FeaturedStoreWithStore[] = [
     sortOrder: 0,
     createdAt: ISO,
     updatedAt: ISO,
-    store: serviceWithCategory(services[0]!)
+    store: serviceWithCategory(services[0]!, categories)
   },
   {
     id: '44444444-4444-4444-8444-444444444402',
@@ -154,7 +146,7 @@ const featuredStores: FeaturedStoreWithStore[] = [
     sortOrder: 1,
     createdAt: ISO,
     updatedAt: ISO,
-    store: serviceWithCategory(services[1]!)
+    store: serviceWithCategory(services[1]!, categories)
   }
 ]
 
@@ -165,7 +157,7 @@ const featuredOffers: FeaturedOfferWithOffer[] = [
     sortOrder: 0,
     createdAt: ISO,
     updatedAt: ISO,
-    offer: offerWithService(offers[0]!)
+    offer: offerWithService(offers[0]!, services, categories)
   },
   {
     id: '66666666-6666-4666-8666-666666666602',
@@ -173,7 +165,7 @@ const featuredOffers: FeaturedOfferWithOffer[] = [
     sortOrder: 1,
     createdAt: ISO,
     updatedAt: ISO,
-    offer: offerWithService(offers[1]!)
+    offer: offerWithService(offers[1]!, services, categories)
   }
 ]
 
@@ -205,7 +197,9 @@ export async function getServices(query?: { category?: string; q?: string }): Pr
   }
   if (query?.q?.trim()) {
     const ql = query.q.trim().toLowerCase()
-    list = list.filter((s) => s.name.toLowerCase().includes(ql) || (s.description?.toLowerCase().includes(ql) ?? false))
+    list = list.filter(
+      (s) => s.name.toLowerCase().includes(ql) || (s.description?.toLowerCase() ?? '').includes(ql)
+    )
   }
   return list
 }
@@ -221,7 +215,7 @@ export async function getOffers(
 ): Promise<Offer[]> {
   const { status = 'active', service, category, q } = OffersListQuerySchema.partial().parse(query)
   let list = [...offers]
-  if (status) list = list.filter((o) => o.status === status)
+  list = list.filter((o) => o.status === status)
   if (service) {
     const svc = services.find((s) => s.slug === service)
     list = svc ? list.filter((o) => o.serviceId === svc.id) : []

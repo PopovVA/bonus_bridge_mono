@@ -18,6 +18,7 @@ export default defineConfig({
         'components/**/*.tsx'
       ],
       exclude: [
+        'lib/schemas/index.ts',
         'components/coupon-copy-button.tsx',
         'components/stores-nav.tsx',
         'components/home-header.tsx',

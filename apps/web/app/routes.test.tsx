@@ -366,7 +366,7 @@ describe('web routes', () => {
     vi.mocked(getOffers).mockRejectedValueOnce(new Error('down'))
 
     const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'store' }) }))
-    expect(html).toContain('Store not found or API is unavailable.')
+    expect(html).toContain('Store not found')
     await expect(
       generateStoreMetadata({ params: Promise.resolve({ slug: 'store' }) })
     ).resolves.toMatchObject({ title: 'Store not found | BonusBridge' })

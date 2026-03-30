@@ -4,13 +4,11 @@
 
 BonusBridge is a referral / bonus aggregator with:
 
-- Public SEO website (Next.js) with **in-repo static content**
-- Shared schemas/types (Zod) for the web app
+- Public SEO website (Next.js) with **in-repo static content** and Zod schemas under `apps/web/lib/schemas`
 
 ## Repo layout
 
-- apps/web — Next.js public site (SEO)
-- packages/shared — Zod schemas, inferred TS types, shared utils
+- apps/web — Next.js public site (SEO), schemas and small utils in `lib/schemas`, `lib/utils`
 
 ## Package manager
 
@@ -31,8 +29,8 @@ Codex may spawn multiple agents. To avoid conflicts:
   - Must NOT pass work to implementation until user explicitly approves requirements
   - Does not edit code
 - Full-Stack Senior Developer Agent:
-  - Owns implementation quality for Web + shared packages
-  - Can edit: apps/web/**, packages/shared/**
+  - Owns implementation quality for the web app
+  - Can edit: apps/web/**
   - Can add/update unit tests for changed behavior
   - Must keep `README.md` and relevant app/package READMEs up to date with any behavior/setup/command changes
   - Must maintain 100% unit test coverage for changed modules and keep global unit coverage target at 100%
@@ -103,16 +101,12 @@ Codex may spawn multiple agents. To avoid conflicts:
     6. QA Automation
   - Before each stage, explicitly announce which role-agent is active.
   - After each stage, provide a short stage result and next handoff.
-- Any change to public content shapes MUST stay aligned with `packages/shared` schemas/types and `apps/web/lib/site-data.ts`.
-- Web/Admin MUST consume types from packages/shared; do not duplicate DTOs locally.
-- Any DB schema change requires:
-  1. migration (or equivalent),
-  2. updated shared schema/types,
-  3. updated API implementation.
+- Any change to public content shapes MUST stay aligned with `apps/web/lib/schemas` and `apps/web/lib/site-data.ts`.
+- Do not duplicate DTOs: extend `lib/schemas` and import inferred types from there.
 
-## Shared contract rules
+## Data contract rules
 
-- Define data models in packages/shared using Zod:
+- Define data models in `apps/web/lib/schemas` using Zod:
   - Export Schema (e.g., OfferSchema)
   - Export inferred types (e.g., type Offer = z.infer<typeof OfferSchema>)
 - Prefer runtime validation on web data boundaries (e.g. parsing static payloads) using the same Zod schemas where useful.

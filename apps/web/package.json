@@ -3,18 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": {
-    "node": ">=22.9.0"
-  },
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "node ./scripts/start-production.mjs",
+    "start": "next start",
     "lint": "eslint .",
-    "test": "pnpm --filter @bonusbridge/shared build && vitest run --coverage"
+    "test": "vitest run --coverage"
   },
   "dependencies": {
-    "@bonusbridge/shared": "workspace:*",
     "autoprefixer": "^10.4.27",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.577.0",

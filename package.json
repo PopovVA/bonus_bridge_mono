@@ -6,12 +6,9 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "dev": "pnpm --filter @bonusbridge/shared build && pnpm --filter web dev",
-    "dev:web": "pnpm --filter web dev",
-    "db:up": "docker compose up -d --wait",
-    "db:down": "docker compose down",
+    "dev": "pnpm --filter web dev",
     "lint": "pnpm -r lint",
-    "test": "pnpm --filter @bonusbridge/shared build && pnpm -r test",
-    "build": "pnpm --filter @bonusbridge/shared build && pnpm --filter web build"
+    "test": "pnpm -r test",
+    "build": "pnpm --filter web build"
   }
 }

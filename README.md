@@ -2,8 +2,7 @@
 
 Public SEO site with **fixed in-repo content** (no separate API or admin app).
 
-- `apps/web` — Next.js (`/`, `/stores`, `/stores/[slug]`, `/coupons`, `/coupons/[id]`)
-- `packages/shared` — Zod schemas and TypeScript types used by the web app
+- `apps/web` — Next.js (`/`, `/stores`, `/stores/[slug]`, `/coupons`, `/coupons/[id]`) with Zod schemas in `apps/web/lib/schemas`
 
 **Content:** edit `apps/web/lib/site-data.ts` (categories, stores, coupons, hero images, premium banner, featured sections).
 
@@ -32,18 +31,17 @@ pnpm dev
 
 Web: `http://localhost:3000`
 
-Optional: local Postgres for other tooling — `pnpm db:up` / `pnpm db:down` (see `docker-compose.yml`).
+## Deploy
 
-## Deploy (Railway / any Node host)
+Use the **monorepo root** as the app root (not `apps/web` alone), then:
 
-Monorepo **root** as working directory (leave **Root Directory** empty / `.` — **not** `apps/web`):
+```bash
+pnpm install --frozen-lockfile
+pnpm --filter web build
+pnpm --filter web start
+```
 
-1. **Build:** `pnpm install --frozen-lockfile && pnpm --filter @bonusbridge/shared build && pnpm --filter web build`
-2. **Start:** `pnpm --filter web start`
-3. Do **not** set `PORT` manually — the host injects it. Logs should show `[bonusbridge-web] cwd=... PORT=...` then Next **Ready**.
-4. **Healthcheck path:** `/health` (avoids SSR on `/` during the probe). Repo root `railway.json` sets this for Railway.
-
-If deploy logs show **Ready** but the public URL returns **502**, the router often hits a bad replica or the healthcheck on `/` fails. Use **`/health`** in Railway service settings and confirm **Root Directory** is the repo root so `pnpm --filter` sees the workspace.
+Default production URL is **port 3000** (`next start`). If your host sets another `PORT`, pass it the usual way for that platform or align the host’s public port with the port Next is listening on.
 
 ## Design reference
 
@@ -51,4 +49,4 @@ If deploy logs show **Ready** but the public URL returns **502**, the router oft
 
 ## CI
 
-GitHub Actions: install, shared build, lint, test, web build.
+GitHub Actions: install, lint, test, web build.

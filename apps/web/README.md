@@ -19,7 +19,7 @@ Port: `http://localhost:3000`
 - `pnpm --filter web dev`
 - `pnpm --filter web build`
 - `pnpm --filter web test`
-- `pnpm --filter web start` — production (uses `PORT` from the host)
+- `pnpm --filter web start` — production (default **port 3000**, same as `next start`)
 
 ## Routes
 
@@ -31,4 +31,4 @@ Port: `http://localhost:3000`
 
 ## Types
 
-Shared Zod types come from `@bonusbridge/shared`; runtime content lives in `lib/site-data.ts`.
+Zod schemas and inferred types live in `lib/schemas`; runtime content lives in `lib/site-data.ts`.

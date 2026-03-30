@@ -1,4 +1,4 @@
-import type { PremiumBanner } from '@bonusbridge/shared'
+import type { PremiumBanner } from '@/lib/schemas'
 
 export function PromoBanner({ banner }: { banner: PremiumBanner | null }) {
   if (!banner) return null
