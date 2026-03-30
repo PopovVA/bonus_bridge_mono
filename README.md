@@ -37,9 +37,11 @@ Use the **monorepo root** as the app root (not `apps/web` alone), then:
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm --filter web build
-pnpm --filter web start
+pnpm build
+pnpm start
 ```
+
+(`pnpm start` в корне нужен для провайдеров вроде Railpack, которые ищут скрипт `start` в корневом `package.json`; это то же самое, что `pnpm --filter web start` → `next start`.)
 
 Default production URL is **port 3000** (`next start`). If your host sets another `PORT`, pass it the usual way for that platform or align the host’s public port with the port Next is listening on.
 
