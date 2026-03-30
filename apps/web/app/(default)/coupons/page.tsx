@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getOffers } from '@/lib/api-client'
+import { getOffers } from '@/lib/site-data'
 
 export const metadata: Metadata = {
   title: 'Coupons | BonusBridge',

@@ -8,7 +8,7 @@ import {
   getPremiumBanner,
   getFeaturedStores,
   getFeaturedOffers
-} from '@/lib/api-client'
+} from '@/lib/site-data'
 
 export const metadata: Metadata = {
   title: 'Home | BonusBridge',

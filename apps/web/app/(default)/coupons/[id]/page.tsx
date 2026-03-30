@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { CouponCopyButton } from '@/components/coupon-copy-button'
-import { getOfferById } from '@/lib/api-client'
+import { getOfferById } from '@/lib/site-data'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -31,7 +31,7 @@ export default async function CouponDetailsPage({ params }: Props) {
     return (
       <section className="card">
         <h1 className="title">Coupon not found</h1>
-        <p className="meta">This coupon is missing or the API is unavailable.</p>
+        <p className="meta">This coupon does not exist.</p>
       </section>
     )
   }

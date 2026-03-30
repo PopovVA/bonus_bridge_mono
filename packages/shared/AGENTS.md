@@ -20,7 +20,7 @@ From repo root:
 
 - Export Zod schemas and inferred types.
 - Avoid importing from apps/\* here (shared must be dependency-leaf).
-- Keep it stable; breaking changes require coordinated updates in api/web/admin.
+- Keep it stable; breaking changes require coordinated updates in apps/web (and `lib/site-data.ts`).
 
 ## Versioning mindset (even inside monorepo)
 

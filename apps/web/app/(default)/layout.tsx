@@ -1,5 +1,5 @@
 import { SiteHeader } from '@/components/site-header'
-import { getCategories } from '@/lib/api-client'
+import { getCategories } from '@/lib/site-data'
 
 export default async function DefaultLayout({ children }: { children: React.ReactNode }) {
   const categories = await getCategories().catch(() => [])

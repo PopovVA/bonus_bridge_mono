@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { EmptyState } from '@/components/empty-state'
 import { CouponCopyButton } from '@/components/coupon-copy-button'
-import { getOffers, getServiceBySlug } from '@/lib/api-client'
+import { getOffers, getServiceBySlug } from '@/lib/site-data'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -29,7 +29,7 @@ export default async function StorePage({ params }: Props) {
   ])
 
   if (!store) {
-    return <EmptyState message="Store not found or API is unavailable." />
+    return <EmptyState message="Store not found." />
   }
 
   return (

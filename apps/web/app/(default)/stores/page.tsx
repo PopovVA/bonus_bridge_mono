@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { EmptyState } from '@/components/empty-state'
-import { getCategories, getServices } from '@/lib/api-client'
+import { getCategories, getServices } from '@/lib/site-data'
 import { StoreSearchForm } from '@/components/store-search-form'
 
 type Props = {

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-vi.mock('@/lib/api-client', () => ({
+vi.mock('@/lib/site-data', () => ({
   getCategories: vi.fn(),
   getServices: vi.fn(),
   getOffers: vi.fn(),
@@ -33,7 +33,7 @@ import {
   getFeaturedOffers,
   getServiceBySlug,
   getServices
-} from '@/lib/api-client'
+} from '@/lib/site-data'
 
 (globalThis as { React?: typeof React }).React = React
 

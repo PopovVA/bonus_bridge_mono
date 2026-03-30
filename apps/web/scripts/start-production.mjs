@@ -6,10 +6,9 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const appRoot = path.join(__dirname, '..')
-const port = String(process.env.PORT ?? '3002')
+const port = String(process.env.PORT ?? '3000')
 
-// Railway must set PORT; log so deploy logs show misconfig (e.g. wrong start cwd)
-console.error(`[bonusbridge-admin] cwd=${appRoot} PORT=${port}`)
+console.error(`[bonusbridge-web] cwd=${appRoot} PORT=${port}`)
 
 function resolveNextBin() {
   const fallback = path.join(appRoot, 'node_modules', 'next', 'dist', 'bin', 'next')
@@ -18,7 +17,7 @@ function resolveNextBin() {
     const require = createRequire(import.meta.url)
     return require.resolve('next/dist/bin/next')
   } catch (err) {
-    console.error('[bonusbridge-admin] Next.js CLI not found. Run install+build from monorepo root.', err)
+    console.error('[bonusbridge-web] Next.js CLI not found. Run install+build from monorepo root.', err)
     process.exit(1)
   }
 }
