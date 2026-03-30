@@ -29,11 +29,12 @@ const imageSlide: HeroSlide = {
 }
 
 describe('HeroSlider', () => {
-  it('renders full-width Chime panel, CTA link, carousel bar', () => {
+  it('renders full-width Chime panel, CTA link, floating carousel controls', () => {
     ;(globalThis as { React?: typeof React }).React = React
     const html = renderToStaticMarkup(<HeroSlider slides={[chimeSlide, imageSlide]} />)
+    expect(html).toContain('hero-carousel-shell')
     expect(html).toContain('hero-chime-panel')
-    expect(html).toContain('hero-slide-cell--chime')
+    expect(html).toContain('hero-slide-cell--promo')
     expect(html).toContain('Get up to ')
     expect(html).toContain('$125')
     expect(html).toContain('hero-chime-cta-primary')
@@ -41,6 +42,8 @@ describe('HeroSlider', () => {
     expect(html).not.toContain('hero-chime-side')
     expect(html).not.toContain('hero-chime-url-input')
     expect(html).not.toContain('copy-btn')
+    expect(html).toContain('hero-floating-arrow')
+    expect(html).toContain('hero-floating-dot')
     expect(html).toContain('hero.jpg')
   })
 

@@ -172,4 +172,20 @@ describe('site schemas', () => {
     expect(chime.ctaText).toBe('Start offer')
     expect(chime.steps).toHaveLength(2)
   })
+
+  it('parses hero coinbase slide', () => {
+    const cb = HeroSlideSchema.parse({
+      kind: 'coinbase',
+      id: '550e8400-e29b-41d4-a716-446655440099',
+      sortOrder: 1,
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
+      headline: 'Grow with friends',
+      subtext: 'Earn up to $200.',
+      referralUrl: 'https://coinbase.com/join/X',
+      ctaText: 'Join'
+    })
+    expect(cb.kind).toBe('coinbase')
+    expect(cb.ctaText).toBe('Join')
+  })
 })

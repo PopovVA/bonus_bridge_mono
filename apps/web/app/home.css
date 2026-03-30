@@ -82,34 +82,139 @@
   padding: 12px 24px;
 }
 
-.hero-embla-viewport {
+/* Outer frame: one radius + overflow kills gray “square” corners behind rounded slides */
+.hero-carousel-shell {
+  position: relative;
+  --hero-slide-gap: 16px;
+  border-radius: 20px;
   overflow: hidden;
+  background: #fff;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.14);
 }
 
+.hero-embla-viewport {
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Spacing between slides (Embla-friendly: padding-left + negative margin on track) */
 .hero-embla-track {
   display: flex;
-  gap: 0;
+  margin-left: calc(-1 * var(--hero-slide-gap));
 }
 
 .hero-slide-cell {
   flex: 0 0 100%;
   min-width: 0;
+  padding-left: var(--hero-slide-gap);
+  box-sizing: border-box;
 }
 
-/* Clip to rounded rect so inner layers never show square corners (Safari: isolate + mask) */
-.hero-slide-cell--chime {
-  border-radius: 20px;
+/* Inner clip; corner shape comes from .hero-carousel-shell */
+.hero-slide-cell--promo {
   overflow: hidden;
   contain: paint;
   isolation: isolate;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.22);
 }
 
 .hero-slide-cell--image {
-  border-radius: 16px;
   overflow: hidden;
   contain: paint;
   isolation: isolate;
+}
+
+/* Floating nav — above all slides, does not scroll with track */
+.hero-floating-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 12;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.hero-floating-arrow:hover {
+  background: #fff;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16);
+}
+
+.hero-floating-arrow:focus-visible {
+  outline: 2px solid #00e889;
+  outline-offset: 2px;
+}
+
+.hero-floating-arrow--prev {
+  left: 12px;
+}
+
+.hero-floating-arrow--next {
+  right: 12px;
+}
+
+.hero-floating-dots {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: calc(100% - 120px);
+  pointer-events: auto;
+}
+
+.hero-floating-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  background: rgba(15, 23, 42, 0.28);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.hero-section[data-active-slide='image'] .hero-floating-dot.active {
+  background: #111827;
+  border-color: rgba(255, 255, 255, 0.98);
+  transform: scale(1.08);
+}
+
+.hero-section[data-active-slide='chime'] .hero-floating-dot.active {
+  background: #00e889;
+  border-color: rgba(255, 255, 255, 0.98);
+  transform: scale(1.08);
+}
+
+.hero-section[data-active-slide='coinbase'] .hero-floating-dot.active {
+  background: #0052ff;
+  border-color: rgba(255, 255, 255, 0.98);
+  transform: scale(1.08);
+}
+
+.hero-floating-dot:focus-visible {
+  outline: 2px solid #00e889;
+  outline-offset: 3px;
+}
+
+/* Room for overlaid dots on promo + image slides */
+.hero-carousel-shell:has(.hero-floating-dots) .hero-chime-panel-inner,
+.hero-carousel-shell:has(.hero-floating-dots) .hero-coinbase-panel-inner {
+  padding-bottom: clamp(40px, 7vw, 64px);
 }
 
 .hero-slide {
@@ -170,7 +275,7 @@
   align-items: center;
   min-height: 100%;
   width: 100%;
-  padding: clamp(28px, 5vw, 48px) clamp(20px, 4vw, 40px) clamp(22px, 4vw, 36px);
+  padding: clamp(28px, 5vw, 48px) clamp(24px, 5vw, 48px) clamp(22px, 4vw, 36px);
   box-sizing: border-box;
 }
 
@@ -182,6 +287,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  row-gap: 2px;
 }
 
 .hero-chime-brand {
@@ -334,68 +440,175 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-.hero-chime-carousel-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: auto;
-  padding-top: 20px;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-.hero-chime-nav-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s ease;
-}
-
-.hero-chime-nav-btn:hover {
-  background: rgba(255, 255, 255, 0.32);
-}
-
-.hero-chime-dots {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.hero-chime-dot {
-  width: 8px;
-  height: 8px;
+/* Coinbase promo slide — same footprint as Chime, navy + Coinbase blue */
+.hero-slide-coinbase {
+  --cb-blue: #0052ff;
+  --cb-blue-bright: #5d9eff;
+  align-items: stretch;
+  justify-content: stretch;
   padding: 0;
+  min-height: clamp(300px, 52vw, 460px);
+  height: 100%;
+  border-radius: 0;
+  font-family: var(--font-chime-ui), system-ui, sans-serif;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.hero-coinbase-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  background:
+    radial-gradient(ellipse 70% 50% at 85% 20%, rgba(0, 82, 255, 0.18) 0%, transparent 50%),
+    linear-gradient(165deg, #0a1628 0%, #050d1a 45%, #030814 100%);
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+}
+
+.hero-coinbase-panel-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
+  width: 100%;
+  padding: clamp(28px, 5vw, 48px) clamp(24px, 5vw, 48px) clamp(22px, 4vw, 36px);
+  box-sizing: border-box;
+}
+
+.hero-coinbase-stack {
+  width: 100%;
+  max-width: 36rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  row-gap: 2px;
+}
+
+.hero-coinbase-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.hero-coinbase-icon-circle {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  border: 2px solid transparent;
-  background: rgba(255, 255, 255, 0.25);
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.12);
 }
 
-.hero-chime-dot.active {
-  background: var(--chime-lime);
-  border-color: rgba(255, 255, 255, 0.95);
-  transform: scale(1.15);
+.hero-coinbase-icon-circle--dark {
+  background: #0f1419;
+  margin-right: 0;
+  z-index: 1;
 }
 
-.hero-chime-dot:focus-visible {
-  outline: 2px solid var(--chime-lime);
-  outline-offset: 2px;
+.hero-coinbase-icon-circle--light {
+  background: #fff;
+  z-index: 2;
 }
 
-.hero-slide-image .hero-arrow {
-  z-index: 4;
+.hero-coinbase-brand {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.hero-coinbase-eyebrow {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(147, 197, 255, 0.75);
+}
+
+.hero-coinbase-headline {
+  margin: 0 0 12px;
+  max-width: 24rem;
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.hero-coinbase-money-accent {
+  color: var(--cb-blue-bright);
+  font-weight: 800;
+}
+
+.hero-coinbase-promo-highlight {
+  margin: 0 0 14px;
+  max-width: 30rem;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: clamp(0.88rem, 1.85vw, 0.98rem);
+  font-weight: 600;
+  line-height: 1.45;
+  color: #e8f0ff;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(93, 158, 255, 0.25);
+}
+
+.hero-coinbase-sub {
+  margin: 0 0 20px;
+  max-width: 32rem;
+  font-size: clamp(0.8rem, 1.65vw, 0.92rem);
+  line-height: 1.6;
+  color: rgba(200, 220, 255, 0.72);
+}
+
+.hero-coinbase-terms-link {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+
+.hero-coinbase-terms-link:hover {
+  color: var(--cb-blue-bright);
+}
+
+.hero-coinbase-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto 4px;
+  padding: 14px 28px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: #fff;
+  background: var(--cb-blue);
+  border: none;
+  box-shadow: 0 6px 28px rgba(0, 82, 255, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.hero-coinbase-cta-primary:hover {
+  background: #1a63ff;
+  box-shadow: 0 8px 32px rgba(0, 82, 255, 0.55);
+  transform: translateY(-1px);
 }
 
 .hero-image-wrap {
@@ -452,73 +665,9 @@
   background: #f3f4f6;
 }
 
-.hero-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.9);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hero-arrow:hover {
-  background: #fff;
-}
-
-.hero-arrow-prev {
-  left: 20px;
-}
-
-.hero-arrow-next {
-  right: 20px;
-}
-
 .hero-slide-content {
   padding: 0 24px;
   max-width: 512px;
-}
-
-.hero-dots {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
-  margin-top: 16px;
-}
-
-.hero-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  padding: 0;
-  background: rgba(17, 24, 39, 0.22);
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-}
-
-.hero-section[data-active-slide='image'] .hero-dot.active {
-  background: #111827;
-  border-color: rgba(255, 255, 255, 0.9);
-  transform: scale(1.05);
-}
-
-.hero-section[data-active-slide='chime'] .hero-dot.active {
-  background: #00e889;
-  border-color: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
-  transform: scale(1.08);
-}
-
-.hero-dot:focus-visible {
-  outline: 2px solid #00e889;
-  outline-offset: 3px;
 }
 
 /* Section headings */

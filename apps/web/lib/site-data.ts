@@ -120,10 +120,26 @@ const heroSlides: HeroSlide[] = [
     ctaText: 'Get your $125'
   },
   {
+    kind: 'coinbase',
+    id: 'cccccccc-cccc-4ccc-8ccc-cccccccccc01',
+    sortOrder: 1,
+    createdAt: ISO,
+    updatedAt: ISO,
+    eyebrow: 'Referral program',
+    headline: 'Referral rewards that grow with your friends',
+    promoHighlight: 'Earn $20 each when a friend makes their first $15+ trade',
+    subtext:
+      'Refer your friends and earn as they join, subscribe, and start trading. Up to $200 BTC.',
+    termsLabel: 'View terms',
+    termsUrl: 'https://www.coinbase.com/legal',
+    referralUrl: 'https://coinbase.com/join/F2XRWRL?src=ios-link',
+    ctaText: 'Join Coinbase'
+  },
+  {
     kind: 'image',
     id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1',
     imageUrl: 'https://picsum.photos/id/29/1200/600',
-    sortOrder: 1,
+    sortOrder: 2,
     createdAt: ISO,
     updatedAt: ISO
   },
@@ -131,7 +147,7 @@ const heroSlides: HeroSlide[] = [
     kind: 'image',
     id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2',
     imageUrl: 'https://picsum.photos/id/48/1200/600',
-    sortOrder: 2,
+    sortOrder: 3,
     createdAt: ISO,
     updatedAt: ISO
   }
