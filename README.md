@@ -114,14 +114,16 @@ Ensure the API is running locally (`pnpm dev:api`) and admin uses `NEXT_PUBLIC_A
 
 ### Railway: admin (502 / "Application failed to respond")
 
-If logs show **`upstreamErrors: connection refused`**, the proxy is hitting a port where nothing is listening — almost always **Next is not bound to Railway's `PORT`** (defaults to `3002` locally). The admin app uses `scripts/start-production.mjs` so `process.env.PORT` is passed straight to `next start`.
+If logs show **`upstreamErrors: connection refused`**, nothing is accepting TCP on the port Railway uses (the platform sets **`PORT`**; do not override it in variables).
 
-Usually the process is **not listening on Railway's `PORT`**, or the service was built **from a subfolder** without the pnpm workspace.
+**Common mistake:** the monorepo **root `package.json` has no `start` script.** If the admin service **Start command** is left empty, Railpack may run `pnpm start` / `npm start` at the repo root, which **fails immediately** → no listener → `connection refused`. You must set an **explicit** start command (below).
+
+After a successful boot, deploy logs should show **`[bonusbridge-admin] cwd=... PORT=...`** then Next **“Ready”** on `0.0.0.0`.
 
 1. **Root Directory** for the admin service: repository root **`.`** (not `apps/admin`).
 2. **Build command:**  
    `pnpm install --frozen-lockfile && pnpm --filter @bonusbridge/shared build && pnpm --filter admin build`
-3. **Start command:**  
+3. **Start command (required, non-empty):**  
    `pnpm --filter admin start`
 4. **Node:** `22` (see `.nvmrc`). If needed, set `NIXPACKS_NODE_VERSION=22` or `NODE_VERSION=22` in variables.
 5. Env vars from `apps/admin/.env.example` (`NEXT_PUBLIC_SUPABASE_*`, `NEXT_PUBLIC_API_BASE_URL`, …).
