@@ -114,6 +114,8 @@ Ensure the API is running locally (`pnpm dev:api`) and admin uses `NEXT_PUBLIC_A
 
 ### Railway: admin (502 / "Application failed to respond")
 
+If logs show **`upstreamErrors: connection refused`**, the proxy is hitting a port where nothing is listening — almost always **Next is not bound to Railway's `PORT`** (defaults to `3002` locally). The admin app uses `scripts/start-production.mjs` so `process.env.PORT` is passed straight to `next start`.
+
 Usually the process is **not listening on Railway's `PORT`**, or the service was built **from a subfolder** without the pnpm workspace.
 
 1. **Root Directory** for the admin service: repository root **`.`** (not `apps/admin`).
