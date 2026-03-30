@@ -1,4 +1,4 @@
-import { ResourceTable } from '@/components/resource-table'
+import { EditablePremiumBannerRow } from '@/components/editable-premium-banner-row'
 import { createAdminApiClient } from '@/lib/api/admin-client'
 import { getAccessToken, getAccessTokenForMutation } from '@/lib/auth'
 import { PremiumBannerCreateSchema, PremiumBannerUpdateSchema, type PremiumBanner } from '@bonusbridge/shared'
@@ -7,9 +7,7 @@ import { revalidatePath } from 'next/cache'
 async function createPremiumBannerAction(formData: FormData) {
   'use server'
   const accessToken = await getAccessTokenForMutation()
-  if (!accessToken) {
-    return
-  }
+  if (!accessToken) return
 
   const api = createAdminApiClient(accessToken)
   const payload = PremiumBannerCreateSchema.parse({
@@ -32,22 +30,31 @@ async function updatePremiumBannerAction(formData: FormData) {
     return
   }
 
-  const id = String(formData.get('id') ?? '')
+  const id = String(formData.get('id') ?? '').trim()
+  if (!id) return
+
   const api = createAdminApiClient(accessToken)
-  const payload = PremiumBannerUpdateSchema.parse({
-    title: String(formData.get('title') ?? '').trim() || undefined,
-    description: String(formData.get('description') ?? '').trim() || undefined,
-    priceText: String(formData.get('priceText') ?? '').trim() || undefined,
-    priceNote: String(formData.get('priceNote') ?? '').trim() || undefined,
-    ctaText: String(formData.get('ctaText') ?? '').trim() || undefined,
-    ctaHref: String(formData.get('ctaHref') ?? '').trim() || undefined
-  })
+  const toStr = (v: FormDataEntryValue | null) => String(v ?? '').trim()
+  const title = toStr(formData.get('title'))
+  const description = toStr(formData.get('description'))
+  const priceText = toStr(formData.get('priceText'))
+  const ctaText = toStr(formData.get('ctaText'))
+  if (!title || !description || !priceText || !ctaText) return
+
+  const payload: Record<string, string | null> = {
+    title,
+    description,
+    priceText,
+    priceNote: toStr(formData.get('priceNote')) || null,
+    ctaText,
+    ctaHref: toStr(formData.get('ctaHref')) || null
+  }
+
+  PremiumBannerUpdateSchema.parse(payload)
 
   const filtered = Object.fromEntries(
-    Object.entries(payload).filter(([, v]) => v !== undefined)
-  )
-  if (Object.keys(filtered).length === 0) return
-
+    Object.entries(payload).filter(([, v]) => v != null)
+  ) as Record<string, string>
   await api.updatePremiumBanner(id, filtered)
   revalidatePath('/admin/premium-banner')
 }
@@ -77,45 +84,17 @@ export default async function PremiumBannerAdminPage() {
   }
 
   return (
-    <ResourceTable
-      title="Premium Banner"
-      subtitle="Edit the Join Our Premium Membership banner content shown on the home page."
-      columns={['Title', 'Description', 'Price', 'CTA', 'Actions']}
-      rows={banners.map((b) => [
-        b.title,
-        <span key={`${b.id}-desc`} style={{ maxWidth: 200, fontSize: 13 }}>
-          {b.description}
-        </span>,
-        `${b.priceText}${b.priceNote ? ` (${b.priceNote})` : ''}`,
-        `${b.ctaText}${b.ctaHref ? ` → ${b.ctaHref}` : ''}`,
-        <form action={updatePremiumBannerAction} key={b.id} className="actions">
-          <input type="hidden" name="id" value={b.id} />
-          <input name="title" defaultValue={b.title} placeholder="Title" aria-label="Title" required />
-          <textarea
-            name="description"
-            defaultValue={b.description}
-            placeholder="Description"
-            aria-label="Description"
-            rows={2}
-            style={{ minWidth: 180 }}
-          />
-          <input name="priceText" defaultValue={b.priceText} placeholder="Price" aria-label="Price" required />
-          <input name="priceNote" defaultValue={b.priceNote ?? ''} placeholder="Note (optional)" aria-label="Price note" />
-          <input name="ctaText" defaultValue={b.ctaText} placeholder="CTA text" aria-label="CTA text" required />
-          <input name="ctaHref" defaultValue={b.ctaHref ?? ''} placeholder="CTA link (optional)" aria-label="CTA link" />
-          <button className="btn" type="submit">
-            Save
-          </button>
-          <form action={deletePremiumBannerAction} style={{ display: 'inline' }}>
-            <input type="hidden" name="id" value={b.id} />
-            <button className="btn" type="submit">
-              Delete
-            </button>
-          </form>
-        </form>
-      ])}
-      actions={
-        <>
+    <section className="panel grid">
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+        <div>
+          <h2 className="heading" style={{ marginBottom: 6 }}>
+            Premium Banner
+          </h2>
+          <p className="subtle">
+            Edit the Join Our Premium Membership banner content shown on the home page.
+          </p>
+        </div>
+        <div className="actions">
           {loadError ? <span className="subtle">{loadError}</span> : null}
           <form action={createPremiumBannerAction} className="actions">
             <input name="title" placeholder="Title" aria-label="Title" required />
@@ -128,8 +107,38 @@ export default async function PremiumBannerAdminPage() {
               Add banner
             </button>
           </form>
-        </>
-      }
-    />
+        </div>
+      </div>
+
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>CTA</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {banners.length === 0 ? (
+            <tr>
+              <td colSpan={5} className="subtle">
+                No records. Check API or create new entities.
+              </td>
+            </tr>
+          ) : (
+            banners.map((banner) => (
+              <EditablePremiumBannerRow
+                key={banner.id}
+                banner={banner}
+                updateAction={updatePremiumBannerAction}
+                deleteAction={deletePremiumBannerAction}
+              />
+            ))
+          )}
+        </tbody>
+      </table>
+    </section>
   )
 }

@@ -109,6 +109,60 @@ a {
   font-size: 0.92rem;
 }
 
+.cell-edit-trigger {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+
+.cell-edit-trigger:hover {
+  text-decoration: underline;
+  color: var(--accent);
+}
+
+.banner-edit-form-wrapper {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.banner-edit-form {
+  display: grid;
+  flex: 1;
+  min-width: 280px;
+  grid-template-columns: minmax(100px, 1fr) minmax(120px, 1.5fr) minmax(100px, 1fr) minmax(100px, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.banner-edit-form .edit-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.banner-edit-form .edit-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 760px) {
+  .banner-edit-form {
+    grid-template-columns: 1fr;
+    min-width: 280px;
+  }
+}
+
 .actions {
   display: flex;
   gap: 8px;
@@ -116,11 +170,15 @@ a {
 }
 
 .btn {
+  display: inline-flex;
+  align-items: center;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 7px 11px;
+  border-radius: 6px;
+  padding: 2px 8px;
+  height: 26px;
   background: #fbfcf9;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  line-height: 1;
 }
 
 .btn.primary {
@@ -142,10 +200,17 @@ input,
 select,
 textarea {
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 8px 10px;
-  font-size: 0.92rem;
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 0.88rem;
+  line-height: 1.2;
   min-width: 180px;
+}
+
+input,
+select {
+  height: 26px;
+  box-sizing: border-box;
 }
 
 textarea {

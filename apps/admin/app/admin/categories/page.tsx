@@ -1,4 +1,4 @@
-import { ResourceTable } from '@/components/resource-table'
+import { EditableCategoryRow } from '@/components/editable-category-row'
 import { createAdminApiClient } from '@/lib/api/admin-client'
 import { getAccessToken, getAccessTokenForMutation } from '@/lib/auth'
 import { CategoryCreateSchema, CategoryUpdateSchema, toSlug, type Category } from '@bonusbridge/shared'
@@ -57,24 +57,15 @@ export default async function CategoriesAdminPage() {
   }
 
   return (
-    <ResourceTable
-      title="Categories"
-      subtitle="Group stores by a stable taxonomy used in web filters."
-      columns={['Name', 'Slug', 'Actions']}
-      rows={categories.map((category) => [
-        category.name,
-        category.slug,
-        <form action={updateCategoryAction} key={category.id} className="actions">
-          <input type="hidden" name="id" value={category.id} />
-          <input name="name" defaultValue={category.name} placeholder="Category name" aria-label="Category name" required />
-          <input name="slug" defaultValue={category.slug} placeholder="category-slug" aria-label="Category slug" required />
-          <button className="btn" type="submit">
-            Save
-          </button>
-        </form>
-      ])}
-      actions={
-        <>
+    <section className="panel grid">
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+        <div>
+          <h2 className="heading" style={{ marginBottom: 6 }}>
+            Categories
+          </h2>
+          <p className="subtle">Group stores by a stable taxonomy used in web filters.</p>
+        </div>
+        <div className="actions">
           {loadError ? <span className="subtle">{loadError}</span> : null}
           <form action={createCategoryAction} className="actions">
             <input name="name" placeholder="Category name" aria-label="Category name" required />
@@ -83,8 +74,31 @@ export default async function CategoriesAdminPage() {
               Add category
             </button>
           </form>
-        </>
-      }
-    />
+        </div>
+      </div>
+
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {categories.length === 0 ? (
+            <tr>
+              <td colSpan={3} className="subtle">
+                No records. Check API or create new entities.
+              </td>
+            </tr>
+          ) : (
+            categories.map((category) => (
+              <EditableCategoryRow key={category.id} category={category} updateAction={updateCategoryAction} />
+            ))
+          )}
+        </tbody>
+      </table>
+    </section>
   )
 }

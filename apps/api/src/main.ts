@@ -1,10 +1,11 @@
 import { NestFactory } from '@nestjs/core'
+import type { NestExpressApplication } from '@nestjs/platform-express'
 import { AppModule } from './app.module'
 import { Env, parseEnv } from './shared/config/env'
 
 async function bootstrap() {
   const env: Env = parseEnv(process.env)
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
   const allowedOrigins = new Set(env.CORS_ALLOWED_ORIGINS)
 

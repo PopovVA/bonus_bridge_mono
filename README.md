@@ -103,6 +103,11 @@ Security note:
 ## Design Reference
 - UI style guide for web/admin: `docs/design-references.md`
 
+## Troubleshooting
+
+**Premium Banner save returns 400 "expected object, received string"**  
+Ensure the API is running locally (`pnpm dev:api`) and admin uses `NEXT_PUBLIC_API_BASE_URL=http://localhost:3001`. If using a deployed API, deploy the latest API code first.
+
 ## Deploy
 - Database/Auth: Supabase
 - Runtime/API/Web/Admin: Railway

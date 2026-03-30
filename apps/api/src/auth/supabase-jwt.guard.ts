@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { createRemoteJWKSet, jwtVerify } from 'jose'
 import {
   JsonWebTokenError,
   TokenExpiredError,
@@ -77,6 +76,7 @@ export class SupabaseJwtGuard implements CanActivate {
   ): Promise<JwtPayload> {
     if (supabaseUrl) {
       try {
+        const { createRemoteJWKSet, jwtVerify } = await import('jose')
         const jwks = createRemoteJWKSet(
           new URL(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/.well-known/jwks.json`)
         )

@@ -57,39 +57,89 @@ function unwrapList<T>(parsed: T[] | { items: T[] }): T[] {
   return Array.isArray(parsed) ? parsed : parsed.items
 }
 
-export function createAdminApiClient(accessToken?: string) {
+export function createAdminApiClient(accessToken?: string, proxyUrl?: string) {
+  const useProxy = Boolean(proxyUrl)
+
   async function request<T>(
     path: string,
     options: RequestInit,
     schema: z.ZodSchema<T>,
     query?: Record<string, string | number | undefined>
   ) {
-    const url = new URL(path, env.apiBaseUrl)
+    let response: Response
 
-    if (query) {
-      for (const [key, value] of Object.entries(query)) {
-        if (value !== undefined && value !== '') {
-          url.searchParams.set(key, String(value))
+    if (useProxy && proxyUrl && ['PATCH', 'POST', 'DELETE'].includes(options.method ?? '')) {
+      const pathWithQuery =
+        query && Object.keys(query).length > 0
+          ? `${path}?${new URLSearchParams(
+              Object.fromEntries(
+                Object.entries(query)
+                  .filter(([, v]) => v !== undefined && v !== '')
+                  .map(([k, v]) => [k, String(v)])
+              )
+            )}`
+          : path
+      const body =
+        options.method !== 'DELETE' && options.body
+          ? (typeof options.body === 'string' ? JSON.parse(options.body) : options.body)
+          : undefined
+      response = await fetch(proxyUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+          ...(options.headers ?? {})
+        },
+        body: JSON.stringify({ path: pathWithQuery, method: options.method as 'PATCH' | 'POST' | 'DELETE', body }),
+        cache: 'no-store'
+      })
+    } else {
+      const apiBase = env.apiBaseUrl
+      const base = apiBase.endsWith('/') ? apiBase : `${apiBase}/`
+      const pathStr = path.startsWith('/') ? path.slice(1) : path
+      const url = new URL(pathStr, base)
+
+      if (query) {
+        for (const [key, value] of Object.entries(query)) {
+          if (value !== undefined && value !== '') {
+            url.searchParams.set(key, String(value))
+          }
         }
       }
-    }
 
-    const response = await fetch(url.toString(), {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-        ...(options.headers ?? {})
-      },
-      cache: 'no-store'
-    })
+      response = await fetch(url.toString(), {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+          ...(options.headers ?? {})
+        },
+        cache: 'no-store'
+      })
+    }
 
     if (!response.ok) {
       let detail = ''
       try {
         const body = await response.json()
-        if (body?.message) detail = `: ${body.message}`
+        const msg = body?.message ?? body?.error?.message
+        if (msg) detail = `: ${msg}`
+        const err = body?.error?.details
+        if (err && typeof err === 'object') {
+          const parts: string[] = []
+          if (Array.isArray(err.formErrors) && err.formErrors.length) {
+            parts.push(`form: ${err.formErrors.join(', ')}`)
+          }
+          if (err.fieldErrors && typeof err.fieldErrors === 'object') {
+            const fieldParts = Object.entries(err.fieldErrors)
+              .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`)
+            if (fieldParts.length) parts.push(`fields: ${fieldParts.join('; ')}`)
+          }
+          if (parts.length) detail += ` (${parts.join('; ')})`
+          else detail += ` ${JSON.stringify(err)}`
+        }
       } catch {
         // ignore
       }
@@ -127,7 +177,10 @@ export function createAdminApiClient(accessToken?: string) {
     createPremiumBanner: (payload: PremiumBannerCreateInput): Promise<PremiumBanner> =>
       request('/premium-banner', { method: 'POST', body: JSON.stringify(PremiumBannerCreateSchema.parse(payload)) }, PremiumBannerSchema),
     updatePremiumBanner: (id: string, payload: PremiumBannerUpdateInput): Promise<PremiumBanner> =>
-      request(`/premium-banner/${id}`, { method: 'PATCH', body: JSON.stringify(PremiumBannerUpdateSchema.parse(payload)) }, PremiumBannerSchema),
+      request(`/premium-banner/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(PremiumBannerUpdateSchema.parse(payload))
+      }, PremiumBannerSchema),
     deletePremiumBanner: (id: string): Promise<{ ok: true }> =>
       request(`/premium-banner/${id}`, { method: 'DELETE' }, z.object({ ok: z.literal(true) })),
 
