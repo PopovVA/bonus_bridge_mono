@@ -112,8 +112,7 @@ const heroSlides: HeroSlide[] = [
     eyebrow: 'Limited-time bank bonus',
     headline: 'Get up to $125 when you open Chime',
     promoHighlight: 'New account + qualifying direct deposit — tap the button to start in one step.',
-    subtext:
-      "Amounts and eligibility follow Chime's current promo. Friends may qualify for separate offers. SpotMe® extras may apply.",
+    subtext: "Eligibility and amounts follow Chime's current offer; friends may qualify separately.",
     termsLabel: 'View terms',
     termsUrl: 'https://www.chime.com/legal/all-policies/',
     referralUrl: 'https://www.chime.com/r/vadimpopov1/',
@@ -125,31 +124,32 @@ const heroSlides: HeroSlide[] = [
     sortOrder: 1,
     createdAt: ISO,
     updatedAt: ISO,
-    eyebrow: 'Referral program',
-    headline: 'Referral rewards that grow with your friends',
-    promoHighlight: 'Earn $20 each when a friend makes their first $15+ trade',
-    subtext:
-      'Refer your friends and earn as they join, subscribe, and start trading. Up to $200 BTC.',
+    eyebrow: 'Limited-time crypto offer',
+    headline: 'Get up to $200 in crypto when you join Coinbase',
+    promoHighlight:
+      'Open through our link, then buy or trade — bonuses stack as Coinbase\'s promos allow.',
+    subtext: 'Reward caps and who qualifies are set by Coinbase. Read their latest terms before you trade.',
     termsLabel: 'View terms',
     termsUrl: 'https://www.coinbase.com/legal',
     referralUrl: 'https://coinbase.com/join/F2XRWRL?src=ios-link',
-    ctaText: 'Join Coinbase'
+    ctaText: 'Open Coinbase & earn'
   },
   {
-    kind: 'image',
-    id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1',
-    imageUrl: 'https://picsum.photos/id/29/1200/600',
+    kind: 'paypal',
+    id: 'dddddddd-dddd-4ddd-8ddd-dddddddddd01',
     sortOrder: 2,
     createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    kind: 'image',
-    id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa2',
-    imageUrl: 'https://picsum.photos/id/48/1200/600',
-    sortOrder: 3,
-    createdAt: ISO,
-    updatedAt: ISO
+    updatedAt: ISO,
+    eyebrow: 'PayPal Rewards offer',
+    headline: 'Earn up to $100 in cash back with PayPal Rewards',
+    promoHighlight:
+      'Our link opens the offer — points toward cash after setup and a small qualifying checkout.',
+    subtext:
+      'Usually: linked bank or card, verified phone, and a $5+ PayPal checkout within 30 days. Limits are set by PayPal.',
+    termsLabel: 'View terms',
+    termsUrl: 'https://www.paypal.com/us/legalhub/paypal/referral-program',
+    referralUrl: 'https://py.pl/29jzHS',
+    ctaText: 'Open the PayPal offer'
   }
 ]
 

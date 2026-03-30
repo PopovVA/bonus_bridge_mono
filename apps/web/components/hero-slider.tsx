@@ -3,15 +3,28 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
-import { ChevronLeft, ChevronRight, Gem, Gift } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { HeroSlide } from '@/lib/schemas'
 
 /** Time each hero slide stays visible before auto-advance (ms). */
 const HERO_AUTOPLAY_INTERVAL_MS = 30000
 
-type PromoKind = 'chime' | 'coinbase'
+type PromoKind = 'chime' | 'coinbase' | 'paypal'
 
 type PromoSlide = Extract<HeroSlide, { kind: PromoKind }>
+
+/** Wide wordmarks (ar21) from vectorlogo.zone — keep sizing in CSS for consistent centering */
+const BRAND_LOGO: Record<PromoKind, { src: string }> = {
+  chime: {
+    src: 'https://www.vectorlogo.zone/logos/chimebank/chimebank-ar21.svg'
+  },
+  coinbase: {
+    src: 'https://www.vectorlogo.zone/logos/coinbase/coinbase-ar21.svg'
+  },
+  paypal: {
+    src: 'https://www.vectorlogo.zone/logos/paypal/paypal-ar21.svg'
+  }
+}
 
 const PROMO_UI: Record<
   PromoKind,
@@ -20,7 +33,6 @@ const PROMO_UI: Record<
     panel: string
     panelInner: string
     stack: string
-    brand: string
     eyebrow: string
     headline: string
     moneyAccent: string
@@ -35,7 +47,7 @@ const PROMO_UI: Record<
     stepBody: string
     stepTitle: string
     stepHint: string
-    brandText: string
+    brandAlt: string
   }
 > = {
   chime: {
@@ -43,7 +55,6 @@ const PROMO_UI: Record<
     panel: 'hero-chime-panel',
     panelInner: 'hero-chime-panel-inner',
     stack: 'hero-chime-stack',
-    brand: 'hero-chime-brand',
     eyebrow: 'hero-chime-eyebrow',
     headline: 'hero-chime-headline',
     moneyAccent: 'hero-chime-headline-accent',
@@ -58,14 +69,13 @@ const PROMO_UI: Record<
     stepBody: 'hero-chime-step-body',
     stepTitle: 'hero-chime-step-title',
     stepHint: 'hero-chime-step-hint',
-    brandText: 'Chime'
+    brandAlt: 'Chime'
   },
   coinbase: {
     slide: 'hero-slide-coinbase',
     panel: 'hero-coinbase-panel',
     panelInner: 'hero-coinbase-panel-inner',
     stack: 'hero-coinbase-stack',
-    brand: 'hero-coinbase-brand',
     eyebrow: 'hero-coinbase-eyebrow',
     headline: 'hero-coinbase-headline',
     moneyAccent: 'hero-coinbase-money-accent',
@@ -80,7 +90,28 @@ const PROMO_UI: Record<
     stepBody: 'hero-chime-step-body',
     stepTitle: 'hero-chime-step-title',
     stepHint: 'hero-chime-step-hint',
-    brandText: 'Coinbase'
+    brandAlt: 'Coinbase'
+  },
+  paypal: {
+    slide: 'hero-slide-paypal',
+    panel: 'hero-paypal-panel',
+    panelInner: 'hero-paypal-panel-inner',
+    stack: 'hero-paypal-stack',
+    eyebrow: 'hero-paypal-eyebrow',
+    headline: 'hero-paypal-headline',
+    moneyAccent: 'hero-paypal-money-accent',
+    promoHl: 'hero-paypal-promo-highlight',
+    sub: 'hero-paypal-sub',
+    terms: 'hero-paypal-terms-link',
+    cta: 'hero-paypal-cta-primary',
+    stepsTitle: 'hero-paypal-steps-title',
+    steps: 'hero-paypal-steps',
+    step: 'hero-paypal-step',
+    stepNum: 'hero-paypal-step-num',
+    stepBody: 'hero-paypal-step-body',
+    stepTitle: 'hero-paypal-step-title',
+    stepHint: 'hero-paypal-step-hint',
+    brandAlt: 'PayPal'
   }
 }
 
@@ -98,21 +129,15 @@ function moneyAccentSpans(text: string, accentClass: string): ReactNode[] {
 
 function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], kind: PromoKind) {
   const headlineId = `hero-promo-${slide.id}-headline`
+  const logo = BRAND_LOGO[kind]
   return (
     <div className={ui.panel} role="group" aria-labelledby={headlineId}>
       <div className={ui.panelInner}>
         <div className={ui.stack}>
-          {kind === 'coinbase' ? (
-            <div className="hero-coinbase-icons" aria-hidden>
-              <div className="hero-coinbase-icon-circle hero-coinbase-icon-circle--dark">
-                <Gem size={20} color="#fff" strokeWidth={2} aria-hidden />
-              </div>
-              <div className="hero-coinbase-icon-circle hero-coinbase-icon-circle--light">
-                <Gift size={20} color="#0f1419" strokeWidth={2} aria-hidden />
-              </div>
-            </div>
-          ) : null}
-          <p className={ui.brand}>{ui.brandText}</p>
+          <div className={`hero-promo-brand-row hero-promo-brand-row--${kind}`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="hero-promo-brand-logo" src={logo.src} alt={ui.brandAlt} />
+          </div>
           {slide.eyebrow ? <p className={ui.eyebrow}>{slide.eyebrow}</p> : null}
           <h2 id={headlineId} className={ui.headline}>
             {moneyAccentSpans(slide.headline, ui.moneyAccent)}
@@ -193,11 +218,12 @@ export function HeroSlider({ slides = [] }: { slides?: HeroSlide[] }) {
     }
   }, [emblaApi, onSelect])
 
+  /* Restart interval whenever the active slide changes (manual or auto) so the 30s window always resets */
   useEffect(() => {
     if (!emblaApi || slides.length <= 1) return
     const interval = setInterval(() => emblaApi.scrollNext(), HERO_AUTOPLAY_INTERVAL_MS)
     return () => clearInterval(interval)
-  }, [emblaApi, slides.length])
+  }, [emblaApi, slides.length, selectedIndex])
 
   useEffect(() => {
     if (!emblaApi) return
@@ -208,7 +234,7 @@ export function HeroSlider({ slides = [] }: { slides?: HeroSlide[] }) {
 
   if (slides.length === 0) return null
 
-  const activeKind = slides[selectedIndex]?.kind ?? 'image'
+  const activeKind = slides[selectedIndex]?.kind ?? 'chime'
   const showChrome = slides.length > 1
 
   return (
@@ -227,7 +253,9 @@ export function HeroSlider({ slides = [] }: { slides?: HeroSlide[] }) {
                       ? 'hero-slide-image'
                       : slide.kind === 'chime'
                         ? 'hero-slide-chime'
-                        : 'hero-slide-coinbase'
+                        : slide.kind === 'coinbase'
+                          ? 'hero-slide-coinbase'
+                          : 'hero-slide-paypal'
                   }`}
                 >
                   {slide.kind === 'image' ? (

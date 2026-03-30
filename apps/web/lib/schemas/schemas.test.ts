@@ -188,4 +188,20 @@ describe('site schemas', () => {
     expect(cb.kind).toBe('coinbase')
     expect(cb.ctaText).toBe('Join')
   })
+
+  it('parses hero paypal slide', () => {
+    const pp = HeroSlideSchema.parse({
+      kind: 'paypal',
+      id: '550e8400-e29b-41d4-a716-446655440098',
+      sortOrder: 2,
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
+      headline: 'Earn $10 per friend',
+      subtext: 'Terms apply.',
+      referralUrl: 'https://py.pl/29jzHS',
+      ctaText: 'Invite'
+    })
+    expect(pp.kind).toBe('paypal')
+    expect(pp.referralUrl).toContain('py.pl')
+  })
 })

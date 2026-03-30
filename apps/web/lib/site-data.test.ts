@@ -23,12 +23,16 @@ describe('site-data', () => {
     expect(heroes.length).toBeGreaterThan(0)
     expect(heroes[0]?.kind).toBe('chime')
     expect(heroes[1]?.kind).toBe('coinbase')
+    expect(heroes[2]?.kind).toBe('paypal')
     if (heroes[0]?.kind === 'chime') {
       expect(heroes[0].headline).toContain('$125')
       expect(heroes[0].referralUrl).toContain('chime.com')
     }
     if (heroes[1]?.kind === 'coinbase') {
       expect(heroes[1].referralUrl).toContain('coinbase.com')
+    }
+    if (heroes[2]?.kind === 'paypal') {
+      expect(heroes[2].referralUrl).toContain('py.pl')
     }
     const banner = await getPremiumBanner()
     expect(banner?.title).toBeTruthy()

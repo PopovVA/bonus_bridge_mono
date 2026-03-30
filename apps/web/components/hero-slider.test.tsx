@@ -19,24 +19,28 @@ const chimeSlide: HeroSlide = {
   ctaText: 'Get your $125'
 }
 
-const imageSlide: HeroSlide = {
-  kind: 'image',
+const paypalSlide: HeroSlide = {
+  kind: 'paypal',
   id: '550e8400-e29b-41d4-a716-446655440011',
   sortOrder: 1,
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
-  imageUrl: 'https://example.com/hero.jpg'
+  headline: 'Earn with PayPal Rewards',
+  subtext: 'Terms apply.',
+  referralUrl: 'https://py.pl/test',
+  ctaText: 'Open offer'
 }
 
 describe('HeroSlider', () => {
-  it('renders full-width Chime panel, CTA link, floating carousel controls', () => {
+  it('renders full-width Chime panel, brand logos, CTA link, floating carousel controls', () => {
     ;(globalThis as { React?: typeof React }).React = React
-    const html = renderToStaticMarkup(<HeroSlider slides={[chimeSlide, imageSlide]} />)
+    const html = renderToStaticMarkup(<HeroSlider slides={[chimeSlide, paypalSlide]} />)
     expect(html).toContain('hero-carousel-shell')
     expect(html).toContain('hero-chime-panel')
     expect(html).toContain('hero-slide-cell--promo')
     expect(html).toContain('Get up to ')
     expect(html).toContain('$125')
+    expect(html).toContain('hero-chime-promo-highlight')
     expect(html).toContain('hero-chime-cta-primary')
     expect(html).toContain('href="https://www.chime.com/r/test/"')
     expect(html).not.toContain('hero-chime-side')
@@ -44,7 +48,8 @@ describe('HeroSlider', () => {
     expect(html).not.toContain('copy-btn')
     expect(html).toContain('hero-floating-arrow')
     expect(html).toContain('hero-floating-dot')
-    expect(html).toContain('hero.jpg')
+    expect(html).toContain('vectorlogo.zone/logos/chimebank/')
+    expect(html).toContain('vectorlogo.zone/logos/paypal/')
   })
 
   it('returns null when no slides', () => {
