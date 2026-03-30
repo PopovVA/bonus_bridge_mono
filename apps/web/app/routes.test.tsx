@@ -9,9 +9,9 @@ vi.mock('@/lib/site-data', () => ({
   getOfferById: vi.fn(),
   getServiceBySlug: vi.fn(),
   getHeroSlides: vi.fn(),
-  getPremiumBanner: vi.fn(),
   getFeaturedStores: vi.fn(),
-  getFeaturedOffers: vi.fn()
+  getFeaturedOffers: vi.fn(),
+  getHomeCategoryMarquee: vi.fn()
 }))
 
 import HomePage from './(home)/page'
@@ -28,9 +28,9 @@ import {
   getOfferById,
   getOffers,
   getHeroSlides,
-  getPremiumBanner,
   getFeaturedStores,
   getFeaturedOffers,
+  getHomeCategoryMarquee,
   getServiceBySlug,
   getServices
 } from '@/lib/site-data'
@@ -49,21 +49,18 @@ describe('web routes', () => {
         updatedAt: ''
       }
     ] as never)
-    vi.mocked(getPremiumBanner).mockResolvedValue({
-      id: 'pb1',
-      title: 'Join Premium',
-      description: 'Get exclusive deals',
-      priceText: '$9.99/month',
-      priceNote: 'First free',
-      ctaText: 'Start Trial',
-      ctaHref: 'https://premium.example',
-      createdAt: '',
-      updatedAt: ''
-    } as never)
     vi.mocked(getFeaturedStores).mockResolvedValue([
       { id: 'fs1', storeId: 's1', sortOrder: 0, store: { id: 's1', name: 'Store', slug: 'store', logoSvg: '<svg></svg>' } } as never,
       { id: 'fs2', storeId: 's2', sortOrder: 1, store: { id: 's2', name: 'NoLogo', slug: 'nologo' } } as never,
       { id: 'fs3', storeId: 's3', sortOrder: 2, store: undefined } as never
+    ])
+    vi.mocked(getHomeCategoryMarquee).mockResolvedValue([
+      {
+        slug: 'finance',
+        name: 'Finance',
+        imageSrc: '/categories/finance.svg',
+        href: '/stores?category=finance'
+      }
     ])
     vi.mocked(getFeaturedOffers).mockResolvedValue([
       {
@@ -100,18 +97,19 @@ describe('web routes', () => {
     const html = renderToStaticMarkup(await HomePage())
     expect(html).toContain('Top Cashback Stores')
     expect(html).toContain('Hot Promo Codes')
-    expect(html).toContain('Join Premium')
     expect(html).toContain('Store')
     expect(html).toContain('NoLogo')
     expect(html).toContain('SAVE10')
     expect(html).toContain('NoCode')
+    expect(html).toContain('category-marquee-section')
+    expect(html).toContain('/categories/finance.svg')
   })
 
   it('renders home fallback state when APIs fail', async () => {
     vi.mocked(getHeroSlides).mockRejectedValue(new Error('down'))
-    vi.mocked(getPremiumBanner).mockRejectedValue(new Error('down'))
     vi.mocked(getFeaturedStores).mockRejectedValue(new Error('down'))
     vi.mocked(getFeaturedOffers).mockRejectedValue(new Error('down'))
+    vi.mocked(getHomeCategoryMarquee).mockRejectedValue(new Error('down'))
     const html = renderToStaticMarkup(await HomePage())
     expect(html).toContain('Top Cashback Stores')
     expect(html).toContain('Hot Promo Codes')

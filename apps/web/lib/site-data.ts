@@ -8,7 +8,6 @@ import {
   type FeaturedStoreWithStore,
   type HeroSlide,
   type Offer,
-  type PremiumBanner,
   type Service
 } from '@/lib/schemas'
 import type { z } from 'zod'
@@ -32,8 +31,85 @@ const categories: Category[] = [
     slug: 'shopping',
     createdAt: ISO,
     updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111103',
+    name: 'Food & Dining',
+    slug: 'food-dining',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111104',
+    name: 'Travel',
+    slug: 'travel',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111105',
+    name: 'Health & Beauty',
+    slug: 'health-beauty',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111106',
+    name: 'Electronics',
+    slug: 'electronics',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111107',
+    name: 'Home',
+    slug: 'home',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111108',
+    name: 'Entertainment',
+    slug: 'entertainment',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111109',
+    name: 'Auto',
+    slug: 'auto',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111110',
+    name: 'Sports',
+    slug: 'sports',
+    createdAt: ISO,
+    updatedAt: ISO
   }
 ]
+
+/** Order of chips in the home category marquee; assets: `public/categories/{slug}.svg`. */
+const HOME_CATEGORY_MARQUEE_SLUGS = [
+  'finance',
+  'shopping',
+  'food-dining',
+  'travel',
+  'health-beauty',
+  'electronics',
+  'home',
+  'entertainment',
+  'auto',
+  'sports'
+] as const
+
+export type HomeCategoryChip = {
+  slug: string
+  name: string
+  imageSrc: string
+  href: string
+}
 
 const services: Service[] = [
   {
@@ -187,18 +263,6 @@ const heroSlides: HeroSlide[] = [
   }
 ]
 
-const premiumBanner: PremiumBanner = {
-  id: '55555555-5555-4555-8555-555555555501',
-  title: 'Join BonusBridge Premium',
-  description: 'Unlock curated deals, early access to promos, and referral tools in one place.',
-  priceText: '$4.99/mo',
-  priceNote: 'Cancel anytime',
-  ctaText: 'Learn more',
-  ctaHref: 'https://example.com/premium',
-  createdAt: ISO,
-  updatedAt: ISO
-}
-
 const featuredStores: FeaturedStoreWithStore[] = [
   {
     id: '44444444-4444-4444-8444-444444444401',
@@ -241,12 +305,21 @@ export async function getCategories(): Promise<Category[]> {
   return structuredClone(categories)
 }
 
-export async function getHeroSlides(): Promise<HeroSlide[]> {
-  return structuredClone(heroSlides)
+export async function getHomeCategoryMarquee(): Promise<HomeCategoryChip[]> {
+  const bySlug = new Map(categories.map((c) => [c.slug, c]))
+  return HOME_CATEGORY_MARQUEE_SLUGS.map((slug) => {
+    const c = bySlug.get(slug)!
+    return {
+      slug: c.slug,
+      name: c.name,
+      imageSrc: `/categories/${c.slug}.svg`,
+      href: `/stores?category=${encodeURIComponent(c.slug)}`
+    }
+  })
 }
 
-export async function getPremiumBanner(): Promise<PremiumBanner | null> {
-  return structuredClone(premiumBanner)
+export async function getHeroSlides(): Promise<HeroSlide[]> {
+  return structuredClone(heroSlides)
 }
 
 export async function getFeaturedStores(): Promise<FeaturedStoreWithStore[]> {

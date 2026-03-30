@@ -2,12 +2,12 @@ import type { Metadata } from 'next'
 import { HeroSlider } from '@/components/hero-slider'
 import { StoreCard } from '@/components/store-card'
 import { CouponCard } from '@/components/coupon-card'
-import { PromoBanner } from '@/components/promo-banner'
+import { CategoryMarquee } from '@/components/category-marquee'
 import {
   getHeroSlides,
-  getPremiumBanner,
   getFeaturedStores,
-  getFeaturedOffers
+  getFeaturedOffers,
+  getHomeCategoryMarquee
 } from '@/lib/site-data'
 
 export const metadata: Metadata = {
@@ -16,11 +16,11 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [heroSlides, premiumBanner, featuredStores, featuredOffers] = await Promise.all([
+  const [heroSlides, featuredStores, featuredOffers, categoryChips] = await Promise.all([
     getHeroSlides().catch(() => []),
-    getPremiumBanner().catch(() => null),
     getFeaturedStores().catch(() => []),
-    getFeaturedOffers().catch(() => [])
+    getFeaturedOffers().catch(() => []),
+    getHomeCategoryMarquee().catch(() => [])
   ])
 
   return (
@@ -52,7 +52,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <PromoBanner banner={premiumBanner} />
+      <CategoryMarquee chips={categoryChips} />
 
       <section id="coupons" className="coupons-section">
         <div className="section-head">

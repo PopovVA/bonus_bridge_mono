@@ -4,9 +4,9 @@ import {
   getFeaturedOffers,
   getFeaturedStores,
   getHeroSlides,
+  getHomeCategoryMarquee,
   getOfferById,
   getOffers,
-  getPremiumBanner,
   getServiceBySlug,
   getServices
 } from './site-data'
@@ -14,11 +14,20 @@ import {
 describe('site-data', () => {
   it('returns categories', async () => {
     const list = await getCategories()
-    expect(list.length).toBeGreaterThan(0)
+    expect(list.length).toBe(10)
     expect(list[0]).toMatchObject({ slug: expect.any(String), name: expect.any(String) })
   })
 
-  it('returns hero slides and premium banner', async () => {
+  it('returns home category marquee chips in order', async () => {
+    const chips = await getHomeCategoryMarquee()
+    expect(chips.length).toBe(10)
+    expect(chips[0]?.slug).toBe('finance')
+    expect(chips[0]?.imageSrc).toBe('/categories/finance.svg')
+    expect(chips[0]?.href).toContain('/stores?category=finance')
+    expect(chips[2]?.slug).toBe('food-dining')
+  })
+
+  it('returns hero slides', async () => {
     const heroes = await getHeroSlides()
     expect(heroes.length).toBeGreaterThan(0)
     expect(heroes[0]?.kind).toBe('chime')
@@ -44,8 +53,6 @@ describe('site-data', () => {
       expect(heroes[4].referralUrl).toContain('ubereats.com')
       expect(heroes[4].referralUrl).toContain('promoCode=')
     }
-    const banner = await getPremiumBanner()
-    expect(banner?.title).toBeTruthy()
   })
 
   it('returns featured stores with nested store', async () => {

@@ -4,7 +4,7 @@ Public SEO site with **fixed in-repo content** (no separate API or admin app).
 
 - `apps/web` — Next.js (`/`, `/stores`, `/stores/[slug]`, `/coupons`, `/coupons/[id]`) with Zod schemas in `apps/web/lib/schemas`
 
-**Content:** edit `apps/web/lib/site-data.ts` (categories, stores, coupons, hero slides, premium banner, featured sections). Static images: `apps/web/public/`.
+**Content:** edit `apps/web/lib/site-data.ts` (categories, stores, coupons, hero slides, featured sections). Static images: `apps/web/public/`.
 
 ## Stack
 

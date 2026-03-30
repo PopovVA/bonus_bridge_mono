@@ -1,6 +1,6 @@
 # BonusBridge Web
 
-Public SEO site (Next.js App Router). **Data is static** — edit `lib/site-data.ts` to change stores, coupons, hero promo copy/links, and home sections. Hero backgrounds and brand marks live under `public/hero/` and `public/brands/` (referenced from CSS/components).
+Public SEO site (Next.js App Router). **Data is static** — edit `lib/site-data.ts` to change stores, coupons, hero promo copy/links, and home sections. Hero backgrounds and brand marks: `public/hero/`, `public/brands/`. Home category carousel: SVG tiles in `public/categories/{slug}.svg` (`getHomeCategoryMarquee` + `HOME_CATEGORY_MARQUEE_SLUGS` in `lib/site-data.ts`).
 
 ## Local setup
 
@@ -25,7 +25,7 @@ Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](http
 
 ## Routes
 
-- `/` — hero slider, top stores, premium banner, hot promo codes
+- `/` — hero slider, top stores, category carousel, hot promo codes
 - `/stores` — list + category filter + search
 - `/stores/[slug]` — store + coupons
 - `/coupons` — list

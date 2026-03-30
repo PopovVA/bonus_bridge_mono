@@ -7,7 +7,6 @@ import {
   HeroImageCreateSchema,
   HeroSlideSchema,
   OfferCreateSchema,
-  PremiumBannerCreateSchema,
   ServiceCreateSchema,
   ServicesListQuerySchema
 } from './index'
@@ -71,17 +70,6 @@ describe('site schemas', () => {
     })
     expect(parsed.imageUrl).toBe('https://example.com/hero.jpg')
     expect(parsed.sortOrder).toBe(0)
-  })
-
-  it('validates premium banner create input', () => {
-    const parsed = PremiumBannerCreateSchema.parse({
-      title: 'Join Premium',
-      description: 'Get exclusive deals',
-      priceText: '$9.99/month',
-      ctaText: 'Start Free Trial'
-    })
-    expect(parsed.title).toBe('Join Premium')
-    expect(parsed.ctaText).toBe('Start Free Trial')
   })
 
   it('validates featured store create input', () => {
