@@ -21,6 +21,7 @@ export default defineConfig({
       exclude: [
         'lib/schemas/index.ts',
         'components/coupon-copy-button.tsx',
+        'components/home-clip-coupons.tsx',
         'components/stores-nav.tsx',
         'components/home-header.tsx',
         'components/home-footer.tsx',

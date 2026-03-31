@@ -5,6 +5,7 @@ import {
   getFeaturedStores,
   getHeroSlides,
   getHomeCategoryMarquee,
+  getHomeClipCoupons,
   getHotCashbackOffers,
   getTopMonthlyOffers,
   getOfferById,
@@ -37,6 +38,25 @@ describe('site-data', () => {
     expect(list[2]?.logoSrc).toBe('/top-offers/logos/too-good-to-go-logo.svg')
     expect(list[2]?.imageSrc).toBe('/top-offers/media/too-good-to-go-promo.png')
     expect(list[2]?.badgeText).toBe('2$ off')
+  })
+
+  it('returns home clip coupons (8 tear-off promos)', async () => {
+    const list = await getHomeClipCoupons()
+    expect(list).toHaveLength(8)
+    const ue = list.find((c) => c.id === 'clip-ubereats')
+    expect(ue?.code).toBe('eats-zywrn58e0v')
+    expect(ue?.openUrl).toContain('ubereats.com')
+    expect(ue?.openUrl).toContain('promoCode=eats-zywrn58e0v')
+    expect(ue?.logoSrc).toBe('/brands/ubereats-logo.png')
+    const rides = list.find((c) => c.id === 'clip-uber-rides')
+    expect(rides?.code).toBe('zfj232q2gjsx')
+    expect(rides?.openUrl).toContain('referrals.uber.com')
+    expect(rides?.openUrl).toContain('zfj232q2gjsx')
+    expect(rides?.logoSrc).toBe('/brands/uber-logo.png')
+    const seven = list.find((c) => c.id === 'clip-7now')
+    expect(seven?.code).toBe('my1w2j')
+    expect(seven?.openUrl).toBe('https://smart.link/370flfia27552?cp_0=my1w2j')
+    expect(seven?.logoSrc).toBe('/clip-coupons/7eleven.svg')
   })
 
   it('returns hot cashback offers for home', async () => {

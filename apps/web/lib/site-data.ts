@@ -14,8 +14,10 @@ import {
 } from '@/lib/schemas'
 import type { z } from 'zod'
 import { offerWithService, serviceWithCategory } from '@/lib/site-data-relations'
+import { HOME_CLIP_COUPONS, type HomeClipCoupon } from '@/lib/home-clip-coupons'
 import { HOT_CASHBACK_OFFERS, type HotCashbackOffer } from '@/lib/hot-cashback'
 
+export type { HomeClipCoupon } from '@/lib/home-clip-coupons'
 export type { HotCashbackOffer } from '@/lib/hot-cashback'
 
 const ISO = '2026-03-01T12:00:00.000Z'
@@ -376,6 +378,10 @@ export async function getTopMonthlyOffers(): Promise<MonthlyTopOffer[]> {
 
 export async function getHotCashbackOffers(): Promise<HotCashbackOffer[]> {
   return structuredClone(HOT_CASHBACK_OFFERS)
+}
+
+export async function getHomeClipCoupons(): Promise<HomeClipCoupon[]> {
+  return structuredClone(HOME_CLIP_COUPONS)
 }
 
 export async function getFeaturedOffers(): Promise<FeaturedOfferWithOffer[]> {
