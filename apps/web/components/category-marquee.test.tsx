@@ -19,10 +19,11 @@ const chips = [
 ]
 
 describe('CategoryMarquee', () => {
-  it('renders duplicated track for infinite scroll', () => {
+  it('renders duplicated track for CSS infinite scroll', () => {
     ;(globalThis as { React?: typeof React }).React = React
     const html = renderToStaticMarkup(<CategoryMarquee chips={chips} />)
     expect(html).toContain('category-marquee-section')
+    expect(html).toContain('category-marquee-viewport')
     expect(html).toContain('category-marquee-track')
     const aCount = (html.match(/href="\/stores\?category=a"/g) ?? []).length
     expect(aCount).toBe(2)

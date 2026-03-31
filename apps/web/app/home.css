@@ -1527,7 +1527,7 @@
   font-weight: 600;
 }
 
-/* Infinite category carousel (below top offers) */
+/* Infinite category carousel — CSS translate loop (duplicate track = 50% keyframe) */
 .category-marquee-section {
   max-width: 1280px;
   margin: 0 auto;
@@ -1540,7 +1540,8 @@
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 24px;
+  /* Room for hover lift (translateY) + shadow so overflow:hidden does not clip */
+  padding: 12px 24px 16px;
   box-sizing: border-box;
   mask-image: linear-gradient(
     to right,
