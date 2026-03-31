@@ -1,6 +1,6 @@
 # BonusBridge Web
 
-Public SEO site (Next.js App Router). **Data is static** — edit `lib/site-data.ts` to change stores, coupons, hero promo copy/links, and home sections. Hero backgrounds and brand marks: `public/hero/`, `public/brands/`. Home category carousel: `public/categories/{slug}.svg`. **Top monthly offers:** copy/links, `badgeText`, and `imageSrc` in `getTopMonthlyOffers()` inside `lib/site-data.ts`. Brand logos (replace by keeping the same filenames or update `logoSrc`): `apps/web/public/top-offers/logos/klarna-logo.svg`, `public-logo.svg`, `too-good-to-go-logo.svg`.
+Public SEO site (Next.js App Router). **Favicon:** `app/icon.svg` (BB monogram; edit in place to refresh). **Data is static** — edit `lib/site-data.ts` to change stores, coupons, hero promo copy/links, and home sections. Hero backgrounds and brand marks: `public/hero/`, `public/brands/`. Home category carousel: `public/categories/{slug}.svg`. **Top monthly offers:** copy/links, `badgeText`, and `imageSrc` in `getTopMonthlyOffers()` inside `lib/site-data.ts`. Brand logos (replace by keeping the same filenames or update `logoSrc`): `apps/web/public/top-offers/logos/klarna-logo.svg`, `public-logo.svg`, `too-good-to-go-logo.svg`.
 
 **Right-side promo images (swap these files to change art — keep names unless you change `imageSrc` in `site-data.ts`):**
 

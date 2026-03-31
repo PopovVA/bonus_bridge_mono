@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+  <rect width="64" height="64" rx="14" fill="#f7f5f2"/>
+  <rect x="1.25" y="1.25" width="61.5" height="61.5" rx="13" stroke="#e5e2dc" stroke-width="1.5"/>
+  <text
+    x="32"
+    y="41"
+    text-anchor="middle"
+    font-family="Georgia, Cambria, 'Times New Roman', Times, serif"
+    font-size="26"
+    font-weight="700"
+    fill="#1f1f1f"
+    letter-spacing="-0.06em"
+  >BB</text>
+  <rect x="20" y="48" width="24" height="3" rx="1.5" fill="#0f7a5f"/>
+</svg>
