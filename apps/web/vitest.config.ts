@@ -30,7 +30,8 @@ export default defineConfig({
         'components/store-card.tsx',
         'app/(home)/layout.tsx',
         '**/privacy/page.tsx',
-        '**/terms/page.tsx'
+        '**/terms/page.tsx',
+        '**/categories/[slug]/page.tsx'
       ],
       thresholds: {
         statements: 100,

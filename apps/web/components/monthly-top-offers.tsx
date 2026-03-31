@@ -6,21 +6,26 @@ type Props = {
 
 function logoWrapClass(slug: string): string {
   const base = 'monthly-offer-card__logo-wrap'
-  if (slug === 'too-good-to-go') {
-    return `${base} ${base}--tgtg`
+  if (slug === 'robinhood') {
+    return `${base} ${base}--robinhood`
   }
   return base
 }
 
 function mediaShellClass(slug: string): string {
   const base = 'monthly-offer-card__media'
-  return slug === 'public' ? `${base} ${base}--public` : base
+  if (slug === 'public') return `${base} ${base}--public`
+  if (slug === 'robinhood') return `${base} ${base}--robinhood`
+  return base
 }
 
 function mediaImgClass(slug: string): string {
   const base = 'monthly-offer-card__media-img'
   if (slug === 'public') {
     return `${base} ${base}--public-contain`
+  }
+  if (slug === 'robinhood') {
+    return `${base} ${base}--robinhood-contain`
   }
   return base
 }
@@ -111,6 +116,8 @@ export function MonthlyTopOffers({ offers }: Props) {
                     loading="lazy"
                     decoding="async"
                   />
+                ) : offer.slug === 'robinhood' ? (
+                  <div className="monthly-offer-card__robinhood-visual" aria-hidden="true" />
                 ) : (
                   <div className="monthly-offer-card__skeleton" aria-hidden="true">
                     <span className="monthly-offer-card__skeleton-shimmer" />

@@ -6,7 +6,7 @@ import { StoreSearchForm } from './store-search-form'
 describe('StoreSearchForm', () => {
   it('renders form with default values', () => {
     const html = renderToStaticMarkup(<StoreSearchForm />)
-    expect(html).toContain('action="/stores"')
+    expect(html).toContain('action="/"')
     expect(html).toContain('method="get"')
     expect(html).toContain('name="q"')
     expect(html).toContain('Search stores')

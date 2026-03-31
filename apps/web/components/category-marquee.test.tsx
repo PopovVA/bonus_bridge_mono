@@ -8,13 +8,13 @@ const chips = [
     slug: 'a',
     name: 'Alpha',
     imageSrc: '/categories/a.svg',
-    href: '/stores?category=a'
+    href: '/categories/a'
   },
   {
     slug: 'b',
     name: 'Beta',
     imageSrc: '/categories/b.svg',
-    href: '/stores?category=b'
+    href: '/categories/b'
   }
 ]
 
@@ -25,7 +25,7 @@ describe('CategoryMarquee', () => {
     expect(html).toContain('category-marquee-section')
     expect(html).toContain('category-marquee-viewport')
     expect(html).toContain('category-marquee-track')
-    const aCount = (html.match(/href="\/stores\?category=a"/g) ?? []).length
+    const aCount = (html.match(/href="\/categories\/a"/g) ?? []).length
     expect(aCount).toBe(2)
   })
 

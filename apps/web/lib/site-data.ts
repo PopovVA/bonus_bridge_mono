@@ -24,39 +24,12 @@ const ISO = '2026-03-01T12:00:00.000Z'
 const LOGO =
   '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" rx="8" fill="#1a1a1a"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="14" font-family="system-ui">B</text></svg>'
 
+/** Canonical category list (home marquee, Stores mega menu, `/categories/[slug]`). Sorted A–Z by `name` when exposed via getters. */
 const categories: Category[] = [
   {
-    id: '11111111-1111-4111-8111-111111111101',
-    name: 'Finance',
-    slug: 'finance',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '11111111-1111-4111-8111-111111111102',
-    name: 'Shopping',
-    slug: 'shopping',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '11111111-1111-4111-8111-111111111103',
-    name: 'Food & Dining',
-    slug: 'food-dining',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '11111111-1111-4111-8111-111111111104',
-    name: 'Travel',
-    slug: 'travel',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '11111111-1111-4111-8111-111111111105',
-    name: 'Health & Beauty',
-    slug: 'health-beauty',
+    id: '11111111-1111-4111-8111-111111111109',
+    name: 'Auto',
+    slug: 'auto',
     createdAt: ISO,
     updatedAt: ISO
   },
@@ -68,13 +41,6 @@ const categories: Category[] = [
     updatedAt: ISO
   },
   {
-    id: '11111111-1111-4111-8111-111111111107',
-    name: 'Home',
-    slug: 'home',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
     id: '11111111-1111-4111-8111-111111111108',
     name: 'Entertainment',
     slug: 'entertainment',
@@ -82,9 +48,23 @@ const categories: Category[] = [
     updatedAt: ISO
   },
   {
-    id: '11111111-1111-4111-8111-111111111109',
-    name: 'Auto',
-    slug: 'auto',
+    id: '11111111-1111-4111-8111-111111111101',
+    name: 'Finance',
+    slug: 'finance',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111103',
+    name: 'Food',
+    slug: 'food',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111102',
+    name: 'Shopping',
+    slug: 'shopping',
     createdAt: ISO,
     updatedAt: ISO
   },
@@ -94,28 +74,42 @@ const categories: Category[] = [
     slug: 'sports',
     createdAt: ISO,
     updatedAt: ISO
+  },
+  {
+    id: '11111111-1111-4111-8111-111111111104',
+    name: 'Travel',
+    slug: 'travel',
+    createdAt: ISO,
+    updatedAt: ISO
   }
 ]
 
-/** Order of chips in the home category marquee; assets: `public/categories/{slug}.svg`. */
-const HOME_CATEGORY_MARQUEE_SLUGS = [
-  'finance',
-  'shopping',
-  'food-dining',
-  'travel',
-  'health-beauty',
-  'electronics',
-  'home',
-  'entertainment',
-  'auto',
-  'sports'
-] as const
+function categoriesSortedAlphabetically(): Category[] {
+  return [...categories].sort((a, b) => a.name.localeCompare(b.name, 'en'))
+}
 
 export type HomeCategoryChip = {
   slug: string
   name: string
   imageSrc: string
   href: string
+}
+
+export type StoresMegaMenuCategory = {
+  slug: string
+  name: string
+  /** Same tiles as the home category carousel: `public/categories/{slug}.svg`. */
+  imageSrc: string
+}
+
+export type StoresMegaMenuStore = {
+  slug: string
+  name: string
+}
+
+export type StoresMegaMenuPayload = {
+  categories: StoresMegaMenuCategory[]
+  storesByCategorySlug: Record<string, StoresMegaMenuStore[]>
 }
 
 const services: Service[] = [
@@ -323,6 +317,18 @@ const monthlyTopOffers: MonthlyTopOffer[] = MonthlyTopOfferSchema.array().parse(
   },
   {
     id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa02',
+    brandName: 'Robinhood',
+    slug: 'robinhood',
+    description:
+      'Gift stock after you sign up and meet funding rules. Many rewards are $5 to $10. Limits and terms on Robinhood.',
+    ctaText: 'Claim your stock',
+    href: 'https://join.robinhood.com/vadimp-4f32ef3',
+    logoSrc: '/clip-coupons/robinhood.svg',
+    imageSrc: '/top-offers/media/robinhood-promo.png',
+    badgeText: '$5+ stock'
+  },
+  {
+    id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa03',
     brandName: 'Public',
     slug: 'public',
     description:
@@ -332,36 +338,38 @@ const monthlyTopOffers: MonthlyTopOffer[] = MonthlyTopOfferSchema.array().parse(
     logoSrc: '/top-offers/logos/public-logo.svg',
     imageSrc: '/top-offers/media/public-promo.png',
     badgeText: '20$ off'
-  },
-  {
-    id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa03',
-    brandName: 'Too Good To Go',
-    slug: 'too-good-to-go',
-    description:
-      'Rescue surprise bags from cafés and stores near you — save food from waste and money on meals via the app.',
-    ctaText: 'Get the app',
-    href: 'https://tgtg.onelink.me/OGjG/1vzeei4g',
-    logoSrc: '/top-offers/logos/too-good-to-go-logo.svg',
-    imageSrc: '/top-offers/media/too-good-to-go-promo.png',
-    badgeText: '2$ off'
   }
 ])
 
 export async function getCategories(): Promise<Category[]> {
-  return structuredClone(categories)
+  return structuredClone(categoriesSortedAlphabetically())
 }
 
 export async function getHomeCategoryMarquee(): Promise<HomeCategoryChip[]> {
-  const bySlug = new Map(categories.map((c) => [c.slug, c]))
-  return HOME_CATEGORY_MARQUEE_SLUGS.map((slug) => {
-    const c = bySlug.get(slug)!
-    return {
-      slug: c.slug,
-      name: c.name,
-      imageSrc: `/categories/${c.slug}.svg`,
-      href: `/stores?category=${encodeURIComponent(c.slug)}`
-    }
-  })
+  return categoriesSortedAlphabetically().map((c) => ({
+    slug: c.slug,
+    name: c.name,
+    imageSrc: `/categories/${c.slug}.svg`,
+    href: `/categories/${encodeURIComponent(c.slug)}`
+  }))
+}
+
+/** Categories A–Z, plus stores per category slug (for header mega menu). */
+export async function getStoresMegaMenu(): Promise<StoresMegaMenuPayload> {
+  const sorted = categoriesSortedAlphabetically()
+  const marqueeCategories: StoresMegaMenuCategory[] = sorted.map((c) => ({
+    slug: c.slug,
+    name: c.name,
+    imageSrc: `/categories/${c.slug}.svg`
+  }))
+  const storesByCategorySlug: Record<string, StoresMegaMenuStore[]> = {}
+  for (const cat of sorted) {
+    storesByCategorySlug[cat.slug] = services
+      .filter((s) => s.categoryId === cat.id)
+      .map((s) => ({ slug: s.slug, name: s.name }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  }
+  return { categories: marqueeCategories, storesByCategorySlug }
 }
 
 export async function getHeroSlides(): Promise<HeroSlide[]> {

@@ -2,21 +2,27 @@
 
 import Link from 'next/link'
 import { Search } from 'lucide-react'
+import { StoresNav } from '@/components/stores-nav'
+import type { StoresMegaMenuPayload } from '@/lib/site-data'
 
-export function HomeHeader() {
+type Props = {
+  megaMenu: StoresMegaMenuPayload
+}
+
+export function HomeHeader({ megaMenu }: Props) {
   return (
     <header className="home-header">
       <div className="home-header-inner">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 48 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
           <Link href="/" className="home-logo" aria-label="BonusBridge home">
             BonusBridge
           </Link>
-          <nav className="home-nav">
-            <Link href="/stores">Stores</Link>
-            <Link href="/coupons">Coupons</Link>
+          <nav className="home-nav home-nav--primary">
+            <StoresNav megaMenu={megaMenu} />
+            <Link href="/#coupons">Coupons</Link>
           </nav>
         </div>
-        <form action="/stores" method="get" className="home-search-wrap">
+        <form action="/" method="get" className="home-search-wrap">
           <label htmlFor="home-search" className="sr-only">
             Search stores or coupons
           </label>

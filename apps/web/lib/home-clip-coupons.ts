@@ -56,15 +56,6 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
     logoSrc: CLIP_CARD_LOGO_7NOW
   },
   {
-    id: 'clip-lyft',
-    brand: 'Lyft',
-    title: '50% off your next ride',
-    blurb: 'Up to $10 off one ride for new riders. Market rules and expiry follow Lyft’s current offer.',
-    code: 'VADIM53422',
-    openUrl: 'https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc',
-    logoSrc: CLIP_CARD_LOGO_LYFT
-  },
-  {
     id: 'clip-robinhood',
     brand: 'Robinhood',
     title: 'Get $5 to $200 in stock',
@@ -72,6 +63,15 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
     code: 'vadimp-4f32ef3',
     openUrl: 'https://join.robinhood.com/vadimp-4f32ef3',
     logoSrc: CLIP_CARD_LOGO_ROBINHOOD
+  },
+  {
+    id: 'clip-lyft',
+    brand: 'Lyft',
+    title: '50% off your next ride',
+    blurb: 'Up to $10 off one ride for new riders. Market rules and expiry follow Lyft’s current offer.',
+    code: 'VADIM53422',
+    openUrl: 'https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc',
+    logoSrc: CLIP_CARD_LOGO_LYFT
   },
   {
     id: 'clip-lime',

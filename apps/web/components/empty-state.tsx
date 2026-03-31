@@ -1,7 +1,13 @@
-export function EmptyState({ message }: { message: string }) {
+type Props = {
+  message: string
+  /** Defaults to home-style panel (matches category / store empty UI). */
+  className?: string
+}
+
+export function EmptyState({ message, className = 'app-surface-card' }: Props) {
   return (
-    <div className="card">
-      <p className="meta" style={{ margin: 0 }}>
+    <div className={className}>
+      <p className="default-muted-text" style={{ margin: 0 }}>
         {message}
       </p>
     </div>

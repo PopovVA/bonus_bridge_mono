@@ -41,7 +41,7 @@ export default async function CouponDetailsPage({ params }: Props) {
   return (
     <article className="card">
       <p className="meta" style={{ marginTop: 0 }}>
-        <Link href="/coupons">Back to coupons</Link>
+        <Link href="/#coupons">Back to coupons</Link>
       </p>
       <h1 className="title">{coupon.title}</h1>
       <div className="row">

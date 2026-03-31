@@ -11,14 +11,27 @@ import {
   getOfferById,
   getOffers,
   getServiceBySlug,
-  getServices
+  getServices,
+  getStoresMegaMenu
 } from './site-data'
 
 describe('site-data', () => {
-  it('returns categories', async () => {
+  it('returns categories in alphabetical order by name', async () => {
     const list = await getCategories()
-    expect(list.length).toBe(10)
-    expect(list[0]).toMatchObject({ slug: expect.any(String), name: expect.any(String) })
+    expect(list.length).toBe(8)
+    const names = list.map((c) => c.name)
+    expect([...names].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(names)
+    expect(list[0]).toMatchObject({ slug: 'auto', name: 'Auto' })
+    expect(list.map((c) => c.slug)).toEqual([
+      'auto',
+      'electronics',
+      'entertainment',
+      'finance',
+      'food',
+      'shopping',
+      'sports',
+      'travel'
+    ])
   })
 
   it('returns top monthly offers for home', async () => {
@@ -29,15 +42,15 @@ describe('site-data', () => {
     expect(list[0]?.logoSrc).toBe('/top-offers/logos/klarna-logo.svg')
     expect(list[0]?.imageSrc).toBe('/top-offers/media/klarna-promo.png')
     expect(list[0]?.badgeText).toBe('20$ off')
-    expect(list[1]?.slug).toBe('public')
-    expect(list[1]?.logoSrc).toBe('/top-offers/logos/public-logo.svg')
-    expect(list[1]?.imageSrc).toBe('/top-offers/media/public-promo.png')
-    expect(list[1]?.badgeText).toBe('20$ off')
-    expect(list[2]?.slug).toBe('too-good-to-go')
-    expect(list[2]?.href).toContain('tgtg.onelink.me')
-    expect(list[2]?.logoSrc).toBe('/top-offers/logos/too-good-to-go-logo.svg')
-    expect(list[2]?.imageSrc).toBe('/top-offers/media/too-good-to-go-promo.png')
-    expect(list[2]?.badgeText).toBe('2$ off')
+    expect(list[1]?.slug).toBe('robinhood')
+    expect(list[1]?.href).toContain('join.robinhood.com')
+    expect(list[1]?.logoSrc).toBe('/clip-coupons/robinhood.svg')
+    expect(list[1]?.imageSrc).toBe('/top-offers/media/robinhood-promo.png')
+    expect(list[1]?.badgeText).toBe('$5+ stock')
+    expect(list[2]?.slug).toBe('public')
+    expect(list[2]?.logoSrc).toBe('/top-offers/logos/public-logo.svg')
+    expect(list[2]?.imageSrc).toBe('/top-offers/media/public-promo.png')
+    expect(list[2]?.badgeText).toBe('20$ off')
   })
 
   it('returns home clip coupons (8 tear-off promos)', async () => {
@@ -96,13 +109,30 @@ describe('site-data', () => {
     expect(list[3]?.href).toBe('https://lemonade.com/r/vadimpopov1')
   })
 
-  it('returns home category marquee chips in order', async () => {
+  it('returns home category marquee chips in alphabetical order', async () => {
     const chips = await getHomeCategoryMarquee()
-    expect(chips.length).toBe(10)
-    expect(chips[0]?.slug).toBe('finance')
-    expect(chips[0]?.imageSrc).toBe('/categories/finance.svg')
-    expect(chips[0]?.href).toContain('/stores?category=finance')
-    expect(chips[2]?.slug).toBe('food-dining')
+    expect(chips.length).toBe(8)
+    expect(chips[0]?.slug).toBe('auto')
+    expect(chips[0]?.imageSrc).toBe('/categories/auto.svg')
+    expect(chips[0]?.href).toBe('/categories/auto')
+    expect(chips.find((c) => c.slug === 'food')?.name).toBe('Food')
+    const names = chips.map((c) => c.name)
+    expect([...names].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(names)
+  })
+
+  it('returns stores mega menu categories A–Z', async () => {
+    const menu = await getStoresMegaMenu()
+    expect(menu.categories.length).toBe(8)
+    expect(menu.categories[0]?.slug).toBe('auto')
+    expect(menu.categories[0]?.imageSrc).toBe('/categories/auto.svg')
+    expect(menu.categories.find((c) => c.slug === 'food')?.imageSrc).toBe('/categories/food.svg')
+    const menuNames = menu.categories.map((c) => c.name)
+    expect([...menuNames].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(menuNames)
+    expect(menu.storesByCategorySlug.finance?.map((s) => s.slug).sort()).toEqual(['acme-cash'])
+    expect(menu.storesByCategorySlug.shopping?.map((s) => s.slug).sort()).toEqual([
+      'bonus-shop',
+      'no-desc-mart'
+    ])
   })
 
   it('returns hero slides', async () => {

@@ -7,7 +7,7 @@ type Props = {
 
 export function StoreSearchForm({ defaultValue = '', category = '' }: Props) {
   return (
-    <form action="/stores" method="get" className="row" style={{ marginBottom: 16 }}>
+    <form action="/" method="get" className="row" style={{ marginBottom: 16 }}>
       <input
         type="search"
         name="q"

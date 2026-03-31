@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${store.name} | BonusBridge`,
-    description: `Referral links and coupons for ${store.name}.`
+    description: `Promo codes and offers for ${store.name}.`
   }
 }
 
@@ -33,16 +33,18 @@ export default async function StorePage({ params }: Props) {
   }
 
   return (
-    <section>
-      <p className="meta" style={{ marginTop: 0 }}>
-        <Link href="/stores">Back to stores</Link>
-      </p>
-      <article className="card">
-        <h1 className="title">{store.name}</h1>
-        <div className="row">
+    <section className="category-page-section" aria-labelledby="store-page-heading">
+      <nav className="category-page-breadcrumb" aria-label="Breadcrumb">
+        <Link href="/">Home</Link>
+      </nav>
+      <article className="app-surface-card store-page-hero">
+        <h1 id="store-page-heading" className="section-title app-serif-page-title">
+          {store.name}
+        </h1>
+        <div className="store-page-meta-row">
           {store.logoSvg ? (
             <span
-              className="store-icon"
+              className="store-icon store-page-logo"
               style={{
                 backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(store.logoSvg)}")`
               }}
@@ -51,30 +53,30 @@ export default async function StorePage({ params }: Props) {
           ) : null}
           {store.website ? (
             <a href={store.website} target="_blank" rel="noreferrer">
-              Open store
+              Open store website
             </a>
           ) : (
-            <span className="meta">Store link is not set</span>
+            <span className="default-muted-text">Store link is not set</span>
           )}
         </div>
       </article>
 
       {coupons.length === 0 ? (
-        <EmptyState message="No active coupons for this store yet." />
+        <EmptyState message="No active promo codes or offers for this store yet." />
       ) : (
-        <div className="list">
-          <h2 className="section-title">Coupons</h2>
+        <div className="category-stores-list store-coupons-block">
+          <h2 className="section-title store-coupons-heading">Promo codes and offers</h2>
           {coupons.map((coupon) => {
             const copyValue = coupon.couponCode?.trim() ? coupon.couponCode : coupon.referralUrl
 
             return (
-              <article key={coupon.id} className="card">
-                <h3 className="section-title">{coupon.title}</h3>
-                <p>{coupon.previewText}</p>
-                <div className="row">
-                  {coupon.couponCode ? <span className="pill">Code: {coupon.couponCode}</span> : null}
-                </div>
-                <div className="row" style={{ marginTop: 8 }}>
+              <article key={coupon.id} className="app-surface-card">
+                <h3 className="category-store-title">{coupon.title}</h3>
+                <p className="category-offer-preview">{coupon.previewText}</p>
+                <div className="category-offer-actions">
+                  {coupon.couponCode ? (
+                    <span className="category-offer-pill">Code: {coupon.couponCode}</span>
+                  ) : null}
                   <a href={coupon.referralUrl} target="_blank" rel="noreferrer">
                     Open link
                   </a>

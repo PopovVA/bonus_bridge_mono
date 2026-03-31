@@ -53,9 +53,8 @@ export function HomeClipCoupons({ coupons }: Props) {
                 <img
                   src={c.logoSrc}
                   alt=""
-                  width={140}
-                  height={40}
                   className="clip-coupon-card__logo"
+                  decoding="async"
                 />
               </div>
               <div className="clip-coupon-card__top">

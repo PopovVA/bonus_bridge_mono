@@ -1,7 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 26" aria-hidden="true">
   <text
-    x="0"
-    y="20"
+    x="50%"
+    y="50%"
+    dominant-baseline="central"
+    text-anchor="middle"
     fill="#13294B"
     font-family="ui-sans-serif, system-ui, -apple-system, sans-serif"
     font-size="22"

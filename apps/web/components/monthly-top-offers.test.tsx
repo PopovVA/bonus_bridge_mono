@@ -38,12 +38,34 @@ describe('MonthlyTopOffers', () => {
     expect(html).not.toContain('monthly-offer-card__media-img')
   })
 
-  it('uses teal logo wrap for Too Good To Go', () => {
+  it('uses mint logo wrap and promo image for Robinhood', () => {
     ;(globalThis as { React?: typeof React }).React = React
     const html = renderToStaticMarkup(
-      <MonthlyTopOffers offers={[{ ...baseOffer, slug: 'too-good-to-go' }]} />
+      <MonthlyTopOffers
+        offers={[
+          {
+            ...baseOffer,
+            slug: 'robinhood',
+            badgeText: '$5+ stock',
+            imageSrc: '/top-offers/media/robinhood-promo.png'
+          }
+        ]}
+      />
     )
-    expect(html).toContain('monthly-offer-card__logo-wrap--tgtg')
+    expect(html).toContain('monthly-offer-card__logo-wrap--robinhood')
+    expect(html).toContain('monthly-offer-card__media--robinhood')
+    expect(html).toContain('monthly-offer-card__media-img--robinhood-contain')
+    expect(html).toContain('/top-offers/media/robinhood-promo.png')
+    expect(html).not.toContain('monthly-offer-card__robinhood-visual')
+  })
+
+  it('uses gradient fallback for Robinhood when imageSrc is omitted', () => {
+    ;(globalThis as { React?: typeof React }).React = React
+    const html = renderToStaticMarkup(
+      <MonthlyTopOffers offers={[{ ...baseOffer, slug: 'robinhood', badgeText: '$5+ stock' }]} />
+    )
+    expect(html).toContain('monthly-offer-card__media--robinhood')
+    expect(html).toContain('monthly-offer-card__robinhood-visual')
   })
 
   it('uses contain + dark shell for Public wide promo art', () => {

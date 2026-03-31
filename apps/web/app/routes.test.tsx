@@ -12,17 +12,17 @@ vi.mock('@/lib/site-data', () => ({
   getTopMonthlyOffers: vi.fn(),
   getHomeClipCoupons: vi.fn(),
   getHomeCategoryMarquee: vi.fn(),
-  getHotCashbackOffers: vi.fn()
+  getHotCashbackOffers: vi.fn(),
+  getStoresMegaMenu: vi.fn()
 }))
 
 import HomePage from './(home)/page'
 import HomeLayout from './(home)/layout'
 import RootLayout from './layout'
 import DefaultLayout from './(default)/layout'
-import StoresPage, { generateMetadata as generateStoresMetadata } from './(default)/stores/page'
-import CouponsPage from './(default)/coupons/page'
 import CouponDetailsPage, { generateMetadata } from './(default)/coupons/[id]/page'
 import StorePage, { generateMetadata as generateStoreMetadata } from './(default)/stores/[slug]/page'
+import CategoryPage, { generateMetadata as generateCategoryMetadata } from './(default)/categories/[slug]/page'
 import { EmptyState } from '@/components/empty-state'
 import {
   getCategories,
@@ -34,7 +34,8 @@ import {
   getHotCashbackOffers,
   getTopMonthlyOffers,
   getServiceBySlug,
-  getServices
+  getServices,
+  getStoresMegaMenu
 } from '@/lib/site-data'
 
 (globalThis as { React?: typeof React }).React = React
@@ -69,7 +70,7 @@ describe('web routes', () => {
         slug: 'finance',
         name: 'Finance',
         imageSrc: '/categories/finance.svg',
-        href: '/stores?category=finance'
+        href: '/categories/finance'
       }
     ])
     vi.mocked(getHotCashbackOffers).mockResolvedValue([
@@ -120,71 +121,6 @@ describe('web routes', () => {
     expect(html).not.toContain('monthly-offers-section')
     expect(html).not.toContain('clip-coupons-section')
     expect(html).not.toContain('hot-cashback-section')
-  })
-
-  it('renders stores/coupons pages', async () => {
-    vi.mocked(getCategories).mockResolvedValue([])
-    vi.mocked(getServices).mockResolvedValue([
-      { id: 's1', name: 'Store', slug: 'store', description: 'Desc', website: 'https://store.example', categoryId: 'c1' } as never,
-      { id: 's2', name: 'No Description', slug: 'no-description', categoryId: 'c1' } as never
-    ])
-    vi.mocked(getOffers).mockResolvedValue([
-      { id: 'o1', title: 'Coupon', status: 'active', description: 'Coupon desc' } as never,
-      { id: 'o2', title: 'No Description', status: 'active' } as never
-    ])
-
-    expect(renderToStaticMarkup(await StoresPage({ searchParams: Promise.resolve({}) }))).toContain('Stores')
-    expect(renderToStaticMarkup(await CouponsPage())).toContain('Coupons')
-  })
-
-  it('renders stores page with category and search, and metadata branches', async () => {
-    vi.mocked(getCategories).mockResolvedValue([
-      { id: 'c1', name: 'Electronics', slug: 'electronics' } as never
-    ])
-    vi.mocked(getServices).mockResolvedValue([
-      { id: 's1', name: 'Store', slug: 'store', description: 'Desc', website: 'https://store.example', categoryId: 'c1' } as never
-    ])
-    const html = renderToStaticMarkup(
-      await StoresPage({ searchParams: Promise.resolve({ category: 'electronics', q: 'test' }) })
-    )
-    expect(html).toContain('Electronics')
-    expect(html).toContain('name="category"')
-    expect(html).toContain('value="electronics"')
-
-    await expect(
-      generateStoresMetadata({ searchParams: Promise.resolve({ q: 'foo' }) })
-    ).resolves.toMatchObject({ title: 'Stores matching "foo" | BonusBridge' })
-    await expect(
-      generateStoresMetadata({ searchParams: Promise.resolve({ category: 'cat' }) })
-    ).resolves.toMatchObject({ title: 'Stores in category | BonusBridge' })
-    await expect(
-      generateStoresMetadata({ searchParams: Promise.resolve({}) })
-    ).resolves.toMatchObject({ title: 'Stores | BonusBridge' })
-  })
-
-  it('renders empty-state branches for list pages', async () => {
-    vi.mocked(getCategories).mockResolvedValue([])
-    vi.mocked(getServices).mockResolvedValue([])
-    vi.mocked(getOffers).mockResolvedValue([])
-
-    expect(renderToStaticMarkup(await StoresPage({ searchParams: Promise.resolve({}) }))).toContain('No stores found')
-    expect(renderToStaticMarkup(await CouponsPage())).toContain('Coupons')
-  })
-
-  it('handles rejected list APIs on list pages', async () => {
-    vi.mocked(getCategories).mockResolvedValue([])
-    vi.mocked(getServices).mockRejectedValue(new Error('down'))
-    vi.mocked(getOffers).mockRejectedValue(new Error('down'))
-
-    expect(renderToStaticMarkup(await StoresPage({ searchParams: Promise.resolve({}) }))).toContain('No stores found')
-    expect(renderToStaticMarkup(await CouponsPage())).toContain('Coupons')
-  })
-
-  it('handles rejected getCategories on stores page', async () => {
-    vi.mocked(getCategories).mockRejectedValue(new Error('down'))
-    vi.mocked(getServices).mockResolvedValue([])
-    const html = renderToStaticMarkup(await StoresPage({ searchParams: Promise.resolve({}) }))
-    expect(html).toContain('No stores found')
   })
 
   it('renders coupon details and metadata branches', async () => {
@@ -264,17 +200,31 @@ describe('web routes', () => {
   it('renders empty state component', () => {
     const html = renderToStaticMarkup(<EmptyState message="No data" />)
     expect(html).toContain('No data')
+    expect(html).toContain('app-surface-card')
   })
 
   it('renders home layout', async () => {
-    const html = renderToStaticMarkup(
-      HomeLayout({
-        children: <main>child</main>
-      })
-    )
+    vi.mocked(getStoresMegaMenu).mockResolvedValue({
+      categories: [{ slug: 'finance', name: 'Finance', imageSrc: '/categories/finance.svg' }],
+      storesByCategorySlug: { finance: [] }
+    })
+    const tree = await HomeLayout({
+      children: <main>child</main>
+    })
+    const html = renderToStaticMarkup(tree)
     expect(html).toContain('BonusBridge')
     expect(html).toContain('Privacy Policy')
     expect(html).toContain('child')
+  })
+
+  it('renders home layout when getStoresMegaMenu fails', async () => {
+    vi.mocked(getStoresMegaMenu).mockRejectedValue(new Error('down'))
+    const tree = await HomeLayout({
+      children: <main>fallback</main>
+    })
+    const html = renderToStaticMarkup(tree)
+    expect(html).toContain('BonusBridge')
+    expect(html).toContain('fallback')
   })
 
   it('renders root layout', async () => {
@@ -287,7 +237,12 @@ describe('web routes', () => {
   })
 
   it('renders default layout with navigation', async () => {
-    vi.mocked(getCategories).mockResolvedValue([])
+    vi.mocked(getStoresMegaMenu).mockResolvedValue({
+      categories: [
+        { slug: 'electronics', name: 'Electronics', imageSrc: '/categories/electronics.svg' }
+      ],
+      storesByCategorySlug: { electronics: [{ slug: 'store', name: 'Store' }] }
+    })
     const html = renderToStaticMarkup(
       await DefaultLayout({
         children: <main>child</main>
@@ -298,8 +253,8 @@ describe('web routes', () => {
     expect(html).toContain('Coupons')
   })
 
-  it('renders default layout when getCategories fails', async () => {
-    vi.mocked(getCategories).mockRejectedValue(new Error('down'))
+  it('renders default layout when getStoresMegaMenu fails', async () => {
+    vi.mocked(getStoresMegaMenu).mockRejectedValue(new Error('down'))
     const html = renderToStaticMarkup(
       await DefaultLayout({
         children: <main>child</main>
@@ -307,6 +262,42 @@ describe('web routes', () => {
     )
     expect(html).toContain('BonusBridge')
     expect(html).toContain('child')
+  })
+
+  it('renders category page with stores and offers', async () => {
+    vi.mocked(getCategories).mockResolvedValue([
+      { id: 'c1', name: 'Electronics', slug: 'electronics' } as never
+    ])
+    vi.mocked(getServices).mockResolvedValue([
+      {
+        id: 's1',
+        name: 'Tech Shop',
+        slug: 'tech-shop',
+        description: 'Gadgets',
+        categoryId: 'c1'
+      } as never
+    ])
+    vi.mocked(getOffers).mockResolvedValue([
+      {
+        id: 'o1',
+        serviceId: 's1',
+        title: '10% off',
+        previewText: 'Save on first order',
+        couponCode: 'SAVE10',
+        referralUrl: 'https://example.com',
+        status: 'active'
+      } as never
+    ])
+    const html = renderToStaticMarkup(
+      await CategoryPage({ params: Promise.resolve({ slug: 'electronics' }) })
+    )
+    expect(html).toContain('Electronics')
+    expect(html).toContain('Tech Shop')
+    expect(html).toContain('10% off')
+    expect(html).toContain('SAVE10')
+    await expect(
+      generateCategoryMetadata({ params: Promise.resolve({ slug: 'electronics' }) })
+    ).resolves.toMatchObject({ title: 'Electronics stores | BonusBridge' })
   })
 
   it('renders store page and metadata', async () => {
@@ -363,7 +354,7 @@ describe('web routes', () => {
     } as never)
     vi.mocked(getOffers).mockResolvedValue([])
     const noCouponsHtml = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'store' }) }))
-    expect(noCouponsHtml).toContain('No active coupons for this store yet.')
+    expect(noCouponsHtml).toContain('No active promo codes or offers for this store yet.')
 
     vi.mocked(getServiceBySlug).mockResolvedValueOnce(null as never).mockResolvedValueOnce(null as never)
     const missingHtml = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'missing' }) }))
