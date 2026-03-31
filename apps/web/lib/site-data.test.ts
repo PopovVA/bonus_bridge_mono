@@ -69,6 +69,14 @@ describe('site-data', () => {
     expect(lime?.code).toBe('REGUD7BFJWT')
     expect(lime?.openUrl).toBe('https://lime.bike/referral_signin/REGUD7BFJWT')
     expect(lime?.logoSrc).toBe('/clip-coupons/lime.svg')
+    const bird = list.find((c) => c.id === 'clip-bird')
+    expect(bird?.code).toBe('X86GGD')
+    expect(bird?.openUrl).toBe('https://links.bird.co/rKbyq2')
+    expect(bird?.logoSrc).toBe('/clip-coupons/bird.svg')
+    const posh = list.find((c) => c.id === 'clip-poshmark')
+    expect(posh?.code).toBe('VADIMPOPOV')
+    expect(posh?.openUrl).toBe('https://posh.mk/QW6tN2UJW1b')
+    expect(posh?.logoSrc).toBe('/clip-coupons/poshmark.svg')
   })
 
   it('returns hot cashback offers for home', async () => {

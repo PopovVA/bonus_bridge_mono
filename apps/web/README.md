@@ -37,7 +37,7 @@ Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](http
 
 ## Routes
 
-- `/` — hero slider, top monthly offers (Klarna / Public / Too Good To Go), category carousel, **clip-out promo grid** (8 codes in `lib/home-clip-coupons.ts`; assets e.g. `/brands/ubereats-logo.png`, `/clip-coupons/7eleven.svg`, `/clip-coupons/lyft.svg`, `/clip-coupons/robinhood.svg`, `/clip-coupons/lime.svg`)
+- `/` — hero slider, top monthly offers (Klarna / Public / Too Good To Go), category carousel, **clip-out promo grid** (8 codes in `lib/home-clip-coupons.ts`; assets e.g. `/brands/ubereats-logo.png`, `/clip-coupons/7eleven.svg`, `/clip-coupons/lyft.svg`, `/clip-coupons/robinhood.svg`, `/clip-coupons/lime.svg`, `/clip-coupons/bird.svg`, `/clip-coupons/poshmark.svg`)
 - `/stores` — list + category filter + search
 - `/stores/[slug]` — store + coupons
 - `/coupons` — list
