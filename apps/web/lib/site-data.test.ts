@@ -12,24 +12,24 @@ import {
   getOffers,
   getServiceBySlug,
   getServices,
-  getStoresMegaMenu
+  getStoresMegaMenu,
+  megaMenuStoreImageSrc,
+  sortServicesForCategorySlug
 } from './site-data'
 
 describe('site-data', () => {
   it('returns categories in alphabetical order by name', async () => {
     const list = await getCategories()
-    expect(list.length).toBe(8)
+    expect(list.length).toBe(6)
     const names = list.map((c) => c.name)
     expect([...names].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(names)
     expect(list[0]).toMatchObject({ slug: 'auto', name: 'Auto' })
     expect(list.map((c) => c.slug)).toEqual([
       'auto',
       'electronics',
-      'entertainment',
       'finance',
       'food',
       'shopping',
-      'sports',
       'travel'
     ])
   })
@@ -111,7 +111,7 @@ describe('site-data', () => {
 
   it('returns home category marquee chips in alphabetical order', async () => {
     const chips = await getHomeCategoryMarquee()
-    expect(chips.length).toBe(8)
+    expect(chips.length).toBe(6)
     expect(chips[0]?.slug).toBe('auto')
     expect(chips[0]?.imageSrc).toBe('/categories/auto.svg')
     expect(chips[0]?.href).toBe('/categories/auto')
@@ -120,19 +120,36 @@ describe('site-data', () => {
     expect([...names].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(names)
   })
 
-  it('returns stores mega menu categories A–Z', async () => {
+  it('returns stores mega menu categories A–Z with store icons', async () => {
     const menu = await getStoresMegaMenu()
-    expect(menu.categories.length).toBe(8)
+    expect(menu.categories.length).toBe(6)
     expect(menu.categories[0]?.slug).toBe('auto')
     expect(menu.categories[0]?.imageSrc).toBe('/categories/auto.svg')
     expect(menu.categories.find((c) => c.slug === 'food')?.imageSrc).toBe('/categories/food.svg')
     const menuNames = menu.categories.map((c) => c.name)
     expect([...menuNames].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(menuNames)
-    expect(menu.storesByCategorySlug.finance?.map((s) => s.slug).sort()).toEqual(['acme-cash'])
-    expect(menu.storesByCategorySlug.shopping?.map((s) => s.slug).sort()).toEqual([
-      'bonus-shop',
-      'no-desc-mart'
+    expect(menu.storesByCategorySlug.auto?.map((s) => s.slug)).toEqual([
+      'uber',
+      'lyft',
+      'lime',
+      'bird',
+      'lemonade'
     ])
+    expect(menu.storesByCategorySlug.auto?.[0]?.imageSrc).toBe('/brands/uber-logo.png')
+    expect(menu.storesByCategorySlug.finance?.map((s) => s.slug)).toEqual([
+      'chime',
+      'robinhood',
+      'public',
+      'klarna',
+      'lemonade'
+    ])
+    expect(menu.storesByCategorySlug.shopping?.map((s) => s.slug)).toEqual([
+      'poshmark',
+      'rakuten',
+      'topcashback',
+      'honey'
+    ])
+    expect(menu.storesByCategorySlug.travel?.map((s) => s.slug)).toEqual(['airbnb'])
   })
 
   it('returns hero slides', async () => {
@@ -165,7 +182,7 @@ describe('site-data', () => {
 
   it('returns featured stores with nested store', async () => {
     const fs = await getFeaturedStores()
-    expect(fs[0]?.store?.slug).toBeTruthy()
+    expect(fs[0]?.store?.slug).toBe('uber')
   })
 
   it('returns featured offers with nested offer', async () => {
@@ -175,28 +192,32 @@ describe('site-data', () => {
 
   it('filters services by category slug and query', async () => {
     const finance = await getServices({ category: 'finance' })
+    expect(finance.map((s) => s.slug)).toEqual(['chime', 'robinhood', 'public', 'klarna', 'lemonade'])
     expect(finance.every((s) => s.categoryId === '11111111-1111-4111-8111-111111111101')).toBe(true)
-    const q = await getServices({ q: 'Acme' })
-    expect(q.some((s) => s.name.includes('Acme'))).toBe(true)
-    const byDescription = await getServices({ q: 'Cashback' })
-    expect(byDescription.some((s) => s.slug === 'acme-cash')).toBe(true)
-    const noDesc = await getServices({ q: 'No Desc' })
-    expect(noDesc.some((s) => s.slug === 'no-desc-mart')).toBe(true)
+    const auto = await getServices({ category: 'auto' })
+    expect(auto.map((s) => s.slug)).toEqual(['uber', 'lyft', 'lime', 'bird', 'lemonade'])
+    expect(auto.find((s) => s.slug === 'lemonade')?.categoryId).toBe('11111111-1111-4111-8111-111111111101')
+    const q = await getServices({ q: 'Klarna' })
+    expect(q.some((s) => s.slug === 'klarna')).toBe(true)
+    const byDescription = await getServices({ q: 'Cash back' })
+    expect(byDescription.some((s) => s.slug === 'topcashback')).toBe(true)
+    const byInsurance = await getServices({ q: 'insurance' })
+    expect(byInsurance.some((s) => s.slug === 'lemonade')).toBe(true)
   })
 
   it('resolves service by slug', async () => {
-    const s = await getServiceBySlug('acme-cash')
-    expect(s.slug).toBe('acme-cash')
+    const s = await getServiceBySlug('chime')
+    expect(s.slug).toBe('chime')
     await expect(getServiceBySlug('missing-store')).rejects.toThrow()
   })
 
   it('filters offers by status, store slug, category', async () => {
     const active = await getOffers({ status: 'active' })
-    expect(active.length).toBeGreaterThan(0)
-    const byStore = await getOffers({ status: 'active', service: 'acme-cash' })
-    expect(byStore.every((o) => o.serviceId === '22222222-2222-4222-8222-222222222201')).toBe(true)
-    const byCat = await getOffers({ status: 'active', category: 'shopping' })
-    expect(byCat.length).toBeGreaterThan(0)
+    expect(active.length).toBe(3)
+    const byStore = await getOffers({ status: 'active', service: 'chime' })
+    expect(byStore.every((o) => o.serviceId === '22222222-2222-4222-8222-222222222210')).toBe(true)
+    const byCat = await getOffers({ status: 'active', category: 'finance' })
+    expect(byCat.length).toBe(2)
   })
 
   it('returns offer by id or throws', async () => {
@@ -212,7 +233,58 @@ describe('site-data', () => {
   })
 
   it('filters offers by search query', async () => {
-    const found = await getOffers({ status: 'active', q: 'Acme' })
-    expect(found.some((o) => o.title.includes('Acme'))).toBe(true)
+    const found = await getOffers({ status: 'active', q: 'Klarna' })
+    expect(found.some((o) => o.title.toLowerCase().includes('klarna'))).toBe(true)
+    const byPreviewOnly = await getOffers({ status: 'active', q: 'qualifying' })
+    expect(byPreviewOnly.some((o) => o.id === '33333333-3333-4333-8333-333333333301')).toBe(true)
+  })
+
+  it('resolves mega menu store image path with fallback', () => {
+    expect(megaMenuStoreImageSrc({ logoSrc: '/brands/x.png' })).toBe('/brands/x.png')
+    expect(megaMenuStoreImageSrc({ logoSrc: null })).toBe('/icon.svg')
+    expect(megaMenuStoreImageSrc({})).toBe('/icon.svg')
+  })
+
+  it('sorts services with slugs missing from category order after known slugs', async () => {
+    const uber = await getServiceBySlug('uber')
+    const tail: typeof uber = {
+      ...uber,
+      id: '22222222-2222-4222-8222-222222222299',
+      slug: 'z-tail-test',
+      name: 'Z tail'
+    }
+    const sorted = sortServicesForCategorySlug('auto', [tail, uber])
+    expect(sorted[0]?.slug).toBe('uber')
+    expect(sorted[sorted.length - 1]?.slug).toBe('z-tail-test')
+  })
+
+  it('alphabetically sorts when category has no explicit store order (travel)', async () => {
+    const airbnb = await getServiceBySlug('airbnb')
+    const zed: typeof airbnb = {
+      ...airbnb,
+      id: '22222222-2222-4222-8222-222222222296',
+      slug: 'zed-travel-test',
+      name: 'Zed Travel Test'
+    }
+    const sorted = sortServicesForCategorySlug('travel', [zed, airbnb])
+    expect(sorted.map((s) => s.name)).toEqual(['Airbnb', 'Zed Travel Test'])
+  })
+
+  it('sorts unknown slugs by name when both are outside category order', async () => {
+    const uber = await getServiceBySlug('uber')
+    const b: typeof uber = {
+      ...uber,
+      id: '22222222-2222-4222-8222-222222222297',
+      slug: 'unknown-b',
+      name: 'Beta'
+    }
+    const a: typeof uber = {
+      ...uber,
+      id: '22222222-2222-4222-8222-222222222298',
+      slug: 'unknown-a',
+      name: 'Alpha'
+    }
+    const sorted = sortServicesForCategorySlug('auto', [b, a])
+    expect(sorted.map((s) => s.slug)).toEqual(['unknown-a', 'unknown-b'])
   })
 })

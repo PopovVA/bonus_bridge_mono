@@ -241,7 +241,9 @@ describe('web routes', () => {
       categories: [
         { slug: 'electronics', name: 'Electronics', imageSrc: '/categories/electronics.svg' }
       ],
-      storesByCategorySlug: { electronics: [{ slug: 'store', name: 'Store' }] }
+      storesByCategorySlug: {
+        electronics: [{ slug: 'store', name: 'Store', imageSrc: '/icon.svg' }]
+      }
     })
     const html = renderToStaticMarkup(
       await DefaultLayout({
@@ -307,6 +309,7 @@ describe('web routes', () => {
       slug: 'store',
       categoryId: 'c1',
       website: 'https://store.example',
+      logoSrc: '/brands/uber-logo.png',
       logoSvg: '<svg xmlns="http://www.w3.org/2000/svg"><circle r="10"/></svg>',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -341,6 +344,22 @@ describe('web routes', () => {
     await expect(
       generateStoreMetadata({ params: Promise.resolve({ slug: 'store' }) })
     ).resolves.toMatchObject({ title: 'Store | BonusBridge' })
+  })
+
+  it('renders store page with inline SVG when logoSrc is absent', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's-svg',
+      name: 'SVG Store',
+      slug: 'svg-store',
+      categoryId: 'c1',
+      website: 'https://example.com',
+      logoSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><circle r="10"/></svg>',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([])
+    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'svg-store' }) }))
+    expect(html).toContain('data:image/svg+xml')
   })
 
   it('renders fallback branches for store page', async () => {

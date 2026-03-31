@@ -21,8 +21,6 @@ export type { HomeClipCoupon } from '@/lib/home-clip-coupons'
 export type { HotCashbackOffer } from '@/lib/hot-cashback'
 
 const ISO = '2026-03-01T12:00:00.000Z'
-const LOGO =
-  '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" rx="8" fill="#1a1a1a"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="14" font-family="system-ui">B</text></svg>'
 
 /** Canonical category list (home marquee, Stores mega menu, `/categories/[slug]`). Sorted A–Z by `name` when exposed via getters. */
 const categories: Category[] = [
@@ -37,13 +35,6 @@ const categories: Category[] = [
     id: '11111111-1111-4111-8111-111111111106',
     name: 'Electronics',
     slug: 'electronics',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '11111111-1111-4111-8111-111111111108',
-    name: 'Entertainment',
-    slug: 'entertainment',
     createdAt: ISO,
     updatedAt: ISO
   },
@@ -69,13 +60,6 @@ const categories: Category[] = [
     updatedAt: ISO
   },
   {
-    id: '11111111-1111-4111-8111-111111111110',
-    name: 'Sports',
-    slug: 'sports',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
     id: '11111111-1111-4111-8111-111111111104',
     name: 'Travel',
     slug: 'travel',
@@ -84,8 +68,41 @@ const categories: Category[] = [
   }
 ]
 
+/** Display order for stores inside each category (mega menu + category pages). */
+const CATEGORY_STORE_ORDER: Record<string, string[]> = {
+  auto: ['uber', 'lyft', 'lime', 'bird', 'lemonade'],
+  electronics: ['poshmark', 'rakuten', 'topcashback', 'honey'],
+  finance: ['chime', 'robinhood', 'public', 'klarna', 'lemonade'],
+  food: ['uber-eats', '7now'],
+  shopping: ['poshmark', 'rakuten', 'topcashback', 'honey'],
+  /* Empty order → alphabetical sort in `sortServicesForCategorySlug` (travel is a single store). */
+  travel: []
+}
+
 function categoriesSortedAlphabetically(): Category[] {
   return [...categories].sort((a, b) => a.name.localeCompare(b.name, 'en'))
+}
+
+function serviceMatchesCategory(s: Service, cat: Category): boolean {
+  if (s.categoryId === cat.id) return true
+  const extra = s.extraCategorySlugs ?? []
+  return extra.includes(cat.slug)
+}
+
+/** Exported for unit tests (unknown slug tail ordering). */
+export function sortServicesForCategorySlug(categorySlug: string, list: Service[]): Service[] {
+  if (list.length < 2) return [...list]
+  const order = CATEGORY_STORE_ORDER[categorySlug]
+  if (!order?.length) {
+    return [...list].sort((a, b) => a.name.localeCompare(b.name, 'en'))
+  }
+  return [...list].sort((a, b) => {
+    const ia = order.indexOf(a.slug)
+    const ib = order.indexOf(b.slug)
+    const ra = ia === -1 ? order.length + 1 : ia
+    const rb = ib === -1 ? order.length + 1 : ib
+    return ra - rb || a.name.localeCompare(b.name, 'en')
+  })
 }
 
 export type HomeCategoryChip = {
@@ -105,6 +122,7 @@ export type StoresMegaMenuCategory = {
 export type StoresMegaMenuStore = {
   slug: string
   name: string
+  imageSrc: string
 }
 
 export type StoresMegaMenuPayload = {
@@ -112,37 +130,210 @@ export type StoresMegaMenuPayload = {
   storesByCategorySlug: Record<string, StoresMegaMenuStore[]>
 }
 
+const CAT = {
+  auto: '11111111-1111-4111-8111-111111111109',
+  electronics: '11111111-1111-4111-8111-111111111106',
+  finance: '11111111-1111-4111-8111-111111111101',
+  food: '11111111-1111-4111-8111-111111111103',
+  shopping: '11111111-1111-4111-8111-111111111102',
+  travel: '11111111-1111-4111-8111-111111111104'
+} as const
+
 const services: Service[] = [
   {
     id: '22222222-2222-4222-8222-222222222201',
-    name: 'Acme Cash',
-    slug: 'acme-cash',
-    categoryId: '11111111-1111-4111-8111-111111111101',
-    website: 'https://example.com/acme-cash',
-    description: 'Cashback and referral bonuses for everyday spending.',
-    logoSvg: LOGO,
+    name: 'Uber',
+    slug: 'uber',
+    categoryId: CAT.auto,
+    website: 'https://www.uber.com/',
+    description: 'Rides and mobility.',
+    logoSvg: undefined,
+    logoSrc: '/brands/uber-logo.png',
     createdAt: ISO,
     updatedAt: ISO
   },
   {
     id: '22222222-2222-4222-8222-222222222202',
-    name: 'Bonus Shop',
-    slug: 'bonus-shop',
-    categoryId: '11111111-1111-4111-8111-111111111102',
-    website: 'https://example.com/bonus-shop',
-    description: 'Deals and promo codes for online shopping.',
-    logoSvg: LOGO,
+    name: 'Lyft',
+    slug: 'lyft',
+    categoryId: CAT.auto,
+    website: 'https://www.lyft.com/',
+    description: 'Rideshare rewards and referrals.',
+    logoSvg: undefined,
+    logoSrc: '/clip-coupons/lyft.svg',
     createdAt: ISO,
     updatedAt: ISO
   },
   {
     id: '22222222-2222-4222-8222-222222222203',
-    name: 'No Desc Mart',
-    slug: 'no-desc-mart',
-    categoryId: '11111111-1111-4111-8111-111111111102',
-    website: 'https://example.com/no-desc',
+    name: 'Lime',
+    slug: 'lime',
+    categoryId: CAT.auto,
+    website: 'https://www.li.me/',
+    description: 'E-scooter and bike sharing.',
+    logoSvg: undefined,
+    logoSrc: '/clip-coupons/lime.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222204',
+    name: 'Bird',
+    slug: 'bird',
+    categoryId: CAT.auto,
+    website: 'https://www.bird.co/',
     description: null,
-    logoSvg: LOGO,
+    logoSvg: undefined,
+    logoSrc: '/clip-coupons/bird.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222205',
+    name: 'Lemonade',
+    slug: 'lemonade',
+    categoryId: CAT.finance,
+    extraCategorySlugs: ['auto'],
+    website: 'https://www.lemonade.com/',
+    description: 'Digital renters and home insurance with referrals.',
+    logoSvg: undefined,
+    logoSrc: '/hot-cashback/logos/lemonade.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222206',
+    name: 'Poshmark',
+    slug: 'poshmark',
+    categoryId: CAT.electronics,
+    extraCategorySlugs: ['shopping'],
+    website: 'https://poshmark.com/',
+    description: 'Resale fashion marketplace.',
+    logoSvg: undefined,
+    logoSrc: '/clip-coupons/poshmark.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222207',
+    name: 'Rakuten',
+    slug: 'rakuten',
+    categoryId: CAT.electronics,
+    extraCategorySlugs: ['shopping'],
+    website: 'https://www.rakuten.com/',
+    description: 'Cash back when you shop online.',
+    logoSvg: undefined,
+    logoSrc: '/hot-cashback/logos/rakuten.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222208',
+    name: 'TopCashback',
+    slug: 'topcashback',
+    categoryId: CAT.electronics,
+    extraCategorySlugs: ['shopping'],
+    website: 'https://www.topcashback.com/',
+    description: 'Cash back portal for thousands of retailers.',
+    logoSvg: undefined,
+    logoSrc: '/hot-cashback/logos/topcashback.png',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222209',
+    name: 'PayPal Honey',
+    slug: 'honey',
+    categoryId: CAT.electronics,
+    extraCategorySlugs: ['shopping'],
+    website: 'https://www.joinhoney.com/',
+    description: 'Automatic coupons and rewards.',
+    logoSvg: undefined,
+    logoSrc: '/hot-cashback/logos/honey.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222210',
+    name: 'Chime',
+    slug: 'chime',
+    categoryId: CAT.finance,
+    website: 'https://www.chime.com/',
+    description: 'Mobile banking with referral bonuses.',
+    logoSvg: undefined,
+    logoSrc: '/stores/chime.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222211',
+    name: 'Robinhood',
+    slug: 'robinhood',
+    categoryId: CAT.finance,
+    website: 'https://robinhood.com/',
+    description: 'Investing and stock rewards.',
+    logoSvg: undefined,
+    logoSrc: '/clip-coupons/robinhood.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222212',
+    name: 'Public',
+    slug: 'public',
+    categoryId: CAT.finance,
+    website: 'https://public.com/',
+    description: 'Social investing.',
+    logoSvg: undefined,
+    logoSrc: '/top-offers/logos/public-logo.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222213',
+    name: 'Klarna',
+    slug: 'klarna',
+    categoryId: CAT.finance,
+    website: 'https://www.klarna.com/',
+    description: 'Shop now, pay later.',
+    logoSvg: undefined,
+    logoSrc: '/top-offers/logos/klarna-logo.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222214',
+    name: 'Uber Eats',
+    slug: 'uber-eats',
+    categoryId: CAT.food,
+    website: 'https://www.ubereats.com/',
+    description: 'Food delivery promos and first-order deals.',
+    logoSvg: undefined,
+    logoSrc: '/brands/ubereats-logo.png',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222215',
+    name: '7NOW Delivery',
+    slug: '7now',
+    categoryId: CAT.food,
+    website: 'https://www.7-eleven.com/',
+    description: '7NOW delivery and convenience offers.',
+    logoSvg: undefined,
+    logoSrc: '/clip-coupons/7eleven.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222216',
+    name: 'Airbnb',
+    slug: 'airbnb',
+    categoryId: CAT.travel,
+    website: 'https://www.airbnb.com/',
+    description: 'Stays and experiences.',
+    logoSvg: undefined,
+    logoSrc: '/stores/airbnb.svg',
     createdAt: ISO,
     updatedAt: ISO
   }
@@ -151,28 +342,42 @@ const services: Service[] = [
 const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333301',
-    serviceId: '22222222-2222-4222-8222-222222222201',
-    title: '$25 referral when you join Acme Cash',
-    previewText: 'New members earn a bonus after first qualifying purchase.',
-    couponCode: 'WELCOME25',
-    bonusAmount: '$25',
-    description: 'Refer a friend and both get rewards. Terms apply.',
-    referralUrl: 'https://example.com/acme-cash/ref',
-    terms: 'Valid for new accounts only. Expires at end of month.',
+    serviceId: '22222222-2222-4222-8222-222222222210',
+    title: 'Get up to $125 when you open Chime',
+    previewText: 'New account + qualifying direct deposit — see Chime for current terms.',
+    couponCode: null,
+    bonusAmount: '$125',
+    description: 'Referral bonus when you qualify.',
+    referralUrl: 'https://www.chime.com/r/vadimpopov1/',
+    terms: 'Eligibility and amounts follow Chime.',
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO
   },
   {
     id: '33333333-3333-4333-8333-333333333302',
-    serviceId: '22222222-2222-4222-8222-222222222202',
-    title: '15% off first order at Bonus Shop',
-    previewText: 'Stack with free shipping on orders over $50.',
+    serviceId: '22222222-2222-4222-8222-222222222213',
+    title: 'Shop now with Klarna',
+    previewText: 'Flexible payments at checkout — open Klarna with our invite.',
     couponCode: null,
-    bonusAmount: '15%',
-    description: 'Use at checkout. Some brands excluded.',
-    referralUrl: 'https://example.com/bonus-shop/deal',
-    terms: 'One use per customer.',
+    bonusAmount: null,
+    description: 'Pay over time where available.',
+    referralUrl: 'https://invite.klarna.com/us/n33cxpeu/default-us',
+    terms: 'Subject to Klarna approval.',
+    status: 'active',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '33333333-3333-4333-8333-333333333399',
+    serviceId: 'ffffffff-ffff-4fff-8fff-ffffffffffff',
+    title: 'Detached offer row',
+    previewText: 'No matching store id — omitted from category listings.',
+    couponCode: null,
+    bonusAmount: null,
+    description: null,
+    referralUrl: 'https://example.com',
+    terms: null,
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO
@@ -354,6 +559,11 @@ export async function getHomeCategoryMarquee(): Promise<HomeCategoryChip[]> {
   }))
 }
 
+/** Logo path for header mega menu rows when `logoSrc` is missing in static data. */
+export function megaMenuStoreImageSrc(service: Pick<Service, 'logoSrc'>): string {
+  return service.logoSrc ?? '/icon.svg'
+}
+
 /** Categories A–Z, plus stores per category slug (for header mega menu). */
 export async function getStoresMegaMenu(): Promise<StoresMegaMenuPayload> {
   const sorted = categoriesSortedAlphabetically()
@@ -364,10 +574,12 @@ export async function getStoresMegaMenu(): Promise<StoresMegaMenuPayload> {
   }))
   const storesByCategorySlug: Record<string, StoresMegaMenuStore[]> = {}
   for (const cat of sorted) {
-    storesByCategorySlug[cat.slug] = services
-      .filter((s) => s.categoryId === cat.id)
-      .map((s) => ({ slug: s.slug, name: s.name }))
-      .sort((a, b) => a.name.localeCompare(b.name))
+    const inCat = services.filter((s) => serviceMatchesCategory(s, cat))
+    storesByCategorySlug[cat.slug] = sortServicesForCategorySlug(cat.slug, inCat).map((s) => ({
+      slug: s.slug,
+      name: s.name,
+      imageSrc: megaMenuStoreImageSrc(s)
+    }))
   }
   return { categories: marqueeCategories, storesByCategorySlug }
 }
@@ -400,13 +612,16 @@ export async function getServices(query?: { category?: string; q?: string }): Pr
   let list = [...services]
   if (query?.category) {
     const cat = categories.find((c) => c.slug === query.category)
-    list = cat ? list.filter((s) => s.categoryId === cat.id) : []
+    list = cat ? list.filter((s) => serviceMatchesCategory(s, cat)) : []
+    list = sortServicesForCategorySlug(query.category, list)
   }
   if (query?.q?.trim()) {
     const ql = query.q.trim().toLowerCase()
-    list = list.filter(
-      (s) => s.name.toLowerCase().includes(ql) || (s.description?.toLowerCase() ?? '').includes(ql)
-    )
+    list = list.filter((s) => {
+      const inName = s.name.toLowerCase().includes(ql)
+      const inDesc = (s.description?.toLowerCase() ?? '').includes(ql)
+      return [inName, inDesc].some((x) => x)
+    })
   }
   return list
 }
@@ -429,13 +644,20 @@ export async function getOffers(
   }
   if (category) {
     const cat = categories.find((c) => c.slug === category)
-    list = cat ? list.filter((o) => services.find((s) => s.id === o.serviceId)?.categoryId === cat.id) : []
+    list = cat
+      ? list.filter((o) => {
+          const svc = services.find((s) => s.id === o.serviceId)
+          return svc ? serviceMatchesCategory(svc, cat) : false
+        })
+      : []
   }
   if (q?.trim()) {
     const ql = q.trim().toLowerCase()
-    list = list.filter(
-      (o) => o.title.toLowerCase().includes(ql) || o.previewText.toLowerCase().includes(ql)
-    )
+    list = list.filter((o) => {
+      const inTitle = o.title.toLowerCase().includes(ql)
+      const inPreview = o.previewText.toLowerCase().includes(ql)
+      return [inTitle, inPreview].some((x) => x)
+    })
   }
   return list
 }

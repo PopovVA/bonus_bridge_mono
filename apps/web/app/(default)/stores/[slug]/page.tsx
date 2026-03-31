@@ -34,15 +34,21 @@ export default async function StorePage({ params }: Props) {
 
   return (
     <section className="category-page-section" aria-labelledby="store-page-heading">
-      <nav className="category-page-breadcrumb" aria-label="Breadcrumb">
-        <Link href="/">Home</Link>
-      </nav>
       <article className="app-surface-card store-page-hero">
         <h1 id="store-page-heading" className="section-title app-serif-page-title">
           {store.name}
         </h1>
         <div className="store-page-meta-row">
-          {store.logoSvg ? (
+          {store.logoSrc ? (
+            <img
+              src={store.logoSrc}
+              alt=""
+              width={40}
+              height={40}
+              className="store-page-logo-img"
+              decoding="async"
+            />
+          ) : store.logoSvg ? (
             <span
               className="store-icon store-page-logo"
               style={{

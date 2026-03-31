@@ -49,9 +49,6 @@ export default async function CategoryPage({ params }: Props) {
 
   return (
     <section className="category-page-section" aria-labelledby="category-page-heading">
-      <nav className="category-page-breadcrumb" aria-label="Breadcrumb">
-        <Link href="/">Home</Link>
-      </nav>
       <header className="category-page-head section-head">
         <h1 id="category-page-heading" className="section-title app-serif-page-title">
           {cat.name}
@@ -70,6 +67,19 @@ export default async function CategoryPage({ params }: Props) {
             return (
               <article key={store.id} className="app-surface-card category-store-card">
                 <h2 className="category-store-title">
+                  {store.logoSrc ? (
+                    <span className="category-store-logo-wrap" aria-hidden="true">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={store.logoSrc}
+                        alt=""
+                        width={32}
+                        height={32}
+                        className="category-store-logo"
+                        decoding="async"
+                      />
+                    </span>
+                  ) : null}
                   <Link href={`/stores/${store.slug}`}>{store.name}</Link>
                 </h2>
                 {store.description ? (

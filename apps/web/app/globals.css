@@ -195,7 +195,7 @@ p, li {
   margin-top: 6px;
   z-index: 60;
   width: min(720px, calc(100vw - 48px));
-  /* Tall enough for ~8 category rows + headings + footer links; columns scroll if needed */
+  /* Tall enough for category + store rows; columns scroll if needed */
   max-height: min(88vh, 580px);
   background: var(--surface);
   border: 1px solid var(--line);
@@ -226,17 +226,6 @@ p, li {
   background: rgba(0, 0, 0, 0.02);
 }
 
-.stores-mega-heading {
-  margin: 0 0 8px;
-  padding: 0 14px;
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
 .stores-mega-list {
   list-style: none;
   margin: 0;
@@ -245,10 +234,11 @@ p, li {
   min-height: 0;
 }
 
-.stores-mega-cat,
-.stores-mega-store {
-  display: block;
-  padding: 10px 14px;
+.stores-mega-cat {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
   color: var(--text);
   text-decoration: none;
   font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -256,20 +246,51 @@ p, li {
   border-left: 3px solid transparent;
 }
 
-.stores-mega-cat {
+.stores-mega-store {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+  padding: 12px 14px;
+  color: var(--text);
+  text-decoration: none;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 0.95rem;
+  border-left: 3px solid transparent;
+}
+
+.stores-mega-store-icon-wrap {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f1f5f9;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.stores-mega-store-icon {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.stores-mega-store-label {
+  min-width: 0;
 }
 
 .stores-mega-cat-icon-wrap {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #f1f5f9;
   border: 1px solid rgba(15, 23, 42, 0.08);
   overflow: hidden;
@@ -277,8 +298,8 @@ p, li {
 
 .stores-mega-cat-icon {
   display: block;
-  width: 22px;
-  height: 22px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
   object-position: center;
 }
@@ -297,29 +318,6 @@ p, li {
   color: #0f172a;
   border-left-color: #334155;
   background: rgba(15, 23, 42, 0.07);
-}
-
-.stores-mega-footer {
-  margin-top: auto;
-  padding-top: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.stores-mega-footer-link {
-  display: block;
-  padding: 8px 14px;
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #0f172a;
-  text-decoration: none;
-}
-
-.stores-mega-footer-link:hover {
-  text-decoration: underline;
-  color: #020617;
 }
 
 .stores-mega-empty {

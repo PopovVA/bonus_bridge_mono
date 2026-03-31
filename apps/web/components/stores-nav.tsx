@@ -66,8 +66,7 @@ export function StoresNav({ megaMenu }: Props) {
         >
           <div className="stores-mega-inner">
             <div className="stores-mega-col stores-mega-cats">
-              <p className="stores-mega-heading">Categories</p>
-              <ul className="stores-mega-list">
+              <ul className="stores-mega-list stores-mega-list--flush-top">
                 {categories.map((cat) => (
                   <li key={cat.slug}>
                     <Link
@@ -86,8 +85,8 @@ export function StoresNav({ megaMenu }: Props) {
                         <img
                           src={cat.imageSrc}
                           alt=""
-                          width={24}
-                          height={24}
+                          width={40}
+                          height={40}
                           className="stores-mega-cat-icon"
                           decoding="async"
                         />
@@ -97,12 +96,8 @@ export function StoresNav({ megaMenu }: Props) {
                   </li>
                 ))}
               </ul>
-              <Link href="/" className="stores-mega-footer-link" onClick={() => setOpen(false)}>
-                All categories
-              </Link>
             </div>
             <div className="stores-mega-col stores-mega-stores">
-              <p className="stores-mega-heading">Stores</p>
               {activeStores.length === 0 ? (
                 <p className="stores-mega-empty meta">No stores in this category yet.</p>
               ) : (
@@ -114,24 +109,23 @@ export function StoresNav({ megaMenu }: Props) {
                         className="stores-mega-store"
                         onClick={() => setOpen(false)}
                       >
-                        {store.name}
+                        <span className="stores-mega-store-icon-wrap" aria-hidden="true">
+                          {/* eslint-disable-next-line @next/next/no-img-element -- brand marks from /public */}
+                          <img
+                            src={store.imageSrc}
+                            alt=""
+                            width={40}
+                            height={40}
+                            className="stores-mega-store-icon"
+                            decoding="async"
+                          />
+                        </span>
+                        <span className="stores-mega-store-label">{store.name}</span>
                       </Link>
                     </li>
                   ))}
                 </ul>
               )}
-              <div className="stores-mega-footer">
-                <Link
-                  href={activeSlug ? `/categories/${activeSlug}` : '/'}
-                  className="stores-mega-footer-link"
-                  onClick={() => setOpen(false)}
-                >
-                  View category page
-                </Link>
-                <Link href="/" className="stores-mega-footer-link" onClick={() => setOpen(false)}>
-                  All stores
-                </Link>
-              </div>
             </div>
           </div>
         </div>
