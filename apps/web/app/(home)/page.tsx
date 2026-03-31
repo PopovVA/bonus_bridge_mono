@@ -3,10 +3,12 @@ import { HeroSlider } from '@/components/hero-slider'
 import { CouponCard } from '@/components/coupon-card'
 import { CategoryMarquee } from '@/components/category-marquee'
 import { MonthlyTopOffers } from '@/components/monthly-top-offers'
+import { HotCashback } from '@/components/hot-cashback'
 import {
   getHeroSlides,
   getFeaturedOffers,
   getHomeCategoryMarquee,
+  getHotCashbackOffers,
   getTopMonthlyOffers
 } from '@/lib/site-data'
 
@@ -16,12 +18,14 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [heroSlides, topMonthlyOffers, featuredOffers, categoryChips] = await Promise.all([
-    getHeroSlides().catch(() => []),
-    getTopMonthlyOffers().catch(() => []),
-    getFeaturedOffers().catch(() => []),
-    getHomeCategoryMarquee().catch(() => [])
-  ])
+  const [heroSlides, topMonthlyOffers, featuredOffers, categoryChips, hotCashbackOffers] =
+    await Promise.all([
+      getHeroSlides().catch(() => []),
+      getTopMonthlyOffers().catch(() => []),
+      getFeaturedOffers().catch(() => []),
+      getHomeCategoryMarquee().catch(() => []),
+      getHotCashbackOffers().catch(() => [])
+    ])
 
   return (
     <>
@@ -58,6 +62,8 @@ export default async function HomePage() {
           })}
         </div>
       </section>
+
+      <HotCashback offers={hotCashbackOffers} />
     </>
   )
 }

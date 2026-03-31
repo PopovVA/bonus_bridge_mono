@@ -5,6 +5,7 @@ import {
   getFeaturedStores,
   getHeroSlides,
   getHomeCategoryMarquee,
+  getHotCashbackOffers,
   getTopMonthlyOffers,
   getOfferById,
   getOffers,
@@ -36,6 +37,23 @@ describe('site-data', () => {
     expect(list[2]?.logoSrc).toBe('/top-offers/logos/too-good-to-go-logo.svg')
     expect(list[2]?.imageSrc).toBe('/top-offers/media/too-good-to-go-promo.png')
     expect(list[2]?.badgeText).toBe('2$ off')
+  })
+
+  it('returns hot cashback offers for home', async () => {
+    const list = await getHotCashbackOffers()
+    expect(list).toHaveLength(4)
+    expect(list[0]?.slug).toBe('rakuten')
+    expect(list[0]?.badgeText).toBe('$50 bonus')
+    expect(list[0]?.href).toBe('https://www.rakuten.com/r/MVADIM7')
+    expect(list[1]?.slug).toBe('topcashback')
+    expect(list[1]?.badgeText).toBe('$40 cashback')
+    expect(list[1]?.href).toBe('https://www.topcashback.com/ref/member344836925437')
+    expect(list[2]?.slug).toBe('honey')
+    expect(list[2]?.badgeText).toBe('$10 cashback')
+    expect(list[2]?.href).toBe('https://www.joinhoney.com/ref/nwpz6sw')
+    expect(list[3]?.slug).toBe('lemonade')
+    expect(list[3]?.badgeText).toBe('$10 gift card')
+    expect(list[3]?.href).toBe('https://lemonade.com/r/vadimpopov1')
   })
 
   it('returns home category marquee chips in order', async () => {

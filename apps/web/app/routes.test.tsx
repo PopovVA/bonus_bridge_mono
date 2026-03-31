@@ -11,7 +11,8 @@ vi.mock('@/lib/site-data', () => ({
   getHeroSlides: vi.fn(),
   getTopMonthlyOffers: vi.fn(),
   getFeaturedOffers: vi.fn(),
-  getHomeCategoryMarquee: vi.fn()
+  getHomeCategoryMarquee: vi.fn(),
+  getHotCashbackOffers: vi.fn()
 }))
 
 import HomePage from './(home)/page'
@@ -30,6 +31,7 @@ import {
   getHeroSlides,
   getFeaturedOffers,
   getHomeCategoryMarquee,
+  getHotCashbackOffers,
   getTopMonthlyOffers,
   getServiceBySlug,
   getServices
@@ -70,6 +72,18 @@ describe('web routes', () => {
         href: '/stores?category=finance'
       }
     ])
+    vi.mocked(getHotCashbackOffers).mockResolvedValue([
+      {
+        id: 'hot-cashback-rakuten',
+        brandName: 'Rakuten',
+        slug: 'rakuten',
+        badgeText: '$50 bonus',
+        description: 'Test cashback copy.',
+        ctaText: 'Invite a friend',
+        href: 'https://www.rakuten.com/r/MVADIM7',
+        logoSrc: '/hot-cashback/logos/rakuten.svg'
+      }
+    ])
     vi.mocked(getFeaturedOffers).mockResolvedValue([
       {
         id: 'fo1',
@@ -105,6 +119,8 @@ describe('web routes', () => {
     const html = renderToStaticMarkup(await HomePage())
     expect(html).toContain('Top offers this month')
     expect(html).toContain('Hot Promo Codes')
+    expect(html).toContain('Hot Cashback')
+    expect(html).toContain('Test cashback copy.')
     expect(html).toContain('Test klarna offer')
     expect(html).toContain('href="https://invite.klarna.com/test"')
     expect(html).toContain('SAVE10')
@@ -118,9 +134,11 @@ describe('web routes', () => {
     vi.mocked(getTopMonthlyOffers).mockRejectedValue(new Error('down'))
     vi.mocked(getFeaturedOffers).mockRejectedValue(new Error('down'))
     vi.mocked(getHomeCategoryMarquee).mockRejectedValue(new Error('down'))
+    vi.mocked(getHotCashbackOffers).mockRejectedValue(new Error('down'))
     const html = renderToStaticMarkup(await HomePage())
     expect(html).not.toContain('monthly-offers-section')
     expect(html).toContain('Hot Promo Codes')
+    expect(html).not.toContain('hot-cashback-section')
   })
 
   it('renders stores/coupons pages', async () => {

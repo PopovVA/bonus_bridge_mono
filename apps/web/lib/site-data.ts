@@ -14,6 +14,9 @@ import {
 } from '@/lib/schemas'
 import type { z } from 'zod'
 import { offerWithService, serviceWithCategory } from '@/lib/site-data-relations'
+import { HOT_CASHBACK_OFFERS, type HotCashbackOffer } from '@/lib/hot-cashback'
+
+export type { HotCashbackOffer } from '@/lib/hot-cashback'
 
 const ISO = '2026-03-01T12:00:00.000Z'
 const LOGO =
@@ -369,6 +372,10 @@ export async function getFeaturedStores(): Promise<FeaturedStoreWithStore[]> {
 
 export async function getTopMonthlyOffers(): Promise<MonthlyTopOffer[]> {
   return structuredClone(monthlyTopOffers)
+}
+
+export async function getHotCashbackOffers(): Promise<HotCashbackOffer[]> {
+  return structuredClone(HOT_CASHBACK_OFFERS)
 }
 
 export async function getFeaturedOffers(): Promise<FeaturedOfferWithOffer[]> {
