@@ -16,6 +16,8 @@ const CLIP_CARD_LOGO_UBER = '/brands/uber-logo.png'
 const CLIP_CARD_LOGO_UBER_EATS = '/brands/ubereats-logo.png'
 /** 7‑Eleven / 7Now mark — `public/clip-coupons/7eleven.svg`. */
 const CLIP_CARD_LOGO_7NOW = '/clip-coupons/7eleven.svg'
+/** Lyft wordmark — `public/clip-coupons/lyft.svg`. */
+const CLIP_CARD_LOGO_LYFT = '/clip-coupons/lyft.svg'
 
 export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
@@ -46,13 +48,13 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
     logoSrc: CLIP_CARD_LOGO_7NOW
   },
   {
-    id: 'clip-instacart',
-    brand: 'Instacart',
-    title: '$30 off first order',
-    blurb: 'Grocery delivery; minimum cart and fees may apply.',
-    code: 'CARTNEW30',
-    openUrl: 'https://example.com/promos/instacart-stub',
-    logoSrc: CLIP_CARD_LOGO_UBER
+    id: 'clip-lyft',
+    brand: 'Lyft',
+    title: '50% off your next ride',
+    blurb: 'Up to $10 off one ride — new-rider rules, market, and expiry follow Lyft’s current offer.',
+    code: 'VADIM53422',
+    openUrl: 'https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc',
+    logoSrc: CLIP_CARD_LOGO_LYFT
   },
   {
     id: 'clip-starbucks',

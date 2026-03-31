@@ -57,6 +57,10 @@ describe('site-data', () => {
     expect(seven?.code).toBe('my1w2j')
     expect(seven?.openUrl).toBe('https://smart.link/370flfia27552?cp_0=my1w2j')
     expect(seven?.logoSrc).toBe('/clip-coupons/7eleven.svg')
+    const lyft = list.find((c) => c.id === 'clip-lyft')
+    expect(lyft?.code).toBe('VADIM53422')
+    expect(lyft?.openUrl).toBe('https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc')
+    expect(lyft?.logoSrc).toBe('/clip-coupons/lyft.svg')
   })
 
   it('returns hot cashback offers for home', async () => {
