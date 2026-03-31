@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import { HeroSlider } from '@/components/hero-slider'
-import { StoreCard } from '@/components/store-card'
 import { CouponCard } from '@/components/coupon-card'
 import { CategoryMarquee } from '@/components/category-marquee'
+import { MonthlyTopOffers } from '@/components/monthly-top-offers'
 import {
   getHeroSlides,
-  getFeaturedStores,
   getFeaturedOffers,
-  getHomeCategoryMarquee
+  getHomeCategoryMarquee,
+  getTopMonthlyOffers
 } from '@/lib/site-data'
 
 export const metadata: Metadata = {
@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [heroSlides, featuredStores, featuredOffers, categoryChips] = await Promise.all([
+  const [heroSlides, topMonthlyOffers, featuredOffers, categoryChips] = await Promise.all([
     getHeroSlides().catch(() => []),
-    getFeaturedStores().catch(() => []),
+    getTopMonthlyOffers().catch(() => []),
     getFeaturedOffers().catch(() => []),
     getHomeCategoryMarquee().catch(() => [])
   ])
@@ -27,30 +27,7 @@ export default async function HomePage() {
     <>
       <HeroSlider slides={heroSlides} />
 
-      <section id="stores" className="stores-section">
-        <div className="section-head">
-          <h2 className="section-title">Top Cashback Stores</h2>
-          <p className="section-subtitle">
-            Shop at your favorite stores and earn cashback on every purchase
-          </p>
-        </div>
-        <div className="stores-grid">
-          {featuredStores.map((fs) => {
-            const store = fs.store
-            if (!store) return null
-            return (
-              <StoreCard
-                key={fs.id}
-                id={store.id}
-                name={store.name}
-                slug={store.slug}
-                logoSvg={store.logoSvg}
-                bonusLabel="View deals"
-              />
-            )
-          })}
-        </div>
-      </section>
+      <MonthlyTopOffers offers={topMonthlyOffers} />
 
       <CategoryMarquee chips={categoryChips} />
 

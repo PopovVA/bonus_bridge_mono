@@ -5,6 +5,7 @@ import {
   getFeaturedStores,
   getHeroSlides,
   getHomeCategoryMarquee,
+  getTopMonthlyOffers,
   getOfferById,
   getOffers,
   getServiceBySlug,
@@ -16,6 +17,25 @@ describe('site-data', () => {
     const list = await getCategories()
     expect(list.length).toBe(10)
     expect(list[0]).toMatchObject({ slug: expect.any(String), name: expect.any(String) })
+  })
+
+  it('returns top monthly offers for home', async () => {
+    const list = await getTopMonthlyOffers()
+    expect(list).toHaveLength(3)
+    expect(list[0]?.slug).toBe('klarna')
+    expect(list[0]?.href).toContain('klarna.com')
+    expect(list[0]?.logoSrc).toBe('/top-offers/logos/klarna-logo.svg')
+    expect(list[0]?.imageSrc).toBe('/top-offers/media/klarna-promo.png')
+    expect(list[0]?.badgeText).toBe('20$ off')
+    expect(list[1]?.slug).toBe('public')
+    expect(list[1]?.logoSrc).toBe('/top-offers/logos/public-logo.svg')
+    expect(list[1]?.imageSrc).toBe('/top-offers/media/public-promo.png')
+    expect(list[1]?.badgeText).toBe('20$ off')
+    expect(list[2]?.slug).toBe('too-good-to-go')
+    expect(list[2]?.href).toContain('tgtg.onelink.me')
+    expect(list[2]?.logoSrc).toBe('/top-offers/logos/too-good-to-go-logo.svg')
+    expect(list[2]?.imageSrc).toBe('/top-offers/media/too-good-to-go-promo.png')
+    expect(list[2]?.badgeText).toBe('2$ off')
   })
 
   it('returns home category marquee chips in order', async () => {

@@ -6,6 +6,7 @@ import {
   FeaturedStoreWithStoreSchema,
   HeroImageCreateSchema,
   HeroSlideSchema,
+  MonthlyTopOfferSchema,
   OfferCreateSchema,
   ServiceCreateSchema,
   ServicesListQuerySchema
@@ -70,6 +71,48 @@ describe('site schemas', () => {
     })
     expect(parsed.imageUrl).toBe('https://example.com/hero.jpg')
     expect(parsed.sortOrder).toBe(0)
+  })
+
+  it('validates monthly top offer', () => {
+    const o = MonthlyTopOfferSchema.parse({
+      id: '550e8400-e29b-41d4-a716-446655440099',
+      brandName: 'Klarna',
+      slug: 'klarna',
+      description: 'Short offer text.',
+      ctaText: 'Open',
+      href: 'https://invite.klarna.com/us/x',
+      logoSrc: '/top-offers/logos/klarna-logo.svg',
+      imageSrc: '/top-offers/media/x.svg'
+    })
+    expect(o.brandName).toBe('Klarna')
+    expect(o.imageSrc).toBe('/top-offers/media/x.svg')
+  })
+
+  it('validates monthly top offer without hero image', () => {
+    const o = MonthlyTopOfferSchema.parse({
+      id: '550e8400-e29b-41d4-a716-446655440099',
+      brandName: 'Klarna',
+      slug: 'klarna',
+      description: 'Short offer text.',
+      ctaText: 'Open',
+      href: 'https://invite.klarna.com/us/x',
+      logoSrc: '/top-offers/logos/klarna-logo.svg'
+    })
+    expect(o.imageSrc).toBeUndefined()
+  })
+
+  it('validates monthly top offer with badge', () => {
+    const o = MonthlyTopOfferSchema.parse({
+      id: '550e8400-e29b-41d4-a716-446655440099',
+      brandName: 'Klarna',
+      slug: 'klarna',
+      description: 'Short offer text.',
+      ctaText: 'Open',
+      href: 'https://invite.klarna.com/us/x',
+      logoSrc: '/top-offers/logos/klarna-logo.svg',
+      badgeText: '20$ off'
+    })
+    expect(o.badgeText).toBe('20$ off')
   })
 
   it('validates featured store create input', () => {

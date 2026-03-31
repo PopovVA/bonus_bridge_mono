@@ -20,7 +20,7 @@ From repo root:
 
 - Prefer server-rendered or statically generated pages where possible.
 - Current URL structure:
-  - `/` — home (hero, featured stores/offers, category carousel)
+  - `/` — home (hero, top monthly offers, category carousel, featured coupon cards)
   - `/stores`, `/stores/[slug]`
   - `/coupons`, `/coupons/[id]`
   - `/privacy`, `/terms`

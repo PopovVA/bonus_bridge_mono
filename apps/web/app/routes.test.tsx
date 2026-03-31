@@ -9,7 +9,7 @@ vi.mock('@/lib/site-data', () => ({
   getOfferById: vi.fn(),
   getServiceBySlug: vi.fn(),
   getHeroSlides: vi.fn(),
-  getFeaturedStores: vi.fn(),
+  getTopMonthlyOffers: vi.fn(),
   getFeaturedOffers: vi.fn(),
   getHomeCategoryMarquee: vi.fn()
 }))
@@ -28,9 +28,9 @@ import {
   getOfferById,
   getOffers,
   getHeroSlides,
-  getFeaturedStores,
   getFeaturedOffers,
   getHomeCategoryMarquee,
+  getTopMonthlyOffers,
   getServiceBySlug,
   getServices
 } from '@/lib/site-data'
@@ -49,10 +49,18 @@ describe('web routes', () => {
         updatedAt: ''
       }
     ] as never)
-    vi.mocked(getFeaturedStores).mockResolvedValue([
-      { id: 'fs1', storeId: 's1', sortOrder: 0, store: { id: 's1', name: 'Store', slug: 'store', logoSvg: '<svg></svg>' } } as never,
-      { id: 'fs2', storeId: 's2', sortOrder: 1, store: { id: 's2', name: 'NoLogo', slug: 'nologo' } } as never,
-      { id: 'fs3', storeId: 's3', sortOrder: 2, store: undefined } as never
+    vi.mocked(getTopMonthlyOffers).mockResolvedValue([
+      {
+        id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa01',
+        brandName: 'Klarna',
+        slug: 'klarna',
+        description: 'Test klarna offer.',
+        ctaText: 'Open',
+        href: 'https://invite.klarna.com/test',
+        logoSrc: '/top-offers/logos/klarna-logo.svg',
+        imageSrc: '/top-offers/media/klarna-promo.png',
+        badgeText: '20$ off'
+      }
     ])
     vi.mocked(getHomeCategoryMarquee).mockResolvedValue([
       {
@@ -95,10 +103,10 @@ describe('web routes', () => {
       { id: 'fo3', offerId: 'o3', sortOrder: 2, offer: undefined } as never
     ])
     const html = renderToStaticMarkup(await HomePage())
-    expect(html).toContain('Top Cashback Stores')
+    expect(html).toContain('Top offers this month')
     expect(html).toContain('Hot Promo Codes')
-    expect(html).toContain('Store')
-    expect(html).toContain('NoLogo')
+    expect(html).toContain('Test klarna offer')
+    expect(html).toContain('href="https://invite.klarna.com/test"')
     expect(html).toContain('SAVE10')
     expect(html).toContain('NoCode')
     expect(html).toContain('category-marquee-section')
@@ -107,11 +115,11 @@ describe('web routes', () => {
 
   it('renders home fallback state when APIs fail', async () => {
     vi.mocked(getHeroSlides).mockRejectedValue(new Error('down'))
-    vi.mocked(getFeaturedStores).mockRejectedValue(new Error('down'))
+    vi.mocked(getTopMonthlyOffers).mockRejectedValue(new Error('down'))
     vi.mocked(getFeaturedOffers).mockRejectedValue(new Error('down'))
     vi.mocked(getHomeCategoryMarquee).mockRejectedValue(new Error('down'))
     const html = renderToStaticMarkup(await HomePage())
-    expect(html).toContain('Top Cashback Stores')
+    expect(html).not.toContain('monthly-offers-section')
     expect(html).toContain('Hot Promo Codes')
   })
 

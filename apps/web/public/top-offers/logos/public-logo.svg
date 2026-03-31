@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="32" viewBox="0 0 100 32" fill="none" aria-hidden="true">
+  <circle cx="12" cy="12" r="8" fill="#0047FF" />
+  <circle cx="12" cy="26" r="4.5" fill="#0047FF" />
+  <text
+    x="28"
+    y="22"
+    fill="#111827"
+    font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="17"
+    font-weight="500"
+  >public</text>
+</svg>

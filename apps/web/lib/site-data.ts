@@ -2,11 +2,13 @@
  * Fixed in-repo content for the public site. Edit this file to change copy, stores, and coupons.
  */
 import {
+  MonthlyTopOfferSchema,
   OffersListQuerySchema,
   type Category,
   type FeaturedOfferWithOffer,
   type FeaturedStoreWithStore,
   type HeroSlide,
+  type MonthlyTopOffer,
   type Offer,
   type Service
 } from '@/lib/schemas'
@@ -301,6 +303,45 @@ const featuredOffers: FeaturedOfferWithOffer[] = [
   }
 ]
 
+const monthlyTopOffers: MonthlyTopOffer[] = MonthlyTopOfferSchema.array().parse([
+  {
+    id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa01',
+    brandName: 'Klarna',
+    slug: 'klarna',
+    description:
+      'Shop now, pay later — open Klarna with our invite to explore deals, flexible payments, and rewards in the app.',
+    ctaText: 'Open Klarna',
+    href: 'https://invite.klarna.com/us/n33cxpeu/default-us',
+    logoSrc: '/top-offers/logos/klarna-logo.svg',
+    imageSrc: '/top-offers/media/klarna-promo.png',
+    badgeText: '20$ off'
+  },
+  {
+    id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa02',
+    brandName: 'Public',
+    slug: 'public',
+    description:
+      'Invest with friends on Public. Join through our link for a welcome bonus when you qualify — stocks, ETFs, and more.',
+    ctaText: 'Join Public',
+    href: 'https://share.public.com/Vadim66923',
+    logoSrc: '/top-offers/logos/public-logo.svg',
+    imageSrc: '/top-offers/media/public-promo.png',
+    badgeText: '20$ off'
+  },
+  {
+    id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa03',
+    brandName: 'Too Good To Go',
+    slug: 'too-good-to-go',
+    description:
+      'Rescue surprise bags from cafés and stores near you — save food from waste and money on meals via the app.',
+    ctaText: 'Get the app',
+    href: 'https://tgtg.onelink.me/OGjG/1vzeei4g',
+    logoSrc: '/top-offers/logos/too-good-to-go-logo.svg',
+    imageSrc: '/top-offers/media/too-good-to-go-promo.png',
+    badgeText: '2$ off'
+  }
+])
+
 export async function getCategories(): Promise<Category[]> {
   return structuredClone(categories)
 }
@@ -324,6 +365,10 @@ export async function getHeroSlides(): Promise<HeroSlide[]> {
 
 export async function getFeaturedStores(): Promise<FeaturedStoreWithStore[]> {
   return structuredClone(featuredStores)
+}
+
+export async function getTopMonthlyOffers(): Promise<MonthlyTopOffer[]> {
+  return structuredClone(monthlyTopOffers)
 }
 
 export async function getFeaturedOffers(): Promise<FeaturedOfferWithOffer[]> {

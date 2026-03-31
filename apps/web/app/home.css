@@ -1196,7 +1196,256 @@
   margin: 0;
 }
 
-/* Top stores section */
+/* Top monthly offers (Klarna / Public / Too Good To Go) */
+.monthly-offers-section {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px 8px;
+}
+
+.monthly-offers-head {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.monthly-offers-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 900px) {
+  .monthly-offers-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: stretch;
+  }
+}
+
+.monthly-offer-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 220px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+}
+
+.monthly-offer-card__badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  left: auto;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 24px);
+  padding: 6px 11px 6px 8px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  color: #111827;
+}
+
+.monthly-offer-card__badge-icon {
+  flex-shrink: 0;
+  display: block;
+  color: #374151;
+}
+
+.monthly-offer-card__badge-text {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.monthly-offer-card__body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+  align-items: stretch;
+}
+
+@media (min-width: 480px) {
+  .monthly-offer-card__body {
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 220px;
+    flex: 1 1 auto;
+  }
+}
+
+.monthly-offer-card__left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 14px 20px 22px;
+}
+
+@media (min-width: 480px) {
+  .monthly-offer-card__left {
+    flex: 1 1 52%;
+    max-width: 58%;
+    padding: 22px 12px 22px 22px;
+    min-height: 100%;
+  }
+}
+
+.monthly-offer-card__logo-wrap {
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+/* Too Good To Go mark is light-on-cream; teal tile keeps contrast on white cards */
+.monthly-offer-card__logo-wrap--tgtg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #115e59;
+}
+
+.monthly-offer-card__logo {
+  display: block;
+  width: auto;
+  max-width: 140px;
+  height: auto;
+  max-height: 40px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.monthly-offer-card__logo-wrap--tgtg .monthly-offer-card__logo {
+  max-height: 36px;
+}
+
+.monthly-offer-card__desc-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.monthly-offer-card__desc {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #475569;
+  text-align: left;
+}
+
+.monthly-offer-card__cta {
+  margin-top: auto;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #fff;
+  background: #111827;
+  border: 1px solid #111827;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.monthly-offer-card__cta:hover {
+  background: #1f2937;
+  border-color: #1f2937;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  transform: translateY(-1px);
+}
+
+.monthly-offer-card__media {
+  flex: 0 0 auto;
+  position: relative;
+  min-height: 200px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+@media (min-width: 480px) {
+  .monthly-offer-card__media {
+    flex: 1 1 38%;
+    min-width: 0;
+    max-width: none;
+    min-height: 0;
+    height: 100%;
+    align-self: stretch;
+    border-radius: 0;
+  }
+}
+
+.monthly-offer-card__media-img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Public uses a wide landscape banner: show the full art (headline + devices), letterbox if needed. */
+.monthly-offer-card__media--public {
+  background: #0a0a12;
+}
+
+.monthly-offer-card__media-img--public-contain {
+  object-fit: contain;
+  object-position: center center;
+}
+
+.monthly-offer-card__skeleton {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #e2e8f0;
+}
+
+.monthly-offer-card__skeleton-shimmer {
+  position: absolute;
+  inset: 0;
+  width: 200%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  animation: monthly-offer-skeleton-shimmer 2s ease-in-out infinite;
+}
+
+@keyframes monthly-offer-skeleton-shimmer {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Legacy store grid (stores listing page patterns) */
 .stores-section {
   max-width: 1280px;
   margin: 0 auto;
@@ -1278,7 +1527,7 @@
   font-weight: 600;
 }
 
-/* Infinite category carousel (below featured stores) */
+/* Infinite category carousel (below top offers) */
 .category-marquee-section {
   max-width: 1280px;
   margin: 0 auto;

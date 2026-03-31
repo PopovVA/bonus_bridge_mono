@@ -26,6 +26,7 @@ export default defineConfig({
         'components/home-footer.tsx',
         /* Embla + client effects: smoke-tested in hero-slider.test.tsx; v8 cannot execute hooks in SSR markup */
         'components/hero-slider.tsx',
+        'components/store-card.tsx',
         'app/(home)/layout.tsx',
         '**/privacy/page.tsx',
         '**/terms/page.tsx'
