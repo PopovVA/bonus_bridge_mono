@@ -18,6 +18,8 @@ const CLIP_CARD_LOGO_UBER_EATS = '/brands/ubereats-logo.png'
 const CLIP_CARD_LOGO_7NOW = '/clip-coupons/7eleven.svg'
 /** Lyft wordmark — `public/clip-coupons/lyft.svg`. */
 const CLIP_CARD_LOGO_LYFT = '/clip-coupons/lyft.svg'
+/** Robinhood wordmark — `public/clip-coupons/robinhood.svg`. */
+const CLIP_CARD_LOGO_ROBINHOOD = '/clip-coupons/robinhood.svg'
 
 export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
@@ -57,13 +59,13 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
     logoSrc: CLIP_CARD_LOGO_LYFT
   },
   {
-    id: 'clip-starbucks',
-    brand: 'Starbucks',
-    title: 'BOGO handcrafted drink',
-    blurb: 'Rewards members; afternoons on select days.',
-    code: 'STAR-BOGO-PM',
-    openUrl: 'https://example.com/promos/starbucks-stub',
-    logoSrc: CLIP_CARD_LOGO_UBER
+    id: 'clip-robinhood',
+    brand: 'Robinhood',
+    title: 'Get $5–$200 in stock',
+    blurb: 'Gift stock after sign-up and qualifying funding — typical values $5–$10; limits and terms per Robinhood.',
+    code: 'vadimp-4f32ef3',
+    openUrl: 'https://join.robinhood.com/vadimp-4f32ef3',
+    logoSrc: CLIP_CARD_LOGO_ROBINHOOD
   },
   {
     id: 'clip-chipotle',

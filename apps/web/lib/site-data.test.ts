@@ -61,6 +61,10 @@ describe('site-data', () => {
     expect(lyft?.code).toBe('VADIM53422')
     expect(lyft?.openUrl).toBe('https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc')
     expect(lyft?.logoSrc).toBe('/clip-coupons/lyft.svg')
+    const rh = list.find((c) => c.id === 'clip-robinhood')
+    expect(rh?.code).toBe('vadimp-4f32ef3')
+    expect(rh?.openUrl).toBe('https://join.robinhood.com/vadimp-4f32ef3')
+    expect(rh?.logoSrc).toBe('/clip-coupons/robinhood.svg')
   })
 
   it('returns hot cashback offers for home', async () => {
