@@ -65,6 +65,10 @@ describe('site-data', () => {
     expect(rh?.code).toBe('vadimp-4f32ef3')
     expect(rh?.openUrl).toBe('https://join.robinhood.com/vadimp-4f32ef3')
     expect(rh?.logoSrc).toBe('/clip-coupons/robinhood.svg')
+    const lime = list.find((c) => c.id === 'clip-lime')
+    expect(lime?.code).toBe('REGUD7BFJWT')
+    expect(lime?.openUrl).toBe('https://lime.bike/referral_signin/REGUD7BFJWT')
+    expect(lime?.logoSrc).toBe('/clip-coupons/lime.svg')
   })
 
   it('returns hot cashback offers for home', async () => {

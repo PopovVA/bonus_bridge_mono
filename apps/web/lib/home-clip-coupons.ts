@@ -20,6 +20,8 @@ const CLIP_CARD_LOGO_7NOW = '/clip-coupons/7eleven.svg'
 const CLIP_CARD_LOGO_LYFT = '/clip-coupons/lyft.svg'
 /** Robinhood wordmark — `public/clip-coupons/robinhood.svg`. */
 const CLIP_CARD_LOGO_ROBINHOOD = '/clip-coupons/robinhood.svg'
+/** Lime wordmark — `public/clip-coupons/lime.svg`. */
+const CLIP_CARD_LOGO_LIME = '/clip-coupons/lime.svg'
 
 export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
@@ -68,13 +70,13 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
     logoSrc: CLIP_CARD_LOGO_ROBINHOOD
   },
   {
-    id: 'clip-chipotle',
-    brand: 'Chipotle',
-    title: 'Free chips & guac',
-    blurb: 'App or online order over $10; limited time.',
-    code: 'EXTRA-GUAC-24',
-    openUrl: 'https://example.com/promos/chipotle-stub',
-    logoSrc: CLIP_CARD_LOGO_UBER
+    id: 'clip-lime',
+    brand: 'Lime',
+    title: '$5 sign-up credit',
+    blurb: 'New riders after registration — amount, markets, and expiry follow Lime’s current referral terms.',
+    code: 'REGUD7BFJWT',
+    openUrl: 'https://lime.bike/referral_signin/REGUD7BFJWT',
+    logoSrc: CLIP_CARD_LOGO_LIME
   },
   {
     id: 'clip-target',
