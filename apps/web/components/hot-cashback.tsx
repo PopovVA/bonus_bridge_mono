@@ -64,7 +64,11 @@ export function HotCashback({
                 />
               </div>
               <div className="hot-cashback-card__desc-wrap">
-                <p className="hot-cashback-card__desc">{offer.description}</p>
+                <div className="hot-cashback-card__text-stack">
+                  <p className="clip-coupon-card__brand">{offer.brandName.toUpperCase()}</p>
+                  <h3 className="clip-coupon-card__headline">{offer.headline}</h3>
+                  <p className="clip-coupon-card__blurb">{offer.description}</p>
+                </div>
               </div>
               <a
                 href={offer.href}

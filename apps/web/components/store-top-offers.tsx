@@ -19,7 +19,7 @@ export function StoreTopOffers({ storeName, storeSlug, storeLogoSrc, offers }: P
     id: o.id,
     title: o.title,
     previewText: o.previewText,
-    couponCode: o.couponCode,
+    couponCode: o.couponCode ?? null,
     serviceSlug: storeSlug,
     serviceName: storeName,
     logoSrc: storeLogoSrc,

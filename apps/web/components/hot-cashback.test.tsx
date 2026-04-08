@@ -9,6 +9,7 @@ const sample = [
     brandName: 'Rakuten',
     slug: 'rakuten',
     badgeText: '$50 bonus',
+    headline: 'Up to $50 after qualifying spend',
     description: 'Register for up to $50 after qualifying spend—Rakuten pays cashback on partner stores.',
     ctaText: 'Get the bonus',
     href: 'https://www.rakuten.com/r/MVADIM7',
@@ -23,6 +24,9 @@ describe('HotCashback', () => {
     expect(html).toContain('hot-cashback-section')
     expect(html).toContain('Hot Cashback')
     expect(html).toContain('$50 bonus')
+    expect(html).toContain('clip-coupon-card__brand')
+    expect(html).toContain('RAKUTEN')
+    expect(html).toContain('Up to $50 after qualifying spend')
     expect(html).toContain('Register for up to $50 after qualifying spend—Rakuten pays cashback on partner stores.')
     expect(html).toContain('Sign up below—welcome offers and eligibility are set by each partner.')
     expect(html).toContain('href="https://www.rakuten.com/r/MVADIM7"')

@@ -10,6 +10,10 @@
     "start": "pnpm --filter web start",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
-    "build": "pnpm --filter web build"
+    "build": "pnpm --filter web build",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
   }
 }

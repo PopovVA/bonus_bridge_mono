@@ -97,6 +97,8 @@ export function StoreRelatedOfferCards({ offers, labelledBy }: Props) {
           const curated = getCuratedLinkCardCopyForExploreMore(o.serviceSlug)
           const badgeText = curated?.badgeText ?? 'Offer'
           const descText = curated?.description ?? null
+          const headlineText = curated?.headline ?? o.title
+          const blurbText = descText?.trim() ? descText.trim() : o.previewText?.trim() ?? ''
           const ctaText = curated?.ctaText ?? 'Open offer'
           const offerHref = curated?.href ?? o.referralUrl
           const logoSrc = curated?.logoSrc ?? logo
@@ -120,14 +122,11 @@ export function StoreRelatedOfferCards({ offers, labelledBy }: Props) {
                     />
                   </div>
                   <div className="hot-cashback-card__desc-wrap">
-                    {descText ? (
-                      <p className="hot-cashback-card__desc">{descText}</p>
-                    ) : (
-                      <p className="hot-cashback-card__desc">
-                        <strong className="store-related-discovery-offer-card__title">{o.title}</strong>
-                        {o.previewText?.trim() ? <> {o.previewText.trim()}</> : null}
-                      </p>
-                    )}
+                    <div className="hot-cashback-card__text-stack">
+                      <p className="clip-coupon-card__brand">{o.serviceName.toUpperCase()}</p>
+                      <h3 className="clip-coupon-card__headline">{headlineText}</h3>
+                      {blurbText ? <p className="clip-coupon-card__blurb">{blurbText}</p> : null}
+                    </div>
                   </div>
                   <a
                     href={offerHref}

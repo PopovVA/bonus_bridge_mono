@@ -19,4 +19,10 @@ describe('getHotCashbackOfferByStoreSlug', () => {
   it('includes Public for store-page / Explore More lookups', () => {
     expect(getHotCashbackOfferByStoreSlug('public')?.ctaText).toBe('Join Public')
   })
+
+  it('includes Chime with 125$ badge for Explore More', () => {
+    const c = getHotCashbackOfferByStoreSlug('chime')
+    expect(c?.badgeText).toBe('125$')
+    expect(c?.headline).toBe('Get up to $125 when you open Chime')
+  })
 })

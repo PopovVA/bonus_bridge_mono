@@ -519,7 +519,8 @@ describe('web routes', () => {
     expect(html).toContain('$50 bonus')
     expect(html).toContain('Get the bonus')
     expect(html).toContain('Register for up to $50 after qualifying spend')
-    expect(html).not.toContain('clip-coupon-card')
+    expect(html).toContain('clip-coupon-card__brand')
+    expect(html).not.toContain('<article class="clip-coupon-card"')
     expect(html).not.toContain('No active promo codes or offers for this store yet.')
   })
 

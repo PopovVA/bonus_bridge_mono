@@ -17,12 +17,14 @@ describe('getCuratedLinkCardCopyForExploreMore', () => {
     )
     expect(c?.href).toContain('klarna.com')
     expect(c?.logoSrc).toBe('/top-offers/logos/klarna-logo.svg')
+    expect(c?.headline).toBeNull()
   })
 
   it('uses Hot Cashback copy when slug is not in monthly top row', () => {
     const c = getCuratedLinkCardCopyForExploreMore('rakuten')
     expect(c?.badgeText).toBe('$50 bonus')
     expect(c?.ctaText).toBe('Get the bonus')
+    expect(c?.headline).toBe('Up to $50 after qualifying spend')
   })
 
   it('returns null when slug has no curated copy', () => {
@@ -41,5 +43,6 @@ describe('getCuratedLinkCardCopyForExploreMore', () => {
     } as MonthlyTopOffer)
     const c = getCuratedLinkCardCopyForExploreMore('test-brand')
     expect(c?.badgeText).toBe('Offer')
+    expect(c?.headline).toBeNull()
   })
 })

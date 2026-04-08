@@ -3,6 +3,8 @@ import { getMonthlyTopOfferSnapshotBySlug } from '@/lib/site-data'
 
 export type CuratedExploreLinkCardCopy = {
   badgeText: string
+  /** Bold headline under brand (hot cashback); monthly uses offer title from catalog instead. */
+  headline: string | null
   description: string
   ctaText: string
   href: string
@@ -18,6 +20,7 @@ export function getCuratedLinkCardCopyForExploreMore(slug: string): CuratedExplo
   if (monthly) {
     return {
       badgeText: monthly.badgeText ?? 'Offer',
+      headline: null,
       description: monthly.description,
       ctaText: monthly.ctaText,
       href: monthly.href,
@@ -28,6 +31,7 @@ export function getCuratedLinkCardCopyForExploreMore(slug: string): CuratedExplo
   if (hot) {
     return {
       badgeText: hot.badgeText,
+      headline: hot.headline,
       description: hot.description,
       ctaText: hot.ctaText,
       href: hot.href,

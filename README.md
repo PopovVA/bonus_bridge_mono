@@ -54,6 +54,13 @@ Default production URL is **port 3000** (`next start`). If your host sets anothe
 
 - **Single app font:** `next/font/google` (and `next/font/local`) may only be imported from `apps/web/app/layout.tsx`. ESLint rule `bonusbridge/single-app-font` blocks extra font imports in other layouts or components. Details: `.cursor/rules/web-single-font.mdc`.
 
+## Git hooks
+
+[Husky](https://typicode.github.io/husky/) runs via the root `prepare` script after `pnpm install`:
+
+- **pre-commit** — `pnpm test` (workspace tests).
+- **pre-push** — `pnpm --filter web build` (Next.js production build + TypeScript check).
+
 ## CI
 
 GitHub Actions: install, lint, test, web build.

@@ -129,7 +129,7 @@ describe('site-data', () => {
 
   it('returns hot cashback offers for home', async () => {
     const list = await getHotCashbackOffers()
-    expect(list).toHaveLength(4)
+    expect(list).toHaveLength(5)
     expect(list[0]?.slug).toBe('rakuten')
     expect(list[0]?.badgeText).toBe('$50 bonus')
     expect(list[0]?.href).toBe('https://www.rakuten.com/r/MVADIM7')
@@ -142,11 +142,14 @@ describe('site-data', () => {
     expect(list[3]?.slug).toBe('lemonade')
     expect(list[3]?.badgeText).toBe('$10 gift card')
     expect(list[3]?.href).toBe('https://lemonade.com/r/vadimpopov1')
+    expect(list[4]?.slug).toBe('chime')
+    expect(list[4]?.badgeText).toBe('125$')
+    expect(list[4]?.href).toBe('https://www.chime.com/r/vadimpopov1/')
   })
 
   it('returns full hot cashback list for store pages (includes Public)', async () => {
     const list = await getAllHotCashbackOffers()
-    expect(list).toHaveLength(5)
+    expect(list).toHaveLength(6)
     const pub = list.find((o) => o.slug === 'public')
     expect(pub?.badgeText).toBe('20$ off')
     expect(pub?.ctaText).toBe('Join Public')
