@@ -8,15 +8,16 @@ Public SEO site with **fixed in-repo content** (no separate API or admin app).
 
 ## Stack
 
-- Node.js `22` (`.nvmrc`)
+- Node.js `24` LTS (see `.nvmrc`)
+- pnpm `10.33` (see root `package.json` → `packageManager`)
 - pnpm workspaces
-- TypeScript `5.9.3`
-- Next.js `16.1.6`
+- TypeScript `6.x` (`apps/web`)
+- Next.js `16.x` (`apps/web`)
 
 ## Quick start
 
 ```bash
-nvm use 22
+nvm use 24
 pnpm install
 pnpm lint
 pnpm test
@@ -41,9 +42,9 @@ pnpm build
 pnpm start
 ```
 
-(`pnpm start` в корне нужен для провайдеров вроде Railpack, которые ищут скрипт `start` в корневом `package.json`; это то же самое, что `pnpm --filter web start` → `next start`.)
+Root `pnpm start` exists for hosts (e.g. Railpack) that expect a `start` script at the repo root; it runs the same as `pnpm --filter web start` → `next start`.
 
-Default production URL is **port 3000** (`next start`). If your host sets another `PORT`, pass it the usual way for that platform or align the host’s public port with the port Next is listening on.
+Default production URL is **port 3000** (`next start`). If your host sets another `PORT`, configure it per that platform or align the public port with the port Next listens on.
 
 ## Design reference
 
@@ -52,3 +53,8 @@ Default production URL is **port 3000** (`next start`). If your host sets anothe
 ## CI
 
 GitHub Actions: install, lint, test, web build.
+
+## Version notes
+
+- **ESLint:** `apps/web` uses **ESLint 9.x** with `eslint-config-next`. **ESLint 10** is not yet supported by the Next.js ESLint preset and bundled plugins (see [vercel/next.js#91702](https://github.com/vercel/next.js/issues/91702)). Upgrade when `eslint-config-next` declares ESLint 10 compatibility.
+- **lucide-react 1.x** no longer ships brand social icons. The footer uses neutral Lucide icons; link `aria-label` text still names the intended networks (e.g. Facebook, Twitter).

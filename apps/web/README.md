@@ -19,7 +19,7 @@ Use PNG or WebP/JPEG if you prefer: add the file under `public/top-offers/media/
 From repo root:
 
 ```bash
-nvm use 22
+nvm use 24
 pnpm install
 pnpm dev
 ```

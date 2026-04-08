@@ -38,4 +38,4 @@ From repo root:
 
 ## Multi-agent protocol
 
-- For role chain and handoffs, see **repo root `AGENTS.md`** (including `действуйте командой` / `Командой делаем`).
+- For role chain, handoffs, and multi-agent triggers, see **repo root `AGENTS.md`** (workflow triggers are documented there, including the exact Russian phrases users may type).

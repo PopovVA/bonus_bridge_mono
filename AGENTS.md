@@ -87,7 +87,7 @@ Codex may spawn multiple agents. To avoid conflicts:
   5. Code Review & Architect Agent reviews and either approves or returns for rework
   6. QA Automation Agent runs/updates integration tests and reports final status
 - Default shorthand command:
-  - If user message contains `Командой делаем` or `действуйте командой` (at start or anywhere), run the same default flow above automatically.
+  - If the user message contains either Russian workflow trigger — `Командой делаем` or `действуйте командой` (anywhere in the message) — run the same default flow above automatically. (Phrases are literal user text, not translated.)
   - User does not need to repeat agent chain names.
   - Override is allowed only when user explicitly names a different sequence.
   - This command MUST run in multi-agent mode with separate agents per role (not a single mixed worker).

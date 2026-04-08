@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react'
+import { AtSign, Camera, MessageCircle, PlayCircle } from 'lucide-react'
 
 export function HomeFooter() {
   return (
@@ -12,16 +12,16 @@ export function HomeFooter() {
           </div>
           <div className="home-footer-social">
             <a href="#facebook" aria-label="Facebook">
-              <Facebook size={20} />
+              <MessageCircle size={20} aria-hidden />
             </a>
             <a href="#twitter" aria-label="Twitter">
-              <Twitter size={20} />
+              <AtSign size={20} aria-hidden />
             </a>
             <a href="#instagram" aria-label="Instagram">
-              <Instagram size={20} />
+              <Camera size={20} aria-hidden />
             </a>
             <a href="#youtube" aria-label="YouTube">
-              <Youtube size={20} />
+              <PlayCircle size={20} aria-hidden />
             </a>
           </div>
         </div>
