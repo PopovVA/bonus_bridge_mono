@@ -58,8 +58,13 @@ Default production URL is **port 3000** (`next start`). If your host sets anothe
 
 [Husky](https://typicode.github.io/husky/) runs via the root `prepare` script after `pnpm install`:
 
+- Hooks **`cd` to the repo root** and source **`.husky/load-nvmrc.sh`**, which loads **[nvm](https://github.com/nvm-sh/nvm)** from **`$NVM_DIR`** (or **`~/.nvm`**) and runs **`nvm use`** so the same **Node version as `.nvmrc`** is used as in an interactive shell.
 - **pre-commit** — `pnpm test` (workspace tests).
-- **pre-push** — `pnpm --filter web build` (Next.js production build + TypeScript check).
+- **pre-push** — `pnpm --filter web build` (Next.js production build + TypeScript).
+
+If nvm is not installed, hooks fall back to **whatever `node` is on `PATH`**. To skip hooks: `git push --no-verify`.
+
+CI still runs install, lint, test, and web build on Node 24.
 
 ## CI
 
