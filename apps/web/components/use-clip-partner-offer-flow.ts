@@ -8,7 +8,7 @@ export type ClipPartnerPending = {
   copySucceeded: boolean
 }
 
-const CLIP_TOAST_DURATION_MS = 30_000
+const CLIP_TOAST_DURATION_MS = 15_000
 
 export function useClipPartnerOfferFlow() {
   const [toast, setToast] = useState<string | null>(null)

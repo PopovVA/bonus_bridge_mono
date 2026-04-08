@@ -4,7 +4,7 @@
   --text: #1f1f1f;
   --muted: #6a6a6a;
   --line: #e5e2dc;
-  --accent: #0f7a5f;
+  --accent: #334155;
   --maxw: 1100px;
 }
 
@@ -359,7 +359,7 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 2px solid #0f7a5f;
+  outline: 2px solid #0f172a;
   outline-offset: 2px;
 }
 

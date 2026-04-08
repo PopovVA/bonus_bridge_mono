@@ -319,7 +319,7 @@
 }
 
 .hero-section[data-active-slide='chime'] .hero-floating-dot.active {
-  background: #00e889;
+  background: #334155;
   border-color: rgba(255, 255, 255, 0.98);
   transform: scale(1.08);
 }
@@ -438,8 +438,7 @@
 
 /* Chime: full-bleed single panel (text only), no side photos */
 .hero-slide-chime {
-  --chime-lime: #00e889;
-  --chime-lime-dim: #00c977;
+  --chime-accent: #cbd5e1;
   align-items: stretch;
   justify-content: stretch;
   padding: 0;
@@ -458,8 +457,8 @@
   width: 100%;
   min-height: 0;
   background:
-    radial-gradient(ellipse 80% 55% at 50% -10%, rgba(0, 232, 137, 0.14) 0%, transparent 55%),
-    linear-gradient(165deg, rgba(5, 40, 24, 0.82) 0%, rgba(2, 8, 6, 0.9) 100%),
+    radial-gradient(ellipse 80% 55% at 50% -10%, rgba(148, 163, 184, 0.16) 0%, transparent 55%),
+    linear-gradient(165deg, rgba(15, 23, 42, 0.88) 0%, rgba(2, 6, 15, 0.92) 100%),
     url('/hero/hero-chime-bg.png') center/cover no-repeat;
   border: 1px solid rgba(0, 0, 0, 0.35);
   box-sizing: border-box;
@@ -510,8 +509,8 @@
 }
 
 .hero-chime-headline-accent {
-  color: var(--chime-lime);
-  text-shadow: 0 0 28px rgba(0, 232, 137, 0.4);
+  color: var(--chime-accent);
+  text-shadow: 0 0 28px rgba(148, 163, 184, 0.35);
 }
 
 .hero-chime-promo-highlight {
@@ -520,7 +519,7 @@
   font-size: clamp(0.78rem, 1.55vw, 0.88rem);
   font-weight: 700;
   line-height: 1.35;
-  color: var(--chime-lime);
+  color: var(--chime-accent);
 }
 
 .hero-chime-sub {
@@ -539,7 +538,7 @@
 }
 
 .hero-chime-terms-link:hover {
-  color: var(--chime-lime);
+  color: var(--chime-accent);
 }
 
 .hero-chime-cta-primary {
@@ -557,16 +556,16 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #021208;
-  background: linear-gradient(180deg, #2cff9c 0%, var(--chime-lime-dim) 100%);
+  color: #fff;
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
   border: none;
-  box-shadow: 0 4px 24px rgba(0, 232, 137, 0.45);
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.45);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .hero-chime-cta-primary:hover {
-  background: linear-gradient(180deg, #5dffc0 0%, var(--chime-lime) 100%);
-  box-shadow: 0 6px 28px rgba(0, 232, 137, 0.55);
+  background: linear-gradient(180deg, #475569 0%, #334155 100%);
+  box-shadow: 0 6px 28px rgba(15, 23, 42, 0.55);
   transform: translateY(-1px);
 }
 
@@ -606,7 +605,7 @@
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.2;
-  color: var(--chime-lime);
+  color: var(--chime-accent);
 }
 
 .hero-chime-step-body {
@@ -1442,7 +1441,7 @@
   justify-content: center;
 }
 
-/* Robinhood: full-width mint bar so the wordmark centers in the column (wide SVG viewBox). */
+/* Robinhood: neutral slate bar so the wordmark centers in the column (wide SVG viewBox). */
 .monthly-offer-card__logo-wrap--robinhood {
   display: flex;
   width: 100%;
@@ -1451,7 +1450,7 @@
   justify-content: center;
   padding: 10px 18px;
   border-radius: 12px;
-  background: #ecfdf5;
+  background: #f1f5f9;
 }
 
 .monthly-offer-card__logo {
@@ -1544,10 +1543,9 @@
   background: #0a0a12;
 }
 
-/* Robinhood promo art is a wide lime banner: contain keeps the full wordmark visible in the strip.
-   Background matches dominant lime in `robinhood-promo.png` so letterboxing blends with the asset. */
+/* Robinhood promo art: contain keeps the full wordmark visible; neutral letterboxing (site slate, not brand lime). */
 .monthly-offer-card__media--robinhood {
-  background: #dafc51;
+  background: #f1f5f9;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2153,7 +2151,7 @@
 }
 
 .clip-coupon-card__code:focus-visible {
-  outline: 2px solid #0f7a5f;
+  outline: 2px solid #0f172a;
   outline-offset: 2px;
 }
 
@@ -2181,7 +2179,7 @@
 }
 
 .clip-coupon-card__btn:focus-visible {
-  outline: 2px solid #0f7a5f;
+  outline: 2px solid #0f172a;
   outline-offset: 2px;
 }
 
@@ -2291,7 +2289,7 @@
 }
 
 .clip-open-store-dialog__btn:focus-visible {
-  outline: 2px solid #0f7a5f;
+  outline: 2px solid #0f172a;
   outline-offset: 2px;
 }
 
@@ -2381,7 +2379,7 @@
 }
 
 .default-app-shell .default-main a.hot-cashback-card__cta:focus-visible {
-  outline: 2px solid #0f7a5f;
+  outline: 2px solid #0f172a;
   outline-offset: 2px;
 }
 
@@ -2393,7 +2391,7 @@
 }
 
 .default-app-shell .default-main a.category-store-cta:focus-visible {
-  outline: 2px solid #0f7a5f;
+  outline: 2px solid #0f172a;
   outline-offset: 2px;
 }
 
@@ -2405,7 +2403,7 @@
 }
 
 .default-app-shell .default-main a.monthly-offer-card__cta:focus-visible {
-  outline: 2px solid #0f7a5f;
+  outline: 2px solid #0f172a;
   outline-offset: 2px;
 }
 
