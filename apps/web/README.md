@@ -39,7 +39,7 @@ Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](http
 
 - `/` — hero slider, top monthly offers (Klarna / Robinhood / Public), category carousel, **clip-out promo grid** (8 codes in `lib/home-clip-coupons.ts`; assets e.g. `/brands/ubereats-logo.png`, `/clip-coupons/7eleven.svg`, `/clip-coupons/robinhood.svg`, `/clip-coupons/lyft.svg`, `/clip-coupons/lime.svg`, `/clip-coupons/bird.svg`, `/clip-coupons/poshmark.svg`)
 - `/` — header: **Stores** (mega menu by category; each category shows the same `/categories/{slug}.svg` tile as the carousel; slate/neutral hover/active chrome, no green) and **Coupons** (anchor `#coupons` to the clip grid). `/stores` and `/coupons` redirect to `/`. Legacy `/categories/food-dining` → `/categories/food`.
-- **`app/(default)/layout.tsx`** — same shell as home: `HomeHeader`, `HomeFooter`, Fraunces + Plus Jakarta Sans, `home.css` (`.default-main` content width 1280px; in-content links slate, not legacy green).
+- **`app/(default)/layout.tsx`** — same shell as home: `HomeHeader`, `HomeFooter`, `home.css` (`.default-main` content width 1280px; in-content links slate, not legacy green). App font: **Plus Jakarta Sans** via `next/font` on root `app/layout.tsx` (`--font-app`).
 - `/categories/[slug]` — stores in that category with offers (categories: Auto, Electronics, Finance, Food, Shopping, Travel — **A–Z**; Sports hidden; Entertainment removed — see `getCategories()` / `getStoresMegaMenu()` in `lib/site-data.ts`)
 - `/stores/[slug]` — store detail, promo codes and offers
 - `/coupons/[id]` — offer detail + copy (code or referral URL)

@@ -1,0 +1,12 @@
+---
+description: Single font family for apps/web; avoid mixing next/font or serif stacks
+globs: apps/web/**
+alwaysApply: false
+---
+
+# Typography (apps/web)
+
+- **One UI font family** for the whole app: **Plus Jakarta Sans** via `next/font/google` in **`app/layout.tsx` only**, exposed as **`--font-app`** on `<html>`.
+- Do **not** import `next/font/google` or `next/font/local` anywhere else (nested layouts, components). ESLint enforces this (`bonusbridge/single-app-font`).
+- In CSS, use **`font-family: var(--font-app), ui-sans-serif, system-ui, sans-serif`** (or the same stack without repeating a second branded face). Avoid introducing **Georgia / Times** (or a second Google Font) for body or headings unless the product explicitly changes the single-font policy.
+- **Monospace** is allowed only for codes / technical strings (e.g. coupon codes), not as a second marketing typeface.

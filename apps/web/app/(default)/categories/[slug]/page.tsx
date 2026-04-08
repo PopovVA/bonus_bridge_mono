@@ -50,7 +50,7 @@ export default async function CategoryPage({ params }: Props) {
   return (
     <section className="category-page-section" aria-labelledby="category-page-heading">
       <header className="category-page-head section-head">
-        <h1 id="category-page-heading" className="section-title app-serif-page-title">
+        <h1 id="category-page-heading" className="section-title app-page-title">
           {cat.name}
         </h1>
         <p className="section-subtitle category-page-subtitle">

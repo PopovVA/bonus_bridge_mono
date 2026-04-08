@@ -28,7 +28,7 @@ body {
   margin: 0;
   background: linear-gradient(180deg, #f9f7f3 0%, #f4f1ea 100%);
   color: var(--text);
-  font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+  font-family: var(--font-app), ui-sans-serif, system-ui, sans-serif;
 }
 
 .container {
@@ -140,7 +140,7 @@ p, li {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-app), ui-sans-serif, system-ui, sans-serif;
   font-size: 1.12rem;
 }
 
@@ -241,7 +241,7 @@ p, li {
   padding: 12px 14px;
   color: var(--text);
   text-decoration: none;
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-app), ui-sans-serif, system-ui, sans-serif;
   font-size: 0.95rem;
   border-left: 3px solid transparent;
 }
@@ -253,7 +253,7 @@ p, li {
   padding: 12px 14px;
   color: var(--text);
   text-decoration: none;
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-app), ui-sans-serif, system-ui, sans-serif;
   font-size: 0.95rem;
   border-left: 3px solid transparent;
 }
@@ -409,7 +409,7 @@ select:focus-visible {
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 6px;
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: var(--font-app), ui-sans-serif, system-ui, sans-serif;
 }
 
 @media (max-width: 640px) {

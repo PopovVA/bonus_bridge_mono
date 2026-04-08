@@ -35,7 +35,7 @@ export default async function StorePage({ params }: Props) {
   return (
     <section className="category-page-section" aria-labelledby="store-page-heading">
       <article className="app-surface-card store-page-hero">
-        <h1 id="store-page-heading" className="section-title app-serif-page-title">
+        <h1 id="store-page-heading" className="section-title app-page-title">
           {store.name}
         </h1>
         <div className="store-page-meta-row">

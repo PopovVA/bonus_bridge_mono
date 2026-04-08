@@ -50,6 +50,10 @@ Default production URL is **port 3000** (`next start`). If your host sets anothe
 
 - `docs/design-references.md`
 
+## Web conventions
+
+- **Single app font:** `next/font/google` (and `next/font/local`) may only be imported from `apps/web/app/layout.tsx`. ESLint rule `bonusbridge/single-app-font` blocks extra font imports in other layouts or components. Details: `.cursor/rules/web-single-font.mdc`.
+
 ## CI
 
 GitHub Actions: install, lint, test, web build.

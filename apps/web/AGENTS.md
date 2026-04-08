@@ -31,6 +31,7 @@ From repo root:
 
 ## UI rules
 
+- **Typography:** one app-wide font (Plus Jakarta Sans, `--font-app` from `app/layout.tsx` only). Do not add `next/font` imports outside `app/layout.tsx` (ESLint blocks this). Use `var(--font-app)` in CSS; monospace only for codes.
 - Keep components simple; avoid heavy client JS on SEO-critical content.
 - No secrets on the client.
 - Listing-first structure (RetailMeNot-like), Medium-like readability — see `docs/design-references.md`.
