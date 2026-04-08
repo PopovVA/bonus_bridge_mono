@@ -1,17 +1,23 @@
 import { describe, expect, it } from 'vitest'
 import {
   getCategories,
+  getClientCatalog,
   getFeaturedOffers,
   getFeaturedStores,
   getHeroSlides,
   getHomeCategoryMarquee,
   getHomeClipCoupons,
+  getAllHotCashbackOffers,
   getHotCashbackOffers,
+  getMonthlyTopOfferForStoreSlug,
+  getMonthlyTopOfferSnapshotBySlug,
   getTopMonthlyOffers,
   getOfferById,
   getOffers,
+  getStoreSlugForOfferId,
   getServiceBySlug,
   getServices,
+  serviceMatchesSearchQuery,
   getStoresMegaMenu,
   megaMenuStoreImageSrc,
   sortServicesForCategorySlug
@@ -42,15 +48,44 @@ describe('site-data', () => {
     expect(list[0]?.logoSrc).toBe('/top-offers/logos/klarna-logo.svg')
     expect(list[0]?.imageSrc).toBe('/top-offers/media/klarna-promo.png')
     expect(list[0]?.badgeText).toBe('20$ off')
+    expect(list[0]?.ctaText).toBe('Open Klarna')
+    expect(list[0]?.description).toBe(
+      'Shop now, pay later — open Klarna with our invite to explore deals, flexible payments, and rewards in the app.'
+    )
     expect(list[1]?.slug).toBe('robinhood')
     expect(list[1]?.href).toContain('join.robinhood.com')
     expect(list[1]?.logoSrc).toBe('/clip-coupons/robinhood.svg')
     expect(list[1]?.imageSrc).toBe('/top-offers/media/robinhood-promo.png')
     expect(list[1]?.badgeText).toBe('$5+ stock')
+    expect(list[1]?.ctaText).toBe('Claim your stock')
+    expect(list[1]?.description).toBe(
+      'Gift stock after you sign up and meet funding rules. Many rewards are $5 to $10. Limits and terms on Robinhood.'
+    )
     expect(list[2]?.slug).toBe('public')
     expect(list[2]?.logoSrc).toBe('/top-offers/logos/public-logo.svg')
     expect(list[2]?.imageSrc).toBe('/top-offers/media/public-promo.png')
     expect(list[2]?.badgeText).toBe('20$ off')
+    expect(list[2]?.ctaText).toBe('Join Public')
+    expect(list[2]?.description).toBe(
+      'Invest with friends on Public. Join through our link for a welcome bonus when you qualify — stocks, ETFs, and more.'
+    )
+  })
+
+  it('exposes sync monthly top snapshot by slug (Explore More parity)', () => {
+    const k = getMonthlyTopOfferSnapshotBySlug('klarna')
+    expect(k?.slug).toBe('klarna')
+    expect(k?.badgeText).toBe('20$ off')
+    expect(getMonthlyTopOfferSnapshotBySlug('unknown-slug-xyz')).toBeUndefined()
+  })
+
+  it('returns monthly top offer for Klarna, Robinhood, Public store slugs only', async () => {
+    await expect(getMonthlyTopOfferForStoreSlug('klarna')).resolves.toMatchObject({
+      slug: 'klarna',
+      brandName: 'Klarna'
+    })
+    await expect(getMonthlyTopOfferForStoreSlug('robinhood')).resolves.toMatchObject({ slug: 'robinhood' })
+    await expect(getMonthlyTopOfferForStoreSlug('public')).resolves.toMatchObject({ slug: 'public' })
+    await expect(getMonthlyTopOfferForStoreSlug('uber')).resolves.toBeNull()
   })
 
   it('returns home clip coupons (8 tear-off promos)', async () => {
@@ -109,6 +144,14 @@ describe('site-data', () => {
     expect(list[3]?.href).toBe('https://lemonade.com/r/vadimpopov1')
   })
 
+  it('returns full hot cashback list for store pages (includes Public)', async () => {
+    const list = await getAllHotCashbackOffers()
+    expect(list).toHaveLength(5)
+    const pub = list.find((o) => o.slug === 'public')
+    expect(pub?.badgeText).toBe('20$ off')
+    expect(pub?.ctaText).toBe('Join Public')
+  })
+
   it('returns home category marquee chips in alphabetical order', async () => {
     const chips = await getHomeCategoryMarquee()
     expect(chips.length).toBe(6)
@@ -152,6 +195,25 @@ describe('site-data', () => {
     expect(menu.storesByCategorySlug.travel?.map((s) => s.slug)).toEqual(['airbnb'])
   })
 
+  it('returns client catalog with stores and active offers per category', async () => {
+    const catalog = await getClientCatalog()
+    expect(catalog.categories.length).toBe(6)
+    const finance = catalog.categories.find((c) => c.slug === 'finance')
+    expect(finance?.stores.map((s) => s.slug)).toEqual(['chime', 'robinhood', 'public', 'klarna', 'lemonade'])
+    const chime = finance?.stores.find((s) => s.slug === 'chime')
+    expect(chime?.offers.some((o) => o.title.length > 0)).toBe(true)
+    expect(chime?.offers[0]).toMatchObject({
+      serviceSlug: 'chime',
+      serviceName: 'Chime',
+      referralUrl: expect.stringMatching(/^https?:\/\//)
+    })
+    const bird = catalog.categories.find((c) => c.slug === 'auto')?.stores.find((s) => s.slug === 'bird')
+    expect(bird?.logoSrc).toBeNull()
+    expect(bird?.offers.length).toBeGreaterThan(0)
+    const uberEats = catalog.categories.find((c) => c.slug === 'food')?.stores.find((s) => s.slug === 'uber-eats')
+    expect(uberEats?.offers.some((o) => o.couponCode)).toBe(true)
+  })
+
   it('returns hero slides', async () => {
     const heroes = await getHeroSlides()
     expect(heroes.length).toBeGreaterThan(0)
@@ -190,6 +252,13 @@ describe('site-data', () => {
     expect(fo[0]?.offer?.referralUrl).toMatch(/^https?:\/\//)
   })
 
+  it('serviceMatchesSearchQuery matches name, description, and treats null description as empty', () => {
+    expect(serviceMatchesSearchQuery({ name: 'Acme Shop', description: 'Cash back deals' }, 'acme')).toBe(true)
+    expect(serviceMatchesSearchQuery({ name: 'X', description: 'Cash back deals' }, 'cash')).toBe(true)
+    expect(serviceMatchesSearchQuery({ name: 'NoDescBrand', description: null }, 'nodescbrand')).toBe(true)
+    expect(serviceMatchesSearchQuery({ name: 'Other', description: 'alpha' }, 'zzz')).toBe(false)
+  })
+
   it('filters services by category slug and query', async () => {
     const finance = await getServices({ category: 'finance' })
     expect(finance.map((s) => s.slug)).toEqual(['chime', 'robinhood', 'public', 'klarna', 'lemonade'])
@@ -213,17 +282,23 @@ describe('site-data', () => {
 
   it('filters offers by status, store slug, category', async () => {
     const active = await getOffers({ status: 'active' })
-    expect(active.length).toBe(3)
+    expect(active.length).toBe(17)
     const byStore = await getOffers({ status: 'active', service: 'chime' })
     expect(byStore.every((o) => o.serviceId === '22222222-2222-4222-8222-222222222210')).toBe(true)
     const byCat = await getOffers({ status: 'active', category: 'finance' })
-    expect(byCat.length).toBe(2)
+    expect(byCat.length).toBe(5)
   })
 
   it('returns offer by id or throws', async () => {
     const o = await getOfferById('33333333-3333-4333-8333-333333333301')
     expect(o.title).toBeTruthy()
     await expect(getOfferById('00000000-0000-4000-8000-000000000000')).rejects.toThrow()
+  })
+
+  it('resolves store slug for offer id for coupon URL redirects', async () => {
+    await expect(getStoreSlugForOfferId('33333333-3333-4333-8333-333333333303')).resolves.toBe('uber')
+    await expect(getStoreSlugForOfferId('00000000-0000-4000-8000-000000000000')).resolves.toBeNull()
+    await expect(getStoreSlugForOfferId('33333333-3333-4333-8333-333333333399')).resolves.toBeNull()
   })
 
   it('returns empty lists for unknown filters', async () => {

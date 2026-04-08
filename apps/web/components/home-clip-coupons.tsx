@@ -1,7 +1,9 @@
 'use client'
 
-import { useCallback, useId, useState } from 'react'
-import { Scissors } from 'lucide-react'
+import { useCallback } from 'react'
+import { ClipCouponCard } from '@/components/clip-coupon-card'
+import { ClipOpenStoreDialog } from '@/components/clip-open-store-dialog'
+import { useClipPartnerOfferFlow } from '@/components/use-clip-partner-offer-flow'
 import type { HomeClipCoupon } from '@/lib/home-clip-coupons'
 
 type Props = {
@@ -9,28 +11,18 @@ type Props = {
 }
 
 export function HomeClipCoupons({ coupons }: Props) {
-  const [toast, setToast] = useState<string | null>(null)
-  const toastId = useId()
+  const { toast, toastId, pending, runClipFlow, closeDialog, confirmOpenInNewTab } = useClipPartnerOfferFlow()
 
-  const showToast = useCallback((message: string) => {
-    setToast(message)
-    window.setTimeout(() => setToast(null), 3200)
-  }, [])
-
-  const handleClip = useCallback(
-    async (c: HomeClipCoupon) => {
-      try {
-        await navigator.clipboard.writeText(c.code)
-      } catch {
-        showToast('Could not copy — select the code manually.')
-        window.open(c.openUrl, '_blank', 'noopener,noreferrer')
-        return
-      }
-      showToast('Copied to clipboard — opening offer in a new tab.')
-      window.open(c.openUrl, '_blank', 'noopener,noreferrer')
+  const handleCodeClick = useCallback(
+    (c: HomeClipCoupon) => {
+      void runClipFlow(c.code, c.openUrl)
     },
-    [showToast]
+    [runClipFlow]
   )
+
+  const handleGetOfferClick = useCallback((c: HomeClipCoupon) => {
+    window.open(c.openUrl, '_blank', 'noopener,noreferrer')
+  }, [])
 
   if (coupons.length === 0) return null
 
@@ -42,50 +34,22 @@ export function HomeClipCoupons({ coupons }: Props) {
             Codes worth clipping
           </h2>
           <p className="section-subtitle">
-            Snip along the line, copy the code, and we open the partner offer for you.
+            Tap the code to copy and confirm opening the partner site, or use Get offer to open it right away.
           </p>
         </div>
         <div className="clip-coupons-grid">
           {coupons.map((c) => (
-            <article key={c.id} className="clip-coupon-card">
-              <div className="clip-coupon-card__logo-row">
-                {/* eslint-disable-next-line @next/next/no-img-element -- static PNG in /public/brands */}
-                <img
-                  src={c.logoSrc}
-                  alt=""
-                  className="clip-coupon-card__logo"
-                  decoding="async"
-                />
-              </div>
-              <div className="clip-coupon-card__top">
-                <p className="clip-coupon-card__brand">{c.brand}</p>
-                <h3 className="clip-coupon-card__headline">{c.title}</h3>
-                <p className="clip-coupon-card__blurb">{c.blurb}</p>
-              </div>
-              <div className="clip-coupon-card__tear" aria-hidden="true">
-                <div className="clip-coupon-card__tear-line" />
-                <span className="clip-coupon-card__scissors-wrap">
-                  <Scissors className="clip-coupon-card__scissors" size={18} strokeWidth={2} aria-hidden />
-                </span>
-              </div>
-              <div className="clip-coupon-card__bottom">
-                <button
-                  type="button"
-                  className="clip-coupon-card__code"
-                  onClick={() => handleClip(c)}
-                  aria-label={`Copy code ${c.code} and open offer`}
-                >
-                  {c.code}
-                </button>
-                <button
-                  type="button"
-                  className="clip-coupon-card__btn"
-                  onClick={() => handleClip(c)}
-                >
-                  Copy code & open offer
-                </button>
-              </div>
-            </article>
+            <ClipCouponCard
+              key={c.id}
+              logoSrc={c.logoSrc}
+              brand={c.brand}
+              title={c.title}
+              blurb={c.blurb}
+              codeDisplay={c.code}
+              onCodeClick={() => handleCodeClick(c)}
+              onGetOfferClick={() => handleGetOfferClick(c)}
+              clipAriaLabel={`Copy code ${c.code}`}
+            />
           ))}
         </div>
       </section>
@@ -99,6 +63,13 @@ export function HomeClipCoupons({ coupons }: Props) {
       >
         {toast ?? ''}
       </div>
+
+      <ClipOpenStoreDialog
+        isOpen={pending !== null}
+        copySucceeded={pending?.copySucceeded ?? false}
+        onClose={closeDialog}
+        onConfirmOpen={confirmOpenInNewTab}
+      />
     </>
   )
 }

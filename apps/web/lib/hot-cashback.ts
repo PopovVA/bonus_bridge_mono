@@ -54,5 +54,22 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     ctaText: 'Open Lemonade',
     href: 'https://lemonade.com/r/vadimpopov1',
     logoSrc: '/hot-cashback/logos/lemonade.svg'
+  },
+  /** Same copy as home “Top offers” row; omitted from home Hot Cashback list via `getHotCashbackOffers()` to avoid duplicate tiles. */
+  {
+    id: 'hot-cashback-public',
+    brandName: 'Public',
+    slug: 'public',
+    badgeText: '20$ off',
+    description:
+      'Invest with friends on Public. Join through our link for a welcome bonus when you qualify — stocks, ETFs, and more.',
+    ctaText: 'Join Public',
+    href: 'https://share.public.com/Vadim66923',
+    logoSrc: '/top-offers/logos/public-logo.svg'
   }
 ]
+
+/** Curated badge/copy/CTA for a slug (home Hot Cashback + Explore More link-only cards). */
+export function getHotCashbackOfferByStoreSlug(slug: string): HotCashbackOffer | undefined {
+  return HOT_CASHBACK_OFFERS.find((h) => h.slug === slug)
+}

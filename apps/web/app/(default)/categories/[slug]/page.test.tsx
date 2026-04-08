@@ -76,7 +76,7 @@ describe('category [slug] page', () => {
     expect(html).toContain('No stores in this category yet.')
   })
 
-  it('renders store without offers and store with codeless offer', async () => {
+  it('renders counts and View store only (no per-offer rows)', async () => {
     vi.mocked(getCategories).mockResolvedValue([
       { id: 'c1', slug: 'electronics', name: 'Electronics' } as never
     ])
@@ -108,8 +108,15 @@ describe('category [slug] page', () => {
       } as never
     ])
     const html = renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'electronics' }) }))
-    expect(html).toContain('No active offers listed yet')
-    expect(html).toContain('No code deal')
-    expect(html).toContain('Copy link')
+    expect(html).toContain('No active promo codes or offers.')
+    expect(html).toContain('1 offer')
+    expect(html).toContain('View store')
+    expect(html).toContain('/stores/empty-offers')
+    expect(html).toContain('/stores/link-only')
+    expect(html).toContain('Has link offer')
+    expect(html).toContain('This store is on BonusBridge')
+    expect(html).toContain('category-store-desc')
+    expect(html).not.toContain('No code deal')
+    expect(html).not.toContain('/coupons/')
   })
 })

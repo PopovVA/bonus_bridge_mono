@@ -2,7 +2,7 @@
 
 Public SEO site with **fixed in-repo content** (no separate API or admin app).
 
-- `apps/web` — Next.js (`/`, `/stores`, `/stores/[slug]`, `/coupons`, `/coupons/[id]`) with Zod schemas in `apps/web/lib/schemas`
+- `apps/web` — Next.js (`/`, `/stores`, `/stores/[slug]`, `/coupons` → `/`, `/coupons/[id]` → `/stores/[slug]`) with Zod schemas in `apps/web/lib/schemas`
 
 **Content:** edit `apps/web/lib/site-data.ts` (categories, stores, coupons, hero slides, featured sections). Static images: `apps/web/public/`.
 
@@ -61,4 +61,4 @@ GitHub Actions: install, lint, test, web build.
 ## Version notes
 
 - **ESLint:** `apps/web` uses **ESLint 9.x** with `eslint-config-next`. **ESLint 10** is not yet supported by the Next.js ESLint preset and bundled plugins (see [vercel/next.js#91702](https://github.com/vercel/next.js/issues/91702)). Upgrade when `eslint-config-next` declares ESLint 10 compatibility.
-- **lucide-react 1.x** no longer ships brand social icons. The footer uses neutral Lucide icons; link `aria-label` text still names the intended networks (e.g. Facebook, Twitter).
+- **Footer:** legal links only (Privacy / Terms); social links are omitted until product needs them.

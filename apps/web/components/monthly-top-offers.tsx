@@ -2,6 +2,13 @@ import type { MonthlyTopOffer } from '@/lib/schemas'
 
 type Props = {
   offers: MonthlyTopOffer[]
+  /** Defaults match the home page section. */
+  sectionId?: string
+  headingId?: string
+  heading?: string
+  subtitle?: string
+  /** One centered column (e.g. store spotlight). */
+  singleColumn?: boolean
 }
 
 function logoWrapClass(slug: string): string {
@@ -53,18 +60,27 @@ function OfferDealBadgeIcon() {
   )
 }
 
-export function MonthlyTopOffers({ offers }: Props) {
+export function MonthlyTopOffers({
+  offers,
+  sectionId = 'top-offers',
+  headingId = 'monthly-offers-heading',
+  heading = 'Top offers this month',
+  subtitle = 'Hand-picked invites — tap a card to open the partner offer.',
+  singleColumn = false
+}: Props) {
   if (offers.length === 0) return null
 
+  const gridClass = singleColumn ? 'monthly-offers-grid monthly-offers-grid--single' : 'monthly-offers-grid'
+
   return (
-    <section id="top-offers" className="monthly-offers-section" aria-labelledby="monthly-offers-heading">
+    <section id={sectionId} className="monthly-offers-section" aria-labelledby={headingId}>
       <div className="section-head monthly-offers-head">
-        <h2 id="monthly-offers-heading" className="section-title">
-          Top offers this month
+        <h2 id={headingId} className="section-title">
+          {heading}
         </h2>
-        <p className="section-subtitle">Hand-picked invites — tap a card to open the partner offer.</p>
+        <p className="section-subtitle">{subtitle}</p>
       </div>
-      <div className="monthly-offers-grid">
+      <div className={gridClass}>
         {offers.map((offer) => (
           <article
             key={offer.id}

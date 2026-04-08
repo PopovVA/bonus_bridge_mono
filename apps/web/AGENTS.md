@@ -21,7 +21,7 @@ From repo root:
 - Prefer server-rendered or statically generated pages where possible.
 - Current URL structure:
   - `/` — home (hero, top monthly offers, category carousel, featured coupon cards)
-  - `/` (home; list UIs live here), `/categories/[slug]`, `/stores/[slug]`, `/coupons/[id]` (redirects: `/stores`, `/coupons` → `/`)
+  - `/` (home; list UIs live here), `/categories/[slug]`, `/stores/[slug]`, `/coupons/[id]` → permanent redirect to `/stores/[slug]` (index `/coupons` → `/`)
   - `/privacy`, `/terms`
 - Every SEO page should include title/meta, clear H1, and internal links where relevant.
 

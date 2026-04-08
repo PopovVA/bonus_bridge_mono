@@ -81,4 +81,23 @@ describe('MonthlyTopOffers', () => {
     ;(globalThis as { React?: typeof React }).React = React
     expect(renderToStaticMarkup(<MonthlyTopOffers offers={[]} />)).toBe('')
   })
+
+  it('supports custom ids, copy, and single-column layout', () => {
+    ;(globalThis as { React?: typeof React }).React = React
+    const html = renderToStaticMarkup(
+      <MonthlyTopOffers
+        offers={[{ ...baseOffer, imageSrc: '/x.svg', badgeText: 'Deal' }]}
+        sectionId="store-spotlight"
+        headingId="store-spotlight-h"
+        heading="Store spotlight"
+        subtitle="Custom line."
+        singleColumn
+      />
+    )
+    expect(html).toContain('id="store-spotlight"')
+    expect(html).toContain('id="store-spotlight-h"')
+    expect(html).toContain('Store spotlight')
+    expect(html).toContain('Custom line.')
+    expect(html).toContain('monthly-offers-grid--single')
+  })
 })

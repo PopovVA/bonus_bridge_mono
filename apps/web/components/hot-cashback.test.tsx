@@ -30,6 +30,22 @@ describe('HotCashback', () => {
     expect(html).toContain('/hot-cashback/logos/rakuten.svg')
   })
 
+
+  it('supports custom heading/subtitle/id for store page reuse', () => {
+    ;(globalThis as { React?: typeof React }).React = React
+    const html = renderToStaticMarkup(
+      <HotCashback
+        offers={sample}
+        heading="Store Cashback"
+        subtitle="Cashback for this store"
+        sectionId="store-cashback"
+      />
+    )
+    expect(html).toContain('id="store-cashback"')
+    expect(html).toContain('Store Cashback')
+    expect(html).toContain('Cashback for this store')
+    expect(html).toContain('store-cashback-heading')
+  })
   it('returns null when empty', () => {
     ;(globalThis as { React?: typeof React }).React = React
     expect(renderToStaticMarkup(<HotCashback offers={[]} />)).toBe('')

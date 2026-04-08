@@ -5,14 +5,30 @@ type StoreCardProps = {
   name: string
   slug: string
   logoSvg?: string | null
+  logoSrc?: string | null
+  description?: string | null
   bonusLabel?: string
 }
 
-export function StoreCard({ name, slug, logoSvg, bonusLabel = 'View deals' }: StoreCardProps) {
+const STORE_CARD_FALLBACK_BLURB = 'Promo codes and offers on the store page.'
+
+export function StoreCard({
+  name,
+  slug,
+  logoSvg,
+  logoSrc,
+  description,
+  bonusLabel = 'View deals'
+}: StoreCardProps) {
+  const blurb = description?.trim() || STORE_CARD_FALLBACK_BLURB
+
   return (
     <Link href={`/stores/${slug}`} className="store-card">
       <div className="store-card-logo">
-        {logoSvg ? (
+        {logoSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element -- caller passes /public paths
+          <img src={logoSrc} alt="" width={64} height={64} className="store-card-logo-img" decoding="async" />
+        ) : logoSvg ? (
           <span
             style={{
               width: 64,
@@ -32,6 +48,7 @@ export function StoreCard({ name, slug, logoSvg, bonusLabel = 'View deals' }: St
         )}
       </div>
       <h3 className="store-card-name">{name}</h3>
+      <p className="store-card-desc">{blurb}</p>
       <span className="store-card-badge">{bonusLabel}</span>
     </Link>
   )

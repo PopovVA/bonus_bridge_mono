@@ -1,36 +1,56 @@
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-vi.mock('@/lib/site-data', () => ({
-  getCategories: vi.fn(),
-  getServices: vi.fn(),
-  getOffers: vi.fn(),
-  getOfferById: vi.fn(),
-  getServiceBySlug: vi.fn(),
-  getHeroSlides: vi.fn(),
-  getTopMonthlyOffers: vi.fn(),
-  getHomeClipCoupons: vi.fn(),
-  getHomeCategoryMarquee: vi.fn(),
-  getHotCashbackOffers: vi.fn(),
-  getStoresMegaMenu: vi.fn()
+vi.mock('@/lib/site-data', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/site-data')>()
+  return {
+    ...actual,
+    getCategories: vi.fn(),
+    getClientCatalog: vi.fn(),
+    getServices: vi.fn(),
+    getOffers: vi.fn(),
+    getStoreSlugForOfferId: vi.fn(),
+    getServiceBySlug: vi.fn(),
+    getHeroSlides: vi.fn(),
+    getTopMonthlyOffers: vi.fn(),
+    getHomeClipCoupons: vi.fn(),
+    getHomeCategoryMarquee: vi.fn(),
+    getAllHotCashbackOffers: vi.fn(),
+    getHotCashbackOffers: vi.fn(),
+    getStoresMegaMenu: vi.fn()
+  }
+})
+
+vi.mock('next/navigation', () => ({
+  permanentRedirect: vi.fn((url: string) => {
+    throw new Error(`MOCK_REDIRECT:${url}`)
+  }),
+  notFound: vi.fn(() => {
+    throw new Error('MOCK_NOT_FOUND')
+  })
 }))
 
+import { notFound, permanentRedirect } from 'next/navigation'
 import HomePage from './(home)/page'
 import HomeLayout from './(home)/layout'
 import RootLayout from './layout'
 import DefaultLayout from './(default)/layout'
-import CouponDetailsPage, { generateMetadata } from './(default)/coupons/[id]/page'
+import CouponToStoreRedirectPage, {
+  generateMetadata as generateCouponRedirectMetadata
+} from './(default)/coupons/[id]/page'
 import StorePage, { generateMetadata as generateStoreMetadata } from './(default)/stores/[slug]/page'
 import CategoryPage, { generateMetadata as generateCategoryMetadata } from './(default)/categories/[slug]/page'
 import { EmptyState } from '@/components/empty-state'
 import {
   getCategories,
-  getOfferById,
+  getClientCatalog,
+  getStoreSlugForOfferId,
   getOffers,
   getHeroSlides,
   getHomeClipCoupons,
   getHomeCategoryMarquee,
+  getAllHotCashbackOffers,
   getHotCashbackOffers,
   getTopMonthlyOffers,
   getServiceBySlug,
@@ -40,7 +60,24 @@ import {
 
 (globalThis as { React?: typeof React }).React = React
 
+vi.mocked(getClientCatalog).mockResolvedValue({ categories: [] })
+
 describe('web routes', () => {
+  beforeEach(() => {
+    vi.mocked(getAllHotCashbackOffers).mockReset()
+    vi.mocked(getAllHotCashbackOffers).mockResolvedValue([])
+    vi.mocked(getCategories).mockReset()
+    vi.mocked(getCategories).mockResolvedValue([
+      {
+        id: 'c1',
+        name: 'Electronics',
+        slug: 'electronics',
+        createdAt: '2026-01-01T00:00:00.000Z',
+        updatedAt: '2026-01-01T00:00:00.000Z'
+      }
+    ] as never)
+  })
+
   it('renders home with fetched aggregates', async () => {
     vi.mocked(getHeroSlides).mockResolvedValue([
       {
@@ -106,7 +143,7 @@ describe('web routes', () => {
     expect(html).toContain('clip-coupons-section')
     expect(html).toContain('/brands/uber-logo.png')
     expect(html).toContain('TESTCODE')
-    expect(html).toContain('Copy code &amp; open offer')
+    expect(html).toContain('Get offer')
     expect(html).toContain('category-marquee-section')
     expect(html).toContain('/categories/finance.svg')
   })
@@ -123,78 +160,38 @@ describe('web routes', () => {
     expect(html).not.toContain('hot-cashback-section')
   })
 
-  it('renders coupon details and metadata branches', async () => {
-    vi.mocked(getOfferById).mockResolvedValue({
-      id: 'o1',
-      title: 'Coupon One',
-      referralUrl: 'https://example.com',
-      status: 'active',
-      terms: 'Do this first',
-      description: 'Coupon details',
-      bonusAmount: '$10'
-    } as never)
-    const html = renderToStaticMarkup(await CouponDetailsPage({ params: Promise.resolve({ id: 'o1' }) }))
-    expect(html).toContain('Coupon One')
-
-    await expect(generateMetadata({ params: Promise.resolve({ id: 'o1' }) })).resolves.toMatchObject({
-      title: 'Coupon One | Bonus Bridge'
-    })
-
-    vi.mocked(getOfferById).mockResolvedValueOnce(null as never)
-    await expect(generateMetadata({ params: Promise.resolve({ id: 'missing' }) })).resolves.toMatchObject({
-      title: 'Coupon not found | Bonus Bridge'
-    })
+  it('permanentRedirect to store when coupon id maps to a store', async () => {
+    vi.mocked(getStoreSlugForOfferId).mockResolvedValue('uber')
+    await expect(
+      CouponToStoreRedirectPage({
+        params: Promise.resolve({ id: '33333333-3333-4333-8333-333333333303' })
+      })
+    ).rejects.toThrow('MOCK_REDIRECT:/stores/uber')
+    expect(vi.mocked(permanentRedirect)).toHaveBeenCalledWith('/stores/uber')
   })
 
-  it('uses metadata fallback description and handles rejected coupon fetch', async () => {
-    vi.mocked(getOfferById).mockResolvedValueOnce({
-      id: 'o3',
-      title: 'Coupon Three',
-      referralUrl: 'https://example.com',
-      status: 'active'
-    } as never)
-    await expect(generateMetadata({ params: Promise.resolve({ id: 'o3' }) })).resolves.toMatchObject({
-      description: 'Coupon details and referral terms.'
-    })
-
-    vi.mocked(getOfferById).mockRejectedValueOnce(new Error('down'))
-    await expect(generateMetadata({ params: Promise.resolve({ id: 'o4' }) })).resolves.toMatchObject({
-      title: 'Coupon not found | Bonus Bridge'
-    })
-
-    vi.mocked(getOfferById).mockRejectedValueOnce(new Error('down'))
-    const html = renderToStaticMarkup(await CouponDetailsPage({ params: Promise.resolve({ id: 'o4' }) }))
-    expect(html).toContain('Coupon not found')
+  it('coupon redirect calls notFound when id is unknown', async () => {
+    vi.mocked(getStoreSlugForOfferId).mockResolvedValue(null)
+    await expect(
+      CouponToStoreRedirectPage({ params: Promise.resolve({ id: '00000000-0000-4000-8000-000000000099' }) })
+    ).rejects.toThrow('MOCK_NOT_FOUND')
+    expect(vi.mocked(notFound)).toHaveBeenCalled()
   })
 
-  it('renders missing coupon branch', async () => {
-    vi.mocked(getOfferById).mockResolvedValue(null as never)
-    const html = renderToStaticMarkup(await CouponDetailsPage({ params: Promise.resolve({ id: 'none' }) }))
-    expect(html).toContain('Coupon not found')
-  })
+  it('coupon redirect metadata for known and unknown ids', async () => {
+    vi.mocked(getStoreSlugForOfferId).mockResolvedValueOnce('uber')
+    await expect(
+      generateCouponRedirectMetadata({
+        params: Promise.resolve({ id: '33333333-3333-4333-8333-333333333303' })
+      })
+    ).resolves.toMatchObject({ robots: { index: false, follow: true } })
 
-  it('renders coupon details branch without terms', async () => {
-    vi.mocked(getOfferById).mockResolvedValue({
-      id: 'o2',
-      title: 'Coupon Two',
-      referralUrl: 'https://example.com',
-      status: 'active'
-    } as never)
-    const html = renderToStaticMarkup(await CouponDetailsPage({ params: Promise.resolve({ id: 'o2' }) }))
-    expect(html).toContain('Coupon Two')
-  })
-
-  it('renders coupon with couponCode for copy button', async () => {
-    vi.mocked(getOfferById).mockResolvedValue({
-      id: 'o5',
-      title: 'Coupon With Code',
-      referralUrl: 'https://example.com',
-      couponCode: 'SAVE20',
-      status: 'active'
-    } as never)
-    const html = renderToStaticMarkup(await CouponDetailsPage({ params: Promise.resolve({ id: 'o5' }) }))
-    expect(html).toContain('Coupon With Code')
-    expect(html).toContain('Copy code')
+    vi.mocked(getStoreSlugForOfferId).mockResolvedValueOnce(null)
+    await expect(
+      generateCouponRedirectMetadata({
+        params: Promise.resolve({ id: '00000000-0000-4000-8000-000000000099' })
+      })
+    ).resolves.toMatchObject({ title: 'Offer not found | BonusBridge' })
   })
 
   it('renders empty state component', () => {
@@ -228,11 +225,10 @@ describe('web routes', () => {
   })
 
   it('renders root layout', async () => {
-    const html = renderToStaticMarkup(
-      RootLayout({
-        children: <main>child</main>
-      })
-    )
+    const tree = await RootLayout({
+      children: <main>child</main>
+    })
+    const html = renderToStaticMarkup(tree)
     expect(html).toContain('child')
   })
 
@@ -295,8 +291,10 @@ describe('web routes', () => {
     )
     expect(html).toContain('Electronics')
     expect(html).toContain('Tech Shop')
-    expect(html).toContain('10% off')
-    expect(html).toContain('SAVE10')
+    expect(html).toContain('1 promo code')
+    expect(html).toContain('/stores/tech-shop')
+    expect(html).toContain('View store')
+    expect(html).not.toContain('/coupons/')
     await expect(
       generateCategoryMetadata({ params: Promise.resolve({ slug: 'electronics' }) })
     ).resolves.toMatchObject({ title: 'Electronics stores | BonusBridge' })
@@ -341,9 +339,219 @@ describe('web routes', () => {
     const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'store' }) }))
     expect(html).toContain('Store')
     expect(html).toContain('Preview text')
+    expect(html).toContain('About this store')
+    expect(html).toContain('Open Store')
+    expect(html).toContain('href="https://coupon.example"')
+    expect(html).toContain('clip-coupon-card')
+    expect(html).toContain('CODE10')
+    expect(html).not.toContain('Referral link')
+    expect(html).toContain('Get offer')
+    expect(html).toContain('hot-cashback-card')
+    expect(html).toContain('store-top-offers-heading')
+    expect(html).toContain('Top offers')
     await expect(
       generateStoreMetadata({ params: Promise.resolve({ slug: 'store' }) })
-    ).resolves.toMatchObject({ title: 'Store | BonusBridge' })
+    ).resolves.toMatchObject({
+      title: 'Store | BonusBridge',
+      description: 'Promo codes and offers for Store.'
+    })
+  })
+
+  it('renders Top offers with curated Klarna link card when offer has no promo code', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's-klarna',
+      name: 'Klarna',
+      slug: 'klarna',
+      categoryId: 'c1',
+      logoSrc: '/top-offers/logos/klarna-logo.svg',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([
+      {
+        id: 'o-klarna',
+        serviceId: 's-klarna',
+        title: 'Shop now with Klarna',
+        previewText: 'Flexible payments',
+        couponCode: null,
+        referralUrl: 'https://invite.klarna.com/us/n33cxpeu/default-us',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      } as never
+    ])
+    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'klarna' }) }))
+    expect(html).toContain('store-top-offers-heading')
+    expect(html).toContain('Top offers')
+    expect(html).toContain('hot-cashback-card')
+    expect(html).toContain('Open Klarna')
+    expect(html).toContain('20$ off')
+    expect(html).not.toContain('store-monthly-spotlight')
+    expect(html).not.toContain('No active promo codes or offers for this store yet.')
+  })
+
+  it('store page still renders Top offers clip card when only promo-code offers exist', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's1',
+      name: 'Store',
+      slug: 'store',
+      categoryId: 'c1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([
+      {
+        id: 'o1',
+        serviceId: 's1',
+        title: 'Deal',
+        previewText: 'P',
+        couponCode: 'X',
+        referralUrl: 'https://example.com',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      } as never
+    ])
+    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'store' }) }))
+    expect(html).toContain('Top offers')
+    expect(html).toContain('clip-coupon-card')
+  })
+
+  it('store page treats failed getCategories as empty categories list', async () => {
+    vi.mocked(getCategories).mockRejectedValueOnce(new Error('categories down'))
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's1',
+      name: 'Store',
+      slug: 'store',
+      categoryId: 'c1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([
+      {
+        id: 'o1',
+        serviceId: 's1',
+        title: 'Deal',
+        previewText: 'P',
+        couponCode: 'X',
+        referralUrl: 'https://example.com',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      } as never
+    ])
+    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'store' }) }))
+    expect(html).toContain('Store')
+    expect(html).toContain('clip-coupon-card')
+  })
+
+  it('store metadata uses service description when set', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's-desc',
+      name: 'Desc Store',
+      slug: 'desc-store',
+      categoryId: 'c1',
+      description: 'A test blurb about the merchant.',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    await expect(
+      generateStoreMetadata({ params: Promise.resolve({ slug: 'desc-store' }) })
+    ).resolves.toMatchObject({
+      description: 'A test blurb about the merchant. Find promo codes and offers on BonusBridge.'
+    })
+  })
+
+  it('store page hero partner link uses first offer referral URL', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's-one',
+      name: 'One Coupon Store',
+      slug: 'one-coupon',
+      categoryId: 'c1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([
+      {
+        id: 'only-o',
+        serviceId: 's-one',
+        title: 'Solo deal',
+        previewText: 'Only one',
+        couponCode: 'X',
+        referralUrl: 'https://example.com',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      } as never
+    ])
+    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'one-coupon' }) }))
+    expect(html).toContain('href="https://example.com"')
+    expect(html).toContain('Open Store')
+    expect(html).not.toContain('href="/coupons/')
+  })
+
+
+  it('renders Top offers hot-cashback card for Rakuten link-only offer (curated copy)', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's-r',
+      name: 'Rakuten',
+      slug: 'rakuten',
+      categoryId: 'c1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([
+      {
+        id: 'r-offer',
+        serviceId: 's-r',
+        title: 'Cashback only',
+        previewText: 'No coupon',
+        couponCode: null,
+        referralUrl: 'https://www.rakuten.com/r/MVADIM7',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      } as never
+    ])
+    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'rakuten' }) }))
+    expect(html).toContain('Top offers')
+    expect(html).toContain('hot-cashback-card')
+    expect(html).toContain('$50 bonus')
+    expect(html).toContain('Get the bonus')
+    expect(html).toContain('Register for up to $50 after qualifying spend')
+    expect(html).not.toContain('clip-coupon-card')
+    expect(html).not.toContain('No active promo codes or offers for this store yet.')
+  })
+
+  it('renders Top offers for Public link-only offer (monthly snapshot copy, no duplicate spotlight)', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's-pub',
+      name: 'Public',
+      slug: 'public',
+      categoryId: 'c1',
+      logoSrc: '/top-offers/logos/public-logo.svg',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([
+      {
+        id: 'pub-offer',
+        serviceId: 's-pub',
+        title: 'Public — investing welcome bonus',
+        previewText: 'Join through our link.',
+        couponCode: null,
+        referralUrl: 'https://share.public.com/Vadim66923',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      } as never
+    ])
+    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'public' }) }))
+    expect(html).toContain('Top offers')
+    expect(html).toContain('hot-cashback-card')
+    expect(html).toContain('Join Public')
+    expect(html).toContain('Invest with friends on Public')
+    expect(html).not.toContain('store-monthly-spotlight')
   })
 
   it('renders store page with inline SVG when logoSrc is absent', async () => {
@@ -360,6 +568,8 @@ describe('web routes', () => {
     vi.mocked(getOffers).mockResolvedValue([])
     const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'svg-store' }) }))
     expect(html).toContain('data:image/svg+xml')
+    expect(html).toContain('About this store')
+    expect(html).not.toContain('Open Store')
   })
 
   it('renders fallback branches for store page', async () => {
@@ -374,6 +584,7 @@ describe('web routes', () => {
     vi.mocked(getOffers).mockResolvedValue([])
     const noCouponsHtml = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'store' }) }))
     expect(noCouponsHtml).toContain('No active promo codes or offers for this store yet.')
+    expect(noCouponsHtml).toContain('About this store')
 
     vi.mocked(getServiceBySlug).mockResolvedValueOnce(null as never).mockResolvedValueOnce(null as never)
     const missingHtml = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'missing' }) }))

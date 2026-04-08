@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { EmptyState } from '@/components/empty-state'
-import { CouponCopyButton } from '@/components/coupon-copy-button'
-import { getOffers, getServiceBySlug } from '@/lib/site-data'
+import { StoreTopOffers } from '@/components/store-top-offers'
+import { StoreRelatedPanel } from '@/components/store-related-panel'
+import { getCategories, getOffers, getServiceBySlug, megaMenuStoreImageSrc } from '@/lib/site-data'
+
+const STORE_PAGE_FALLBACK_BLURB =
+  'This store is on BonusBridge so you can see referral and sign-up offers in one place. Use the clip cards below to copy a code or link and open the partner offer in a new tab — same flow as on the home page.'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -15,84 +18,98 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Store not found | BonusBridge' }
   }
 
+  const blurb = store.description?.trim()
   return {
     title: `${store.name} | BonusBridge`,
-    description: `Promo codes and offers for ${store.name}.`
+    description: blurb ? `${blurb} Find promo codes and offers on BonusBridge.` : `Promo codes and offers for ${store.name}.`
   }
 }
 
 export default async function StorePage({ params }: Props) {
   const { slug } = await params
-  const [store, coupons] = await Promise.all([
+  const [store, coupons, categories] = await Promise.all([
     getServiceBySlug(slug).catch(() => null),
-    getOffers({ service: slug, status: 'active' }).catch(() => [])
+    getOffers({ service: slug, status: 'active' }).catch(() => []),
+    getCategories().catch(() => [])
   ])
 
   if (!store) {
     return <EmptyState message="Store not found." />
   }
 
+  const primaryCategorySlug = categories.find((c) => c.id === store.categoryId)?.slug ?? null
+  const storeOfferLogoSrc = megaMenuStoreImageSrc({ logoSrc: store.logoSrc ?? null })
+  const aboutText = store.description?.trim() || STORE_PAGE_FALLBACK_BLURB
+  const primaryPromo = coupons[0]
+  const openStoreUrl = primaryPromo?.referralUrl ?? null
+  const hasMainOffers = coupons.length > 0
+
   return (
-    <section className="category-page-section" aria-labelledby="store-page-heading">
+    <section className="category-page-section store-page" aria-labelledby="store-page-heading">
       <article className="app-surface-card store-page-hero">
-        <h1 id="store-page-heading" className="section-title app-page-title">
+        <h1 id="store-page-heading" className="sr-only">
           {store.name}
         </h1>
-        <div className="store-page-meta-row">
-          {store.logoSrc ? (
-            <img
-              src={store.logoSrc}
-              alt=""
-              width={40}
-              height={40}
-              className="store-page-logo-img"
-              decoding="async"
-            />
-          ) : store.logoSvg ? (
-            <span
-              className="store-icon store-page-logo"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(store.logoSvg)}")`
-              }}
-              aria-hidden
-            />
-          ) : null}
-          {store.website ? (
-            <a href={store.website} target="_blank" rel="noreferrer">
-              Open store website
-            </a>
-          ) : (
-            <span className="default-muted-text">Store link is not set</span>
-          )}
+        <div className="store-page-hero-grid">
+          <div className="store-page-hero-main">
+            <div className="store-page-logo-box">
+              {store.logoSrc ? (
+                <img
+                  src={store.logoSrc}
+                  alt=""
+                  width={120}
+                  height={120}
+                  className="store-page-logo-img"
+                  decoding="async"
+                />
+              ) : store.logoSvg ? (
+                <span
+                  className="store-page-logo-svg"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(store.logoSvg)}")`
+                  }}
+                  aria-hidden
+                />
+              ) : (
+                <span className="store-page-logo-fallback" aria-hidden>
+                  {store.name.charAt(0)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="store-page-hero-about">
+            <h2 className="store-page-about-heading">About this store</h2>
+            <p className="store-page-about-body">{aboutText}</p>
+            {openStoreUrl ? (
+              <a href={openStoreUrl} target="_blank" rel="noreferrer" className="store-page-open-store-btn">
+                Open Store
+              </a>
+            ) : null}
+          </div>
         </div>
       </article>
 
-      {coupons.length === 0 ? (
-        <EmptyState message="No active promo codes or offers for this store yet." />
-      ) : (
-        <div className="category-stores-list store-coupons-block">
-          <h2 className="section-title store-coupons-heading">Promo codes and offers</h2>
-          {coupons.map((coupon) => {
-            const copyValue = coupon.couponCode?.trim() ? coupon.couponCode : coupon.referralUrl
-
-            return (
-              <article key={coupon.id} className="app-surface-card">
-                <h3 className="category-store-title">{coupon.title}</h3>
-                <p className="category-offer-preview">{coupon.previewText}</p>
-                <div className="category-offer-actions">
-                  {coupon.couponCode ? (
-                    <span className="category-offer-pill">Code: {coupon.couponCode}</span>
-                  ) : null}
-                  <a href={coupon.referralUrl} target="_blank" rel="noreferrer">
-                    Open link
-                  </a>
-                  <CouponCopyButton value={copyValue} label={coupon.couponCode ? 'Copy code' : 'Copy link'} />
-                </div>
-              </article>
-            )
-          })}
+      {coupons.length > 0 ? (
+        <div className="store-top-offers-wrap clip-coupons-section store-page-clip-section">
+          <div className="section-head clip-coupons-head">
+            <h2 id="store-top-offers-heading" className="section-title">
+              Top offers
+            </h2>
+          </div>
+          <StoreTopOffers
+            storeName={store.name}
+            storeSlug={slug}
+            storeLogoSrc={storeOfferLogoSrc}
+            offers={coupons}
+          />
         </div>
-      )}
+      ) : null}
+
+      {!hasMainOffers ? (
+        <EmptyState message="No active promo codes or offers for this store yet." />
+      ) : null}
+
+      <StoreRelatedPanel storeSlug={slug} primaryCategorySlug={primaryCategorySlug} />
     </section>
   )
 }

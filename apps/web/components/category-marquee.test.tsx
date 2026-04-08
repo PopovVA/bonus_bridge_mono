@@ -19,14 +19,16 @@ const chips = [
 ]
 
 describe('CategoryMarquee', () => {
-  it('renders duplicated track for CSS infinite scroll', () => {
+  it('renders many duplicated segments for wide-viewport infinite scroll + static fallback track', () => {
     ;(globalThis as { React?: typeof React }).React = React
     const html = renderToStaticMarkup(<CategoryMarquee chips={chips} />)
     expect(html).toContain('category-marquee-section')
     expect(html).toContain('category-marquee-viewport')
-    expect(html).toContain('category-marquee-track')
+    expect(html).toContain('category-marquee-track--animated')
+    expect(html).toContain('category-marquee-track--static')
     const aCount = (html.match(/href="\/categories\/a"/g) ?? []).length
-    expect(aCount).toBe(2)
+    /* 10 animated copies + 1 static row (DOM always includes both) */
+    expect(aCount).toBe(11)
   })
 
   it('returns null when no chips', () => {

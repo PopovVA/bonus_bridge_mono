@@ -2,6 +2,9 @@ import type { HotCashbackOffer } from '@/lib/hot-cashback'
 
 type Props = {
   offers: HotCashbackOffer[]
+  heading?: string
+  subtitle?: string
+  sectionId?: string
 }
 
 function CashbackBadgeIcon() {
@@ -26,18 +29,21 @@ function CashbackBadgeIcon() {
   )
 }
 
-export function HotCashback({ offers }: Props) {
+export function HotCashback({
+  offers,
+  heading = 'Hot Cashback',
+  subtitle = 'Sign up below—welcome offers and eligibility are set by each partner.',
+  sectionId = 'hot-cashback'
+}: Props) {
   if (offers.length === 0) return null
 
   return (
-    <section id="hot-cashback" className="hot-cashback-section" aria-labelledby="hot-cashback-heading">
+    <section id={sectionId} className="hot-cashback-section" aria-labelledby={`${sectionId}-heading`}>
       <div className="section-head hot-cashback-head">
-        <h2 id="hot-cashback-heading" className="section-title">
-          Hot Cashback
+        <h2 id={`${sectionId}-heading`} className="section-title">
+          {heading}
         </h2>
-        <p className="section-subtitle">
-          Sign up below—welcome offers and eligibility are set by each partner.
-        </p>
+        <p className="section-subtitle">{subtitle}</p>
       </div>
       <div className="hot-cashback-grid">
         {offers.map((offer) => (
