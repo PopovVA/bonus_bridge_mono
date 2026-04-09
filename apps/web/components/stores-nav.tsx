@@ -34,6 +34,15 @@ export function StoresNav({ megaMenu }: Props) {
     return () => document.removeEventListener('keydown', onKey)
   }, [open])
 
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [open])
+
   const activeStores = activeSlug ? (storesByCategorySlug[activeSlug] ?? []) : []
 
   return (
@@ -53,17 +62,70 @@ export function StoresNav({ megaMenu }: Props) {
         aria-expanded={open}
         aria-haspopup="dialog"
       >
-        Stores
+        <span className="stores-trigger-label">Stores</span>
         <span className="chevron" aria-hidden>
           ▼
         </span>
+        <span className="stores-trigger-menu-icon" aria-hidden>
+          ☰
+        </span>
       </button>
       {open && categories.length > 0 ? (
-        <div
-          className="stores-mega"
-          role="dialog"
-          aria-label="Browse stores by category"
-        >
+        <>
+          <div className="stores-drawer-backdrop" onClick={() => setOpen(false)} aria-hidden />
+          <aside className="stores-drawer" role="dialog" aria-modal="true" aria-label="Browse stores by category">
+            <div className="stores-drawer-head">
+              <h2 className="stores-drawer-title">Browse stores</h2>
+              <button
+                type="button"
+                className="stores-drawer-close"
+                onClick={() => setOpen(false)}
+                aria-label="Close stores menu"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="stores-drawer-body">
+              <ul className="stores-drawer-cats">
+                {categories.map((cat) => (
+                  <li key={cat.slug}>
+                    <button
+                      type="button"
+                      className={activeSlug === cat.slug ? 'stores-drawer-cat stores-drawer-cat--active' : 'stores-drawer-cat'}
+                      onClick={() => setActiveSlug(cat.slug)}
+                    >
+                      {cat.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <ul className="stores-drawer-stores">
+                {activeStores.map((store) => (
+                  <li key={store.slug}>
+                    <Link href={`/stores/${store.slug}`} className="stores-drawer-store" onClick={() => setOpen(false)}>
+                      <span className="stores-mega-store-icon-wrap" aria-hidden="true">
+                        {/* eslint-disable-next-line @next/next/no-img-element -- brand marks from /public */}
+                        <img
+                          src={store.imageSrc}
+                          alt=""
+                          width={40}
+                          height={40}
+                          className="stores-mega-store-icon"
+                          decoding="async"
+                        />
+                      </span>
+                      <span className="stores-mega-store-label">{store.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+          <div
+            className="stores-mega stores-mega--desktop"
+            role="dialog"
+            aria-label="Browse stores by category"
+          >
           <div className="stores-mega-inner">
             <div className="stores-mega-col stores-mega-cats">
               <ul className="stores-mega-list stores-mega-list--flush-top">
@@ -128,7 +190,8 @@ export function StoresNav({ megaMenu }: Props) {
               )}
             </div>
           </div>
-        </div>
+          </div>
+        </>
       ) : null}
       {open && categories.length === 0 ? (
         <div className="stores-dropdown" role="menu">
