@@ -316,6 +316,11 @@
   transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 
+.hero-floating-arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
 .hero-floating-arrow:hover {
   background: #fff;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16);
@@ -400,6 +405,11 @@
 .hero-floating-dot:focus-visible {
   outline: 2px solid var(--bb-accent-strong);
   outline-offset: 3px;
+}
+
+.hero-mobile-terms-wrap {
+  display: none;
+  margin: 0;
 }
 
 /* Room for overlaid dots on promo + image slides */
@@ -2899,4 +2909,46 @@
 
 .store-related-discovery-offer-card__title {
   font-weight: 700;
+}
+
+@media (max-width: 767px) {
+  .hero-floating-dots {
+    display: none;
+  }
+
+  .hero-floating-arrow {
+    width: 44px;
+    height: 44px;
+  }
+
+  .hero-floating-arrow svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hero-chime-eyebrow,
+  .hero-coinbase-eyebrow,
+  .hero-paypal-eyebrow,
+  .hero-uber-eyebrow,
+  .hero-ubereats-eyebrow,
+  .hero-chime-promo-highlight,
+  .hero-coinbase-promo-highlight,
+  .hero-paypal-promo-highlight,
+  .hero-uber-promo-highlight,
+  .hero-ubereats-promo-highlight,
+  .hero-chime-sub,
+  .hero-coinbase-sub,
+  .hero-paypal-sub,
+  .hero-uber-sub,
+  .hero-ubereats-sub,
+  .hero-chime-steps-title,
+  .hero-paypal-steps-title,
+  .hero-chime-steps,
+  .hero-paypal-steps {
+    display: none;
+  }
+
+  .hero-mobile-terms-wrap {
+    display: block;
+  }
 }

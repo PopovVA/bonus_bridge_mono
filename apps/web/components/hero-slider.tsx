@@ -221,6 +221,13 @@ function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], k
               </a>
             ) : null}
           </p>
+          {slide.termsUrl ? (
+            <p className="hero-mobile-terms-wrap">
+              <a href={slide.termsUrl} className={ui.terms} target="_blank" rel="noopener noreferrer">
+                {slide.termsLabel ?? 'View terms'}
+              </a>
+            </p>
+          ) : null}
           <a
             href={slide.referralUrl}
             className={ui.cta}
