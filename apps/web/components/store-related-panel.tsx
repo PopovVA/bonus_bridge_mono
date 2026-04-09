@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { TrackedLink } from '@/components/tracked-link'
 import { getStoreRelatedSections } from '@/lib/client-catalog'
 import { useClientCatalog } from '@/components/client-catalog-provider'
 import { StoreRelatedOfferCards } from '@/components/store-related-offer-cards'
@@ -24,7 +24,13 @@ export function StoreRelatedPanel({ storeSlug, primaryCategorySlug }: Props) {
         {sections.map((sec) => (
           <article key={sec.categorySlug} className="store-related-card app-surface-card">
             <h3 className="store-related-card-heading">
-              <Link href={`/categories/${sec.categorySlug}`}>{sec.categoryName}</Link>
+              <TrackedLink
+                href={`/categories/${sec.categorySlug}`}
+                event="store_related_category"
+                eventParams={{ category_slug: sec.categorySlug }}
+              >
+                {sec.categoryName}
+              </TrackedLink>
             </h3>
             <div className="store-related-card-body">
               <p className="store-related-label" id={`sr-offers-${sec.categorySlug}`}>

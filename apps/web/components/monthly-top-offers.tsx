@@ -1,3 +1,4 @@
+import { TrackedOutboundLink } from '@/components/tracked-link'
 import type { MonthlyTopOffer } from '@/lib/schemas'
 
 type Props = {
@@ -111,14 +112,16 @@ export function MonthlyTopOffers({
                 <div className="monthly-offer-card__desc-wrap">
                   <p className="monthly-offer-card__desc">{offer.description}</p>
                 </div>
-                <a
+                <TrackedOutboundLink
                   href={offer.href}
                   className="monthly-offer-card__cta"
                   target="_blank"
                   rel="noopener noreferrer"
+                  event="monthly_offer_cta"
+                  eventParams={{ offer_slug: offer.slug }}
                 >
                   {offer.ctaText}
-                </a>
+                </TrackedOutboundLink>
               </div>
               <div className={mediaShellClass(offer.slug)}>
                 {offer.imageSrc ? (

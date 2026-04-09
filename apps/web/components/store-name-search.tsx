@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useClientCatalog } from '@/components/client-catalog-provider'
+import { trackGtagEvent } from '@/lib/gtag-track'
 import { buildStoreSearchIndex, filterStoresByQuery } from '@/lib/store-name-search'
 
 const listId = 'store-name-search-results'
@@ -66,6 +67,7 @@ export function StoreNameSearch() {
                     href={`/stores/${encodeURIComponent(row.slug)}`}
                     className="home-header-search-hit"
                     onClick={() => {
+                      trackGtagEvent('header_search_store_pick', { store_slug: row.slug })
                       setQuery('')
                       setOpen(false)
                     }}

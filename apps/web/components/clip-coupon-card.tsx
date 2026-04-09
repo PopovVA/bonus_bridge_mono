@@ -1,5 +1,8 @@
+'use client'
+
 import React from 'react'
 import { Scissors } from 'lucide-react'
+import { trackGtagEvent } from '@/lib/gtag-track'
 
 export type ClipCouponCardProps = {
   logoSrc: string
@@ -16,6 +19,10 @@ export type ClipCouponCardProps = {
   clipButtonLabel?: string
   /** Accessible name for the primary CTA (default: open partner in new tab). */
   getOfferAriaLabel?: string
+  /** GA4 `place` param (e.g. home_clip, store_page). */
+  analyticsPlace?: string
+  /** GA4 `item_id` param (offer or coupon id). */
+  analyticsItemId?: string
 }
 
 /** Tear-off promo card shell (styles: `home.css` `.clip-coupon-card*`). */
@@ -29,8 +36,18 @@ export function ClipCouponCard({
   onGetOfferClick,
   clipAriaLabel,
   clipButtonLabel = 'Get offer',
-  getOfferAriaLabel = 'Open partner offer in a new tab'
+  getOfferAriaLabel = 'Open partner offer in a new tab',
+  analyticsPlace,
+  analyticsItemId
 }: ClipCouponCardProps) {
+  const analyticsParams =
+    analyticsPlace || analyticsItemId
+      ? {
+          ...(analyticsPlace ? { place: analyticsPlace } : {}),
+          ...(analyticsItemId ? { item_id: analyticsItemId } : {})
+        }
+      : undefined
+
   return (
     <article className="clip-coupon-card">
       <div className="clip-coupon-card__logo-row">
@@ -49,13 +66,24 @@ export function ClipCouponCard({
         </span>
       </div>
       <div className="clip-coupon-card__bottom">
-        <button type="button" className="clip-coupon-card__code" onClick={() => void onCodeClick()} aria-label={clipAriaLabel}>
+        <button
+          type="button"
+          className="clip-coupon-card__code"
+          onClick={() => {
+            trackGtagEvent('clip_copy_code', analyticsParams)
+            void onCodeClick()
+          }}
+          aria-label={clipAriaLabel}
+        >
           {codeDisplay}
         </button>
         <button
           type="button"
           className="clip-coupon-card__btn"
-          onClick={() => void onGetOfferClick()}
+          onClick={() => {
+            trackGtagEvent('clip_get_offer', analyticsParams)
+            void onGetOfferClick()
+          }}
           aria-label={getOfferAriaLabel}
         >
           {clipButtonLabel}

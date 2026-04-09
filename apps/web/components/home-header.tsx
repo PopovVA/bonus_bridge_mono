@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { TrackedLink } from '@/components/tracked-link'
 import { StoreNameSearch } from '@/components/store-name-search'
 import { StoresNav } from '@/components/stores-nav'
 import type { StoresMegaMenuPayload } from '@/lib/site-data'
@@ -14,12 +14,14 @@ export function HomeHeader({ megaMenu }: Props) {
     <header className="home-header">
       <div className="home-header-inner">
         <div className="home-header-brand-nav">
-          <Link href="/" className="home-logo" aria-label="BonusBridge home">
+          <TrackedLink href="/" className="home-logo" aria-label="BonusBridge home" event="header_logo">
             BonusBridge
-          </Link>
+          </TrackedLink>
           <nav className="home-nav home-nav--primary">
             <StoresNav megaMenu={megaMenu} />
-            <Link href="/#coupons">Coupons</Link>
+            <TrackedLink href="/#coupons" event="header_nav_coupons">
+              Coupons
+            </TrackedLink>
           </nav>
         </div>
         <StoreNameSearch />

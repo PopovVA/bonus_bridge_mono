@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { trackGtagEvent } from '@/lib/gtag-track'
 import type { StoresMegaMenuPayload } from '@/lib/site-data'
 
 type Props = {
@@ -52,7 +53,11 @@ export function StoresNav({ megaMenu }: Props) {
         className="nav-link nav-dropdown-trigger"
         onClick={() => {
           setOpen((wasOpen) => {
-            if (wasOpen) return false
+            if (wasOpen) {
+              trackGtagEvent('header_nav_stores_close_toggle')
+              return false
+            }
+            trackGtagEvent('header_nav_stores_open')
             if (firstSlug) {
               setActiveSlug((prev) => (categories.some((c) => c.slug === prev) ? prev : firstSlug))
             }
@@ -72,14 +77,24 @@ export function StoresNav({ megaMenu }: Props) {
       </button>
       {open && categories.length > 0 ? (
         <>
-          <div className="stores-drawer-backdrop" onClick={() => setOpen(false)} aria-hidden />
+          <div
+            className="stores-drawer-backdrop"
+            onClick={() => {
+              trackGtagEvent('header_nav_stores_close_backdrop')
+              setOpen(false)
+            }}
+            aria-hidden
+          />
           <aside className="stores-drawer" role="dialog" aria-modal="true" aria-label="Browse stores by category">
             <div className="stores-drawer-head">
               <h2 className="stores-drawer-title">Browse stores</h2>
               <button
                 type="button"
                 className="stores-drawer-close"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  trackGtagEvent('header_nav_stores_close_btn')
+                  setOpen(false)
+                }}
                 aria-label="Close stores menu"
               >
                 ✕
@@ -92,7 +107,10 @@ export function StoresNav({ megaMenu }: Props) {
                     <button
                       type="button"
                       className={activeSlug === cat.slug ? 'stores-drawer-cat stores-drawer-cat--active' : 'stores-drawer-cat'}
-                      onClick={() => setActiveSlug(cat.slug)}
+                      onClick={() => {
+                        trackGtagEvent('header_nav_stores_category_tab', { category_slug: cat.slug })
+                        setActiveSlug(cat.slug)
+                      }}
                     >
                       {cat.name}
                     </button>
@@ -102,7 +120,14 @@ export function StoresNav({ megaMenu }: Props) {
               <ul className="stores-drawer-stores">
                 {activeStores.map((store) => (
                   <li key={store.slug}>
-                    <Link href={`/stores/${store.slug}`} className="stores-drawer-store" onClick={() => setOpen(false)}>
+                    <Link
+                      href={`/stores/${store.slug}`}
+                      className="stores-drawer-store"
+                      onClick={() => {
+                        trackGtagEvent('header_nav_stores_store', { store_slug: store.slug })
+                        setOpen(false)
+                      }}
+                    >
                       <span className="stores-mega-store-icon-wrap" aria-hidden="true">
                         {/* eslint-disable-next-line @next/next/no-img-element -- brand marks from /public */}
                         <img
@@ -140,7 +165,10 @@ export function StoresNav({ megaMenu }: Props) {
                       }
                       onMouseEnter={() => setActiveSlug(cat.slug)}
                       onFocus={() => setActiveSlug(cat.slug)}
-                      onClick={() => setOpen(false)}
+                      onClick={() => {
+                        trackGtagEvent('header_nav_stores_category_link', { category_slug: cat.slug })
+                        setOpen(false)
+                      }}
                     >
                       <span className="stores-mega-cat-icon-wrap" aria-hidden="true">
                         {/* eslint-disable-next-line @next/next/no-img-element -- static SVG from /public/categories */}
@@ -169,7 +197,10 @@ export function StoresNav({ megaMenu }: Props) {
                       <Link
                         href={`/stores/${store.slug}`}
                         className="stores-mega-store"
-                        onClick={() => setOpen(false)}
+                        onClick={() => {
+                          trackGtagEvent('header_nav_stores_store', { store_slug: store.slug })
+                          setOpen(false)
+                        }}
                       >
                         <span className="stores-mega-store-icon-wrap" aria-hidden="true">
                           {/* eslint-disable-next-line @next/next/no-img-element -- brand marks from /public */}
@@ -195,7 +226,15 @@ export function StoresNav({ megaMenu }: Props) {
       ) : null}
       {open && categories.length === 0 ? (
         <div className="stores-dropdown" role="menu">
-          <Link href="/" className="dropdown-item" onClick={() => setOpen(false)} role="menuitem">
+          <Link
+            href="/"
+            className="dropdown-item"
+            onClick={() => {
+              trackGtagEvent('header_nav_stores_all')
+              setOpen(false)
+            }}
+            role="menuitem"
+          >
             All stores
           </Link>
         </div>

@@ -1,4 +1,6 @@
-import Link from 'next/link'
+'use client'
+
+import { TrackedLink } from '@/components/tracked-link'
 
 type StoreCardProps = {
   id: string
@@ -23,7 +25,12 @@ export function StoreCard({
   const blurb = description?.trim() || STORE_CARD_FALLBACK_BLURB
 
   return (
-    <Link href={`/stores/${slug}`} className="store-card">
+    <TrackedLink
+      href={`/stores/${slug}`}
+      className="store-card"
+      event="store_card_click"
+      eventParams={{ store_slug: slug }}
+    >
       <div className="store-card-logo">
         {logoSrc ? (
           // eslint-disable-next-line @next/next/no-img-element -- caller passes /public paths
@@ -50,6 +57,6 @@ export function StoreCard({
       <h3 className="store-card-name">{name}</h3>
       <p className="store-card-desc">{blurb}</p>
       <span className="store-card-badge">{bonusLabel}</span>
-    </Link>
+    </TrackedLink>
   )
 }

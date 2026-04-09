@@ -26,7 +26,44 @@ pnpm dev
 
 Port: `http://localhost:3000`
 
-**Analytics:** GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) **only when `NODE_ENV` is `production`** (`next build` / `next start`), not during `pnpm dev`. Override the measurement ID with `NEXT_PUBLIC_GA_MEASUREMENT_ID` (see `.env.example`); default is `G-9GPFJN1LKC`.
+### Analytics (GA4)
+
+GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) **only when `NODE_ENV` is `production`** (`next build` / `next start`), not during `pnpm dev`. Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` in `.env` if needed (see `.env.example`); default is `G-9GPFJN1LKC`. Events are sent with `gtag('event', …)` from `lib/gtag-track.ts`; internal and external links use `components/tracked-link.tsx` (`TrackedLink`, `TrackedOutboundLink`).
+
+**`clip_copy_code` / `clip_get_offer`** also send `place` and `item_id` where the parent passes them (e.g. home clip grid, store page, explore-more clip cards).
+
+| Event name | When it fires | Parameters |
+| --- | --- | --- |
+| `header_logo` | Click site title / logo | — |
+| `header_nav_coupons` | Click “Coupons” in header | — |
+| `header_nav_stores_open` | Open Stores menu | — |
+| `header_nav_stores_close_toggle` | Close Stores via the same toggle | — |
+| `header_nav_stores_close_backdrop` | Close Stores by clicking backdrop | — |
+| `header_nav_stores_close_btn` | Close Stores (✕) | — |
+| `header_nav_stores_category_tab` | Pick a category tab (drawer) | `category_slug` |
+| `header_nav_stores_category_link` | Navigate to `/categories/{slug}` (mega menu) | `category_slug` |
+| `header_nav_stores_store` | Open a store from Stores menu | `store_slug` |
+| `header_nav_stores_all` | “All stores” fallback link | — |
+| `header_search_store_pick` | Pick a result in store search | `store_slug` |
+| `hero_carousel_prev` | Hero previous arrow | — |
+| `hero_carousel_next` | Hero next arrow | — |
+| `hero_carousel_dot` | Hero dot / slide index | `slide_index` |
+| `hero_terms_link` | Hero “terms” link | `slide_kind` |
+| `hero_main_cta` | Hero primary partner CTA | `slide_kind` |
+| `monthly_offer_cta` | Top monthly offer card CTA | `offer_slug` |
+| `hot_cashback_cta` | Hot cashback card CTA | `offer_slug` |
+| `home_category_chip` | Category marquee chip | `category_slug` |
+| `clip_copy_code` | Clip card — copy code / link | `place`, `item_id` (if set) |
+| `clip_get_offer` | Clip card — get offer | `place`, `item_id` (if set) |
+| `clip_dialog_not_now` | Partner dialog — “Not now” | — |
+| `clip_dialog_open_tab` | Partner dialog — “Open in new tab” | — |
+| `explore_link_offer_cta` | Explore more — link-only offer CTA | `offer_id` |
+| `footer_privacy` | Footer — Privacy | — |
+| `footer_terms` | Footer — Terms | — |
+| `store_card_click` | Store card component (if used) | `store_slug` |
+| `store_related_category` | “Explore more” category heading link | `category_slug` |
+| `category_view_store` | Category page — “View store” | `store_slug` |
+| `store_page_open_partner` | Store page — “Open Store” hero CTA | `store_slug` |
 
 Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](https://developers.brandfetch.com/register)) so the Uber Eats hero logo can load from `cdn.brandfetch.io/ubereats.com`. Without it, `/brands/ubereats-logo.png`. The Uber rides slide always uses `/brands/uber-logo.png`.
 

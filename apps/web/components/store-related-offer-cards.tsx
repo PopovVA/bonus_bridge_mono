@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react'
 import { ClipCouponCard } from '@/components/clip-coupon-card'
+import { TrackedOutboundLink } from '@/components/tracked-link'
 import { ClipOpenStoreDialog } from '@/components/clip-open-store-dialog'
 import { useClipPartnerOfferFlow } from '@/components/use-clip-partner-offer-flow'
 import { getCuratedLinkCardCopyForExploreMore } from '@/lib/explore-more-link-card-copy'
@@ -128,14 +129,16 @@ export function StoreRelatedOfferCards({ offers, labelledBy }: Props) {
                       {blurbText ? <p className="clip-coupon-card__blurb">{blurbText}</p> : null}
                     </div>
                   </div>
-                  <a
+                  <TrackedOutboundLink
                     href={offerHref}
                     className="hot-cashback-card__cta"
                     target="_blank"
                     rel="noopener noreferrer"
+                    event="explore_link_offer_cta"
+                    eventParams={{ offer_id: o.id }}
                   >
                     {ctaText}
-                  </a>
+                  </TrackedOutboundLink>
                 </div>
               </article>
             </li>

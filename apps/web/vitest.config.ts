@@ -8,6 +8,7 @@ export default defineConfig({
     }
   },
   test: {
+    environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     include: ['app/**/*.test.ts', 'app/**/*.test.tsx', 'lib/**/*.test.ts', 'components/**/*.test.tsx'],
     coverage: {

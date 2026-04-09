@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { EmptyState } from '@/components/empty-state'
+import { TrackedLink } from '@/components/tracked-link'
 import type { Offer, Service } from '@/lib/schemas'
 import { getCategories, getOffers, getServices } from '@/lib/site-data'
 
@@ -135,9 +135,14 @@ export default async function CategoryPage({ params }: Props) {
                     </div>
                   </div>
                   <div className="category-store-row-cta">
-                    <Link href={`/stores/${store.slug}`} className="category-store-cta">
+                    <TrackedLink
+                      href={`/stores/${store.slug}`}
+                      className="category-store-cta"
+                      event="category_view_store"
+                      eventParams={{ store_slug: store.slug }}
+                    >
                       View store
-                    </Link>
+                    </TrackedLink>
                   </div>
                 </div>
               </article>

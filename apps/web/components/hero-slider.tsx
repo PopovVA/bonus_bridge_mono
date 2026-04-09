@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { TrackedOutboundLink } from '@/components/tracked-link'
+import { trackGtagEvent } from '@/lib/gtag-track'
 import type { HeroSlide } from '@/lib/schemas'
 
 /** Time each hero slide stays visible before auto-advance (ms). */
@@ -211,31 +213,42 @@ function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], k
           <p className={ui.sub}>
             {moneyAccentSpans(slide.subtext, ui.moneyAccent)}{' '}
             {slide.termsUrl ? (
-              <a
+              <TrackedOutboundLink
                 href={slide.termsUrl}
                 className={ui.terms}
                 target="_blank"
                 rel="noopener noreferrer"
+                event="hero_terms_link"
+                eventParams={{ slide_kind: kind }}
               >
                 {slide.termsLabel ?? 'View terms'}
-              </a>
+              </TrackedOutboundLink>
             ) : null}
           </p>
           {slide.termsUrl ? (
             <p className="hero-mobile-terms-wrap">
-              <a href={slide.termsUrl} className={ui.terms} target="_blank" rel="noopener noreferrer">
+              <TrackedOutboundLink
+                href={slide.termsUrl}
+                className={ui.terms}
+                target="_blank"
+                rel="noopener noreferrer"
+                event="hero_terms_link"
+                eventParams={{ slide_kind: kind }}
+              >
                 {slide.termsLabel ?? 'View terms'}
-              </a>
+              </TrackedOutboundLink>
             </p>
           ) : null}
-          <a
+          <TrackedOutboundLink
             href={slide.referralUrl}
             className={ui.cta}
             target="_blank"
             rel="noopener noreferrer"
+            event="hero_main_cta"
+            eventParams={{ slide_kind: kind }}
           >
             {slide.ctaText}
-          </a>
+          </TrackedOutboundLink>
           {slide.steps && slide.steps.length > 0 ? (
             <>
               <h3 className={ui.stepsTitle}>{slide.stepsTitle ?? 'How it works'}</h3>
@@ -269,8 +282,14 @@ export function HeroSlider({ slides = [] }: { slides?: HeroSlide[] }) {
   })
   const [selectedIndex, setSelectedIndex] = useState(0)
 
-  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
-  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
+  const scrollPrev = useCallback(() => {
+    trackGtagEvent('hero_carousel_prev')
+    emblaApi?.scrollPrev()
+  }, [emblaApi])
+  const scrollNext = useCallback(() => {
+    trackGtagEvent('hero_carousel_next')
+    emblaApi?.scrollNext()
+  }, [emblaApi])
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return
@@ -372,7 +391,10 @@ export function HeroSlider({ slides = [] }: { slides?: HeroSlide[] }) {
                   role="tab"
                   aria-selected={i === selectedIndex}
                   className={`hero-floating-dot ${i === selectedIndex ? 'active' : ''}`}
-                  onClick={() => emblaApi?.scrollTo(i)}
+                  onClick={() => {
+                    trackGtagEvent('hero_carousel_dot', { slide_index: i })
+                    emblaApi?.scrollTo(i)
+                  }}
                   aria-label={`Go to slide ${i + 1}`}
                 />
               ))}

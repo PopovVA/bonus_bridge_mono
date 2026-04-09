@@ -1,3 +1,4 @@
+import { TrackedOutboundLink } from '@/components/tracked-link'
 import type { HotCashbackOffer } from '@/lib/hot-cashback'
 
 type Props = {
@@ -70,14 +71,16 @@ export function HotCashback({
                   <p className="clip-coupon-card__blurb">{offer.description}</p>
                 </div>
               </div>
-              <a
+              <TrackedOutboundLink
                 href={offer.href}
                 className="hot-cashback-card__cta"
                 target="_blank"
                 rel="noopener noreferrer"
+                event="hot_cashback_cta"
+                eventParams={{ offer_slug: offer.slug }}
               >
                 {offer.ctaText}
-              </a>
+              </TrackedOutboundLink>
             </div>
           </article>
         ))}

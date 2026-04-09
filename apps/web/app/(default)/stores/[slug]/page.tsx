@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { EmptyState } from '@/components/empty-state'
+import { StorePageOpenPartnerLink } from '@/components/store-page-open-partner-link'
 import { StoreTopOffers } from '@/components/store-top-offers'
 import { StoreRelatedPanel } from '@/components/store-related-panel'
 import { getCategories, getOffers, getServiceBySlug, megaMenuStoreImageSrc } from '@/lib/site-data'
@@ -81,9 +82,9 @@ export default async function StorePage({ params }: Props) {
             <h2 className="store-page-about-heading">About this store</h2>
             <p className="store-page-about-body">{aboutText}</p>
             {openStoreUrl ? (
-              <a href={openStoreUrl} target="_blank" rel="noreferrer" className="store-page-open-store-btn">
+              <StorePageOpenPartnerLink href={openStoreUrl} storeSlug={slug}>
                 Open Store
-              </a>
+              </StorePageOpenPartnerLink>
             ) : null}
           </div>
         </div>

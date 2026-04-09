@@ -49,6 +49,8 @@ export function HomeClipCoupons({ coupons }: Props) {
               onCodeClick={() => handleCodeClick(c)}
               onGetOfferClick={() => handleGetOfferClick(c)}
               clipAriaLabel={`Copy code ${c.code}`}
+              analyticsPlace="home_clip"
+              analyticsItemId={c.id}
             />
           ))}
         </div>

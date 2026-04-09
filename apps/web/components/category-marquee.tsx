@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { TrackedLink } from '@/components/tracked-link'
 import type { HomeCategoryChip } from '@/lib/site-data'
 
 type Props = {
@@ -15,11 +15,13 @@ type MarqueeLinkProps = {
 
 function MarqueeCategoryLink({ chip, isPrimaryCopy }: MarqueeLinkProps) {
   return (
-    <Link
+    <TrackedLink
       href={chip.href}
       className="category-marquee-item"
       tabIndex={isPrimaryCopy ? undefined : -1}
       aria-hidden={isPrimaryCopy ? undefined : true}
+      event="home_category_chip"
+      eventParams={{ category_slug: chip.slug }}
     >
       <span className="category-marquee-icon-wrap">
         {/* eslint-disable-next-line @next/next/no-img-element -- small static tiles; avoids test Image mock */}
@@ -34,7 +36,7 @@ function MarqueeCategoryLink({ chip, isPrimaryCopy }: MarqueeLinkProps) {
         />
       </span>
       <span className="category-marquee-label">{chip.name}</span>
-    </Link>
+    </TrackedLink>
   )
 }
 

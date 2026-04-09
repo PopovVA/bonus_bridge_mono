@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { trackGtagEvent } from '@/lib/gtag-track'
 
 export type ClipOpenStoreDialogProps = {
   isOpen: boolean
@@ -60,13 +61,23 @@ export function ClipOpenStoreDialog({
           )}
         </p>
         <div className="clip-open-store-dialog__actions">
-          <button type="button" className="clip-open-store-dialog__btn clip-open-store-dialog__btn--ghost" onClick={onClose}>
+          <button
+            type="button"
+            className="clip-open-store-dialog__btn clip-open-store-dialog__btn--ghost"
+            onClick={() => {
+              trackGtagEvent('clip_dialog_not_now')
+              onClose()
+            }}
+          >
             Not now
           </button>
           <button
             type="button"
             className="clip-open-store-dialog__btn clip-open-store-dialog__btn--primary"
-            onClick={onConfirmOpen}
+            onClick={() => {
+              trackGtagEvent('clip_dialog_open_tab')
+              onConfirmOpen()
+            }}
           >
             Open in new tab
           </button>

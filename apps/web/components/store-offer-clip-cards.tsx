@@ -51,6 +51,8 @@ export function StoreOfferClipCards({ storeName, storeLogoSrc, offers }: Props) 
               onCodeClick={() => handleCodeClick(offer)}
               onGetOfferClick={() => handleGetOfferClick(offer)}
               clipAriaLabel={clipAriaLabel}
+              analyticsPlace="store_page"
+              analyticsItemId={offer.id}
             />
           )
         })}
