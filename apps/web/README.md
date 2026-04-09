@@ -26,6 +26,8 @@ pnpm dev
 
 Port: `http://localhost:3000`
 
+**Analytics:** GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) **only when `NODE_ENV` is `production`** (`next build` / `next start`), not during `pnpm dev`. Override the measurement ID with `NEXT_PUBLIC_GA_MEASUREMENT_ID` (see `.env.example`); default is `G-9GPFJN1LKC`.
+
 Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](https://developers.brandfetch.com/register)) so the Uber Eats hero logo can load from `cdn.brandfetch.io/ubereats.com`. Without it, `/brands/ubereats-logo.png`. The Uber rides slide always uses `/brands/uber-logo.png`.
 
 ## Commands

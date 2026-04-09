@@ -32,6 +32,8 @@ pnpm dev
 
 Web: `http://localhost:3000`
 
+Optional **Google Analytics 4** (gtag) runs in the web app **only in production builds** (`NODE_ENV=production`), not in local `pnpm dev`. Details and env vars: [`apps/web/README.md`](apps/web/README.md).
+
 ## Deploy
 
 Use the **monorepo root** as the app root (not `apps/web` alone), then:
