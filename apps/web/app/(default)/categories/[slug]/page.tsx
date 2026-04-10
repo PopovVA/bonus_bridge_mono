@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { absoluteUrl } from '@/app/seo'
 import { notFound } from 'next/navigation'
 import { EmptyState } from '@/components/empty-state'
 import { TrackedLink } from '@/components/tracked-link'
@@ -69,11 +70,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cats = await getCategories().catch(() => [])
   const cat = cats.find((c) => c.slug === slug)
   if (!cat) {
-    return { title: 'Category | BonusBridge' }
+    return { title: 'Category', robots: { index: false, follow: false } }
   }
   return {
-    title: `${cat.name} stores | BonusBridge`,
-    description: `Browse stores and promo codes in ${cat.name}.`
+    title: `${cat.name} stores`,
+    description: `Browse stores and promo codes in ${cat.name}.`,
+    alternates: {
+      canonical: `/categories/${slug}`
+    }
   }
 }
 
@@ -97,8 +101,27 @@ export default async function CategoryPage({ params }: Props) {
     offersByService.set(o.serviceId, cur)
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `${cat.name} stores`,
+    description: `Browse stores and promo codes in ${cat.name}.`,
+    url: absoluteUrl(`/categories/${slug}`),
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: stores.length,
+      itemListElement: stores.map((store, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        name: store.name,
+        url: absoluteUrl(`/stores/${store.slug}`)
+      }))
+    }
+  }
+
   return (
     <section className="category-page-section" aria-labelledby="category-page-heading">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <header className="category-page-head section-head">
         <h1 id="category-page-heading" className="section-title app-page-title">
           {cat.name}

@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { absoluteUrl } from '@/app/seo'
 import { EmptyState } from '@/components/empty-state'
 import { StorePageOpenPartnerLink } from '@/components/store-page-open-partner-link'
 import { StoreTopOffers } from '@/components/store-top-offers'
@@ -16,13 +18,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const store = await getServiceBySlug(slug).catch(() => null)
   if (!store) {
-    return { title: 'Store not found | BonusBridge' }
+    return { title: 'Store not found', robots: { index: false, follow: false } }
   }
 
   const blurb = store.description?.trim()
   return {
-    title: `${store.name} | BonusBridge`,
-    description: blurb ? `${blurb} Find promo codes and offers on BonusBridge.` : `Promo codes and offers for ${store.name}.`
+    title: store.name,
+    description: blurb ? `${blurb} Find promo codes and offers on BonusBridge.` : `Promo codes and offers for ${store.name}.`,
+    alternates: {
+      canonical: `/stores/${slug}`
+    }
   }
 }
 
@@ -35,7 +40,7 @@ export default async function StorePage({ params }: Props) {
   ])
 
   if (!store) {
-    return <EmptyState message="Store not found." />
+    notFound()
   }
 
   const primaryCategorySlug = categories.find((c) => c.id === store.categoryId)?.slug ?? null
@@ -44,9 +49,17 @@ export default async function StorePage({ params }: Props) {
   const primaryPromo = coupons[0]
   const openStoreUrl = primaryPromo?.referralUrl ?? null
   const hasMainOffers = coupons.length > 0
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `${store.name} offers`,
+    description: aboutText,
+    url: absoluteUrl(`/stores/${slug}`)
+  }
 
   return (
     <section className="category-page-section store-page" aria-labelledby="store-page-heading">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <article className="app-surface-card store-page-hero">
         <h1 id="store-page-heading" className="sr-only">
           {store.name}

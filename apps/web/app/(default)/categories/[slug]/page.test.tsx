@@ -40,7 +40,7 @@ describe('category [slug] page', () => {
   it('generateMetadata uses fallback when category is missing', async () => {
     vi.mocked(getCategories).mockResolvedValue([])
     await expect(generateMetadata({ params: Promise.resolve({ slug: 'missing' }) })).resolves.toMatchObject({
-      title: 'Category | BonusBridge'
+      title: 'Category'
     })
   })
 
@@ -49,7 +49,7 @@ describe('category [slug] page', () => {
       { id: 'c1', slug: 'electronics', name: 'Electronics' } as never
     ])
     await expect(generateMetadata({ params: Promise.resolve({ slug: 'electronics' }) })).resolves.toMatchObject({
-      title: 'Electronics stores | BonusBridge'
+      title: 'Electronics stores'
     })
   })
 

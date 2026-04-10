@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | BonusBridge',
-  description: 'Privacy policy for BonusBridge.'
+  title: 'Privacy Policy',
+  description: 'Privacy policy for BonusBridge.',
+  alternates: {
+    canonical: '/privacy'
+  }
 }
 
 export default function PrivacyPage() {

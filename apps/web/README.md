@@ -65,6 +65,21 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all host
 | `category_view_store` | Category page — “View store” | `store_slug` |
 | `store_page_open_partner` | Store page — “Open Store” hero CTA | `store_slug` |
 
+### SEO
+
+- `app/layout.tsx` sets global metadata (`metadataBase`, title template, default robots, canonical root).
+- `app/robots.ts` publishes robots rules and points to `/sitemap.xml`.
+- `app/sitemap.ts` includes `/`, `/privacy`, `/terms`, all categories, and all store pages from `site-data`.
+- Key routes set canonical metadata:
+  - `/` in `app/(home)/page.tsx`
+  - `/categories/[slug]` in `app/(default)/categories/[slug]/page.tsx`
+  - `/stores/[slug]` in `app/(default)/stores/[slug]/page.tsx`
+  - `/privacy`, `/terms` in their page metadata exports
+- JSON-LD is rendered on:
+  - `/` (`WebSite`)
+  - `/categories/[slug]` (`CollectionPage` + `ItemList`)
+  - `/stores/[slug]` (`WebPage`)
+
 Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](https://developers.brandfetch.com/register)) so the Uber Eats hero logo can load from `cdn.brandfetch.io/ubereats.com`. Without it, `/brands/ubereats-logo.png`. The Uber rides slide always uses `/brands/uber-logo.png`.
 
 ## Commands

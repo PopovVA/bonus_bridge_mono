@@ -184,14 +184,17 @@ describe('web routes', () => {
       generateCouponRedirectMetadata({
         params: Promise.resolve({ id: '33333333-3333-4333-8333-333333333303' })
       })
-    ).resolves.toMatchObject({ robots: { index: false, follow: true } })
+    ).resolves.toMatchObject({
+      robots: { index: false, follow: true },
+      title: { absolute: 'BonusBridge' }
+    })
 
     vi.mocked(getStoreSlugForOfferId).mockResolvedValueOnce(null)
     await expect(
       generateCouponRedirectMetadata({
         params: Promise.resolve({ id: '00000000-0000-4000-8000-000000000099' })
       })
-    ).resolves.toMatchObject({ title: 'Offer not found | BonusBridge' })
+    ).resolves.toMatchObject({ title: 'Offer not found' })
   })
 
   it('renders empty state component', () => {
@@ -297,7 +300,7 @@ describe('web routes', () => {
     expect(html).not.toContain('/coupons/')
     await expect(
       generateCategoryMetadata({ params: Promise.resolve({ slug: 'electronics' }) })
-    ).resolves.toMatchObject({ title: 'Electronics stores | BonusBridge' })
+    ).resolves.toMatchObject({ title: 'Electronics stores' })
   })
 
   it('renders store page and metadata', async () => {
@@ -352,7 +355,7 @@ describe('web routes', () => {
     await expect(
       generateStoreMetadata({ params: Promise.resolve({ slug: 'store' }) })
     ).resolves.toMatchObject({
-      title: 'Store | BonusBridge',
+      title: 'Store',
       description: 'Promo codes and offers for Store.'
     })
   })
@@ -588,21 +591,21 @@ describe('web routes', () => {
     expect(noCouponsHtml).toContain('About this store')
 
     vi.mocked(getServiceBySlug).mockResolvedValueOnce(null as never).mockResolvedValueOnce(null as never)
-    const missingHtml = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'missing' }) }))
-    expect(missingHtml).toContain('Store not found')
+    await expect(StorePage({ params: Promise.resolve({ slug: 'missing' }) })).rejects.toThrow('MOCK_NOT_FOUND')
+    expect(vi.mocked(notFound)).toHaveBeenCalled()
     await expect(
       generateStoreMetadata({ params: Promise.resolve({ slug: 'missing' }) })
-    ).resolves.toMatchObject({ title: 'Store not found | BonusBridge' })
+    ).resolves.toMatchObject({ title: 'Store not found' })
   })
 
   it('handles rejected store data fetches', async () => {
     vi.mocked(getServiceBySlug).mockRejectedValueOnce(new Error('down')).mockRejectedValueOnce(new Error('down'))
     vi.mocked(getOffers).mockRejectedValueOnce(new Error('down'))
 
-    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'store' }) }))
-    expect(html).toContain('Store not found')
+    await expect(StorePage({ params: Promise.resolve({ slug: 'store' }) })).rejects.toThrow('MOCK_NOT_FOUND')
+    expect(vi.mocked(notFound)).toHaveBeenCalled()
     await expect(
       generateStoreMetadata({ params: Promise.resolve({ slug: 'store' }) })
-    ).resolves.toMatchObject({ title: 'Store not found | BonusBridge' })
+    ).resolves.toMatchObject({ title: 'Store not found' })
   })
 })

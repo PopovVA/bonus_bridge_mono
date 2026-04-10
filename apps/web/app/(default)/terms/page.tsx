@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | BonusBridge',
-  description: 'Terms of service for BonusBridge.'
+  title: 'Terms of Service',
+  description: 'Terms of service for BonusBridge.',
+  alternates: {
+    canonical: '/terms'
+  }
 }
 
 export default function TermsPage() {
