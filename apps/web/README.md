@@ -36,6 +36,13 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all host
 | --- | --- | --- |
 | `header_logo` | Click site title / logo | — |
 | `header_nav_coupons` | Click “Coupons” in header | — |
+| `header_nav_articles` | Click “Money Guides” in header (URL `/articles`) | — |
+| `articles_list_open` | Open an article from `/articles` | — |
+| `article_view` | Article page mount (once) | `article_slug` |
+| `chime_calc_update` | Chime calculator inputs change (debounced) | `article_slug`, `friends`, `include_dd`, `your_total_usd` |
+| `article_chime_terms` | Chime official terms link in article | `article_slug` |
+| `article_chime_partner_image_click` | Tap a Chime article figure image (opens partner URL) | `article_slug`, `image_key` (`referral_steps` \| `building`) |
+| `article_chime_partner_cta` | Chime “Get Chime Offer” button (under figures or after Profit Calculator) | `article_slug`, `cta_place` (`under_building` \| `after_calculator`) |
 | `header_nav_stores_open` | Open Stores menu | — |
 | `header_nav_stores_close_toggle` | Close Stores via the same toggle | — |
 | `header_nav_stores_close_backdrop` | Close Stores by clicking backdrop | — |
@@ -69,16 +76,18 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all host
 
 - `app/layout.tsx` sets global metadata (`metadataBase`, title template, default robots, canonical root).
 - `app/robots.ts` publishes robots rules and points to `/sitemap.xml`.
-- `app/sitemap.ts` includes `/`, `/privacy`, `/terms`, all categories, and all store pages from `site-data`.
+- `app/sitemap.ts` includes `/`, `/privacy`, `/terms`, `/articles`, each entry in `lib/articles/list.ts`, all categories, and all store pages from `site-data`.
 - Key routes set canonical metadata:
   - `/` in `app/(home)/page.tsx`
   - `/categories/[slug]` in `app/(default)/categories/[slug]/page.tsx`
   - `/stores/[slug]` in `app/(default)/stores/[slug]/page.tsx`
   - `/privacy`, `/terms` in their page metadata exports
+  - `/articles/chime-1000-two-friends` sets `keywords`, Open Graph (`article` type, `publishedTime`, image dimensions), and Twitter card
 - JSON-LD is rendered on:
   - `/` (`WebSite`)
   - `/categories/[slug]` (`CollectionPage` + `ItemList`)
   - `/stores/[slug]` (`WebPage`)
+  - `/articles/chime-1000-two-friends` (`Article`)
 
 Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](https://developers.brandfetch.com/register)) so the Uber Eats hero logo can load from `cdn.brandfetch.io/ubereats.com`. Without it, `/brands/ubereats-logo.png`. The Uber rides slide always uses `/brands/uber-logo.png`.
 
@@ -91,8 +100,10 @@ Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](http
 
 ## Routes
 
+- `/articles` — **Money Guides** index (URL unchanged); entries are validated with Zod (`ArticleListSchema` in `lib/schemas/article.schema.ts`) and listed from `lib/articles/list.ts`. Optional **`listImageSrc`** (public path) shows a thumbnail on the index card.
+- `/articles/chime-1000-two-friends` — Chime invite guide: **title + lede** (series intro), referral-steps **`ArticlePartnerFigure`**, section **Profit Calculator** with copy, then embedded **`ChimeReferralCalculator`** (`showHeading={false}` `showLead={false}` so the card has no duplicate title or rules blurb), **Get Chime Offer** (`cta_place: after_calculator`), **Why Chime gives away money**, building figure (with CTA), **Important to understand** checklist, disclaimer. **`ArticleViewTracker`** fires `article_view`. **`GoogleAnalytics`** in root layout loads GA4 when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set and host is not localhost. On viewports wider than 640px, figures cap at **605px** width. JSON-LD `Article` uses `lib/articles/list.ts` title and description. Clickable figures → `CHIME_PARTNER_REFERRAL_URL` in `lib/chime-article-constants.ts`.
 - `/` — hero slider, top monthly offers (Klarna / Robinhood / Public), category carousel, **clip-out promo grid** (8 codes in `lib/home-clip-coupons.ts`; assets e.g. `/brands/ubereats-logo.png`, `/clip-coupons/7eleven.svg`, `/clip-coupons/robinhood.svg`, `/clip-coupons/lyft.svg`, `/clip-coupons/lime.svg`, `/clip-coupons/bird.svg`, `/clip-coupons/poshmark.svg`). **Clip cards:** tapping the **code** copies it, shows a toast, then a **confirm dialog**; **Get offer** opens the partner URL in a new tab **immediately** (no dialog) — same pattern on store **Top offers** / **Explore more** clip rows (`useClipPartnerOfferFlow` + `ClipOpenStoreDialog`).
-- `/` — header: **Stores** (mega menu by category; each category shows the same `/categories/{slug}.svg` tile as the carousel; slate/neutral hover/active chrome, no green), **Coupons** (anchor `#coupons` to the clip grid), and a **store name search** (client-side filter over `useClientCatalog()` → links to `/stores/[slug]`). `/stores` and `/coupons` redirect to `/`. Legacy `/categories/food-dining` → `/categories/food`.
+- `/` — header: **Stores** (mega menu by category; first nav link after the logo; each category shows the same `/categories/{slug}.svg` tile as the carousel; slate/neutral hover/active chrome, no green), **Coupons** (anchor `#coupons` to the clip grid, hidden on narrow viewports to save space), **Money Guides** (`/articles`, to the right of Coupons on desktop), and a **store name search** (client-side filter over `useClientCatalog()` → links to `/stores/[slug]`). `/stores` and `/coupons` redirect to `/`. Legacy `/categories/food-dining` → `/categories/food`.
 - **Client catalog:** `getClientCatalog()` runs in `app/layout.tsx` and hydrates `ClientCatalogProvider` with categories → stores → active offers. `useClientCatalog()` / `StoreRelatedPanel` reuse this on store pages (and anywhere else you add client UI).
 - **`app/(default)/layout.tsx`** — same shell as home: `HomeHeader`, `HomeFooter`, `home.css` (`.default-main` content width 1280px; in-content links slate, not legacy green). App font: **Plus Jakarta Sans** via `next/font` on root `app/layout.tsx` (`--font-app`).
 - `/categories/[slug]` — stores in that category; each row shows a **larger logo tile** (image, inline `logoSvg`, or letter fallback), **title**, **short description** from `site-data` `description` (or a neutral fallback), **counts** of promo codes vs link-only offers, and one **View store** button to `/stores/[slug]`.
@@ -101,4 +112,4 @@ Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](http
 
 ## Types
 
-Zod schemas and inferred types live in `lib/schemas`; runtime content lives in `lib/site-data.ts`.
+Zod schemas and inferred types live in `lib/schemas`; runtime content lives in `lib/site-data.ts`. Article registry and copy metadata live in `lib/articles/list.ts` (add new posts there and extend `ArticleListSchema` via the same pattern).

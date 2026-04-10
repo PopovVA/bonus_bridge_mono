@@ -19,8 +19,11 @@ export function HomeHeader({ megaMenu }: Props) {
           </TrackedLink>
           <nav className="home-nav home-nav--primary">
             <StoresNav megaMenu={megaMenu} />
-            <TrackedLink href="/#coupons" event="header_nav_coupons">
+            <TrackedLink href="/#coupons" className="home-nav__coupons-link" event="header_nav_coupons">
               Coupons
+            </TrackedLink>
+            <TrackedLink href="/articles" className="home-nav__articles-link" event="header_nav_articles">
+              Money Guides
             </TrackedLink>
           </nav>
         </div>

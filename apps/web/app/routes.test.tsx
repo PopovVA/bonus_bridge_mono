@@ -31,6 +31,39 @@ vi.mock('next/navigation', () => ({
   })
 }))
 
+vi.mock('next/image', () => ({
+  default: function ImageMock(props: {
+    src: string
+    alt: string
+    width?: number
+    height?: number
+    className?: string
+  }) {
+    /* eslint-disable-next-line @next/next/no-img-element -- test double for `next/image` */
+    return <img src={props.src} alt={props.alt} width={props.width} height={props.height} className={props.className} />
+  }
+}))
+
+vi.mock('@/components/article-view-tracker', () => ({
+  ArticleViewTracker: () => null
+}))
+
+vi.mock('@/components/chime-referral-calculator', () => ({
+  ChimeReferralCalculator: () => <div className="chime-referral-calculator-mock" />
+}))
+
+vi.mock('@/components/article-partner-figure', () => ({
+  ArticlePartnerFigure: () => <div className="article-partner-figure-mock" />
+}))
+
+vi.mock('@/components/store-related-panel', () => ({
+  StoreRelatedPanel: () => (
+    <section className="store-related-panel">
+      <h2 className="section-title store-related-panel-title">Explore more</h2>
+    </section>
+  )
+}))
+
 import { notFound, permanentRedirect } from 'next/navigation'
 import HomePage from './(home)/page'
 import HomeLayout from './(home)/layout'
@@ -41,6 +74,10 @@ import CouponToStoreRedirectPage, {
 } from './(default)/coupons/[id]/page'
 import StorePage, { generateMetadata as generateStoreMetadata } from './(default)/stores/[slug]/page'
 import CategoryPage, { generateMetadata as generateCategoryMetadata } from './(default)/categories/[slug]/page'
+import ArticlesIndexPage from './(default)/articles/page'
+import ChimeArticlePage, {
+  generateMetadata as generateChimeArticleMetadata
+} from './(default)/articles/chime-1000-two-friends/page'
 import { EmptyState } from '@/components/empty-state'
 import {
   getCategories,
@@ -252,6 +289,7 @@ describe('web routes', () => {
     expect(html).toContain('BonusBridge')
     expect(html).toContain('Stores')
     expect(html).toContain('Coupons')
+    expect(html).toContain('Money Guides')
   })
 
   it('renders default layout when getStoresMegaMenu fails', async () => {
@@ -263,6 +301,70 @@ describe('web routes', () => {
     )
     expect(html).toContain('BonusBridge')
     expect(html).toContain('child')
+  })
+
+  it('renders articles index', () => {
+    const html = renderToStaticMarkup(<ArticlesIndexPage />)
+    expect(html).toContain('Money Guides')
+    expect(html).toContain('/articles/chime-1000-two-friends')
+    expect(html).toContain('chime-building.png')
+  })
+
+  it('renders chime article with structured data, partner links, terms link, and Explore more', async () => {
+    const html = renderToStaticMarkup(await ChimeArticlePage())
+    expect(html).toContain('chime-referral-calculator-mock')
+    expect(html).toContain('article-partner-figure-mock')
+    expect(html).toContain('Explore more')
+    expect(html).toContain('https://www.chime.com/r/vadimpopov1/')
+    expect(html).toContain('invite-friends-terms-and-conditions-300-sender')
+    expect(html).toContain('application/ld+json')
+  })
+
+  it('chime article still renders when getServiceBySlug fails', async () => {
+    vi.mocked(getServiceBySlug).mockRejectedValueOnce(new Error('down'))
+    const html = renderToStaticMarkup(await ChimeArticlePage())
+    expect(html).toContain('chime-referral-calculator-mock')
+  })
+
+  it('chime article still renders when getCategories fails', async () => {
+    vi.mocked(getCategories).mockRejectedValueOnce(new Error('down'))
+    const html = renderToStaticMarkup(await ChimeArticlePage())
+    expect(html).toContain('chime-referral-calculator-mock')
+  })
+
+  it('chime article tolerates non-array getCategories result', async () => {
+    vi.mocked(getCategories).mockResolvedValueOnce(undefined as never)
+    const html = renderToStaticMarkup(await ChimeArticlePage())
+    expect(html).toContain('chime-referral-calculator-mock')
+  })
+
+  it('chime article sets primaryCategorySlug when Chime store matches catalog categories', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValueOnce({
+      id: 's-chime',
+      name: 'Chime',
+      slug: 'chime',
+      categoryId: 'c1'
+    } as never)
+    const html = renderToStaticMarkup(await ChimeArticlePage())
+    expect(html).toContain('Explore more')
+  })
+
+  it('chime article uses null primaryCategorySlug when store category is not in the list', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValueOnce({
+      id: 's-chime',
+      name: 'Chime',
+      slug: 'chime',
+      categoryId: 'no-such-category'
+    } as never)
+    const html = renderToStaticMarkup(await ChimeArticlePage())
+    expect(html).toContain('chime-referral-calculator-mock')
+  })
+
+  it('generateMetadata for chime article sets canonical and keywords', async () => {
+    const m = await generateChimeArticleMetadata()
+    expect(m.alternates).toMatchObject({ canonical: '/articles/chime-1000-two-friends' })
+    expect(m.title).toBeTruthy()
+    expect(m.keywords).toBeDefined()
   })
 
   it('renders category page with stores and offers', async () => {

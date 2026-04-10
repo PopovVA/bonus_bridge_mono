@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  ArticleListItemSchema,
   FeaturedOfferCreateSchema,
   FeaturedOfferWithOfferSchema,
   FeaturedStoreCreateSchema,
@@ -266,5 +267,17 @@ describe('site schemas', () => {
     })
     expect(ue.kind).toBe('ubereats')
     expect(ue.referralUrl).toContain('ubereats.com')
+  })
+
+  it('validates article list item', () => {
+    const row = ArticleListItemSchema.parse({
+      slug: 'chime-1000-two-friends',
+      title: 'How to model Chime referrals',
+      description: 'Short description for listing cards and SEO meta.',
+      publishedAt: '2026-04-10T12:00:00.000Z',
+      listImageSrc: '/articles/chime/chime-building.png'
+    })
+    expect(row.slug).toBe('chime-1000-two-friends')
+    expect(row.listImageSrc).toBe('/articles/chime/chime-building.png')
   })
 })
