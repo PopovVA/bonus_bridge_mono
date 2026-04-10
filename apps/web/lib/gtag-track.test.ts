@@ -1,41 +1,53 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { trackGtagEvent } from './gtag-track'
+import { isAnalyticsEnabledForHostname, trackGtagEvent } from './gtag-track'
+
+describe('isAnalyticsEnabledForHostname', () => {
+  it('disables localhost hosts', () => {
+    expect(isAnalyticsEnabledForHostname('localhost')).toBe(false)
+    expect(isAnalyticsEnabledForHostname('127.0.0.1')).toBe(false)
+    expect(isAnalyticsEnabledForHostname('::1')).toBe(false)
+  })
+
+  it('enables non-local hosts', () => {
+    expect(isAnalyticsEnabledForHostname('bonusbridge.io')).toBe(true)
+  })
+})
 
 describe('trackGtagEvent', () => {
   afterEach(() => {
-    vi.unstubAllEnvs()
     vi.restoreAllMocks()
   })
 
-  it('does not call gtag when NODE_ENV is not production', () => {
-    vi.stubEnv('NODE_ENV', 'development')
+  it('does not call gtag on localhost and logs skip reason', () => {
     const gtag = vi.fn()
+    const info = vi.spyOn(console, 'info').mockImplementation(() => undefined)
     Object.defineProperty(globalThis, 'window', {
-      value: { gtag } as unknown as Window,
+      value: { location: { hostname: 'localhost' }, gtag } as unknown as Window,
       configurable: true,
       writable: true
     })
     trackGtagEvent('test_event', { a: 1 })
     expect(gtag).not.toHaveBeenCalled()
+    expect(info).toHaveBeenCalledWith(expect.stringContaining('not sent because analytics is disabled'))
   })
 
-  it('calls gtag with event name and params in production', () => {
-    vi.stubEnv('NODE_ENV', 'production')
+  it('calls gtag and logs sent status on non-local host', () => {
     const gtag = vi.fn()
+    const info = vi.spyOn(console, 'info').mockImplementation(() => undefined)
     Object.defineProperty(globalThis, 'window', {
-      value: { gtag } as unknown as Window,
+      value: { location: { hostname: 'bonusbridge.io' }, gtag } as unknown as Window,
       configurable: true,
       writable: true
     })
     trackGtagEvent('btn_test', { place: 'home', item_id: 'x' })
     expect(gtag).toHaveBeenCalledWith('event', 'btn_test', { place: 'home', item_id: 'x' })
+    expect(info).toHaveBeenCalledWith('[Analytics] Event "btn_test" sent.', { place: 'home', item_id: 'x' })
   })
 
   it('omits undefined param values', () => {
-    vi.stubEnv('NODE_ENV', 'production')
     const gtag = vi.fn()
     Object.defineProperty(globalThis, 'window', {
-      value: { gtag } as unknown as Window,
+      value: { location: { hostname: 'bonusbridge.io' }, gtag } as unknown as Window,
       configurable: true,
       writable: true
     })
@@ -44,10 +56,9 @@ describe('trackGtagEvent', () => {
   })
 
   it('passes empty object when params only contain undefined', () => {
-    vi.stubEnv('NODE_ENV', 'production')
     const gtag = vi.fn()
     Object.defineProperty(globalThis, 'window', {
-      value: { gtag } as unknown as Window,
+      value: { location: { hostname: 'bonusbridge.io' }, gtag } as unknown as Window,
       configurable: true,
       writable: true
     })
@@ -55,14 +66,28 @@ describe('trackGtagEvent', () => {
     expect(gtag).toHaveBeenCalledWith('event', 'btn_test', {})
   })
 
-  it('no-ops when gtag is not a function', () => {
-    vi.stubEnv('NODE_ENV', 'production')
+  it('logs not available when gtag is not a function', () => {
+    const info = vi.spyOn(console, 'info').mockImplementation(() => undefined)
     Object.defineProperty(globalThis, 'window', {
-      value: { gtag: undefined } as unknown as Window,
+      value: { location: { hostname: 'bonusbridge.io' }, gtag: undefined } as unknown as Window,
       configurable: true,
       writable: true
     })
-    expect(() => trackGtagEvent('x')).not.toThrow()
+    trackGtagEvent('x')
+    expect(info).toHaveBeenCalledWith('[Analytics] Event "x" not sent because gtag is not available yet.')
+  })
+
+  it('treats missing location as localhost and skips send', () => {
+    const gtag = vi.fn()
+    const info = vi.spyOn(console, 'info').mockImplementation(() => undefined)
+    Object.defineProperty(globalThis, 'window', {
+      value: { gtag } as unknown as Window,
+      configurable: true,
+      writable: true
+    })
+    trackGtagEvent('no_location')
+    expect(gtag).not.toHaveBeenCalled()
+    expect(info).toHaveBeenCalledWith(expect.stringContaining('not sent because analytics is disabled'))
   })
 
   it('returns early when window is undefined (SSR)', () => {

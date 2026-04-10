@@ -30,13 +30,8 @@ describe('TrackedLink', () => {
   })
 
   it('fires gtag and optional onClick on press', async () => {
-    vi.stubEnv('NODE_ENV', 'production')
     const gtag = vi.fn()
-    Object.defineProperty(globalThis, 'window', {
-      value: { gtag } as unknown as Window,
-      configurable: true,
-      writable: true
-    })
+    ;(window as Window & { gtag?: typeof gtag }).gtag = gtag
     const userClick = vi.fn()
     const el = document.createElement('div')
     document.body.appendChild(el)
@@ -69,13 +64,8 @@ describe('TrackedOutboundLink', () => {
   })
 
   it('fires gtag on click', async () => {
-    vi.stubEnv('NODE_ENV', 'production')
     const gtag = vi.fn()
-    Object.defineProperty(globalThis, 'window', {
-      value: { gtag } as unknown as Window,
-      configurable: true,
-      writable: true
-    })
+    ;(window as Window & { gtag?: typeof gtag }).gtag = gtag
     const el = document.createElement('div')
     document.body.appendChild(el)
     const root = createRoot(el)

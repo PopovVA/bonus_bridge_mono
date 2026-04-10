@@ -9,6 +9,11 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    environmentOptions: {
+      jsdom: {
+        url: 'https://bonusbridge.io/'
+      }
+    },
     setupFiles: ['./vitest.setup.ts'],
     include: ['app/**/*.test.ts', 'app/**/*.test.tsx', 'lib/**/*.test.ts', 'components/**/*.test.tsx'],
     coverage: {

@@ -28,7 +28,7 @@ Port: `http://localhost:3000`
 
 ### Analytics (GA4)
 
-GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) **only when `NODE_ENV` is `production`** (`next build` / `next start`), not during `pnpm dev`. Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` in `.env` if needed (see `.env.example`); default is `G-9GPFJN1LKC`. Events are sent with `gtag('event', …)` from `lib/gtag-track.ts`; internal and external links use `components/tracked-link.tsx` (`TrackedLink`, `TrackedOutboundLink`).
+GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all hosts except local loopback (`localhost`, `127.0.0.1`, `::1`). Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` in `.env` if needed (see `.env.example`); default is `G-9GPFJN1LKC`. Events are sent with `gtag('event', …)` from `lib/gtag-track.ts`; internal and external links use `components/tracked-link.tsx` (`TrackedLink`, `TrackedOutboundLink`).
 
 **`clip_copy_code` / `clip_get_offer`** also send `place` and `item_id` where the parent passes them (e.g. home clip grid, store page, explore-more clip cards).
 
