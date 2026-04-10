@@ -3229,6 +3229,17 @@
   color: #64748b;
 }
 
+/* Deep links: offset sticky header when jumping to in-page anchors */
+.article-page h2[id],
+.article-page .article-page__disclaimer-title[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+.article-page__header[id],
+.article-page .article-page__explore[id] {
+  scroll-margin-top: 5.5rem;
+}
+
 .article-page__lede {
   font-size: 1.08rem;
   line-height: 1.7;

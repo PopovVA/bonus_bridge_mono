@@ -318,6 +318,9 @@ describe('web routes', () => {
     expect(html).toContain('https://www.chime.com/r/vadimpopov1/')
     expect(html).toContain('invite-friends-terms-and-conditions-300-sender')
     expect(html).toContain('application/ld+json')
+    expect(html).toContain('id="profit-calculator"')
+    expect(html).toContain('id="chime-bonus-guide"')
+    expect(html).toContain('id="how-it-works"')
   })
 
   it('chime article still renders when getServiceBySlug fails', async () => {
