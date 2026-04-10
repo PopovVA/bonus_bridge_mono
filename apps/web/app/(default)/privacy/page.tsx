@@ -39,9 +39,11 @@ export default function PrivacyPage() {
       <p className="legal-page__notice">
         BonusBridge (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) operates the website available at the domain where this policy
         is posted (the &quot;Site&quot;). This Privacy Policy explains how we collect, use, disclose, and safeguard information when
-        you visit or use the Site. It applies to visitors in the United States unless we state otherwise. This policy is
-        provided for general informational purposes and does not create rights enforceable by third parties. If you need
-        legal advice about your specific situation, consult a qualified attorney.
+        you visit or use the Site. We orient the Site toward the <strong>United States</strong>: we intend it primarily for
+        visitors in the U.S., and this document emphasizes disclosures and choices that align with U.S. state and federal
+        privacy frameworks. Anyone may access the Site, but other countries or regions may impose additional
+        requirements. This policy is provided for general informational purposes and does not create rights enforceable by
+        third parties. If you need legal advice about your specific situation, consult a qualified attorney.
       </p>
 
       <section aria-labelledby="privacy-scope">
@@ -75,8 +77,17 @@ export default function PrivacyPage() {
         <p>
           We may use cookies and similar technologies to operate the Site, remember preferences, measure traffic, and
           understand how visitors use our pages. We may use third party analytics tools (such as Google Analytics) that
-          collect information about use of the Site and generate aggregated or statistical reports. Those providers may
-          process information according to their own privacy policies and terms.
+          collect information about use of the Site and generate aggregated or statistical reports. Those tools may set or
+          read cookies or use similar identifiers on your device. Providers process information according to their own
+          privacy policies and terms.
+        </p>
+        <p>
+          <strong>How we communicate this for U.S. visitors.</strong> There is no single U.S. federal rule that requires
+          every website to show a stand-alone &quot;cookie banner&quot; or to obtain click-through consent before all analytics
+          cookies in the same way some jurisdictions outside the United States require. We describe our use of cookies and
+          analytics in this Privacy Policy and summarize choices that may apply to you in Section 6 (including state law
+          rights where available). If you are not in the United States, local laws may require different notices or consent
+          mechanisms.
         </p>
         <p>
           You can control many cookies through your browser settings. Some browsers offer a &quot;Do Not Track&quot; setting. The
