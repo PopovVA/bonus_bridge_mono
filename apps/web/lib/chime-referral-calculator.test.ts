@@ -50,8 +50,8 @@ describe('computeChimeReferralTotals', () => {
 describe('parseChimeFriendsField', () => {
   it('parses integers and clamps', () => {
     expect(parseChimeFriendsField('  3  ')).toBe(3)
-    expect(parseChimeFriendsField('')).toBe(2)
-    expect(parseChimeFriendsField('  ')).toBe(2)
+    expect(parseChimeFriendsField('')).toBe(0)
+    expect(parseChimeFriendsField('  ')).toBe(0)
     expect(parseChimeFriendsField('not')).toBe(0)
     expect(parseChimeFriendsField(String(CHIME_CALC_FRIENDS_MAX + 9))).toBe(CHIME_CALC_FRIENDS_MAX)
     expect(parseChimeFriendsField('02')).toBe(2)

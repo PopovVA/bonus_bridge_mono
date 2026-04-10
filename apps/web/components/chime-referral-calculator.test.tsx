@@ -62,6 +62,21 @@ describe('ChimeReferralCalculator', () => {
     })
     expect(friendsInput.value).toBe('2')
     await act(() => {
+      friendsInput.focus()
+    })
+    await act(() => {
+      setNumber(friendsInput, '')
+    })
+    expect(friendsInput.value).toBe('')
+    await act(() => {
+      friendsInput.blur()
+    })
+    expect(friendsInput.value).toBe('2')
+    await act(() => {
+      setNumber(friendsInput, '7')
+    })
+    expect(friendsInput.value).toBe('7')
+    await act(() => {
       ddSwitch.click()
     })
     expect(el.textContent).not.toContain('Your direct-deposit bonus (modeled)')

@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useId, useState } from 'react'
+import { friendsInputValueAfterBlur, sanitizeFriendsDigitsInput } from '@/lib/chime-friends-field-ui'
 import {
-  CHIME_CALC_FRIENDS_MAX,
   CHIME_DIRECT_DEPOSIT_BONUS_USD,
   CHIME_FRIEND_BONUS_USD,
   CHIME_REFERRER_PER_FRIEND_USD,
@@ -23,8 +23,10 @@ export function ChimeReferralCalculator({ articleSlug, showHeading = true, showL
   const friendsId = useId()
   const ddBonusLabelId = useId()
 
-  const [friends, setFriends] = useState(2)
+  const [friendsInput, setFriendsInput] = useState('2')
   const [includeDd, setIncludeDd] = useState(true)
+
+  const friends = parseChimeFriendsField(friendsInput)
 
   const totals = computeChimeReferralTotals({
     friends,
@@ -74,8 +76,9 @@ export function ChimeReferralCalculator({ articleSlug, showHeading = true, showL
               inputMode="numeric"
               autoComplete="off"
               spellCheck={false}
-              value={String(friends)}
-              onChange={(e) => setFriends(parseChimeFriendsField(e.target.value))}
+              value={friendsInput}
+              onChange={(e) => setFriendsInput(sanitizeFriendsDigitsInput(e.target.value))}
+              onBlur={() => setFriendsInput((v) => friendsInputValueAfterBlur(v))}
             />
             <div className="article-calculator__dd-bundle">
               <p id={ddBonusLabelId} className="article-calculator__dd-toggle-label">

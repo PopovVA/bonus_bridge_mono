@@ -9,11 +9,11 @@ export const CHIME_CALC_WEEKS_MAX = 104
 
 /**
  * Parses the friends count field — whole integers only (parseInt normalizes "02" → 2).
- * Empty input maps to 2 (calculator default).
+ * Empty input is 0 (the UI may show a default of 2 until the user edits).
  */
 export function parseChimeFriendsField(raw: string): number {
   const t = raw.trim()
-  if (t === '') return 2
+  if (t === '') return 0
   const n = parseInt(t, 10)
   if (Number.isNaN(n)) return 0
   return Math.min(CHIME_CALC_FRIENDS_MAX, Math.max(0, n))
