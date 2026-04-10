@@ -233,7 +233,7 @@ export default async function ChimeArticlePage() {
           <h2 className="article-page__disclaimer-title">Editorial & legal disclaimer</h2>
           <p>
             BonusBridge publishes educational summaries. We are not a bank, broker, or tax advisor. Chime is a financial
-            technology company, not a bank. Banking services are provided by partner banks. See Chime's site for current
+            technology company, not a bank. Banking services are provided by partner banks. See Chime&apos;s site for current
             details. Offers change. Always read the official terms. BonusBridge may earn compensation when you use some
             partner links.
           </p>

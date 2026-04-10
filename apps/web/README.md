@@ -81,7 +81,7 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all host
   - `/` in `app/(home)/page.tsx`
   - `/categories/[slug]` in `app/(default)/categories/[slug]/page.tsx`
   - `/stores/[slug]` in `app/(default)/stores/[slug]/page.tsx`
-  - `/privacy`, `/terms` in their page metadata exports
+  - `/privacy`, `/terms` in their page metadata exports (full Privacy Policy and Terms of Service copy, U.S. focused disclaimers, contact email in `lib/legal-site-meta.ts`)
   - `/articles/chime-1000-two-friends` sets `keywords`, Open Graph (`article` type, `publishedTime`, image dimensions), and Twitter card
 - JSON-LD is rendered on:
   - `/` (`WebSite`)
