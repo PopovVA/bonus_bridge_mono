@@ -139,10 +139,10 @@ export default async function ChimeArticlePage() {
           <h2 id="chime-bonus-guide">Chime Bonus Guide</h2>
           <p className="article-page__lede">
             Landing this kind of payout is honestly straightforward. You are not limited to two friends. When more people
-            you refer finish the steps the offer requires, your outcome can grow until you hit the program caps. Chime is
-            one of the best known digital banking brands in the United States and earns strong everyday trust for simple
-            checking, early pay, and clear fees. This piece opens our series on bank partner programs you can handle from
-            home with realistic numbers and links to official rules.
+            you refer finish the steps the offer requires, your outcome can grow until you hit the program caps—the
+            maximum bonuses and limits Chime sets for the promotion. Chime is one of the best-known digital banking brands
+            in the United States, with a reputation for simple checking, early pay, and clear fees. This piece opens our
+            series on bank partner programs you can handle from home with realistic numbers and links to official rules.
           </p>
         </section>
 
@@ -158,15 +158,22 @@ export default async function ChimeArticlePage() {
             sizes="(max-width: 640px) min(400px, 100vw), min(605px, calc(100vw - 48px))"
             priority
           />
+          <p>At a high level, the referral path looks like this:</p>
+          <ul className="article-page__list">
+            <li>You join through a referral link and meet the new-member requirements in the current offer.</li>
+            <li>You share your personal invite link so friends can open accounts.</li>
+            <li>Each friend completes what Chime counts as a qualifying direct deposit, if the offer requires it.</li>
+            <li>Bonuses post when Chime confirms eligibility—amounts, timing, and caps follow the official terms.</li>
+          </ul>
           <p>
             Competition for banking and money apps in the United States is intense, and customer acquisition spending in
             fintech runs high compared with many other sectors. Chime is a public company, and its regular filings show
-            multi year revenue growth. That growth helps explain how the business can fund attractive sign up and referral
-            offers while it fights for long term account relationships.
+            multi-year revenue growth. That growth helps explain how the business can fund attractive sign-up and referral
+            offers while it fights for long-term account relationships.
           </p>
           <p>
-            None of that means a bonus is automatic for you. It simply frames why a trusted brand still uses cash style
-            incentives alongside product quality.
+            None of that means a bonus is automatic for you. It simply explains why a trusted brand still offers cash
+            bonuses alongside the product.
           </p>
           <ArticlePartnerFigure
             articleSlug={SLUG}
@@ -217,8 +224,8 @@ export default async function ChimeArticlePage() {
         <section className="article-page__section" aria-labelledby="requirements-heading">
           <h2 id="requirements">Requirements</h2>
           <p>
-            Before you model dollars, line up what the official invite terms ask for in your region and for this offer
-            window.
+            Before you rely on any estimate, confirm what the official invite terms require in your region and for this
+            offer window.
           </p>
           <ul className="article-page__list">
             <li>Confirm you are on the latest invite terms for your region and offer window.</li>
@@ -231,8 +238,8 @@ export default async function ChimeArticlePage() {
           <h2 id="important-to-understand">Important to understand</h2>
           <p>
             The Profit Calculator is <strong>not</strong> a guarantee of what you will earn. It is a planning aid that
-            turns today’s public offer outline into a quick estimate. Real payouts depend on approval, timing, and whether
-            each friend satisfies the rules.
+            turns today&apos;s public offer outline into a quick estimate. Real payouts depend on approval, timing, and
+            whether each friend satisfies the rules.
           </p>
           <ul className="article-page__list">
             <li>Treat the calculator as planning help, not a promise of approval or payout timing.</li>
