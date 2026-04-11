@@ -218,6 +218,21 @@
   font-size: 1.05rem;
 }
 
+/* DOM order is Money Guides → Coupons → Stores for mobile grid; restore desktop tab order */
+@media (min-width: 769px) {
+  .home-nav--primary .stores-nav {
+    order: 1;
+  }
+
+  .home-nav--primary .home-nav__coupons-link {
+    order: 2;
+  }
+
+  .home-nav--primary .home-nav__articles-link {
+    order: 3;
+  }
+}
+
 .home-nav a {
   font-size: inherit;
   color: #4b5563;
