@@ -23,6 +23,6 @@ describe('getHotCashbackOfferByStoreSlug', () => {
   it('includes Chime with 125$ badge for Explore More', () => {
     const c = getHotCashbackOfferByStoreSlug('chime')
     expect(c?.badgeText).toBe('125$')
-    expect(c?.headline).toBe('Get up to $125 when you open Chime')
+    expect(c?.headline).toBe('See up to $125 new-account bonus (Chime)')
   })
 })

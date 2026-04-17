@@ -66,10 +66,10 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     brandName: 'Chime',
     slug: 'chime',
     badgeText: '125$',
-    headline: 'Get up to $125 when you open Chime',
+    headline: 'See up to $125 new-account bonus (Chime)',
     description:
-      'New account + qualifying direct deposit — see Chime for current terms. Eligibility and amounts follow Chime.',
-    ctaText: 'Open offer',
+      'New account and qualifying direct deposit may be required — see Chime for current terms. Eligibility and amounts follow Chime.',
+    ctaText: 'View offer details',
     href: 'https://www.chime.com/r/vadimpopov1/',
     logoSrc: '/stores/chime.svg'
   },

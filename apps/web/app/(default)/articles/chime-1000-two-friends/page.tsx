@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { ArticlePartnerFigure } from '@/components/article-partner-figure'
+import { ArticleReferralDisclosure } from '@/components/article-referral-disclosure'
 import { ArticleViewTracker } from '@/components/article-view-tracker'
 import { ChimeReferralCalculator } from '@/components/chime-referral-calculator'
 import { StoreRelatedPanel } from '@/components/store-related-panel'
@@ -12,6 +13,7 @@ import {
   CHIME_REFERRER_PER_FRIEND_USD
 } from '@/lib/chime-referral-calculator'
 import { articleList } from '@/lib/articles/list'
+import { CHIME_TRADEMARK_NOTICE } from '@/lib/site-disclaimers'
 import { getCategories, getServiceBySlug } from '@/lib/site-data'
 
 const SLUG = 'chime-1000-two-friends'
@@ -36,9 +38,8 @@ export async function generateMetadata(): Promise<Metadata> {
       'bank referral bonus',
       'direct deposit bonus',
       'referral calculator',
-      'profit calculator',
-      'digital bank bonus',
-      'earn money from home',
+      'digital banking bonus',
+      'referral bonus estimate',
       'Chime $300',
       'Chime $400',
       'Chime $1,000'
@@ -100,9 +101,8 @@ export default async function ChimeArticlePage() {
       'Chime referral',
       'direct deposit bonus',
       'digital banking',
-      'bank partner program',
-      'referral calculator',
-      'work from home'
+      'referral program',
+      'referral calculator'
     ],
     about: [{ '@type': 'Thing', name: 'Chime' }, { '@type': 'Thing', name: 'Referral marketing' }],
     author: {
@@ -135,14 +135,17 @@ export default async function ChimeArticlePage() {
           </p>
         </header>
 
+        <ArticleReferralDisclosure />
+        <p className="article-page__trademark-note">{CHIME_TRADEMARK_NOTICE}</p>
+
         <section className="article-page__section" aria-labelledby="chime-bonus-guide-heading">
-          <h2 id="chime-bonus-guide">Chime Bonus Guide</h2>
+          <h2 id="chime-bonus-guide">How this referral offer fits together</h2>
           <p className="article-page__lede">
-            Landing this kind of payout is honestly straightforward. You are not limited to two friends. When more people
-            you refer finish the steps the offer requires, your outcome can grow until you hit the program caps—the
-            maximum bonuses and limits Chime sets for the promotion. Chime is one of the best-known digital banking brands
-            in the United States, with a reputation for simple checking, early pay, and clear fees. This piece opens our
-            series on bank partner programs you can handle from home with realistic numbers and links to official rules.
+            This article explains how referral bonuses are structured—you are not limited to two friends. When people you
+            refer complete the steps the current offer requires, amounts can add up until you reach the program caps Chime
+            sets. Chime is a widely used digital banking brand in the United States, known for simple checking, early pay,
+            and transparent fees. We walk through realistic example numbers and link to Chime&apos;s published rules so you
+            can verify details yourself.
           </p>
         </section>
 
@@ -172,8 +175,8 @@ export default async function ChimeArticlePage() {
             offers while it fights for long-term account relationships.
           </p>
           <p>
-            None of that means a bonus is automatic for you. It simply explains why a trusted brand still offers cash
-            bonuses alongside the product.
+            None of that means a bonus is automatic for you. It simply explains why a large consumer-facing finance brand
+            may still offer cash bonuses alongside the product.
           </p>
           <ArticlePartnerFigure
             articleSlug={SLUG}
@@ -184,19 +187,20 @@ export default async function ChimeArticlePage() {
             height={404}
             sizes="(max-width: 640px) min(400px, 100vw), min(605px, calc(100vw - 48px))"
             partnerOfferCta
-            caption="Stick to Chime's published terms for your region. Tap the image to open our partner offer in a new tab."
+            caption="Stick to Chime's published terms for your region. Tap the image to view offer details on Chime's site (opens in a new tab)."
           />
         </section>
 
-        <section className="article-page__section" aria-labelledby="profit-calculator-heading">
-          <h2 id="profit-calculator">Profit Calculator</h2>
+        <section className="article-page__section" aria-labelledby="referral-bonus-estimate-heading">
+          <h2 id="referral-bonus-estimate">Referral bonus estimate</h2>
           <p>
-            We built the Profit Calculator so you can skip the scratch pad. If you open through a referral and{' '}
-            <strong>two friends</strong> set up qualifying direct deposits, the public structure we model lands around{' '}
+            Use the estimate below to see how published amounts can combine—this is not a promise of what you will
+            receive. If you open through a referral and <strong>two friends</strong> set up qualifying direct deposits,
+            the public structure we model lands around{' '}
             <strong>${modeledTwoFriendTotalUsd.toLocaleString('en-US')}</strong> for you when you also count your own{' '}
             <strong>${CHIME_DIRECT_DEPOSIT_BONUS_USD}</strong> direct deposit bonus as a new member who qualifies. You
-            can invite more than two people. Use the friend count and the direct deposit toggle below to see how the
-            estimate shifts.
+            can invite more than two people. Adjust the friend count and the direct deposit toggle to see how the
+            illustration changes.
           </p>
           <p>
             Chime advertises up to <strong>${CHIME_REFERRER_PER_FRIEND_USD}</strong> per qualifying friend for you,{' '}
@@ -215,7 +219,7 @@ export default async function ChimeArticlePage() {
                 event="article_chime_partner_cta"
                 eventParams={{ article_slug: SLUG, cta_place: 'after_calculator' }}
               >
-                Get Chime Offer
+                View offer details
               </TrackedOutboundLink>
             </div>
           </div>
@@ -237,9 +241,9 @@ export default async function ChimeArticlePage() {
         <section className="article-page__section" aria-labelledby="important-to-understand-heading">
           <h2 id="important-to-understand">Important to understand</h2>
           <p>
-            The Profit Calculator is <strong>not</strong> a guarantee of what you will earn. It is a planning aid that
-            turns today&apos;s public offer outline into a quick estimate. Real payouts depend on approval, timing, and
-            whether each friend satisfies the rules.
+            The referral bonus estimate tool is <strong>not</strong> a guarantee of what you will earn. It is a planning
+            aid that turns today&apos;s public offer outline into a quick illustration. Real payouts depend on approval,
+            timing, and whether each friend satisfies the rules.
           </p>
           <ul className="article-page__list">
             <li>Treat the calculator as planning help, not a promise of approval or payout timing.</li>
@@ -254,10 +258,10 @@ export default async function ChimeArticlePage() {
             Editorial & legal disclaimer
           </h2>
           <p>
-            BonusBridge publishes educational summaries. We are not a bank, broker, or tax advisor. Chime is a financial
-            technology company, not a bank. Banking services are provided by partner banks. See Chime&apos;s site for current
-            details. Offers change. Always read the official terms. BonusBridge may earn compensation when you use some
-            partner links.
+            BonusBridge publishes independent educational summaries. We are not a bank, broker, or tax advisor, and we are
+            not affiliated with Chime. Chime is a financial technology company, not a bank. Banking services are provided
+            by partner banks. See Chime&apos;s site for current details. Offers change—always read the official terms.
+            BonusBridge may earn compensation when you use some partner links.
           </p>
           <p>
             <TrackedOutboundLink
@@ -268,7 +272,7 @@ export default async function ChimeArticlePage() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              View Chime invite-friends terms (official)
+              See official invite-friends terms on Chime
             </TrackedOutboundLink>
           </p>
         </section>

@@ -2391,6 +2391,23 @@
   padding: 48px 24px;
 }
 
+.home-footer-disclaimer {
+  max-width: 52rem;
+  margin: 0 auto 28px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #6b7280;
+}
+
+@media (min-width: 768px) {
+  .home-footer-disclaimer {
+    text-align: left;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 .home-footer-links {
   display: flex;
   flex-wrap: wrap;
@@ -3366,6 +3383,27 @@
 
 .article-page__list li {
   margin-bottom: 8px;
+}
+
+.article-page__referral-disclosure {
+  margin-bottom: 28px;
+  padding: 16px 20px;
+  border: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.article-page__referral-disclosure-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #374151;
+}
+
+.article-page__trademark-note {
+  margin: 0 0 24px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b7280;
 }
 
 .article-page__disclaimer {

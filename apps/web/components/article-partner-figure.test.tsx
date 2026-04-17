@@ -28,7 +28,7 @@ describe('ArticlePartnerFigure', () => {
     expect(html).toContain('https://www.chime.com/r/vadimpopov1/')
     expect(html).toContain('referral-steps.png')
     expect(html).toContain('Caption text')
-    expect(html).toContain('Get Chime Offer')
+    expect(html).toContain('View offer details')
   })
 
   it('omits figcaption when caption is omitted', async () => {
@@ -47,7 +47,7 @@ describe('ArticlePartnerFigure', () => {
       />
     )
     expect(html).not.toContain('article-page__caption')
-    expect(html).toContain('Get Chime Offer')
+    expect(html).toContain('View offer details')
   })
 
   it('omits the offer button when partnerOfferCta is false', async () => {
@@ -65,6 +65,6 @@ describe('ArticlePartnerFigure', () => {
         caption="Cap"
       />
     )
-    expect(html).not.toContain('Get Chime Offer')
+    expect(html).not.toContain('article-page__figure-cta')
   })
 })

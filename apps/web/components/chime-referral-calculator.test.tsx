@@ -25,7 +25,7 @@ describe('ChimeReferralCalculator', () => {
     await act(async () => {
       root.render(<ChimeReferralCalculator articleSlug="chime-1000-two-friends" />)
     })
-    expect(el.textContent).toContain('Profit Calculator')
+    expect(el.textContent).toContain('Referral bonus estimate')
     expect(el.textContent).toContain('Estimated total for you')
     await act(async () => {
       vi.advanceTimersByTime(450)

@@ -10,13 +10,13 @@ const chimeSlide: HeroSlide = {
   sortOrder: 0,
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
-  headline: 'Get up to $125 when you open Chime',
-  promoHighlight: 'Tap the button to open the offer.',
+  headline: 'See up to $125 new-account bonus (Chime)',
+  promoHighlight: 'Learn how to qualify — tap to continue to the official site.',
   subtext: 'Terms apply.',
   termsLabel: 'View terms',
   termsUrl: 'https://example.com/terms',
   referralUrl: 'https://www.chime.com/r/test/',
-  ctaText: 'Get your $125'
+  ctaText: 'Continue to official site'
 }
 
 const paypalSlide: HeroSlide = {
@@ -38,7 +38,7 @@ describe('HeroSlider', () => {
     expect(html).toContain('hero-carousel-shell')
     expect(html).toContain('hero-chime-panel')
     expect(html).toContain('hero-slide-cell--promo')
-    expect(html).toContain('Get up to ')
+    expect(html).toContain('See up to ')
     expect(html).toContain('$125')
     expect(html).toContain('hero-chime-promo-highlight')
     expect(html).toContain('hero-chime-cta-primary')

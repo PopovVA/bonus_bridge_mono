@@ -387,8 +387,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333301',
     serviceId: '22222222-2222-4222-8222-222222222210',
-    title: 'Get up to $125 when you open Chime',
-    previewText: 'New account + qualifying direct deposit — see Chime for current terms.',
+    title: 'See up to $125 new-account bonus (Chime)',
+    previewText: 'New account and qualifying direct deposit may be required — amounts and eligibility are set by Chime.',
     couponCode: null,
     bonusAmount: '$125',
     description: 'Referral bonus when you qualify.',
@@ -631,14 +631,16 @@ const heroSlides: HeroSlide[] = [
     sortOrder: 0,
     createdAt: ISO,
     updatedAt: ISO,
-    eyebrow: 'Limited-time bank bonus',
-    headline: 'Get up to $125 when you open Chime',
-    promoHighlight: 'New account + qualifying direct deposit — tap the button to start in one step.',
-    subtext: "Eligibility and amounts follow Chime's current offer; friends may qualify separately.",
-    termsLabel: 'View terms',
+    eyebrow: 'Referral bonus (informational)',
+    headline: 'See up to $125 new-account bonus (Chime)',
+    promoHighlight:
+      "Learn how to qualify — new accounts and qualifying direct deposit may be required. Tap the button to continue to Chime's site.",
+    subtext:
+      "Bonus terms may vary by campaign and region. Friends may have separate eligibility. BonusBridge is not Chime's website.",
+    termsLabel: 'See official terms',
     termsUrl: 'https://www.chime.com/legal/all-policies/',
     referralUrl: 'https://www.chime.com/r/vadimpopov1/',
-    ctaText: 'Get your $125'
+    ctaText: 'Continue to official site'
   },
   {
     kind: 'uber',

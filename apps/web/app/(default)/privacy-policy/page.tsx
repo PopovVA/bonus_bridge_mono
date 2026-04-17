@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { LEGAL_CONTACT_EMAIL, LEGAL_DOCUMENT_LAST_UPDATED } from '@/lib/legal-site-meta'
 import { absoluteUrl } from '@/app/seo'
 
-const path = '/privacy'
+const path = '/privacy-policy'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
@@ -104,11 +104,20 @@ export default function PrivacyPage() {
           <li>Understanding how visitors use the Site and measuring performance</li>
           <li>Communicating with you if you contact us</li>
           <li>Protecting the security and integrity of the Site</li>
-          <li>Complying with law and enforcing our Terms of Service</li>
+          <li>
+            Complying with law and enforcing our{' '}
+            <a href="/terms-of-service">Terms of Service</a>
+          </li>
         </ul>
         <p>
           We do not use the Site to offer you individualized financial, legal, or tax advice, and we do not decide whether
           you qualify for any third party promotion or payout.
+        </p>
+        <p>
+          When you click referral, affiliate, or partner links on the Site, the destination may record that you arrived from
+          BonusBridge. We may earn a commission or similar compensation if you sign up or complete qualifying actions with
+          a partner, as further described in our <a href="/terms-of-service">Terms of Service</a> and on pages where such
+          links appear.
         </p>
       </section>
 

@@ -3,9 +3,9 @@ import { ArticleListSchema, type ArticleListItem } from '@/lib/schemas/article.s
 export const articleList: ArticleListItem[] = ArticleListSchema.parse([
   {
     slug: 'chime-1000-two-friends',
-    title: 'Open a Chime Account, Invite Two Friends, and Earn $1,000 Without Leaving Home',
+    title: 'Understanding Chime Referral Bonuses: Requirements, Estimates, and Official Terms',
     description:
-      'Walk through a simple path to about $1,000 when you open through a referral and two friends set up qualifying direct deposits. Interactive profit calculator, why Chime funds these offers, and a clear checklist. Part one in our series on bank partner programs you can do from home.',
+      "Learn how Chime's invite-a-friend offer can work in example scenarios (including two qualifying friends and direct deposit), use an interactive estimate tool, and see requirements. Editorial overview only—bonus terms may vary; always confirm on Chime's official site.",
     publishedAt: '2026-04-10T12:00:00.000Z',
     listImageSrc: '/articles/chime/chime-building.png'
   }

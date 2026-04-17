@@ -14,7 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   )
 
-  const baseRoutes: MetadataRoute.Sitemap = ['/', '/privacy', '/terms'].map((path) => ({
+  const baseRoutes: MetadataRoute.Sitemap = ['/', '/privacy-policy', '/terms-of-service', '/contact'].map((path) => ({
     url: absoluteUrl(path),
     changeFrequency: 'weekly',
     priority: path === '/' ? 1 : 0.4

@@ -43,8 +43,8 @@ export default defineConfig({
         'components/hero-slider.tsx',
         'components/store-card.tsx',
         'app/(home)/layout.tsx',
-        '**/privacy/page.tsx',
-        '**/terms/page.tsx',
+        '**/privacy-policy/page.tsx',
+        '**/terms-of-service/page.tsx',
         '**/categories/[slug]/page.tsx'
       ],
       thresholds: {

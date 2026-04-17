@@ -251,6 +251,8 @@ describe('web routes', () => {
     const html = renderToStaticMarkup(tree)
     expect(html).toContain('BonusBridge')
     expect(html).toContain('Privacy Policy')
+    expect(html).toContain('Contact')
+    expect(html).toContain('independent informational website and is not affiliated with Chime')
     expect(html).toContain('child')
   })
 
@@ -290,6 +292,8 @@ describe('web routes', () => {
     expect(html).toContain('Stores')
     expect(html).toContain('Coupons')
     expect(html).toContain('Money Guides')
+    expect(html).toContain('Contact')
+    expect(html).toContain('independent informational website and is not affiliated with Chime')
   })
 
   it('renders default layout when getStoresMegaMenu fails', async () => {
@@ -318,9 +322,10 @@ describe('web routes', () => {
     expect(html).toContain('https://www.chime.com/r/vadimpopov1/')
     expect(html).toContain('invite-friends-terms-and-conditions-300-sender')
     expect(html).toContain('application/ld+json')
-    expect(html).toContain('id="profit-calculator"')
+    expect(html).toContain('id="referral-bonus-estimate"')
     expect(html).toContain('id="chime-bonus-guide"')
     expect(html).toContain('id="how-it-works"')
+    expect(html).toContain('This guide explains how referral bonuses work')
   })
 
   it('chime article still renders when getServiceBySlug fails', async () => {

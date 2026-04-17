@@ -49,11 +49,11 @@ export function ChimeReferralCalculator({ articleSlug, showHeading = true, showL
     <section
       className={`article-calculator app-surface-card${!showHeading && !showLead ? ' article-calculator--embedded' : ''}`}
       aria-labelledby={showHeading ? 'chime-calc-heading' : undefined}
-      aria-label={showHeading ? undefined : 'Chime profit calculator'}
+      aria-label={showHeading ? undefined : 'Chime referral bonus estimate tool'}
     >
       {showHeading ? (
         <h2 id="chime-calc-heading" className="article-calculator__title">
-          Profit Calculator
+          Referral bonus estimate
         </h2>
       ) : null}
       {showLead ? (

@@ -11,7 +11,9 @@ const nextConfig: NextConfig = {
       { source: '/coupons', destination: '/', permanent: false },
       { source: '/offers', destination: '/', permanent: true },
       { source: '/offers/:path*', destination: '/coupons/:path*', permanent: true },
-      { source: '/categories/food-dining', destination: '/categories/food', permanent: true }
+      { source: '/categories/food-dining', destination: '/categories/food', permanent: true },
+      { source: '/privacy', destination: '/privacy-policy', permanent: true },
+      { source: '/terms', destination: '/terms-of-service', permanent: true }
     ]
   }
 }

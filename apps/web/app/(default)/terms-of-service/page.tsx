@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { LEGAL_CONTACT_EMAIL, LEGAL_DOCUMENT_LAST_UPDATED } from '@/lib/legal-site-meta'
 import { absoluteUrl } from '@/app/seo'
 
-const path = '/terms'
+const path = '/terms-of-service'
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
@@ -219,8 +219,9 @@ export default function TermsPage() {
       <section aria-labelledby="terms-general">
         <h2 id="terms-general">14. General</h2>
         <p>
-          <strong>Entire agreement.</strong> These Terms and our Privacy Policy constitute the entire agreement between you
-          and BonusBridge regarding the Site and supersede prior understandings on that subject.
+          <strong>Entire agreement.</strong> These Terms and our{' '}
+          <a href="/privacy-policy">Privacy Policy</a> constitute the entire agreement between you and BonusBridge regarding
+          the Site and supersede prior understandings on that subject.
         </p>
         <p>
           <strong>Severability.</strong> If any provision is held invalid or unenforceable, the remaining provisions remain

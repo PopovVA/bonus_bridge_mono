@@ -16,7 +16,7 @@ type Props = {
   /** Optional. Omit to show image + optional CTA only (no caption under the image). */
   caption?: ReactNode
   priority?: boolean
-  /** Renders “Get Chime Offer” below the caption (partner link + GA4). */
+  /** Renders a partner CTA below the caption (referral link + GA4). */
   partnerOfferCta?: boolean
 }
 
@@ -42,7 +42,7 @@ export function ArticlePartnerFigure({
         rel="noopener noreferrer sponsored"
         event="article_chime_partner_image_click"
         eventParams={{ article_slug: articleSlug, image_key: imageKey }}
-        aria-label={`Open Chime offer, ${alt}`}
+        aria-label={`View offer details on the official site, ${alt}`}
       >
         <Image
           src={src}
@@ -65,7 +65,7 @@ export function ArticlePartnerFigure({
             event="article_chime_partner_cta"
             eventParams={{ article_slug: articleSlug, cta_place: `under_${imageKey}` }}
           >
-            Get Chime Offer
+            View offer details
           </TrackedOutboundLink>
         </div>
       ) : null}
