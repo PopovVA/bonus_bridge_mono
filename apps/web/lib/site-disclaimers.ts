@@ -1,7 +1,10 @@
 /** Site-wide and article-level disclosure copy (affiliate transparency, ad-policy friendly tone). */
+import { LEGAL_CONTACT_EMAIL } from '@/lib/legal-site-meta'
 
 export const SITE_FOOTER_DISCLAIMER =
   'BonusBridge is an independent informational website. We may earn commissions from partner links. We do not provide financial services. All offers are subject to terms from the provider.'
+
+export const SITE_OPERATOR_NOTICE = `BonusBridge is operated by Apis Systems LLC (Texas, USA). Contact: ${LEGAL_CONTACT_EMAIL}`
 
 export const REFERRAL_GUIDE_DISCLOSURE =
   'BonusBridge is an independent informational website. This guide explains how referral offers can work; it is not financial advice. We may earn commissions from partner links. Terms, eligibility, and offer details are set by the provider.'

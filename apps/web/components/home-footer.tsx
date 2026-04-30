@@ -1,11 +1,12 @@
 import { TrackedLink } from '@/components/tracked-link'
-import { SITE_FOOTER_DISCLAIMER } from '@/lib/site-disclaimers'
+import { SITE_FOOTER_DISCLAIMER, SITE_OPERATOR_NOTICE } from '@/lib/site-disclaimers'
 
 export function HomeFooter() {
   return (
     <footer className="home-footer">
       <div className="home-footer-inner">
         <p className="home-footer-disclaimer">{SITE_FOOTER_DISCLAIMER}</p>
+        <p className="home-footer-operator">{SITE_OPERATOR_NOTICE}</p>
         <div className="home-footer-links">
           <TrackedLink href="/privacy-policy" event="footer_privacy">
             Privacy Policy

@@ -255,6 +255,8 @@ describe('web routes', () => {
     expect(html).toContain('Contact')
     expect(html).toContain('independent informational website')
     expect(html).toContain('We do not provide financial services')
+    expect(html).toContain('BonusBridge is operated by Apis Systems LLC (Texas, USA)')
+    expect(html).toContain('support@bonusbridge.io')
     expect(html).toContain('child')
   })
 
