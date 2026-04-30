@@ -218,7 +218,7 @@
   font-size: 1.05rem;
 }
 
-/* DOM order is Money Guides → Coupons → Stores for mobile grid; restore desktop tab order */
+/* DOM order is Guides → Coupons → Stores for mobile grid; restore desktop tab order */
 @media (min-width: 769px) {
   .home-nav--primary .stores-nav {
     order: 1;
@@ -1391,6 +1391,27 @@
   margin: 0;
 }
 
+.site-disclosure {
+  max-width: 1280px;
+  margin: 16px auto 8px;
+  color: #4b5563;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.site-disclosure p {
+  margin: 0;
+}
+
+.site-disclosure--home {
+  margin-top: 18px;
+}
+
+.site-disclosure--store {
+  margin-top: 14px;
+  margin-bottom: 8px;
+}
+
 /* Top monthly offers (Klarna / Public / Too Good To Go) */
 .monthly-offers-section {
   max-width: 1280px;
@@ -1686,7 +1707,7 @@
   }
 }
 
-/* Hot Cashback — same card language as monthly top offers, no right-rail image */
+/* Partner offer guides — same card language as monthly offer details, no right-rail image */
 .hot-cashback-section {
   max-width: 1280px;
   margin: 0 auto;

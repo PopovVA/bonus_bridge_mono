@@ -20,7 +20,7 @@ describe('MonthlyTopOffers', () => {
       <MonthlyTopOffers offers={[{ ...baseOffer, imageSrc: '/i.svg', badgeText: '20$ off' }]} />
     )
     expect(html).toContain('monthly-offers-section')
-    expect(html).toContain('Top offers this month')
+    expect(html).toContain('Offer details this month')
     expect(html).toContain('Desc')
     expect(html).toContain('href="https://example.com/k"')
     expect(html).toContain('monthly-offer-card__media-img')

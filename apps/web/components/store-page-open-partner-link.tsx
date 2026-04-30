@@ -9,13 +9,13 @@ type Props = {
   children: ReactNode
 }
 
-/** Primary outbound CTA on the store page hero (“Open Store”). */
+/** Primary outbound CTA on the store page hero. */
 export function StorePageOpenPartnerLink({ href, storeSlug, children }: Props) {
   return (
     <TrackedOutboundLink
       href={href}
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer sponsored"
       className="store-page-open-store-btn"
       event="store_page_open_partner"
       eventParams={{ store_slug: storeSlug }}

@@ -32,8 +32,8 @@ function CashbackBadgeIcon() {
 
 export function HotCashback({
   offers,
-  heading = 'Hot Cashback',
-  subtitle = 'Sign up below—welcome offers and eligibility are set by each partner.',
+  heading = 'Partner offer guides',
+  subtitle = 'Learn how each offer works, then confirm eligibility and terms on the provider site.',
   sectionId = 'hot-cashback'
 }: Props) {
   if (offers.length === 0) return null
@@ -75,7 +75,7 @@ export function HotCashback({
                 href={offer.href}
                 className="hot-cashback-card__cta"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer sponsored"
                 event="hot_cashback_cta"
                 eventParams={{ offer_slug: offer.slug }}
               >

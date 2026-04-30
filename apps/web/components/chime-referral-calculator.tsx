@@ -49,11 +49,11 @@ export function ChimeReferralCalculator({ articleSlug, showHeading = true, showL
     <section
       className={`article-calculator app-surface-card${!showHeading && !showLead ? ' article-calculator--embedded' : ''}`}
       aria-labelledby={showHeading ? 'chime-calc-heading' : undefined}
-      aria-label={showHeading ? undefined : 'Chime referral bonus estimate tool'}
+      aria-label={showHeading ? undefined : 'Chime referral offer illustration tool'}
     >
       {showHeading ? (
         <h2 id="chime-calc-heading" className="article-calculator__title">
-          Referral bonus estimate
+          Referral offer illustration
         </h2>
       ) : null}
       {showLead ? (
@@ -112,7 +112,7 @@ export function ChimeReferralCalculator({ articleSlug, showHeading = true, showL
           </div>
         ) : null}
         <div className="article-calculator__row article-calculator__row--total">
-          <dt>Estimated total for you</dt>
+          <dt>Illustrative total for you</dt>
           <dd>${totals.yourTotalUsd.toLocaleString('en-US')}</dd>
         </div>
         <div className="article-calculator__row article-calculator__row--muted">

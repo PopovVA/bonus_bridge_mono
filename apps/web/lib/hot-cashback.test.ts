@@ -4,10 +4,10 @@ import { getHotCashbackOfferByStoreSlug } from './hot-cashback'
 describe('getHotCashbackOfferByStoreSlug', () => {
   it('returns curated Rakuten copy for Explore More / home parity', () => {
     const h = getHotCashbackOfferByStoreSlug('rakuten')
-    expect(h?.badgeText).toBe('$50 bonus')
-    expect(h?.ctaText).toBe('Get the bonus')
+    expect(h?.badgeText).toBe('Terms apply')
+    expect(h?.ctaText).toBe('See offer details')
     expect(h?.description).toBe(
-      'Register for up to $50 after qualifying spend—Rakuten pays cashback when you shop its partner stores.'
+      'Learn about Rakuten new-member offer details, qualifying spend requirements, and current provider terms.'
     )
     expect(h?.href).toBe('https://www.rakuten.com/r/MVADIM7')
   })
@@ -17,12 +17,12 @@ describe('getHotCashbackOfferByStoreSlug', () => {
   })
 
   it('includes Public for store-page / Explore More lookups', () => {
-    expect(getHotCashbackOfferByStoreSlug('public')?.ctaText).toBe('Join Public')
+    expect(getHotCashbackOfferByStoreSlug('public')?.ctaText).toBe('See offer details')
   })
 
-  it('includes Chime with 125$ badge for Explore More', () => {
+  it('includes Chime with terms badge for Explore More', () => {
     const c = getHotCashbackOfferByStoreSlug('chime')
-    expect(c?.badgeText).toBe('125$')
-    expect(c?.headline).toBe('See up to $125 new-account bonus (Chime)')
+    expect(c?.badgeText).toBe('Terms apply')
+    expect(c?.headline).toBe('Chime new-account offer details')
   })
 })

@@ -25,8 +25,8 @@ describe('ChimeReferralCalculator', () => {
     await act(async () => {
       root.render(<ChimeReferralCalculator articleSlug="chime-1000-two-friends" />)
     })
-    expect(el.textContent).toContain('Referral bonus estimate')
-    expect(el.textContent).toContain('Estimated total for you')
+    expect(el.textContent).toContain('Referral offer illustration')
+    expect(el.textContent).toContain('Illustrative total for you')
     await act(async () => {
       vi.advanceTimersByTime(450)
     })
@@ -107,7 +107,7 @@ describe('ChimeReferralCalculator', () => {
     expect(el.querySelector('.article-calculator__title')).toBeNull()
     expect(el.textContent).not.toContain('per qualifying friend')
     expect(el.querySelector('.article-calculator--embedded')).toBeTruthy()
-    expect(el.textContent).toContain('Estimated total for you')
+    expect(el.textContent).toContain('Illustrative total for you')
     root.unmount()
     el.remove()
   })

@@ -12,8 +12,8 @@ export type CuratedExploreLinkCardCopy = {
 }
 
 /**
- * Link-only cards in Explore More: prefer home **Top offers this month** copy (Klarna / Robinhood / Public),
- * then **Hot Cashback** curated rows — same strings as on `/`.
+ * Link-only cards in Explore More: prefer home offer-details copy (Klarna / Robinhood / Public),
+ * then partner-offer guide rows — same strings as on `/`.
  */
 export function getCuratedLinkCardCopyForExploreMore(slug: string): CuratedExploreLinkCardCopy | null {
   const monthly = getMonthlyTopOfferSnapshotBySlug(slug)

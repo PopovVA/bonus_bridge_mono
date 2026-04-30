@@ -31,7 +31,7 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
     id: 'clip-ubereats',
     brand: 'Uber Eats',
-    title: '$20 off delivery orders',
+    title: 'Uber Eats delivery offer details',
     blurb: 'New accounts get delivery savings. Minimum spend and expiry follow Uber Eats.',
     code: 'eats-zywrn58e0v',
     openUrl: 'https://ubereats.com/feed?promoCode=eats-zywrn58e0v',
@@ -40,8 +40,8 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
     id: 'clip-uber-rides',
     brand: 'Uber',
-    title: '50% off your next 2 trips',
-    blurb: 'Up to $10 off each of two rides at half price. Caps, timing, and eligibility follow Uber’s current offer.',
+    title: 'Uber new-rider offer details',
+    blurb: 'Ride savings may be available for new riders. Caps, timing, and eligibility follow Uber’s current offer.',
     code: 'zfj232q2gjsx',
     openUrl: 'https://referrals.uber.com/refer?id=zfj232q2gjsx',
     logoSrc: CLIP_CARD_LOGO_UBER
@@ -49,8 +49,8 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
     id: 'clip-7now',
     brand: '7Now Delivery',
-    title: '$10 off your next order',
-    blurb: '$10 credit on a qualifying order. Minimum spend and expiry follow 7Now’s current offer.',
+    title: '7Now delivery offer details',
+    blurb: 'A credit may apply on a qualifying order. Minimum spend and expiry follow 7Now’s current offer.',
     code: 'my1w2j',
     openUrl: 'https://smart.link/370flfia27552?cp_0=my1w2j',
     logoSrc: CLIP_CARD_LOGO_7NOW
@@ -58,8 +58,8 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
     id: 'clip-robinhood',
     brand: 'Robinhood',
-    title: 'Get $5 to $200 in stock',
-    blurb: 'Gift stock after you sign up and meet funding rules. Many rewards are $5 to $10. Limits and terms on Robinhood.',
+    title: 'Robinhood stock reward details',
+    blurb: 'Stock rewards may apply after sign-up and funding rules are met. Limits and terms are set by Robinhood.',
     code: 'vadimp-4f32ef3',
     openUrl: 'https://join.robinhood.com/vadimp-4f32ef3',
     logoSrc: CLIP_CARD_LOGO_ROBINHOOD
@@ -67,8 +67,8 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
     id: 'clip-lyft',
     brand: 'Lyft',
-    title: '50% off your next ride',
-    blurb: 'Up to $10 off one ride for new riders. Market rules and expiry follow Lyft’s current offer.',
+    title: 'Lyft new-rider offer details',
+    blurb: 'Ride savings may be available for new riders. Market rules and expiry follow Lyft’s current offer.',
     code: 'VADIM53422',
     openUrl: 'https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc',
     logoSrc: CLIP_CARD_LOGO_LYFT
@@ -76,7 +76,7 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
     id: 'clip-lime',
     brand: 'Lime',
-    title: '$5 sign-up credit',
+    title: 'Lime sign-up credit details',
     blurb: 'New riders get account credit after sign-up. Amount, markets, and expiry follow Lime’s current offer.',
     code: 'REGUD7BFJWT',
     openUrl: 'https://lime.bike/referral_signin/REGUD7BFJWT',
@@ -85,8 +85,8 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
     id: 'clip-bird',
     brand: 'Bird',
-    title: 'Up to $5 ride credit',
-    blurb: 'New riders can get up to $5. Enter the code in the app after sign-up. Terms follow Bird.',
+    title: 'Bird ride credit details',
+    blurb: 'New-rider credits may be available. Enter the code in the app after sign-up. Terms follow Bird.',
     code: 'X86GGD',
     openUrl: 'https://links.bird.co/rKbyq2',
     logoSrc: CLIP_CARD_LOGO_BIRD
@@ -94,8 +94,8 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
   {
     id: 'clip-poshmark',
     brand: 'Poshmark',
-    title: '$10 credit when you join',
-    blurb: '$10 when you sign up with this code. Further rules and expiry follow Poshmark.',
+    title: 'Poshmark new-member credit details',
+    blurb: 'New-member credit may apply when you sign up with this code. Further rules and expiry follow Poshmark.',
     code: 'VADIMPOPOV',
     openUrl: 'https://posh.mk/QW6tN2UJW1b',
     logoSrc: CLIP_CARD_LOGO_POSHMARK

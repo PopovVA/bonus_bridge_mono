@@ -51,7 +51,7 @@ type Props = {
   labelledBy: string
 }
 
-/** Clip-style cards when a code exists; hot-cashback–style cards for link-only offers. Code: copy + dialog; Get offer: open URL immediately. */
+/** Clip-style cards when a code exists; partner-offer cards for link-only offers. Code: copy + dialog; See details: open URL immediately. */
 export function StoreRelatedOfferCards({ offers, labelledBy }: Props) {
   const { toast, toastId, pending, runClipFlow, closeDialog, confirmOpenInNewTab } = useClipPartnerOfferFlow()
 
@@ -100,7 +100,7 @@ export function StoreRelatedOfferCards({ offers, labelledBy }: Props) {
           const descText = curated?.description ?? null
           const headlineText = curated?.headline ?? o.title
           const blurbText = descText?.trim() ? descText.trim() : o.previewText?.trim() ?? ''
-          const ctaText = curated?.ctaText ?? 'Open offer'
+          const ctaText = curated?.ctaText ?? 'See details'
           const offerHref = curated?.href ?? o.referralUrl
           const logoSrc = curated?.logoSrc ?? logo
 
@@ -133,7 +133,7 @@ export function StoreRelatedOfferCards({ offers, labelledBy }: Props) {
                     href={offerHref}
                     className="hot-cashback-card__cta"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer sponsored"
                     event="explore_link_offer_cta"
                     eventParams={{ offer_id: o.id }}
                   >

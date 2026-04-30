@@ -35,8 +35,8 @@ export function ClipCouponCard({
   onCodeClick,
   onGetOfferClick,
   clipAriaLabel,
-  clipButtonLabel = 'Get offer',
-  getOfferAriaLabel = 'Open partner offer in a new tab',
+  clipButtonLabel = 'See details',
+  getOfferAriaLabel = 'Open provider offer details in a new tab',
   analyticsPlace,
   analyticsItemId
 }: ClipCouponCardProps) {

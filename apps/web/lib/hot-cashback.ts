@@ -11,17 +11,17 @@ export type HotCashbackOffer = {
   logoSrc: string
 }
 
-/** Curated cashback partners for the home page (no right-rail art — logo + copy + CTA only). */
+/** Curated partner offers for the home page (no right-rail art — logo + copy + CTA only). */
 export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
   {
     id: 'hot-cashback-rakuten',
     brandName: 'Rakuten',
     slug: 'rakuten',
-    badgeText: '$50 bonus',
-    headline: 'Up to $50 after qualifying spend',
+    badgeText: 'Terms apply',
+    headline: 'Rakuten offer details and eligibility',
     description:
-      'Register for up to $50 after qualifying spend—Rakuten pays cashback when you shop its partner stores.',
-    ctaText: 'Get the bonus',
+      'Learn about Rakuten new-member offer details, qualifying spend requirements, and current provider terms.',
+    ctaText: 'See offer details',
     href: 'https://www.rakuten.com/r/MVADIM7',
     logoSrc: '/hot-cashback/logos/rakuten.svg'
   },
@@ -29,11 +29,11 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     id: 'hot-cashback-topcashback',
     brandName: 'TopCashback',
     slug: 'topcashback',
-    badgeText: '$40 cashback',
-    headline: 'Up to $40 new-member bonus',
+    badgeText: 'Terms apply',
+    headline: 'TopCashback new-member offer details',
     description:
-      'TopCashback adds up to $40 in new-member bonus cashback on store rates and pays out once you hit the minimum.',
-    ctaText: 'Join TopCashback',
+      'Review TopCashback new-member offer details, payout minimums, and eligibility on the provider site.',
+    ctaText: 'Check eligibility',
     href: 'https://www.topcashback.com/ref/member344836925437',
     logoSrc: '/hot-cashback/logos/topcashback.png'
   },
@@ -41,11 +41,11 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     id: 'hot-cashback-honey',
     brandName: 'Honey',
     slug: 'honey',
-    badgeText: '$10 cashback',
-    headline: 'Earn Honey Gold on qualifying purchases',
+    badgeText: 'Terms apply',
+    headline: 'Honey rewards eligibility explained',
     description:
-      'Register, complete a qualifying first purchase, and earn Honey Gold—PayPal’s Honey finds coupons while you shop.',
-    ctaText: 'Join Honey',
+      'Learn how Honey rewards and coupon tools work, including qualifying activity and PayPal/Honey terms.',
+    ctaText: 'See offer details',
     href: 'https://www.joinhoney.com/ref/nwpz6sw',
     logoSrc: '/hot-cashback/logos/honey.svg'
   },
@@ -53,11 +53,11 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     id: 'hot-cashback-lemonade',
     brandName: 'Lemonade',
     slug: 'lemonade',
-    badgeText: '$10 gift card',
-    headline: 'Gift card on qualifying sign-ups',
+    badgeText: 'Terms apply',
+    headline: 'Lemonade referral terms overview',
     description:
-      'Qualifying sign-ups may get a $10 gift card on Lemonade’s app-based renters, home, pet, and car coverage.',
-    ctaText: 'Open Lemonade',
+      'Review Lemonade referral offer details for eligible insurance products and provider requirements.',
+    ctaText: 'View provider terms',
     href: 'https://lemonade.com/r/vadimpopov1',
     logoSrc: '/hot-cashback/logos/lemonade.svg'
   },
@@ -65,30 +65,30 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     id: 'hot-cashback-chime',
     brandName: 'Chime',
     slug: 'chime',
-    badgeText: '125$',
-    headline: 'See up to $125 new-account bonus (Chime)',
+    badgeText: 'Terms apply',
+    headline: 'Chime new-account offer details',
     description:
       'New account and qualifying direct deposit may be required — see Chime for current terms. Eligibility and amounts follow Chime.',
     ctaText: 'View offer details',
     href: 'https://www.chime.com/r/vadimpopov1/',
     logoSrc: '/stores/chime.svg'
   },
-  /** Same copy as home “Top offers” row; omitted from home Hot Cashback list via `getHotCashbackOffers()` to avoid duplicate tiles. */
+  /** Same copy as home offer-details row; omitted from home partner-offer list via `getHotCashbackOffers()` to avoid duplicate tiles. */
   {
     id: 'hot-cashback-public',
     brandName: 'Public',
     slug: 'public',
-    badgeText: '20$ off',
-    headline: 'Invest with friends on Public',
+    badgeText: 'Terms apply',
+    headline: 'Public welcome offer details',
     description:
-      'Invest with friends on Public. Join through our link for a welcome bonus when you qualify — stocks, ETFs, and more.',
-    ctaText: 'Join Public',
+      'Learn about Public welcome offer eligibility, funding requirements, and current provider terms.',
+    ctaText: 'See offer details',
     href: 'https://share.public.com/Vadim66923',
     logoSrc: '/top-offers/logos/public-logo.svg'
   }
 ]
 
-/** Curated badge/copy/CTA for a slug (home Hot Cashback + Explore More link-only cards). */
+/** Curated badge/copy/CTA for a slug (home partner-offer guides + Explore More link-only cards). */
 export function getHotCashbackOfferByStoreSlug(slug: string): HotCashbackOffer | undefined {
   return HOT_CASHBACK_OFFERS.find((h) => h.slug === slug)
 }

@@ -3,12 +3,13 @@ import { notFound } from 'next/navigation'
 import { absoluteUrl } from '@/app/seo'
 import { EmptyState } from '@/components/empty-state'
 import { StorePageOpenPartnerLink } from '@/components/store-page-open-partner-link'
+import { SiteDisclosure } from '@/components/site-disclosure'
 import { StoreTopOffers } from '@/components/store-top-offers'
 import { StoreRelatedPanel } from '@/components/store-related-panel'
 import { getCategories, getOffers, getServiceBySlug, megaMenuStoreImageSrc } from '@/lib/site-data'
 
 const STORE_PAGE_FALLBACK_BLURB =
-  'This store is on BonusBridge so you can see referral and sign-up offers in one place. Use the clip cards below to copy a code or link and open the partner offer in a new tab — same flow as on the home page.'
+  'This store is on BonusBridge so you can review referral and sign-up offer details in one place. Use the cards below to copy a code or link and open the provider page in a new tab.'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -24,7 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const blurb = store.description?.trim()
   return {
     title: store.name,
-    description: blurb ? `${blurb} Find promo codes and offers on BonusBridge.` : `Promo codes and offers for ${store.name}.`,
+    description: blurb
+      ? `${blurb} Review offer details and provider terms on BonusBridge.`
+      : `Offer details and provider terms for ${store.name}.`,
     alternates: {
       canonical: `/stores/${slug}`
     }
@@ -96,12 +99,13 @@ export default async function StorePage({ params }: Props) {
             <p className="store-page-about-body">{aboutText}</p>
             {openStoreUrl ? (
               <StorePageOpenPartnerLink href={openStoreUrl} storeSlug={slug}>
-                Open Store
+                See provider details
               </StorePageOpenPartnerLink>
             ) : null}
           </div>
         </div>
       </article>
+      <SiteDisclosure className="site-disclosure--store" />
 
       {coupons.length > 0 ? (
         <div className="store-top-offers-wrap clip-coupons-section store-page-clip-section">

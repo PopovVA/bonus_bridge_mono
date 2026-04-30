@@ -3,9 +3,9 @@ import { ArticleListSchema, type ArticleListItem } from '@/lib/schemas/article.s
 export const articleList: ArticleListItem[] = ArticleListSchema.parse([
   {
     slug: 'chime-1000-two-friends',
-    title: 'Understanding Chime Referral Bonuses: Requirements, Estimates, and Official Terms',
+    title: 'Understanding Chime Referral Offers: Requirements, Examples, and Official Terms',
     description:
-      "Learn how Chime's invite-a-friend offer can work in example scenarios (including two qualifying friends and direct deposit), use an interactive estimate tool, and see requirements. Editorial overview only—bonus terms may vary; always confirm on Chime's official site.",
+      "Learn how Chime's invite-a-friend offer can work in example scenarios, review eligibility requirements, and compare the summary with Chime's official terms. Editorial overview only; offer terms may vary.",
     publishedAt: '2026-04-10T12:00:00.000Z',
     listImageSrc: '/articles/chime/chime-building.png'
   }

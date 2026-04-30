@@ -256,7 +256,7 @@ const services: Service[] = [
     extraCategorySlugs: ['shopping'],
     website: 'https://www.rakuten.com/',
     description:
-      'Rakuten is a cash-back portal: start at Rakuten before you shop at partner retailers and earn a percentage back on qualifying purchases. Welcome bonuses for new members are offered on a schedule defined by Rakuten.',
+      'Rakuten is a cash-back portal: start at Rakuten before you shop at partner retailers and review potential cash-back rates on qualifying purchases. New-member offer details are offered on a schedule defined by Rakuten.',
     logoSvg: undefined,
     logoSrc: '/hot-cashback/logos/rakuten.svg',
     createdAt: ISO,
@@ -297,7 +297,7 @@ const services: Service[] = [
     categoryId: CAT.finance,
     website: 'https://www.chime.com/',
     description:
-      'Chime is a financial technology company, not a bank; banking services are provided by partner banks. Members can earn referral bonuses when friends open accounts and meet direct-deposit or other requirements Chime sets.',
+      'Chime is a financial technology company, not a bank; banking services are provided by partner banks. Referral offers may apply when friends open accounts and meet direct-deposit or other requirements Chime sets.',
     logoSvg: undefined,
     logoSrc: '/stores/chime.svg',
     createdAt: ISO,
@@ -387,11 +387,11 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333301',
     serviceId: '22222222-2222-4222-8222-222222222210',
-    title: 'See up to $125 new-account bonus (Chime)',
+    title: 'Chime new-account offer details',
     previewText: 'New account and qualifying direct deposit may be required — amounts and eligibility are set by Chime.',
     couponCode: null,
     bonusAmount: '$125',
-    description: 'Referral bonus when you qualify.',
+    description: 'Referral offer details and eligibility.',
     referralUrl: 'https://www.chime.com/r/vadimpopov1/',
     terms: 'Eligibility and amounts follow Chime.',
     status: 'active',
@@ -401,8 +401,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333302',
     serviceId: '22222222-2222-4222-8222-222222222213',
-    title: 'Shop now with Klarna',
-    previewText: 'Flexible payments at checkout — open Klarna with our invite.',
+    title: 'Klarna flexible payment details',
+    previewText: 'Flexible payments at checkout — open Klarna to review terms and availability.',
     couponCode: null,
     bonusAmount: null,
     description: 'Pay over time where available.',
@@ -415,8 +415,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333303',
     serviceId: '22222222-2222-4222-8222-222222222201',
-    title: '50% off your next 2 trips',
-    previewText: 'Up to $10 off each of two rides at half price. Caps, timing, and eligibility follow Uber\'s current offer.',
+    title: 'Uber new-rider offer details',
+    previewText: 'Review potential ride savings for new riders. Caps, timing, and eligibility follow Uber\'s current offer.',
     couponCode: 'zfj232q2gjsx',
     bonusAmount: '$25',
     description: 'Referral credit when you qualify.',
@@ -429,8 +429,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333304',
     serviceId: '22222222-2222-4222-8222-222222222202',
-    title: '50% off your next ride',
-    previewText: 'Up to $10 off one ride for new riders. Market rules and expiry follow Lyft’s current offer.',
+    title: 'Lyft new-rider offer details',
+    previewText: 'Review possible ride savings for new riders. Market rules and expiry follow Lyft’s current offer.',
     couponCode: 'VADIM53422',
     bonusAmount: null,
     description: null,
@@ -443,7 +443,7 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333305',
     serviceId: '22222222-2222-4222-8222-222222222203',
-    title: '$5 sign-up credit',
+    title: 'Lime sign-up credit details',
     previewText: 'New riders get account credit after sign-up. Amount, markets, and expiry follow Lime’s current offer.',
     couponCode: 'REGUD7BFJWT',
     bonusAmount: null,
@@ -457,8 +457,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333306',
     serviceId: '22222222-2222-4222-8222-222222222204',
-    title: 'Up to $5 ride credit',
-    previewText: 'New riders can get up to $5. Enter the code in the app after sign-up. Terms follow Bird.',
+    title: 'Bird ride credit details',
+    previewText: 'New-rider credits may be available. Enter the code in the app after sign-up. Terms follow Bird.',
     couponCode: 'X86GGD',
     bonusAmount: null,
     description: null,
@@ -472,7 +472,7 @@ const offers: Offer[] = [
     id: '33333333-3333-4333-8333-333333333307',
     serviceId: '22222222-2222-4222-8222-222222222205',
     title: 'Lemonade — renters and home insurance',
-    previewText: 'Digital insurance with referral rewards when you qualify.',
+    previewText: 'Digital insurance with referral offer details explained by provider terms.',
     couponCode: null,
     bonusAmount: '$10 gift card',
     description: null,
@@ -485,8 +485,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333308',
     serviceId: '22222222-2222-4222-8222-222222222206',
-    title: '$10 credit when you join',
-    previewText: '$10 when you sign up with this code. Further rules and expiry follow Poshmark.',
+    title: 'Poshmark new-member credit details',
+    previewText: 'New-member credit may apply when you sign up with this code. Further rules and expiry follow Poshmark.',
     couponCode: 'VADIMPOPOV',
     bonusAmount: null,
     description: null,
@@ -499,8 +499,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333309',
     serviceId: '22222222-2222-4222-8222-222222222207',
-    title: 'Rakuten — cash back + welcome bonus',
-    previewText: 'Shop through Rakuten for cash back; new members may get a sign-up bonus.',
+    title: 'Rakuten cash-back offer details',
+    previewText: 'Shop through Rakuten for cash-back rates; new-member offer details are set by Rakuten.',
     couponCode: null,
     bonusAmount: '$50 bonus',
     description: null,
@@ -513,8 +513,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333310',
     serviceId: '22222222-2222-4222-8222-222222222208',
-    title: 'TopCashback — portal bonus',
-    previewText: 'Cash back at thousands of stores — join via our referral for current new-member offers.',
+    title: 'TopCashback portal offer details',
+    previewText: 'Cash-back rates at thousands of stores — review current new-member offer details with TopCashback.',
     couponCode: null,
     bonusAmount: '$40 cashback',
     description: null,
@@ -527,8 +527,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333311',
     serviceId: '22222222-2222-4222-8222-222222222209',
-    title: 'PayPal Honey — coupons and rewards',
-    previewText: 'Automatic savings at checkout — open Honey with our invite.',
+    title: 'PayPal Honey coupons and rewards details',
+    previewText: 'Automatic coupon tools at checkout — open Honey to review current offer details.',
     couponCode: null,
     bonusAmount: '$10 cashback',
     description: null,
@@ -541,8 +541,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333312',
     serviceId: '22222222-2222-4222-8222-222222222211',
-    title: 'Get $5 to $200 in stock',
-    previewText: 'Gift stock after you sign up and meet funding rules. Many rewards are $5 to $10. Limits and terms on Robinhood.',
+    title: 'Robinhood stock reward details',
+    previewText: 'Stock rewards may apply after sign-up and funding rules are met. Limits and terms are set by Robinhood.',
     couponCode: 'vadimp-4f32ef3',
     bonusAmount: '$5+ stock',
     description: null,
@@ -555,8 +555,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333313',
     serviceId: '22222222-2222-4222-8222-222222222212',
-    title: 'Public — investing welcome bonus',
-    previewText: 'Join Public through our link for a welcome bonus when you qualify.',
+    title: 'Public investing welcome offer details',
+    previewText: 'Review Public welcome offer eligibility and terms before opening the provider site.',
     couponCode: null,
     bonusAmount: null,
     description: null,
@@ -569,7 +569,7 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333314',
     serviceId: '22222222-2222-4222-8222-222222222214',
-    title: '$20 off delivery orders',
+    title: 'Uber Eats delivery offer details',
     previewText: 'New accounts get delivery savings. Minimum spend and expiry follow Uber Eats.',
     couponCode: 'eats-zywrn58e0v',
     bonusAmount: null,
@@ -583,8 +583,8 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333315',
     serviceId: '22222222-2222-4222-8222-222222222215',
-    title: '$10 off your next order',
-    previewText: '$10 credit on a qualifying order. Minimum spend and expiry follow 7Now’s current offer.',
+    title: '7NOW delivery offer details',
+    previewText: 'A credit may apply on a qualifying order. Minimum spend and expiry follow 7Now’s current offer.',
     couponCode: 'my1w2j',
     bonusAmount: null,
     description: null,
@@ -631,8 +631,8 @@ const heroSlides: HeroSlide[] = [
     sortOrder: 0,
     createdAt: ISO,
     updatedAt: ISO,
-    eyebrow: 'Referral bonus (informational)',
-    headline: 'See up to $125 new-account bonus (Chime)',
+    eyebrow: 'Informational offer guide',
+    headline: 'Chime new-account offer details',
     promoHighlight:
       "Learn how to qualify — new accounts and qualifying direct deposit may be required. Tap the button to continue to Chime's site.",
     subtext:
@@ -648,16 +648,16 @@ const heroSlides: HeroSlide[] = [
     sortOrder: 1,
     createdAt: ISO,
     updatedAt: ISO,
-    eyebrow: 'Uber referral',
-    headline: 'Get $25 off your first 2 rides',
+    eyebrow: 'Uber offer guide',
+    headline: 'Uber new-rider offer details',
     promoHighlight:
-      'New to Uber? Use our link — errands, appointments, or visiting friends, without the parking hassle. The discount applies when you sign up through the button below.',
+      'New to Uber? Review the current referral offer for errands, appointments, or visiting friends, then confirm terms on Uber.',
     subtext:
       "Uber is a simple, reliable way to get where you need to go. Savings and eligibility follow Uber's current referral offer and terms.",
     termsLabel: 'Uber terms & help',
     termsUrl: 'https://www.uber.com/legal/',
     referralUrl: 'https://referrals.uber.com/refer?id=zfj232q2gjsx',
-    ctaText: 'Ride with $25 off'
+    ctaText: 'See Uber details'
   },
   {
     kind: 'coinbase',
@@ -665,15 +665,15 @@ const heroSlides: HeroSlide[] = [
     sortOrder: 2,
     createdAt: ISO,
     updatedAt: ISO,
-    eyebrow: 'Limited-time crypto offer',
-    headline: 'Get up to $200 in crypto when you join Coinbase',
+    eyebrow: 'Crypto offer guide',
+    headline: 'Coinbase promotional offer details',
     promoHighlight:
-      'Open through our link, then buy or trade — bonuses stack as Coinbase\'s promos allow.',
+      'Open Coinbase to review current promotional terms before buying or trading.',
     subtext: 'Reward caps and who qualifies are set by Coinbase. Read their latest terms before you trade.',
     termsLabel: 'View terms',
     termsUrl: 'https://www.coinbase.com/legal',
     referralUrl: 'https://coinbase.com/join/F2XRWRL?src=ios-link',
-    ctaText: 'Open Coinbase & earn'
+    ctaText: 'Check Coinbase terms'
   },
   {
     kind: 'paypal',
@@ -681,16 +681,16 @@ const heroSlides: HeroSlide[] = [
     sortOrder: 3,
     createdAt: ISO,
     updatedAt: ISO,
-    eyebrow: 'PayPal Rewards offer',
-    headline: 'Earn up to $100 in cash back with PayPal Rewards',
+    eyebrow: 'PayPal Rewards guide',
+    headline: 'PayPal Rewards offer details',
     promoHighlight:
-      'Our link opens the offer — points toward cash after setup and a small qualifying checkout.',
+      'Our link opens the provider page so you can review setup steps, qualifying checkout rules, and current limits.',
     subtext:
       'Usually: linked bank or card, verified phone, and a $5+ PayPal checkout within 30 days. Limits are set by PayPal.',
     termsLabel: 'View terms',
     termsUrl: 'https://www.paypal.com/us/legalhub/paypal/referral-program',
     referralUrl: 'https://py.pl/29jzHS',
-    ctaText: 'Open the PayPal offer'
+    ctaText: 'See PayPal details'
   },
   {
     kind: 'ubereats',
@@ -698,16 +698,16 @@ const heroSlides: HeroSlide[] = [
     sortOrder: 4,
     createdAt: ISO,
     updatedAt: ISO,
-    eyebrow: 'First order on Uber Eats',
-    headline: 'Get $20 off your next delivery orders',
+    eyebrow: 'Uber Eats offer guide',
+    headline: 'Uber Eats delivery offer details',
     promoHighlight:
-      'New to Uber Eats? Place your first delivery order today — tap below to open Uber Eats with this offer applied.',
+      'New to Uber Eats? Open the provider page to review minimum spend, eligibility, and expiry details.',
     subtext:
       'Delivery orders; minimum spend, eligibility, and expiry follow Uber Eats. Terms apply.',
     termsLabel: 'Offer terms',
     termsUrl: 'https://www.ubereats.com/legal',
     referralUrl: 'https://ubereats.com/feed?promoCode=eats-zywrn58e0v',
-    ctaText: 'Order with $20 off'
+    ctaText: 'See Uber Eats details'
   }
 ]
 
@@ -755,36 +755,36 @@ const monthlyTopOffers: MonthlyTopOffer[] = MonthlyTopOfferSchema.array().parse(
     brandName: 'Klarna',
     slug: 'klarna',
     description:
-      'Shop now, pay later — open Klarna with our invite to explore deals, flexible payments, and rewards in the app.',
-    ctaText: 'Open Klarna',
+      'Review Klarna availability, flexible payment details, and provider terms before continuing to the app.',
+    ctaText: 'Review Klarna terms',
     href: 'https://invite.klarna.com/us/n33cxpeu/default-us',
     logoSrc: '/top-offers/logos/klarna-logo.svg',
     imageSrc: '/top-offers/media/klarna-promo.png',
-    badgeText: '20$ off'
+    badgeText: 'Terms apply'
   },
   {
     id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa02',
     brandName: 'Robinhood',
     slug: 'robinhood',
     description:
-      'Gift stock after you sign up and meet funding rules. Many rewards are $5 to $10. Limits and terms on Robinhood.',
-    ctaText: 'Claim your stock',
+      'Stock rewards may apply after sign-up and funding rules are met. Limits and terms are set by Robinhood.',
+    ctaText: 'Check Robinhood terms',
     href: 'https://join.robinhood.com/vadimp-4f32ef3',
     logoSrc: '/clip-coupons/robinhood.svg',
     imageSrc: '/top-offers/media/robinhood-promo.png',
-    badgeText: '$5+ stock'
+    badgeText: 'Terms apply'
   },
   {
     id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa03',
     brandName: 'Public',
     slug: 'public',
     description:
-      'Invest with friends on Public. Join through our link for a welcome bonus when you qualify — stocks, ETFs, and more.',
-    ctaText: 'Join Public',
+      'Learn about Public welcome offer eligibility, funding requirements, and current provider terms.',
+    ctaText: 'See offer details',
     href: 'https://share.public.com/Vadim66923',
     logoSrc: '/top-offers/logos/public-logo.svg',
     imageSrc: '/top-offers/media/public-promo.png',
-    badgeText: '20$ off'
+    badgeText: 'Terms apply'
   }
 ])
 
@@ -867,7 +867,7 @@ export async function getTopMonthlyOffers(): Promise<MonthlyTopOffer[]> {
   return structuredClone(monthlyTopOffers)
 }
 
-/** Home “Top offers this month” row item when `slug` matches (Klarna, Robinhood, Public). */
+/** Home offer-details row item when `slug` matches (Klarna, Robinhood, Public). */
 export async function getMonthlyTopOfferForStoreSlug(storeSlug: string): Promise<MonthlyTopOffer | null> {
   const found = monthlyTopOffers.find((o) => o.slug === storeSlug)
   return found ? structuredClone(found) : null
@@ -878,12 +878,12 @@ export function getMonthlyTopOfferSnapshotBySlug(slug: string): MonthlyTopOffer 
   return monthlyTopOffers.find((o) => o.slug === slug)
 }
 
-/** Full curated list (store pages need every slug, including Public which also appears in “Top offers this month”). */
+/** Full curated list (store pages need every slug, including Public which also appears in the home offer-details row). */
 export async function getAllHotCashbackOffers(): Promise<HotCashbackOffer[]> {
   return structuredClone(HOT_CASHBACK_OFFERS)
 }
 
-/** Home `/` Hot Cashback row — hides slugs that already have a card in `monthlyTopOffers`. */
+/** Home `/` partner-offer row — hides slugs that already have a card in `monthlyTopOffers`. */
 export async function getHotCashbackOffers(): Promise<HotCashbackOffer[]> {
   const monthlySlugs = new Set(monthlyTopOffers.map((o) => o.slug))
   return structuredClone(HOT_CASHBACK_OFFERS.filter((h) => !monthlySlugs.has(h.slug)))

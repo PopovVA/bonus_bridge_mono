@@ -34,15 +34,11 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     keywords: [
       'Chime referral',
-      'Chime invite bonus',
-      'bank referral bonus',
-      'direct deposit bonus',
-      'referral calculator',
-      'digital banking bonus',
-      'referral bonus estimate',
-      'Chime $300',
-      'Chime $400',
-      'Chime $1,000'
+      'Chime invite offer',
+      'Chime direct deposit requirements',
+      'referral offer terms',
+      'digital banking offer',
+      'eligibility requirements'
     ],
     alternates: {
       canonical: `/articles/${SLUG}`
@@ -127,7 +123,7 @@ export default async function ChimeArticlePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <article className="article-page">
         <header className="article-page__header" id="article-top">
-          <p className="article-page__eyebrow">Money Guides</p>
+          <p className="article-page__eyebrow">Informational Guides</p>
           <h1 className="article-page__title">{chimeArticle.title}</h1>
           <p className="article-page__meta">
             Updated{' '}
@@ -141,11 +137,10 @@ export default async function ChimeArticlePage() {
         <section className="article-page__section" aria-labelledby="chime-bonus-guide-heading">
           <h2 id="chime-bonus-guide">How this referral offer fits together</h2>
           <p className="article-page__lede">
-            This article explains how referral bonuses are structured—you are not limited to two friends. When people you
-            refer complete the steps the current offer requires, amounts can add up until you reach the program caps Chime
-            sets. Chime is a widely used digital banking brand in the United States, known for simple checking, early pay,
-            and transparent fees. We walk through realistic example numbers and link to Chime&apos;s published rules so you
-            can verify details yourself.
+            This article explains how Chime referral offers are structured and what requirements usually matter. Chime is a
+            widely used digital banking brand in the United States, known for simple checking, early pay, and transparent
+            fees. We use example numbers for illustration only and link to Chime&apos;s published rules so you can verify
+            current details yourself.
           </p>
         </section>
 
@@ -166,17 +161,17 @@ export default async function ChimeArticlePage() {
             <li>You join through a referral link and meet the new-member requirements in the current offer.</li>
             <li>You share your personal invite link so friends can open accounts.</li>
             <li>Each friend completes what Chime counts as a qualifying direct deposit, if the offer requires it.</li>
-            <li>Bonuses post when Chime confirms eligibility—amounts, timing, and caps follow the official terms.</li>
+            <li>Any offer benefit posts only when Chime confirms eligibility; amounts, timing, and caps follow the official terms.</li>
           </ul>
           <p>
             Competition for banking and money apps in the United States is intense, and customer acquisition spending in
             fintech runs high compared with many other sectors. Chime is a public company, and its regular filings show
-            multi-year revenue growth. That growth helps explain how the business can fund attractive sign-up and referral
-            offers while it fights for long-term account relationships.
+            multi-year revenue growth. That context helps explain why sign-up and referral promotions can exist alongside
+            the product.
           </p>
           <p>
-            None of that means a bonus is automatic for you. It simply explains why a large consumer-facing finance brand
-            may still offer cash bonuses alongside the product.
+            None of that means an offer benefit is automatic for you. Current eligibility and timing always come from
+            Chime&apos;s official terms.
           </p>
           <ArticlePartnerFigure
             articleSlug={SLUG}
@@ -192,18 +187,17 @@ export default async function ChimeArticlePage() {
         </section>
 
         <section className="article-page__section" aria-labelledby="referral-bonus-estimate-heading">
-          <h2 id="referral-bonus-estimate">Referral bonus estimate</h2>
+          <h2 id="referral-bonus-estimate">Referral offer illustration</h2>
           <p>
-            Use the estimate below to see how published amounts can combine—this is not a promise of what you will
-            receive. If you open through a referral and <strong>two friends</strong> set up qualifying direct deposits,
-            the public structure we model lands around{' '}
+            Use the illustration below to see how published amounts can combine. This is not a promise of approval,
+            payment, or eligibility. In one example where you open through a referral and <strong>two friends</strong> set
+            up qualifying direct deposits, the public structure we model lands around{' '}
             <strong>${modeledTwoFriendTotalUsd.toLocaleString('en-US')}</strong> for you when you also count your own{' '}
             <strong>${CHIME_DIRECT_DEPOSIT_BONUS_USD}</strong> direct deposit bonus as a new member who qualifies. You
-            can invite more than two people. Adjust the friend count and the direct deposit toggle to see how the
-            illustration changes.
+            Adjust the friend count and the direct deposit toggle to see how the illustration changes.
           </p>
           <p>
-            Chime advertises up to <strong>${CHIME_REFERRER_PER_FRIEND_USD}</strong> per qualifying friend for you,{' '}
+            Chime has advertised up to <strong>${CHIME_REFERRER_PER_FRIEND_USD}</strong> per qualifying friend for you,{' '}
             <strong>${CHIME_FRIEND_BONUS_USD}</strong> for each friend, and the separate{' '}
             <strong>${CHIME_DIRECT_DEPOSIT_BONUS_USD}</strong> welcome bonus for you when direct deposit rules are met.
             Promotions change, so treat the tool as a snapshot of the structure we describe on the page.
@@ -241,9 +235,9 @@ export default async function ChimeArticlePage() {
         <section className="article-page__section" aria-labelledby="important-to-understand-heading">
           <h2 id="important-to-understand">Important to understand</h2>
           <p>
-            The referral bonus estimate tool is <strong>not</strong> a guarantee of what you will earn. It is a planning
-            aid that turns today&apos;s public offer outline into a quick illustration. Real payouts depend on approval,
-            timing, and whether each friend satisfies the rules.
+            The referral offer illustration is <strong>not</strong> a guarantee of what you will receive. It is an
+            informational aid that turns today&apos;s public offer outline into a quick example. Real outcomes depend on
+            approval, timing, and whether each person satisfies the rules.
           </p>
           <ul className="article-page__list">
             <li>Treat the calculator as planning help, not a promise of approval or payout timing.</li>

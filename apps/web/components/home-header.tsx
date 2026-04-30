@@ -19,7 +19,7 @@ export function HomeHeader({ megaMenu }: Props) {
           </TrackedLink>
           <nav className="home-nav home-nav--primary" aria-label="Primary">
             <TrackedLink href="/articles" className="home-nav__articles-link" event="header_nav_articles">
-              Money Guides
+              Guides
             </TrackedLink>
             <TrackedLink href="/#coupons" className="home-nav__coupons-link" event="header_nav_coupons">
               Coupons

@@ -213,7 +213,7 @@ describe('site schemas', () => {
       createdAt: '2024-01-01T00:00:00.000Z',
       updatedAt: '2024-01-01T00:00:00.000Z',
       headline: 'Grow with friends',
-      subtext: 'Earn up to $200.',
+      subtext: 'Terms and eligibility apply.',
       referralUrl: 'https://coinbase.com/join/X',
       ctaText: 'Join'
     })
@@ -228,7 +228,7 @@ describe('site schemas', () => {
       sortOrder: 2,
       createdAt: '2024-01-01T00:00:00.000Z',
       updatedAt: '2024-01-01T00:00:00.000Z',
-      headline: 'Earn $10 per friend',
+      headline: 'PayPal referral offer details',
       subtext: 'Terms apply.',
       referralUrl: 'https://py.pl/29jzHS',
       ctaText: 'Invite'

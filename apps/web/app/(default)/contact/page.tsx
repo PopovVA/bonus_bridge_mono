@@ -7,7 +7,7 @@ const path = '/contact'
 export const metadata: Metadata = {
   title: 'Contact',
   description:
-    'Contact BonusBridge — independent informational site about referral bonuses and offers. Email support for questions about the site.',
+    'Contact BonusBridge — independent informational website about referral offers and provider terms. Email support for questions about the site.',
   alternates: {
     canonical: path
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contact | BonusBridge',
     description:
-      'Contact BonusBridge — independent informational site about referral bonuses and offers. Email support for questions about the site.',
+      'Contact BonusBridge — independent informational website about referral offers and provider terms. Email support for questions about the site.',
     url: absoluteUrl(path),
     type: 'website'
   }
@@ -30,7 +30,8 @@ export default function ContactPage() {
       <h1 className="legal-page__title">Contact</h1>
       <p className="legal-page__notice">
         BonusBridge is an independent informational website. We summarize publicly described referral and promotional
-        programs; we are not a bank, broker, or financial institution.
+        programs; we are not a bank, broker, financial institution, or financial services provider. We may earn
+        commissions from partner links.
       </p>
       <p>
         For questions about this website, privacy requests, or corrections to our editorial content, email{' '}

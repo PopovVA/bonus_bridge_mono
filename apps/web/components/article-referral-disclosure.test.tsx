@@ -8,6 +8,6 @@ describe('ArticleReferralDisclosure', () => {
     ;(globalThis as { React?: typeof React }).React = React
     const html = renderToStaticMarkup(<ArticleReferralDisclosure />)
     expect(html).toContain('article-page__referral-disclosure')
-    expect(html).toContain('This guide explains how referral bonuses work')
+    expect(html).toContain('This guide explains how referral offers can work')
   })
 })

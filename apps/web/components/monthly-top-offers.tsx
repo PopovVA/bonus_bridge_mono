@@ -65,8 +65,8 @@ export function MonthlyTopOffers({
   offers,
   sectionId = 'top-offers',
   headingId = 'monthly-offers-heading',
-  heading = 'Top offers this month',
-  subtitle = 'Hand-picked invites — tap a card to open the partner offer.',
+  heading = 'Offer details this month',
+  subtitle = 'Independent summaries of partner offers. Eligibility, amounts, and timing are set by each provider.',
   singleColumn = false
 }: Props) {
   if (offers.length === 0) return null
@@ -116,7 +116,7 @@ export function MonthlyTopOffers({
                   href={offer.href}
                   className="monthly-offer-card__cta"
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer sponsored"
                   event="monthly_offer_cta"
                   eventParams={{ offer_slug: offer.slug }}
                 >

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     default: 'BonusBridge',
     template: '%s | BonusBridge'
   },
-  description: 'Find referral bonuses and coupons by store.',
+  description: 'Independent informational website about referral offers, coupons, eligibility, and provider terms.',
   alternates: {
     canonical: '/'
   },

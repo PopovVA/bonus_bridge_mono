@@ -8,10 +8,10 @@ const sample = [
     id: 'x1',
     brandName: 'Rakuten',
     slug: 'rakuten',
-    badgeText: '$50 bonus',
-    headline: 'Up to $50 after qualifying spend',
-    description: 'Register for up to $50 after qualifying spend—Rakuten pays cashback on partner stores.',
-    ctaText: 'Get the bonus',
+    badgeText: 'Terms apply',
+    headline: 'Rakuten offer details and eligibility',
+    description: 'Learn about Rakuten new-member offer details, qualifying spend requirements, and current provider terms.',
+    ctaText: 'See offer details',
     href: 'https://www.rakuten.com/r/MVADIM7',
     logoSrc: '/hot-cashback/logos/rakuten.svg'
   }
@@ -22,13 +22,13 @@ describe('HotCashback', () => {
     ;(globalThis as { React?: typeof React }).React = React
     const html = renderToStaticMarkup(<HotCashback offers={sample} />)
     expect(html).toContain('hot-cashback-section')
-    expect(html).toContain('Hot Cashback')
-    expect(html).toContain('$50 bonus')
+    expect(html).toContain('Partner offer guides')
+    expect(html).toContain('Terms apply')
     expect(html).toContain('clip-coupon-card__brand')
     expect(html).toContain('RAKUTEN')
-    expect(html).toContain('Up to $50 after qualifying spend')
-    expect(html).toContain('Register for up to $50 after qualifying spend—Rakuten pays cashback on partner stores.')
-    expect(html).toContain('Sign up below—welcome offers and eligibility are set by each partner.')
+    expect(html).toContain('Rakuten offer details and eligibility')
+    expect(html).toContain('Learn about Rakuten new-member offer details')
+    expect(html).toContain('Learn how each offer works, then confirm eligibility and terms on the provider site.')
     expect(html).toContain('href="https://www.rakuten.com/r/MVADIM7"')
     expect(html).toContain('hot-cashback-card__badge-icon')
     expect(html).toContain('/hot-cashback/logos/rakuten.svg')

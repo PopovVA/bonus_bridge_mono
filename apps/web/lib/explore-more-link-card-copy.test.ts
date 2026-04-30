@@ -10,21 +10,21 @@ afterEach(() => {
 describe('getCuratedLinkCardCopyForExploreMore', () => {
   it('uses home Top monthly offers copy for Klarna', () => {
     const c = getCuratedLinkCardCopyForExploreMore('klarna')
-    expect(c?.badgeText).toBe('20$ off')
-    expect(c?.ctaText).toBe('Open Klarna')
+    expect(c?.badgeText).toBe('Terms apply')
+    expect(c?.ctaText).toBe('Review Klarna terms')
     expect(c?.description).toBe(
-      'Shop now, pay later — open Klarna with our invite to explore deals, flexible payments, and rewards in the app.'
+      'Review Klarna availability, flexible payment details, and provider terms before continuing to the app.'
     )
     expect(c?.href).toContain('klarna.com')
     expect(c?.logoSrc).toBe('/top-offers/logos/klarna-logo.svg')
     expect(c?.headline).toBeNull()
   })
 
-  it('uses Hot Cashback copy when slug is not in monthly top row', () => {
+  it('uses partner-offer copy when slug is not in monthly row', () => {
     const c = getCuratedLinkCardCopyForExploreMore('rakuten')
-    expect(c?.badgeText).toBe('$50 bonus')
-    expect(c?.ctaText).toBe('Get the bonus')
-    expect(c?.headline).toBe('Up to $50 after qualifying spend')
+    expect(c?.badgeText).toBe('Terms apply')
+    expect(c?.ctaText).toBe('See offer details')
+    expect(c?.headline).toBe('Rakuten offer details and eligibility')
   })
 
   it('returns null when slug has no curated copy', () => {

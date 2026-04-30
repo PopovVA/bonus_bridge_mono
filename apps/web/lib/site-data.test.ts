@@ -47,34 +47,34 @@ describe('site-data', () => {
     expect(list[0]?.href).toContain('klarna.com')
     expect(list[0]?.logoSrc).toBe('/top-offers/logos/klarna-logo.svg')
     expect(list[0]?.imageSrc).toBe('/top-offers/media/klarna-promo.png')
-    expect(list[0]?.badgeText).toBe('20$ off')
-    expect(list[0]?.ctaText).toBe('Open Klarna')
+    expect(list[0]?.badgeText).toBe('Terms apply')
+    expect(list[0]?.ctaText).toBe('Review Klarna terms')
     expect(list[0]?.description).toBe(
-      'Shop now, pay later — open Klarna with our invite to explore deals, flexible payments, and rewards in the app.'
+      'Review Klarna availability, flexible payment details, and provider terms before continuing to the app.'
     )
     expect(list[1]?.slug).toBe('robinhood')
     expect(list[1]?.href).toContain('join.robinhood.com')
     expect(list[1]?.logoSrc).toBe('/clip-coupons/robinhood.svg')
     expect(list[1]?.imageSrc).toBe('/top-offers/media/robinhood-promo.png')
-    expect(list[1]?.badgeText).toBe('$5+ stock')
-    expect(list[1]?.ctaText).toBe('Claim your stock')
+    expect(list[1]?.badgeText).toBe('Terms apply')
+    expect(list[1]?.ctaText).toBe('Check Robinhood terms')
     expect(list[1]?.description).toBe(
-      'Gift stock after you sign up and meet funding rules. Many rewards are $5 to $10. Limits and terms on Robinhood.'
+      'Stock rewards may apply after sign-up and funding rules are met. Limits and terms are set by Robinhood.'
     )
     expect(list[2]?.slug).toBe('public')
     expect(list[2]?.logoSrc).toBe('/top-offers/logos/public-logo.svg')
     expect(list[2]?.imageSrc).toBe('/top-offers/media/public-promo.png')
-    expect(list[2]?.badgeText).toBe('20$ off')
-    expect(list[2]?.ctaText).toBe('Join Public')
+    expect(list[2]?.badgeText).toBe('Terms apply')
+    expect(list[2]?.ctaText).toBe('See offer details')
     expect(list[2]?.description).toBe(
-      'Invest with friends on Public. Join through our link for a welcome bonus when you qualify — stocks, ETFs, and more.'
+      'Learn about Public welcome offer eligibility, funding requirements, and current provider terms.'
     )
   })
 
   it('exposes sync monthly top snapshot by slug (Explore More parity)', () => {
     const k = getMonthlyTopOfferSnapshotBySlug('klarna')
     expect(k?.slug).toBe('klarna')
-    expect(k?.badgeText).toBe('20$ off')
+    expect(k?.badgeText).toBe('Terms apply')
     expect(getMonthlyTopOfferSnapshotBySlug('unknown-slug-xyz')).toBeUndefined()
   })
 
@@ -131,19 +131,19 @@ describe('site-data', () => {
     const list = await getHotCashbackOffers()
     expect(list).toHaveLength(5)
     expect(list[0]?.slug).toBe('rakuten')
-    expect(list[0]?.badgeText).toBe('$50 bonus')
+    expect(list[0]?.badgeText).toBe('Terms apply')
     expect(list[0]?.href).toBe('https://www.rakuten.com/r/MVADIM7')
     expect(list[1]?.slug).toBe('topcashback')
-    expect(list[1]?.badgeText).toBe('$40 cashback')
+    expect(list[1]?.badgeText).toBe('Terms apply')
     expect(list[1]?.href).toBe('https://www.topcashback.com/ref/member344836925437')
     expect(list[2]?.slug).toBe('honey')
-    expect(list[2]?.badgeText).toBe('$10 cashback')
+    expect(list[2]?.badgeText).toBe('Terms apply')
     expect(list[2]?.href).toBe('https://www.joinhoney.com/ref/nwpz6sw')
     expect(list[3]?.slug).toBe('lemonade')
-    expect(list[3]?.badgeText).toBe('$10 gift card')
+    expect(list[3]?.badgeText).toBe('Terms apply')
     expect(list[3]?.href).toBe('https://lemonade.com/r/vadimpopov1')
     expect(list[4]?.slug).toBe('chime')
-    expect(list[4]?.badgeText).toBe('125$')
+    expect(list[4]?.badgeText).toBe('Terms apply')
     expect(list[4]?.href).toBe('https://www.chime.com/r/vadimpopov1/')
   })
 
@@ -151,8 +151,8 @@ describe('site-data', () => {
     const list = await getAllHotCashbackOffers()
     expect(list).toHaveLength(6)
     const pub = list.find((o) => o.slug === 'public')
-    expect(pub?.badgeText).toBe('20$ off')
-    expect(pub?.ctaText).toBe('Join Public')
+    expect(pub?.badgeText).toBe('Terms apply')
+    expect(pub?.ctaText).toBe('See offer details')
   })
 
   it('returns home category marquee chips in alphabetical order', async () => {
@@ -225,12 +225,12 @@ describe('site-data', () => {
     expect(heroes[2]?.kind).toBe('coinbase')
     expect(heroes[3]?.kind).toBe('paypal')
     if (heroes[0]?.kind === 'chime') {
-      expect(heroes[0].headline).toContain('$125')
+      expect(heroes[0].headline).toBe('Chime new-account offer details')
       expect(heroes[0].referralUrl).toContain('chime.com')
     }
     if (heroes[1]?.kind === 'uber') {
       expect(heroes[1].referralUrl).toContain('referrals.uber.com')
-      expect(heroes[1].headline).toContain('$25')
+      expect(heroes[1].headline).toBe('Uber new-rider offer details')
     }
     if (heroes[2]?.kind === 'coinbase') {
       expect(heroes[2].referralUrl).toContain('coinbase.com')

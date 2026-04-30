@@ -4,15 +4,15 @@ import { TrackedLink } from '@/components/tracked-link'
 import { articleList } from '@/lib/articles/list'
 
 export const metadata: Metadata = {
-  title: 'Money Guides',
+  title: 'Informational Guides',
   description:
-    'Straight-up tips to earn more from bank and app sign-up offers. We decode referral math, read the fine print, and show what actually pays.',
+    'Independent guides to referral and sign-up offers. We explain eligibility, provider terms, and example scenarios.',
   alternates: {
     canonical: '/articles'
   },
   openGraph: {
-    title: 'Money Guides',
-    description: 'Practical guides to bank bonuses, referrals, and sign-up offers that pay.'
+    title: 'Informational Guides',
+    description: 'Independent guides to referral and sign-up offers, eligibility, and provider terms.'
   }
 }
 
@@ -20,10 +20,10 @@ export default function ArticlesIndexPage() {
   return (
     <section className="article-index">
       <header className="article-index__header">
-        <h1 className="article-index__title">Money Guides</h1>
+        <h1 className="article-index__title">Informational Guides</h1>
         <p className="article-index__intro">
-          Real-world tips to squeeze more out of sign-up and referral offers: how the numbers work, what to double-check in
-          the terms, and tools to plan your next move.
+          Plain-English summaries of sign-up and referral offers: how the terms work, what eligibility details to confirm,
+          and which provider rules matter before you continue.
         </p>
       </header>
       <ul className="article-index__list">

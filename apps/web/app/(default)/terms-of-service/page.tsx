@@ -39,10 +39,10 @@ export default function TermsPage() {
       <p className="legal-page__notice">
         These Terms of Service (&quot;Terms&quot;) govern your access to and use of the BonusBridge website and related content
         made available at the domain where these Terms are posted (the &quot;Site&quot;). By accessing or using the Site, you
-        agree to these Terms. If you do not agree, do not use the Site. BonusBridge provides general information about
-        publicly described partner, referral, and promotional programs offered by third parties. We do not guarantee that
-        any offer is available, accurate, or will result in any payment or benefit to you. These Terms include important
-        disclaimers and limitations of liability. Read them carefully. This document is not legal advice. If you need
+        agree to these Terms. If you do not agree, do not use the Site. BonusBridge is an independent informational
+        website that provides general information about publicly described partner, referral, and promotional programs
+        offered by third parties. We do not guarantee that any offer is available, accurate, or will result in any payment
+        or benefit to you. These Terms include important disclaimers and limitations of liability. Read them carefully. This document is not legal advice. If you need
         advice about your rights or obligations, consult a qualified professional.
       </p>
 
@@ -60,8 +60,8 @@ export default function TermsPage() {
         <p>
           BonusBridge publishes editorial summaries, listings, tools (such as calculators), and links that may describe
           third party programs, including referral bonuses, coupons, and similar promotions. The Site is intended to help
-          you discover and compare publicly described opportunities. We may earn compensation when you use certain partner
-          links, as explained in Section 6.
+          you discover and compare publicly described offers. We may earn compensation when you use certain partner links,
+          as explained in Section 6.
         </p>
         <p>
           <strong>

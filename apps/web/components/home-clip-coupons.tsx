@@ -31,10 +31,10 @@ export function HomeClipCoupons({ coupons }: Props) {
       <section id="coupons" className="clip-coupons-section" aria-labelledby="clip-coupons-heading">
         <div className="section-head clip-coupons-head">
           <h2 id="clip-coupons-heading" className="section-title">
-            Codes worth clipping
+            Codes and offer details
           </h2>
           <p className="section-subtitle">
-            Tap the code to copy and confirm opening the partner site, or use Get offer to open it right away.
+            Tap a code to copy it, then confirm details and eligibility on the provider site.
           </p>
         </div>
         <div className="clip-coupons-grid">

@@ -10,7 +10,7 @@ const chimeSlide: HeroSlide = {
   sortOrder: 0,
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
-  headline: 'See up to $125 new-account bonus (Chime)',
+  headline: 'Chime new-account offer details',
   promoHighlight: 'Learn how to qualify — tap to continue to the official site.',
   subtext: 'Terms apply.',
   termsLabel: 'View terms',
@@ -25,7 +25,7 @@ const paypalSlide: HeroSlide = {
   sortOrder: 1,
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
-  headline: 'Earn with PayPal Rewards',
+  headline: 'PayPal Rewards offer details',
   subtext: 'Terms apply.',
   referralUrl: 'https://py.pl/test',
   ctaText: 'Open offer'
@@ -38,8 +38,7 @@ describe('HeroSlider', () => {
     expect(html).toContain('hero-carousel-shell')
     expect(html).toContain('hero-chime-panel')
     expect(html).toContain('hero-slide-cell--promo')
-    expect(html).toContain('See up to ')
-    expect(html).toContain('$125')
+    expect(html).toContain('Chime new-account offer details')
     expect(html).toContain('hero-chime-promo-highlight')
     expect(html).toContain('hero-chime-cta-primary')
     expect(html).toContain('href="https://www.chime.com/r/test/"')

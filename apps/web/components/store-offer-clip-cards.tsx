@@ -14,7 +14,7 @@ type Props = {
 
 const REFERRAL_PLACEHOLDER = 'Referral link'
 
-/** Same as home clip grid: code → copy + dialog; Get offer → open partner URL immediately. */
+/** Same as home clip grid: code → copy + dialog; See details → open partner URL immediately. */
 export function StoreOfferClipCards({ storeName, storeLogoSrc, offers }: Props) {
   const { toast, toastId, pending, runClipFlow, closeDialog, confirmOpenInNewTab } = useClipPartnerOfferFlow()
 

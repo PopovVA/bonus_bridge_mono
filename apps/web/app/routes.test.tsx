@@ -152,9 +152,10 @@ describe('web routes', () => {
         id: 'hot-cashback-rakuten',
         brandName: 'Rakuten',
         slug: 'rakuten',
-        badgeText: '$50 bonus',
+        badgeText: 'Terms apply',
+        headline: 'Rakuten offer details and eligibility',
         description: 'Test cashback copy.',
-        ctaText: 'Invite a friend',
+        ctaText: 'See offer details',
         href: 'https://www.rakuten.com/r/MVADIM7',
         logoSrc: '/hot-cashback/logos/rakuten.svg'
       }
@@ -171,16 +172,16 @@ describe('web routes', () => {
       }
     ])
     const html = renderToStaticMarkup(await HomePage())
-    expect(html).toContain('Top offers this month')
-    expect(html).toContain('Codes worth clipping')
-    expect(html).toContain('Hot Cashback')
+    expect(html).toContain('Offer details this month')
+    expect(html).toContain('Codes and offer details')
+    expect(html).toContain('Partner offer guides')
     expect(html).toContain('Test cashback copy.')
     expect(html).toContain('Test klarna offer')
     expect(html).toContain('href="https://invite.klarna.com/test"')
     expect(html).toContain('clip-coupons-section')
     expect(html).toContain('/brands/uber-logo.png')
     expect(html).toContain('TESTCODE')
-    expect(html).toContain('Get offer')
+    expect(html).toContain('See details')
     expect(html).toContain('category-marquee-section')
     expect(html).toContain('/categories/finance.svg')
   })
@@ -252,7 +253,8 @@ describe('web routes', () => {
     expect(html).toContain('BonusBridge')
     expect(html).toContain('Privacy Policy')
     expect(html).toContain('Contact')
-    expect(html).toContain('independent informational website and is not affiliated with Chime')
+    expect(html).toContain('independent informational website')
+    expect(html).toContain('We do not provide financial services')
     expect(html).toContain('child')
   })
 
@@ -291,9 +293,9 @@ describe('web routes', () => {
     expect(html).toContain('BonusBridge')
     expect(html).toContain('Stores')
     expect(html).toContain('Coupons')
-    expect(html).toContain('Money Guides')
+    expect(html).toContain('Guides')
     expect(html).toContain('Contact')
-    expect(html).toContain('independent informational website and is not affiliated with Chime')
+    expect(html).toContain('We do not provide financial services')
   })
 
   it('renders default layout when getStoresMegaMenu fails', async () => {
@@ -309,7 +311,7 @@ describe('web routes', () => {
 
   it('renders articles index', () => {
     const html = renderToStaticMarkup(<ArticlesIndexPage />)
-    expect(html).toContain('Money Guides')
+    expect(html).toContain('Informational Guides')
     expect(html).toContain('/articles/chime-1000-two-friends')
     expect(html).toContain('chime-building.png')
   })
@@ -325,7 +327,7 @@ describe('web routes', () => {
     expect(html).toContain('id="referral-bonus-estimate"')
     expect(html).toContain('id="chime-bonus-guide"')
     expect(html).toContain('id="how-it-works"')
-    expect(html).toContain('This guide explains how referral bonuses work')
+    expect(html).toContain('This guide explains how referral offers can work')
   })
 
   it('chime article still renders when getServiceBySlug fails', async () => {
@@ -453,12 +455,12 @@ describe('web routes', () => {
     expect(html).toContain('Store')
     expect(html).toContain('Preview text')
     expect(html).toContain('About this store')
-    expect(html).toContain('Open Store')
+    expect(html).toContain('See provider details')
     expect(html).toContain('href="https://coupon.example"')
     expect(html).toContain('clip-coupon-card')
     expect(html).toContain('CODE10')
     expect(html).not.toContain('Referral link')
-    expect(html).toContain('Get offer')
+    expect(html).toContain('See details')
     expect(html).toContain('hot-cashback-card')
     expect(html).toContain('store-top-offers-heading')
     expect(html).toContain('Top offers')
@@ -466,7 +468,7 @@ describe('web routes', () => {
       generateStoreMetadata({ params: Promise.resolve({ slug: 'store' }) })
     ).resolves.toMatchObject({
       title: 'Store',
-      description: 'Promo codes and offers for Store.'
+      description: 'Offer details and provider terms for Store.'
     })
   })
 
@@ -497,8 +499,8 @@ describe('web routes', () => {
     expect(html).toContain('store-top-offers-heading')
     expect(html).toContain('Top offers')
     expect(html).toContain('hot-cashback-card')
-    expect(html).toContain('Open Klarna')
-    expect(html).toContain('20$ off')
+    expect(html).toContain('Review Klarna terms')
+    expect(html).toContain('Terms apply')
     expect(html).not.toContain('store-monthly-spotlight')
     expect(html).not.toContain('No active promo codes or offers for this store yet.')
   })
@@ -571,7 +573,7 @@ describe('web routes', () => {
     await expect(
       generateStoreMetadata({ params: Promise.resolve({ slug: 'desc-store' }) })
     ).resolves.toMatchObject({
-      description: 'A test blurb about the merchant. Find promo codes and offers on BonusBridge.'
+      description: 'A test blurb about the merchant. Review offer details and provider terms on BonusBridge.'
     })
   })
 
@@ -599,7 +601,7 @@ describe('web routes', () => {
     ])
     const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'one-coupon' }) }))
     expect(html).toContain('href="https://example.com"')
-    expect(html).toContain('Open Store')
+    expect(html).toContain('See provider details')
     expect(html).not.toContain('href="/coupons/')
   })
 
@@ -629,9 +631,9 @@ describe('web routes', () => {
     const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'rakuten' }) }))
     expect(html).toContain('Top offers')
     expect(html).toContain('hot-cashback-card')
-    expect(html).toContain('$50 bonus')
-    expect(html).toContain('Get the bonus')
-    expect(html).toContain('Register for up to $50 after qualifying spend')
+    expect(html).toContain('Terms apply')
+    expect(html).toContain('See offer details')
+    expect(html).toContain('Learn about Rakuten new-member offer details')
     expect(html).toContain('clip-coupon-card__brand')
     expect(html).not.toContain('<article class="clip-coupon-card"')
     expect(html).not.toContain('No active promo codes or offers for this store yet.')
@@ -651,7 +653,7 @@ describe('web routes', () => {
       {
         id: 'pub-offer',
         serviceId: 's-pub',
-        title: 'Public — investing welcome bonus',
+        title: 'Public investing welcome offer details',
         previewText: 'Join through our link.',
         couponCode: null,
         referralUrl: 'https://share.public.com/Vadim66923',
@@ -663,8 +665,8 @@ describe('web routes', () => {
     const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'public' }) }))
     expect(html).toContain('Top offers')
     expect(html).toContain('hot-cashback-card')
-    expect(html).toContain('Join Public')
-    expect(html).toContain('Invest with friends on Public')
+    expect(html).toContain('See offer details')
+    expect(html).toContain('Learn about Public welcome offer eligibility')
     expect(html).not.toContain('store-monthly-spotlight')
   })
 

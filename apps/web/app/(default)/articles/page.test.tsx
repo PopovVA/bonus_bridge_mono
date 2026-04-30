@@ -31,7 +31,7 @@ describe('ArticlesIndexPage', () => {
     const { default: ArticlesIndexPage } = await import('./page')
     ;(globalThis as { React?: typeof React }).React = React
     const html = renderToStaticMarkup(<ArticlesIndexPage />)
-    expect(html).toContain('Money Guides')
+    expect(html).toContain('Informational Guides')
     expect(html).toContain('chime-building.png')
     expect(html).toContain('with-thumb')
     expect(html).toContain('no-thumb')

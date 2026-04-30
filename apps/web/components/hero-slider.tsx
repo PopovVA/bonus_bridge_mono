@@ -243,7 +243,7 @@ function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], k
             href={slide.referralUrl}
             className={ui.cta}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer sponsored"
             event="hero_main_cta"
             eventParams={{ slide_kind: kind }}
           >
