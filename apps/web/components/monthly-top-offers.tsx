@@ -71,7 +71,10 @@ export function MonthlyTopOffers({
 }: Props) {
   if (offers.length === 0) return null
 
-  const gridClass = singleColumn ? 'monthly-offers-grid monthly-offers-grid--single' : 'monthly-offers-grid'
+  const gridClass =
+    singleColumn || offers.length === 1
+      ? 'monthly-offers-grid monthly-offers-grid--single'
+      : 'monthly-offers-grid'
 
   return (
     <section id={sectionId} className="monthly-offers-section" aria-labelledby={headingId}>

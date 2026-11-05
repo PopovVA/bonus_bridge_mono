@@ -77,6 +77,20 @@ describe('MonthlyTopOffers', () => {
     expect(html).toContain('monthly-offer-card__media-img--public-contain')
   })
 
+  it('keeps a multi-card grid when more than one offer is passed', () => {
+    ;(globalThis as { React?: typeof React }).React = React
+    const html = renderToStaticMarkup(
+      <MonthlyTopOffers
+        offers={[
+          { ...baseOffer, imageSrc: '/i.svg' },
+          { ...baseOffer, id: '550e8400-e29b-41d4-a716-446655440098', slug: 'robinhood', imageSrc: '/r.svg' }
+        ]}
+      />
+    )
+    expect(html).toContain('monthly-offers-grid')
+    expect(html).not.toContain('monthly-offers-grid--single')
+  })
+
   it('returns null when empty', () => {
     ;(globalThis as { React?: typeof React }).React = React
     expect(renderToStaticMarkup(<MonthlyTopOffers offers={[]} />)).toBe('')

@@ -365,6 +365,30 @@
   right: 12px;
 }
 
+/* Narrow phones: keep the banner tall enough for the headline, terms, and CTA, and park arrows in the top corners so they do not cover those controls. */
+@media (max-width: 640px) {
+  .hero-section {
+    padding: 8px 12px 4px;
+  }
+
+  .hero-carousel-shell {
+    --hero-banner-height: 460px;
+  }
+
+  .hero-floating-arrow {
+    top: 10px;
+    transform: none;
+  }
+
+  .hero-floating-arrow--prev {
+    left: 8px;
+  }
+
+  .hero-floating-arrow--next {
+    right: 8px;
+  }
+}
+
 .hero-floating-dots {
   position: absolute;
   bottom: 14px;
@@ -1404,7 +1428,41 @@
 }
 
 .site-disclosure--home {
-  margin-top: 18px;
+  margin-top: 8px;
+}
+
+.home-intro {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 24px 0;
+}
+
+.home-intro__title {
+  margin: 0 0 8px;
+  font-family: var(--font-app), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.7rem, 4vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+.home-intro__lede {
+  margin: 0;
+  max-width: 42rem;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: #334155;
+}
+
+@media (max-width: 480px) {
+  .home-intro {
+    padding: 16px 12px 0;
+  }
+
+  .home-header-search-input {
+    font-size: 16px;
+  }
 }
 
 .site-disclosure--store {
@@ -1412,7 +1470,7 @@
   margin-bottom: 8px;
 }
 
-/* Top monthly offers (Klarna / Public / Too Good To Go) */
+/* Top monthly offers still published on the home page */
 .monthly-offers-section {
   max-width: 1280px;
   margin: 0 auto;
@@ -2399,6 +2457,28 @@
   outline-offset: 2px;
 }
 
+@media (max-width: 420px) {
+  .clip-open-store-dialog {
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+
+  .clip-open-store-dialog__panel {
+    max-height: calc(100dvh - 24px);
+    overflow: auto;
+  }
+
+  .clip-open-store-dialog__actions {
+    flex-direction: column;
+  }
+
+  .clip-open-store-dialog__btn {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
 /* Footer */
 .home-footer {
   background: #f9fafb;
@@ -2743,6 +2823,47 @@
 
 .store-page-hero {
   margin-bottom: 18px;
+}
+
+.store-page-title {
+  margin: 0 0 14px;
+  font-family: var(--font-app), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.listing-facts {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 18px;
+}
+
+.listing-facts dt {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.listing-facts dd {
+  margin: 2px 0 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #334155;
+}
+
+.store-page-provider-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 12px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .store-page-hero-grid {
@@ -3740,5 +3861,22 @@
   .article-calculator__row {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .default-main {
+    padding: 16px 12px 48px;
+  }
+
+  .app-surface-card {
+    padding: 16px;
+  }
+
+  .category-store-cta,
+  .store-page-open-store-btn,
+  .clip-coupon-card__btn,
+  .clip-coupon-card__code {
+    min-height: 44px;
   }
 }

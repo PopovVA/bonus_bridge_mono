@@ -133,7 +133,7 @@ describe('web routes', () => {
         slug: 'klarna',
         description: 'Test klarna offer.',
         ctaText: 'Open',
-        href: 'https://invite.klarna.com/test',
+        href: 'https://example.com/monthly',
         logoSrc: '/top-offers/logos/klarna-logo.svg',
         imageSrc: '/top-offers/media/klarna-promo.png',
         badgeText: '20$ off'
@@ -177,7 +177,9 @@ describe('web routes', () => {
     expect(html).toContain('Partner offer guides')
     expect(html).toContain('Test cashback copy.')
     expect(html).toContain('Test klarna offer')
-    expect(html).toContain('href="https://invite.klarna.com/test"')
+    expect(html).toContain('href="https://example.com/monthly"')
+    expect(html).toContain('Referral guides and provider terms')
+    expect(html).not.toContain('Open partner site?')
     expect(html).toContain('clip-coupons-section')
     expect(html).toContain('/brands/uber-logo.png')
     expect(html).toContain('TESTCODE')
@@ -414,7 +416,7 @@ describe('web routes', () => {
     expect(html).not.toContain('/coupons/')
     await expect(
       generateCategoryMetadata({ params: Promise.resolve({ slug: 'electronics' }) })
-    ).resolves.toMatchObject({ title: 'Electronics stores' })
+    ).resolves.toMatchObject({ title: 'Electronics store guides' })
   })
 
   it('renders store page and metadata', async () => {
@@ -470,19 +472,20 @@ describe('web routes', () => {
       generateStoreMetadata({ params: Promise.resolve({ slug: 'store' }) })
     ).resolves.toMatchObject({
       title: 'Store',
-      description: 'Offer details and provider terms for Store.'
+      description: 'Informational page for Store. Current bonus amounts are not verified on BonusBridge.'
     })
   })
 
-  it('renders Top offers with curated Klarna link card when offer has no promo code', async () => {
+  it('does not publish a Klarna referral promotion even if offer data includes one', async () => {
     vi.mocked(getServiceBySlug).mockResolvedValue({
       id: 's-klarna',
       name: 'Klarna',
       slug: 'klarna',
       categoryId: 'c1',
+      website: 'https://www.klarna.com/',
       logoSrc: '/top-offers/logos/klarna-logo.svg',
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: '2026-03-01T12:00:00.000Z'
     } as never)
     vi.mocked(getOffers).mockResolvedValue([
       {
@@ -491,20 +494,21 @@ describe('web routes', () => {
         title: 'Shop now with Klarna',
         previewText: 'Flexible payments',
         couponCode: null,
-        referralUrl: 'https://invite.klarna.com/us/n33cxpeu/default-us',
+        referralUrl: 'https://example.com/should-not-render',
         status: 'active',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       } as never
     ])
     const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'klarna' }) }))
-    expect(html).toContain('store-top-offers-heading')
-    expect(html).toContain('Top offers')
-    expect(html).toContain('hot-cashback-card')
-    expect(html).toContain('Review Klarna terms')
-    expect(html).toContain('Terms apply')
-    expect(html).not.toContain('store-monthly-spotlight')
-    expect(html).not.toContain('No active promo codes or offers for this store yet.')
+    expect(html).toContain('not publicly promoting a referral link')
+    expect(html).toContain('href="https://www.klarna.com/"')
+    expect(html).toContain('rel="noopener noreferrer"')
+    expect(html).not.toContain('sponsored')
+    expect(html).not.toContain('https://example.com/should-not-render')
+    expect(html).not.toContain('See provider details')
+    expect(html).toContain('No active promo codes or offers for this store yet.')
+    expect(html).toContain('March 1, 2026')
   })
 
   it('store page still renders Top offers clip card when only promo-code offers exist', async () => {
@@ -524,14 +528,18 @@ describe('web routes', () => {
         previewText: 'P',
         couponCode: 'X',
         referralUrl: 'https://example.com',
+        terms: 'Provider terms apply.',
         status: 'active',
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: '2026-03-01T12:00:00.000Z'
       } as never
     ])
     const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'store' }) }))
     expect(html).toContain('Top offers')
     expect(html).toContain('clip-coupon-card')
+    expect(html).toContain('Provider terms apply.')
+    expect(html).toContain('A current bonus amount is not verified on BonusBridge.')
+    expect(html).toContain('March 1, 2026')
   })
 
   it('store page treats failed getCategories as empty categories list', async () => {
@@ -575,7 +583,7 @@ describe('web routes', () => {
     await expect(
       generateStoreMetadata({ params: Promise.resolve({ slug: 'desc-store' }) })
     ).resolves.toMatchObject({
-      description: 'A test blurb about the merchant. Review offer details and provider terms on BonusBridge.'
+      description: 'A test blurb about the merchant. Current bonus amounts are not verified on BonusBridge.'
     })
   })
 
@@ -641,7 +649,7 @@ describe('web routes', () => {
     expect(html).not.toContain('No active promo codes or offers for this store yet.')
   })
 
-  it('renders Top offers for Public link-only offer (monthly snapshot copy, no duplicate spotlight)', async () => {
+  it('does not publish a Public referral promotion and omits a provider link when website is absent', async () => {
     vi.mocked(getServiceBySlug).mockResolvedValue({
       id: 's-pub',
       name: 'Public',
@@ -658,17 +666,18 @@ describe('web routes', () => {
         title: 'Public investing welcome offer details',
         previewText: 'Join through our link.',
         couponCode: null,
-        referralUrl: 'https://share.public.com/Vadim66923',
+        referralUrl: 'https://example.com/public-should-not-render',
+        terms: 'Should not be shown as an active offer.',
         status: 'active',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       } as never
     ])
     const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'public' }) }))
-    expect(html).toContain('Top offers')
-    expect(html).toContain('hot-cashback-card')
-    expect(html).toContain('See offer details')
-    expect(html).toContain('Learn about Public welcome offer eligibility')
+    expect(html).toContain('not publicly promoting a referral link')
+    expect(html).not.toContain('https://example.com/public-should-not-render')
+    expect(html).not.toContain('Provider website')
+    expect(html).not.toContain('See provider details')
     expect(html).not.toContain('store-monthly-spotlight')
   })
 

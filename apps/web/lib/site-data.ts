@@ -323,7 +323,7 @@ const services: Service[] = [
     categoryId: CAT.finance,
     website: 'https://public.com/',
     description:
-      'Public is a brokerage where you can buy stocks and ETFs, often with a social feed and educational tools. Welcome bonuses vary by campaign; read Public\'s offer terms for funding minimums and asset delivery timing.',
+      'Public is a brokerage for stocks, ETFs, and related products, often with educational tools. BonusBridge does not publish a public referral link for Public. Any offer or eligibility is set by Public and is not promoted on this page.',
     logoSvg: undefined,
     logoSrc: '/top-offers/logos/public-logo.svg',
     createdAt: ISO,
@@ -336,7 +336,7 @@ const services: Service[] = [
     categoryId: CAT.finance,
     website: 'https://www.klarna.com/',
     description:
-      'Klarna lets you split purchases into installments or pay later at many online and in-store merchants. Availability, interest, and fees depend on Klarna\'s credit decision and the merchant — check each offer before you checkout.',
+      'Klarna offers pay-later and installment checkout at participating merchants. Interest, fees, and availability depend on Klarna and the merchant. BonusBridge does not publish a public referral link for Klarna on this page.',
     logoSvg: undefined,
     logoSrc: '/top-offers/logos/klarna-logo.svg',
     createdAt: ISO,
@@ -394,20 +394,6 @@ const offers: Offer[] = [
     description: 'Referral offer details and eligibility.',
     referralUrl: 'https://www.chime.com/r/vadimpopov1/',
     terms: 'Eligibility and amounts follow Chime.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333302',
-    serviceId: '22222222-2222-4222-8222-222222222213',
-    title: 'Klarna flexible payment details',
-    previewText: 'Flexible payments at checkout — open Klarna to review terms and availability.',
-    couponCode: null,
-    bonusAmount: null,
-    description: 'Pay over time where available.',
-    referralUrl: 'https://invite.klarna.com/us/n33cxpeu/default-us',
-    terms: 'Subject to Klarna approval.',
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO
@@ -553,20 +539,6 @@ const offers: Offer[] = [
     updatedAt: ISO
   },
   {
-    id: '33333333-3333-4333-8333-333333333313',
-    serviceId: '22222222-2222-4222-8222-222222222212',
-    title: 'Public investing welcome offer details',
-    previewText: 'Review Public welcome offer eligibility and terms before opening the provider site.',
-    couponCode: null,
-    bonusAmount: null,
-    description: null,
-    referralUrl: 'https://share.public.com/Vadim66923',
-    terms: 'Public terms apply.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
     id: '33333333-3333-4333-8333-333333333314',
     serviceId: '22222222-2222-4222-8222-222222222214',
     title: 'Uber Eats delivery offer details',
@@ -676,23 +648,6 @@ const heroSlides: HeroSlide[] = [
     ctaText: 'Check Coinbase terms'
   },
   {
-    kind: 'paypal',
-    id: 'dddddddd-dddd-4ddd-8ddd-dddddddddd01',
-    sortOrder: 3,
-    createdAt: ISO,
-    updatedAt: ISO,
-    eyebrow: 'PayPal Rewards guide',
-    headline: 'PayPal Rewards offer details',
-    promoHighlight:
-      'Our link opens the provider page so you can review setup steps, qualifying checkout rules, and current limits.',
-    subtext:
-      'Usually: linked bank or card, verified phone, and a $5+ PayPal checkout within 30 days. Limits are set by PayPal.',
-    termsLabel: 'View terms',
-    termsUrl: 'https://www.paypal.com/us/legalhub/paypal/referral-program',
-    referralUrl: 'https://py.pl/29jzHS',
-    ctaText: 'See PayPal details'
-  },
-  {
     kind: 'ubereats',
     id: 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeee01',
     sortOrder: 4,
@@ -751,18 +706,6 @@ const featuredOffers: FeaturedOfferWithOffer[] = [
 
 const monthlyTopOffers: MonthlyTopOffer[] = MonthlyTopOfferSchema.array().parse([
   {
-    id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa01',
-    brandName: 'Klarna',
-    slug: 'klarna',
-    description:
-      'Review Klarna availability, flexible payment details, and provider terms before continuing to the app.',
-    ctaText: 'Review Klarna terms',
-    href: 'https://invite.klarna.com/us/n33cxpeu/default-us',
-    logoSrc: '/top-offers/logos/klarna-logo.svg',
-    imageSrc: '/top-offers/media/klarna-promo.png',
-    badgeText: 'Terms apply'
-  },
-  {
     id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa02',
     brandName: 'Robinhood',
     slug: 'robinhood',
@@ -772,18 +715,6 @@ const monthlyTopOffers: MonthlyTopOffer[] = MonthlyTopOfferSchema.array().parse(
     href: 'https://join.robinhood.com/vadimp-4f32ef3',
     logoSrc: '/clip-coupons/robinhood.svg',
     imageSrc: '/top-offers/media/robinhood-promo.png',
-    badgeText: 'Terms apply'
-  },
-  {
-    id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa03',
-    brandName: 'Public',
-    slug: 'public',
-    description:
-      'Learn about Public welcome offer eligibility, funding requirements, and current provider terms.',
-    ctaText: 'See offer details',
-    href: 'https://share.public.com/Vadim66923',
-    logoSrc: '/top-offers/logos/public-logo.svg',
-    imageSrc: '/top-offers/media/public-promo.png',
     badgeText: 'Terms apply'
   }
 ])
@@ -867,7 +798,7 @@ export async function getTopMonthlyOffers(): Promise<MonthlyTopOffer[]> {
   return structuredClone(monthlyTopOffers)
 }
 
-/** Home offer-details row item when `slug` matches (Klarna, Robinhood, Public). */
+/** Home offer-details row item when `slug` matches a card still published there. */
 export async function getMonthlyTopOfferForStoreSlug(storeSlug: string): Promise<MonthlyTopOffer | null> {
   const found = monthlyTopOffers.find((o) => o.slug === storeSlug)
   return found ? structuredClone(found) : null
@@ -878,7 +809,7 @@ export function getMonthlyTopOfferSnapshotBySlug(slug: string): MonthlyTopOffer 
   return monthlyTopOffers.find((o) => o.slug === slug)
 }
 
-/** Full curated list (store pages need every slug, including Public which also appears in the home offer-details row). */
+/** Full curated partner-offer list used by home and Explore More. */
 export async function getAllHotCashbackOffers(): Promise<HotCashbackOffer[]> {
   return structuredClone(HOT_CASHBACK_OFFERS)
 }
