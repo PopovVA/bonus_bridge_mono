@@ -230,11 +230,11 @@ describe('site schemas', () => {
       updatedAt: '2024-01-01T00:00:00.000Z',
       headline: 'PayPal referral offer details',
       subtext: 'Terms apply.',
-      referralUrl: 'https://py.pl/29jzHS',
+      referralUrl: 'https://example.com/paypal-slide',
       ctaText: 'Invite'
     })
     expect(pp.kind).toBe('paypal')
-    expect(pp.referralUrl).toContain('py.pl')
+    expect(pp.referralUrl).toBe('https://example.com/paypal-slide')
   })
 
   it('parses hero uber slide', () => {

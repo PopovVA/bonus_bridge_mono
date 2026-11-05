@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { absoluteUrl } from '@/app/seo'
+import { absoluteUrl, pageSocialMetadata } from '@/app/seo'
+import { ListingFacts } from '@/components/listing-facts'
+import { buildListingFacts, isNotPubliclyPromoted } from '@/lib/listing-facts'
 import { EmptyState } from '@/components/empty-state'
 import { StorePageOpenPartnerLink } from '@/components/store-page-open-partner-link'
 import { SiteDisclosure } from '@/components/site-disclosure'
@@ -23,15 +25,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const blurb = store.description?.trim()
-  return {
+  return pageSocialMetadata({
     title: store.name,
     description: blurb
-      ? `${blurb} Review offer details and provider terms on BonusBridge.`
-      : `Offer details and provider terms for ${store.name}.`,
-    alternates: {
-      canonical: `/stores/${slug}`
-    }
-  }
+      ? `${blurb} Current bonus amounts are not verified on BonusBridge.`
+      : `Informational page for ${store.name}. Current bonus amounts are not verified on BonusBridge.`,
+    path: `/stores/${slug}`
+  })
 }
 
 export default async function StorePage({ params }: Props) {
@@ -49,24 +49,33 @@ export default async function StorePage({ params }: Props) {
   const primaryCategorySlug = categories.find((c) => c.id === store.categoryId)?.slug ?? null
   const storeOfferLogoSrc = megaMenuStoreImageSrc({ logoSrc: store.logoSrc ?? null })
   const aboutText = store.description?.trim() || STORE_PAGE_FALLBACK_BLURB
-  const primaryPromo = coupons[0]
+  const hidePublicReferral = isNotPubliclyPromoted(slug)
+  const visibleCoupons = hidePublicReferral ? [] : coupons
+  const primaryPromo = visibleCoupons[0]
   const openStoreUrl = primaryPromo?.referralUrl ?? null
-  const hasMainOffers = coupons.length > 0
+  const hasMainOffers = visibleCoupons.length > 0
+  const facts = buildListingFacts({
+    slug,
+    terms: primaryPromo?.terms ?? null,
+    listingUpdatedAt: primaryPromo?.updatedAt ?? store.updatedAt
+  })
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: `${store.name} offers`,
+    name: `${store.name} on BonusBridge`,
     description: aboutText,
-    url: absoluteUrl(`/stores/${slug}`)
+    url: absoluteUrl(`/stores/${slug}`),
+    dateModified: primaryPromo?.updatedAt ?? store.updatedAt
   }
 
   return (
     <section className="category-page-section store-page" aria-labelledby="store-page-heading">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <article className="app-surface-card store-page-hero">
-        <h1 id="store-page-heading" className="sr-only">
+        <h1 id="store-page-heading" className="store-page-title">
           {store.name}
         </h1>
+        <ListingFacts facts={facts} />
         <div className="store-page-hero-grid">
           <div className="store-page-hero-main">
             <div className="store-page-logo-box">
@@ -102,12 +111,17 @@ export default async function StorePage({ params }: Props) {
                 See provider details
               </StorePageOpenPartnerLink>
             ) : null}
+            {hidePublicReferral && store.website ? (
+              <a className="store-page-provider-link" href={store.website} target="_blank" rel="noopener noreferrer">
+                Provider website
+              </a>
+            ) : null}
           </div>
         </div>
       </article>
       <SiteDisclosure className="site-disclosure--store" />
 
-      {coupons.length > 0 ? (
+      {visibleCoupons.length > 0 ? (
         <div className="store-top-offers-wrap clip-coupons-section store-page-clip-section">
           <div className="section-head clip-coupons-head">
             <h2 id="store-top-offers-heading" className="section-title">
@@ -118,7 +132,7 @@ export default async function StorePage({ params }: Props) {
             storeName={store.name}
             storeSlug={slug}
             storeLogoSrc={storeOfferLogoSrc}
-            offers={coupons}
+            offers={visibleCoupons}
           />
         </div>
       ) : null}

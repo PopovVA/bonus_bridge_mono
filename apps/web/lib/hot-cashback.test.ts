@@ -16,8 +16,9 @@ describe('getHotCashbackOfferByStoreSlug', () => {
     expect(getHotCashbackOfferByStoreSlug('no-such-store')).toBeUndefined()
   })
 
-  it('includes Public for store-page / Explore More lookups', () => {
-    expect(getHotCashbackOfferByStoreSlug('public')?.ctaText).toBe('See offer details')
+  it('does not keep a Public referral card in the curated list', () => {
+    expect(getHotCashbackOfferByStoreSlug('public')).toBeUndefined()
+    expect(getHotCashbackOfferByStoreSlug('klarna')).toBeUndefined()
   })
 
   it('includes Chime with terms badge for Explore More', () => {

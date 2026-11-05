@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { trackGtagEvent } from '@/lib/gtag-track'
 
 export type ClipOpenStoreDialogProps = {
@@ -19,23 +19,25 @@ export function ClipOpenStoreDialog({
   onClose,
   onConfirmOpen
 }: ClipOpenStoreDialogProps) {
+  const titleId = useId()
   const ref = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
     const el = ref.current
-    if (!el) return
-    if (isOpen) {
-      if (!el.open) el.showModal()
-    } else if (el.open) {
-      el.close()
+    if (!isOpen || !el) return
+    if (!el.open) el.showModal()
+    return () => {
+      if (el.open) el.close()
     }
   }, [isOpen])
+
+  if (!isOpen) return null
 
   return (
     <dialog
       ref={ref}
       className="clip-open-store-dialog"
-      aria-labelledby="clip-open-store-dialog-title"
+      aria-labelledby={titleId}
       onCancel={(e) => {
         e.preventDefault()
         onClose()
@@ -45,9 +47,9 @@ export function ClipOpenStoreDialog({
       }}
     >
       <div className="clip-open-store-dialog__panel" onClick={(e) => e.stopPropagation()}>
-        <h2 id="clip-open-store-dialog-title" className="clip-open-store-dialog__title">
+        <p id={titleId} className="clip-open-store-dialog__title">
           Open partner site?
-        </h2>
+        </p>
         <p className="clip-open-store-dialog__body">
           {copySucceeded ? (
             <>

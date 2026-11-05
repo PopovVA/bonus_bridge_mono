@@ -8,16 +8,14 @@ afterEach(() => {
 })
 
 describe('getCuratedLinkCardCopyForExploreMore', () => {
-  it('uses home Top monthly offers copy for Klarna', () => {
-    const c = getCuratedLinkCardCopyForExploreMore('klarna')
+  it('uses the home monthly row for Robinhood and has no Klarna or Public referral card', () => {
+    const c = getCuratedLinkCardCopyForExploreMore('robinhood')
     expect(c?.badgeText).toBe('Terms apply')
-    expect(c?.ctaText).toBe('Review Klarna terms')
-    expect(c?.description).toBe(
-      'Review Klarna availability, flexible payment details, and provider terms before continuing to the app.'
-    )
-    expect(c?.href).toContain('klarna.com')
-    expect(c?.logoSrc).toBe('/top-offers/logos/klarna-logo.svg')
+    expect(c?.ctaText).toBe('Check Robinhood terms')
+    expect(c?.href).toBe('https://join.robinhood.com/vadimp-4f32ef3')
     expect(c?.headline).toBeNull()
+    expect(getCuratedLinkCardCopyForExploreMore('klarna')).toBeNull()
+    expect(getCuratedLinkCardCopyForExploreMore('public')).toBeNull()
   })
 
   it('uses partner-offer copy when slug is not in monthly row', () => {

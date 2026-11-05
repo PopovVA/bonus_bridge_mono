@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { absoluteUrl } from '@/app/seo'
+import { absoluteUrl, pageSocialMetadata } from '@/app/seo'
 import { notFound } from 'next/navigation'
 import { EmptyState } from '@/components/empty-state'
 import { TrackedLink } from '@/components/tracked-link'
@@ -72,13 +72,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!cat) {
     return { title: 'Category', robots: { index: false, follow: false } }
   }
-  return {
-    title: `${cat.name} stores`,
-    description: `Browse stores and promo codes in ${cat.name}.`,
-    alternates: {
-      canonical: `/categories/${slug}`
-    }
-  }
+  return pageSocialMetadata({
+    title: `${cat.name} store guides`,
+    description: `Informational ${cat.name} store pages on BonusBridge. Current bonuses are not verified. Eligibility depends on the provider, your account, and your location.`,
+    path: `/categories/${slug}`
+  })
 }
 
 export default async function CategoryPage({ params }: Props) {
@@ -105,7 +103,7 @@ export default async function CategoryPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: `${cat.name} stores`,
-    description: `Browse stores and promo codes in ${cat.name}.`,
+    description: `Informational ${cat.name} store pages. Current bonuses are not verified on BonusBridge.`,
     url: absoluteUrl(`/categories/${slug}`),
     mainEntity: {
       '@type': 'ItemList',
@@ -127,7 +125,8 @@ export default async function CategoryPage({ params }: Props) {
           {cat.name}
         </h1>
         <p className="section-subtitle category-page-subtitle">
-          Stores in this category — open a store page for promo codes and partner offers.
+          Stores in this category. Open a store page for what BonusBridge currently publishes. Current bonus amounts are
+          not verified here. Eligibility can depend on the provider, your account, and your location.
         </p>
       </header>
 

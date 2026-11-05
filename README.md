@@ -2,7 +2,7 @@
 
 Public SEO site with **fixed in-repo content** (no separate API or admin app).
 
-- `apps/web` — Next.js (`/`, `/articles`, `/articles/[slug]`, `/stores`, `/stores/[slug]`, `/coupons` → `/`, `/coupons/[id]` → `/stores/[slug]`) with Zod schemas in `apps/web/lib/schemas`
+- `apps/web` — Next.js (`/`, `/articles`, `/articles/[slug]`, `/stores`, `/stores/[slug]`, `/coupons` → `/`, `/coupons/[id]` → `/stores/[slug]`) with Zod schemas in `apps/web/lib/schemas`. Store pages for Klarna and Public stay informational; their personal referral links are not published. Other inventory referral URLs are unchanged.
 
 **Content:** edit `apps/web/lib/site-data.ts` (categories, stores, coupons, hero slides, featured sections). Static images: `apps/web/public/`.
 

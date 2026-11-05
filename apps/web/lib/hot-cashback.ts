@@ -72,19 +72,6 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     ctaText: 'View offer details',
     href: 'https://www.chime.com/r/vadimpopov1/',
     logoSrc: '/stores/chime.svg'
-  },
-  /** Same copy as home offer-details row; omitted from home partner-offer list via `getHotCashbackOffers()` to avoid duplicate tiles. */
-  {
-    id: 'hot-cashback-public',
-    brandName: 'Public',
-    slug: 'public',
-    badgeText: 'Terms apply',
-    headline: 'Public welcome offer details',
-    description:
-      'Learn about Public welcome offer eligibility, funding requirements, and current provider terms.',
-    ctaText: 'See offer details',
-    href: 'https://share.public.com/Vadim66923',
-    logoSrc: '/top-offers/logos/public-logo.svg'
   }
 ]
 

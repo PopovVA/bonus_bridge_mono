@@ -516,8 +516,8 @@ select:focus-visible {
   }
 
   .stores-nav .nav-dropdown-trigger {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     border: 1px solid #cbd5e1;
     border-radius: 10px;

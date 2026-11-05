@@ -49,7 +49,10 @@ describe('category [slug] page', () => {
       { id: 'c1', slug: 'electronics', name: 'Electronics' } as never
     ])
     await expect(generateMetadata({ params: Promise.resolve({ slug: 'electronics' }) })).resolves.toMatchObject({
-      title: 'Electronics stores'
+      title: 'Electronics store guides',
+      alternates: { canonical: '/categories/electronics' },
+      openGraph: { siteName: 'BonusBridge', type: 'website' },
+      twitter: { card: 'summary' }
     })
   })
 
