@@ -274,7 +274,12 @@
 /* Outer frame: one radius + overflow kills gray “square” corners behind rounded slides */
 .hero-carousel-shell {
   position: relative;
-  --hero-slide-gap: 16px;
+  /* Full-bleed slides. A positive gap plus Embla's snap leaves the previous slide peeking and shifts the CTA. */
+  --hero-slide-gap: 0px;
+  --hero-arrow-size: 44px;
+  --hero-arrow-inset: 12px;
+  /* Copy and the primary CTA stay in the column between the two nav buttons. */
+  --hero-content-inline: calc(var(--hero-arrow-inset) + var(--hero-arrow-size) + 12px);
   /* One height for every slide (promo + image); width is always full viewport cell */
   --hero-banner-height: clamp(300px, 50vw, 440px);
   border-radius: 20px;
@@ -289,11 +294,10 @@
   height: var(--hero-banner-height);
 }
 
-/* Spacing between slides (Embla-friendly: padding-left + negative margin on track) */
+/* One slide per view. No inter-slide padding, so each snap lands flush with the frame. */
 .hero-embla-track {
   display: flex;
   align-items: stretch;
-  margin-left: calc(-1 * var(--hero-slide-gap));
   height: 100%;
   min-height: 100%;
 }
@@ -301,7 +305,7 @@
 .hero-slide-cell {
   flex: 0 0 100%;
   min-width: 0;
-  padding-left: var(--hero-slide-gap);
+  padding-left: 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -322,14 +326,15 @@
   isolation: isolate;
 }
 
-/* Floating nav — above all slides, does not scroll with track */
+/* Floating nav — above all slides, vertically centered on the frame, does not scroll with the track */
 .hero-floating-arrow {
   position: absolute;
   top: 50%;
+  left: var(--hero-arrow-inset);
   transform: translateY(-50%);
   z-index: 12;
-  width: 42px;
-  height: 42px;
+  width: var(--hero-arrow-size);
+  height: var(--hero-arrow-size);
   border-radius: 50%;
   border: 1px solid rgba(15, 23, 42, 0.12);
   background: rgba(255, 255, 255, 0.92);
@@ -350,6 +355,7 @@
 .hero-floating-arrow:hover {
   background: #fff;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16);
+  transform: translateY(-50%);
 }
 
 .hero-floating-arrow:focus-visible {
@@ -358,14 +364,15 @@
 }
 
 .hero-floating-arrow--prev {
-  left: 12px;
+  left: var(--hero-arrow-inset);
 }
 
 .hero-floating-arrow--next {
-  right: 12px;
+  left: auto;
+  right: var(--hero-arrow-inset);
 }
 
-/* Narrow phones: keep the banner tall enough for the headline, terms, and CTA, and park arrows in the top corners so they do not cover those controls. */
+/* Narrow phones: tall enough for a wrapped headline, the terms link, and the CTA between the centered arrows. */
 @media (max-width: 640px) {
   .hero-section {
     padding: 8px 12px 4px;
@@ -373,19 +380,6 @@
 
   .hero-carousel-shell {
     --hero-banner-height: 460px;
-  }
-
-  .hero-floating-arrow {
-    top: 10px;
-    transform: none;
-  }
-
-  .hero-floating-arrow--prev {
-    left: 8px;
-  }
-
-  .hero-floating-arrow--next {
-    right: 8px;
   }
 }
 
@@ -462,15 +456,6 @@
   margin: 0;
 }
 
-/* Room for overlaid dots on promo + image slides */
-.hero-carousel-shell:has(.hero-floating-dots) .hero-chime-panel-inner,
-.hero-carousel-shell:has(.hero-floating-dots) .hero-coinbase-panel-inner,
-.hero-carousel-shell:has(.hero-floating-dots) .hero-paypal-panel-inner,
-.hero-carousel-shell:has(.hero-floating-dots) .hero-uber-panel-inner,
-.hero-carousel-shell:has(.hero-floating-dots) .hero-ubereats-panel-inner {
-  /* Slightly less bottom pad so extra stack gap fits same banner height */
-  padding-bottom: clamp(26px, 4.2vw, 44px);
-}
 
 .hero-promo-brand-row {
   display: flex;
@@ -1184,6 +1169,26 @@
   padding: clamp(8px, 1.7vw, 16px) clamp(14px, 3vw, 36px) clamp(6px, 1.45vw, 12px);
   box-sizing: border-box;
   overflow: hidden;
+}
+
+/* Side padding wins over the per-slide shorthand so arrows never sit on the copy or the CTA. */
+.hero-chime-panel-inner,
+.hero-coinbase-panel-inner,
+.hero-paypal-panel-inner,
+.hero-uber-panel-inner,
+.hero-ubereats-panel-inner {
+  padding-left: var(--hero-content-inline);
+  padding-right: var(--hero-content-inline);
+}
+
+@media (min-width: 768px) {
+  .hero-chime-panel-inner,
+  .hero-coinbase-panel-inner,
+  .hero-paypal-panel-inner,
+  .hero-uber-panel-inner,
+  .hero-ubereats-panel-inner {
+    padding-bottom: 40px;
+  }
 }
 
 .hero-uber-stack {
@@ -3109,16 +3114,6 @@
 @media (max-width: 767px) {
   .hero-floating-dots {
     display: none;
-  }
-
-  .hero-floating-arrow {
-    width: 44px;
-    height: 44px;
-  }
-
-  .hero-floating-arrow svg {
-    width: 16px;
-    height: 16px;
   }
 
   .hero-chime-eyebrow,
