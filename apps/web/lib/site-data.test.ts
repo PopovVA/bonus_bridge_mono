@@ -20,6 +20,7 @@ import {
   serviceMatchesSearchQuery,
   getStoresMegaMenu,
   megaMenuStoreImageSrc,
+  catalogLogoSrc,
   sortServicesForCategorySlug
 } from './site-data'
 
@@ -43,97 +44,58 @@ describe('site-data', () => {
   it('returns top monthly offers for home', async () => {
     const list = await getTopMonthlyOffers()
     expect(list).toHaveLength(1)
-    expect(list[0]?.slug).toBe('robinhood')
-    expect(list[0]?.href).toBe('https://join.robinhood.com/vadimp-4f32ef3')
-    expect(list[0]?.logoSrc).toBe('/clip-coupons/robinhood.svg')
-    expect(list[0]?.imageSrc).toBe('/top-offers/media/robinhood-promo.png')
+    expect(list[0]?.slug).toBe('topcashback')
+    expect(list[0]?.href).toBe('https://www.topcashback.com/ref/member344836925437')
+    expect(list[0]?.logoSrc).toBe('/hot-cashback/logos/topcashback.png')
     expect(list[0]?.badgeText).toBe('Terms apply')
-    expect(list[0]?.ctaText).toBe('Check Robinhood terms')
-    expect(list[0]?.description).toBe(
-      'Stock rewards may apply after sign-up and funding rules are met. Limits and terms are set by Robinhood.'
-    )
+    expect(list[0]?.ctaText).toBe('See TopCashback offer')
+    expect(list[0]?.description).toContain('$10')
+    expect(list[0]?.description).toContain('365 days')
   })
 
   it('exposes sync monthly top snapshot by slug (Explore More parity)', () => {
-    const row = getMonthlyTopOfferSnapshotBySlug('robinhood')
-    expect(row?.slug).toBe('robinhood')
+    const row = getMonthlyTopOfferSnapshotBySlug('topcashback')
+    expect(row?.slug).toBe('topcashback')
     expect(row?.badgeText).toBe('Terms apply')
     expect(getMonthlyTopOfferSnapshotBySlug('klarna')).toBeUndefined()
     expect(getMonthlyTopOfferSnapshotBySlug('public')).toBeUndefined()
+    expect(getMonthlyTopOfferSnapshotBySlug('robinhood')).toBeUndefined()
     expect(getMonthlyTopOfferSnapshotBySlug('unknown-slug-xyz')).toBeUndefined()
   })
 
   it('returns a monthly top offer only for slugs still on the home row', async () => {
-    await expect(getMonthlyTopOfferForStoreSlug('robinhood')).resolves.toMatchObject({ slug: 'robinhood' })
+    await expect(getMonthlyTopOfferForStoreSlug('topcashback')).resolves.toMatchObject({ slug: 'topcashback' })
     await expect(getMonthlyTopOfferForStoreSlug('klarna')).resolves.toBeNull()
     await expect(getMonthlyTopOfferForStoreSlug('public')).resolves.toBeNull()
     await expect(getMonthlyTopOfferForStoreSlug('uber')).resolves.toBeNull()
   })
 
-  it('returns home clip coupons (8 tear-off promos)', async () => {
+  it('returns a home clip coupon only for Lyft', async () => {
     const list = await getHomeClipCoupons()
-    expect(list).toHaveLength(8)
-    const ue = list.find((c) => c.id === 'clip-ubereats')
-    expect(ue?.code).toBe('eats-zywrn58e0v')
-    expect(ue?.openUrl).toContain('ubereats.com')
-    expect(ue?.openUrl).toContain('promoCode=eats-zywrn58e0v')
-    expect(ue?.logoSrc).toBe('/brands/ubereats-logo.png')
-    const rides = list.find((c) => c.id === 'clip-uber-rides')
-    expect(rides?.code).toBe('zfj232q2gjsx')
-    expect(rides?.openUrl).toContain('referrals.uber.com')
-    expect(rides?.openUrl).toContain('zfj232q2gjsx')
-    expect(rides?.logoSrc).toBe('/brands/uber-logo.png')
-    const seven = list.find((c) => c.id === 'clip-7now')
-    expect(seven?.code).toBe('my1w2j')
-    expect(seven?.openUrl).toBe('https://smart.link/370flfia27552?cp_0=my1w2j')
-    expect(seven?.logoSrc).toBe('/clip-coupons/7eleven.svg')
+    expect(list).toHaveLength(1)
     const lyft = list.find((c) => c.id === 'clip-lyft')
     expect(lyft?.code).toBe('VADIM53422')
     expect(lyft?.openUrl).toBe('https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc')
     expect(lyft?.logoSrc).toBe('/clip-coupons/lyft.svg')
-    const rh = list.find((c) => c.id === 'clip-robinhood')
-    expect(rh?.code).toBe('vadimp-4f32ef3')
-    expect(rh?.openUrl).toBe('https://join.robinhood.com/vadimp-4f32ef3')
-    expect(rh?.logoSrc).toBe('/clip-coupons/robinhood.svg')
-    const lime = list.find((c) => c.id === 'clip-lime')
-    expect(lime?.code).toBe('REGUD7BFJWT')
-    expect(lime?.openUrl).toBe('https://lime.bike/referral_signin/REGUD7BFJWT')
-    expect(lime?.logoSrc).toBe('/clip-coupons/lime.svg')
-    const bird = list.find((c) => c.id === 'clip-bird')
-    expect(bird?.code).toBe('X86GGD')
-    expect(bird?.openUrl).toBe('https://links.bird.co/rKbyq2')
-    expect(bird?.logoSrc).toBe('/clip-coupons/bird.svg')
-    const posh = list.find((c) => c.id === 'clip-poshmark')
-    expect(posh?.code).toBe('VADIMPOPOV')
-    expect(posh?.openUrl).toBe('https://posh.mk/QW6tN2UJW1b')
-    expect(posh?.logoSrc).toBe('/clip-coupons/poshmark.svg')
+    expect(lyft?.blurb).toContain('market-specific')
+    expect(list.some((c) => c.brand === 'Uber')).toBe(false)
   })
 
-  it('returns hot cashback offers for home', async () => {
+  it('returns hot cashback offers for home without the monthly duplicate', async () => {
     const list = await getHotCashbackOffers()
-    expect(list).toHaveLength(5)
-    expect(list[0]?.slug).toBe('rakuten')
-    expect(list[0]?.badgeText).toBe('Terms apply')
+    expect(list.map((row) => row.slug)).toEqual(['rakuten', 'honey', 'chime'])
     expect(list[0]?.href).toBe('https://www.rakuten.com/r/MVADIM7')
-    expect(list[1]?.slug).toBe('topcashback')
-    expect(list[1]?.badgeText).toBe('Terms apply')
-    expect(list[1]?.href).toBe('https://www.topcashback.com/ref/member344836925437')
-    expect(list[2]?.slug).toBe('honey')
-    expect(list[2]?.badgeText).toBe('Terms apply')
-    expect(list[2]?.href).toBe('https://www.joinhoney.com/ref/nwpz6sw')
-    expect(list[3]?.slug).toBe('lemonade')
-    expect(list[3]?.badgeText).toBe('Terms apply')
-    expect(list[3]?.href).toBe('https://lemonade.com/r/vadimpopov1')
-    expect(list[4]?.slug).toBe('chime')
-    expect(list[4]?.badgeText).toBe('Terms apply')
-    expect(list[4]?.href).toBe('https://www.chime.com/r/vadimpopov1/')
+    expect(list[1]?.href).toBe('https://www.joinhoney.com/ref/nwpz6sw')
+    expect(list[2]?.href).toBe('https://www.chime.com/r/vadimpopov1/')
   })
 
-  it('returns the full hot cashback list without a Public referral card', async () => {
+  it('returns the full hot cashback list without unlisted referral cards', async () => {
     const list = await getAllHotCashbackOffers()
-    expect(list).toHaveLength(5)
+    expect(list).toHaveLength(4)
     expect(list.find((o) => o.slug === 'public')).toBeUndefined()
     expect(list.find((o) => o.slug === 'klarna')).toBeUndefined()
+    expect(list.find((o) => o.slug === 'lemonade')).toBeUndefined()
+    expect(list.find((o) => o.slug === 'topcashback')?.href).toContain('topcashback.com')
   })
 
   it('returns home category marquee chips in alphabetical order', async () => {
@@ -155,77 +117,56 @@ describe('site-data', () => {
     expect(menu.categories.find((c) => c.slug === 'food')?.imageSrc).toBe('/categories/food.svg')
     const menuNames = menu.categories.map((c) => c.name)
     expect([...menuNames].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(menuNames)
-    expect(menu.storesByCategorySlug.auto?.map((s) => s.slug)).toEqual([
-      'uber',
-      'lyft',
-      'lime',
-      'bird',
-      'lemonade'
-    ])
-    expect(menu.storesByCategorySlug.auto?.[0]?.imageSrc).toBe('/brands/uber-logo.png')
-    expect(menu.storesByCategorySlug.finance?.map((s) => s.slug)).toEqual([
-      'chime',
-      'robinhood',
-      'public',
-      'klarna',
-      'lemonade'
-    ])
+    expect(menu.storesByCategorySlug.auto?.map((s) => s.slug)).toEqual(['lyft'])
+    expect(menu.storesByCategorySlug.auto?.[0]?.imageSrc).toBe('/clip-coupons/lyft.svg')
+    expect(menu.storesByCategorySlug.finance?.map((s) => s.slug)).toEqual(['chime'])
     expect(menu.storesByCategorySlug.shopping?.map((s) => s.slug)).toEqual([
-      'poshmark',
       'rakuten',
       'topcashback',
       'honey'
     ])
-    expect(menu.storesByCategorySlug.travel?.map((s) => s.slug)).toEqual(['airbnb'])
+    expect(menu.storesByCategorySlug.food).toEqual([])
+    expect(menu.storesByCategorySlug.travel).toEqual([])
   })
 
   it('returns client catalog with stores and active offers per category', async () => {
     const catalog = await getClientCatalog()
     expect(catalog.categories.length).toBe(6)
     const finance = catalog.categories.find((c) => c.slug === 'finance')
-    expect(finance?.stores.map((s) => s.slug)).toEqual(['chime', 'robinhood', 'public', 'klarna', 'lemonade'])
+    expect(finance?.stores.map((s) => s.slug)).toEqual(['chime'])
     const chime = finance?.stores.find((s) => s.slug === 'chime')
     expect(chime?.offers.some((o) => o.title.length > 0)).toBe(true)
     expect(chime?.offers[0]).toMatchObject({
       serviceSlug: 'chime',
       serviceName: 'Chime',
-      referralUrl: expect.stringMatching(/^https?:\/\//)
+      referralUrl: 'https://www.chime.com/r/vadimpopov1/'
     })
-    const bird = catalog.categories.find((c) => c.slug === 'auto')?.stores.find((s) => s.slug === 'bird')
-    expect(bird?.logoSrc).toBeNull()
-    expect(bird?.offers.length).toBeGreaterThan(0)
-    const uberEats = catalog.categories.find((c) => c.slug === 'food')?.stores.find((s) => s.slug === 'uber-eats')
-    expect(uberEats?.offers.some((o) => o.couponCode)).toBe(true)
+    const lyft = catalog.categories.find((c) => c.slug === 'auto')?.stores.find((s) => s.slug === 'lyft')
+    expect(lyft?.logoSrc).toBe('/clip-coupons/lyft.svg')
+    expect(catalog.categories.find((c) => c.slug === 'food')?.stores).toEqual([])
+    const slugs = catalog.categories.flatMap((category) => category.stores.map((store) => store.slug))
+    expect(slugs).not.toContain('uber')
+    expect(slugs).not.toContain('robinhood')
   })
 
-  it('returns hero slides', async () => {
+  it('returns hero slides for listed programs only', async () => {
     const heroes = await getHeroSlides()
-    expect(heroes.length).toBeGreaterThan(0)
+    expect(heroes).toHaveLength(1)
     expect(heroes[0]?.kind).toBe('chime')
-    expect(heroes[1]?.kind).toBe('uber')
-    expect(heroes[2]?.kind).toBe('coinbase')
     if (heroes[0]?.kind === 'chime') {
-      expect(heroes[0].headline).toBe('Chime new-account offer details')
+      expect(heroes[0].headline).toBe('Chime referral requirements')
       expect(heroes[0].referralUrl).toContain('chime.com')
-    }
-    if (heroes[1]?.kind === 'uber') {
-      expect(heroes[1].referralUrl).toContain('referrals.uber.com')
-      expect(heroes[1].headline).toBe('Uber new-rider offer details')
-    }
-    if (heroes[2]?.kind === 'coinbase') {
-      expect(heroes[2].referralUrl).toContain('coinbase.com')
-    }
-    expect(heroes[3]?.kind).toBe('ubereats')
-    if (heroes[3]?.kind === 'ubereats') {
-      expect(heroes[3].referralUrl).toContain('ubereats.com')
-      expect(heroes[3].referralUrl).toContain('promoCode=')
+      expect(heroes[0].promoHighlight).toContain('10 successful referrals')
     }
     expect(heroes.some((slide) => slide.kind === 'paypal')).toBe(false)
+    expect(heroes.some((slide) => slide.kind === 'uber')).toBe(false)
+    expect(heroes.some((slide) => slide.kind === 'coinbase')).toBe(false)
   })
 
   it('returns featured stores with nested store', async () => {
     const fs = await getFeaturedStores()
-    expect(fs[0]?.store?.slug).toBe('uber')
+    expect(fs[0]?.store?.slug).toBe('lyft')
+    expect(fs[1]?.store?.slug).toBe('rakuten')
   })
 
   it('returns featured offers with nested offer', async () => {
@@ -242,17 +183,16 @@ describe('site-data', () => {
 
   it('filters services by category slug and query', async () => {
     const finance = await getServices({ category: 'finance' })
-    expect(finance.map((s) => s.slug)).toEqual(['chime', 'robinhood', 'public', 'klarna', 'lemonade'])
+    expect(finance.map((s) => s.slug)).toEqual(['chime'])
     expect(finance.every((s) => s.categoryId === '11111111-1111-4111-8111-111111111101')).toBe(true)
     const auto = await getServices({ category: 'auto' })
-    expect(auto.map((s) => s.slug)).toEqual(['uber', 'lyft', 'lime', 'bird', 'lemonade'])
-    expect(auto.find((s) => s.slug === 'lemonade')?.categoryId).toBe('11111111-1111-4111-8111-111111111101')
+    expect(auto.map((s) => s.slug)).toEqual(['lyft'])
     const q = await getServices({ q: 'Klarna' })
-    expect(q.some((s) => s.slug === 'klarna')).toBe(true)
+    expect(q.some((s) => s.slug === 'klarna')).toBe(false)
     const byDescription = await getServices({ q: 'Cash back' })
     expect(byDescription.some((s) => s.slug === 'topcashback')).toBe(true)
-    const byInsurance = await getServices({ q: 'insurance' })
-    expect(byInsurance.some((s) => s.slug === 'lemonade')).toBe(true)
+    const byDeposit = await getServices({ q: 'direct deposit' })
+    expect(byDeposit.some((s) => s.slug === 'chime')).toBe(true)
   })
 
   it('resolves service by slug', async () => {
@@ -263,11 +203,11 @@ describe('site-data', () => {
 
   it('filters offers by status, store slug, category', async () => {
     const active = await getOffers({ status: 'active' })
-    expect(active.length).toBe(15)
+    expect(active.length).toBe(6)
     const byStore = await getOffers({ status: 'active', service: 'chime' })
     expect(byStore.every((o) => o.serviceId === '22222222-2222-4222-8222-222222222210')).toBe(true)
     const byCat = await getOffers({ status: 'active', category: 'finance' })
-    expect(byCat.length).toBe(3)
+    expect(byCat.length).toBe(1)
   })
 
   it('returns offer by id or throws', async () => {
@@ -277,7 +217,7 @@ describe('site-data', () => {
   })
 
   it('resolves store slug for offer id for coupon URL redirects', async () => {
-    await expect(getStoreSlugForOfferId('33333333-3333-4333-8333-333333333303')).resolves.toBe('uber')
+    await expect(getStoreSlugForOfferId('33333333-3333-4333-8333-333333333304')).resolves.toBe('lyft')
     await expect(getStoreSlugForOfferId('00000000-0000-4000-8000-000000000000')).resolves.toBeNull()
     await expect(getStoreSlugForOfferId('33333333-3333-4333-8333-333333333399')).resolves.toBeNull()
   })
@@ -289,8 +229,8 @@ describe('site-data', () => {
   })
 
   it('filters offers by search query', async () => {
-    const found = await getOffers({ status: 'active', q: 'Uber' })
-    expect(found.some((o) => o.title.toLowerCase().includes('uber'))).toBe(true)
+    const found = await getOffers({ status: 'active', q: 'Lyft' })
+    expect(found.some((o) => o.title.toLowerCase().includes('lyft'))).toBe(true)
     const byPreviewOnly = await getOffers({ status: 'active', q: 'qualifying' })
     expect(byPreviewOnly.some((o) => o.id === '33333333-3333-4333-8333-333333333301')).toBe(true)
   })
@@ -299,6 +239,12 @@ describe('site-data', () => {
     expect(megaMenuStoreImageSrc({ logoSrc: '/brands/x.png' })).toBe('/brands/x.png')
     expect(megaMenuStoreImageSrc({ logoSrc: null })).toBe('/icon.svg')
     expect(megaMenuStoreImageSrc({})).toBe('/icon.svg')
+  })
+
+  it('normalizes catalog logos to null when missing', () => {
+    expect(catalogLogoSrc('/hot-cashback/logos/rakuten.svg')).toBe('/hot-cashback/logos/rakuten.svg')
+    expect(catalogLogoSrc(null)).toBeNull()
+    expect(catalogLogoSrc(undefined)).toBeNull()
   })
 
   it('sorts services with slugs missing from category order after known slugs', async () => {

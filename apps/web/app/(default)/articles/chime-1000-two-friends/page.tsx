@@ -1,26 +1,37 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { ArticlePartnerFigure } from '@/components/article-partner-figure'
 import { ArticleReferralDisclosure } from '@/components/article-referral-disclosure'
 import { ArticleViewTracker } from '@/components/article-view-tracker'
-import { ChimeReferralCalculator } from '@/components/chime-referral-calculator'
 import { StoreRelatedPanel } from '@/components/store-related-panel'
 import { TrackedOutboundLink } from '@/components/tracked-link'
 import { absoluteUrl } from '@/app/seo'
 import { CHIME_INVITE_FRIENDS_TERMS_URL, CHIME_PARTNER_REFERRAL_URL } from '@/lib/chime-article-constants'
-import {
-  CHIME_DIRECT_DEPOSIT_BONUS_USD,
-  CHIME_FRIEND_BONUS_USD,
-  CHIME_REFERRER_PER_FRIEND_USD
-} from '@/lib/chime-referral-calculator'
 import { articleList } from '@/lib/articles/list'
-import { CHIME_TRADEMARK_NOTICE } from '@/lib/site-disclaimers'
+import { CHIME_TRADEMARK_NOTICE, FTC_AFFILIATE_DISCLOSURE } from '@/lib/site-disclaimers'
 import { getCategories, getServiceBySlug } from '@/lib/site-data'
 
 const SLUG = 'chime-1000-two-friends'
+const UPDATED = '2026-11-05T18:00:00.000Z'
 
 const chimeArticle = articleList.find((a) => a.slug === SLUG)!
 
-const modeledTwoFriendTotalUsd = 2 * CHIME_REFERRER_PER_FRIEND_USD + CHIME_DIRECT_DEPOSIT_BONUS_USD
+const faqs = [
+  {
+    question: 'What direct deposit qualifies?',
+    answer:
+      'A payroll, benefits, or other qualifying ACH deposit of at least $200 within 45 days. Peer-to-peer transfers such as Venmo, PayPal, Cash App, and Zelle do not count.'
+  },
+  {
+    question: 'How many referrals can post in a year?',
+    answer: 'Chime’s standard program caps successful referrals at 10 per calendar year.'
+  },
+  {
+    question: 'Is there a guaranteed referrer dollar amount?',
+    answer:
+      'No. The referrer bonus is set when the invited member enrolls. Older promotions used different amounts and should not be treated as the current standard offer.'
+  }
+]
 
 export async function generateMetadata(): Promise<Metadata> {
   const title = chimeArticle.title
@@ -30,15 +41,14 @@ export async function generateMetadata(): Promise<Metadata> {
   const pageUrl = absoluteUrl(`/articles/${SLUG}`)
 
   return {
-    title,
+    title: { absolute: `${title} | BonusBridge` },
     description,
     keywords: [
       'Chime referral',
-      'Chime invite offer',
       'Chime direct deposit requirements',
-      'referral offer terms',
-      'digital banking offer',
-      'eligibility requirements'
+      'Chime referral cap',
+      'qualifying direct deposit',
+      'referral offer terms'
     ],
     alternates: {
       canonical: `/articles/${SLUG}`
@@ -48,13 +58,14 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       type: 'article',
       publishedTime: chimeArticle.publishedAt,
+      modifiedTime: UPDATED,
       url: pageUrl,
       images: [
         {
           url: ogImage,
           width: 605,
           height: 340,
-          alt: 'Chime referral program steps: share link, direct deposit, bonuses'
+          alt: 'Chime referral steps: share a link, qualifying direct deposit, card activation'
         }
       ]
     },
@@ -83,38 +94,39 @@ export default async function ChimeArticlePage() {
   const categories = Array.isArray(categoriesResult) ? categoriesResult : []
   const primaryCategorySlug = store ? categories.find((c) => c.id === store.categoryId)?.slug ?? null : null
 
-  const published = chimeArticle.publishedAt
+  const pageUrl = absoluteUrl(`/articles/${SLUG}`)
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: chimeArticle.title,
-    description: chimeArticle.description,
-    datePublished: published,
-    dateModified: published,
-    url: absoluteUrl(`/articles/${SLUG}`),
-    keywords: [
-      'Chime',
-      'Chime referral',
-      'direct deposit bonus',
-      'digital banking',
-      'referral program',
-      'referral calculator'
-    ],
-    about: [{ '@type': 'Thing', name: 'Chime' }, { '@type': 'Thing', name: 'Referral marketing' }],
-    author: {
-      '@type': 'Organization',
-      name: 'BonusBridge'
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'BonusBridge'
-    },
-    image: [absoluteUrl('/articles/chime/referral-steps.png'), absoluteUrl('/articles/chime/chime-building.png')],
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': absoluteUrl(`/articles/${SLUG}`)
-    },
-    isAccessibleForFree: true
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+          { '@type': 'ListItem', position: 2, name: 'Articles', item: absoluteUrl('/articles') },
+          { '@type': 'ListItem', position: 3, name: chimeArticle.title, item: pageUrl }
+        ]
+      },
+      {
+        '@type': 'Article',
+        headline: chimeArticle.title,
+        description: chimeArticle.description,
+        datePublished: chimeArticle.publishedAt,
+        dateModified: UPDATED,
+        url: pageUrl,
+        author: { '@type': 'Organization', name: 'BonusBridge' },
+        publisher: { '@type': 'Organization', name: 'BonusBridge' },
+        image: [absoluteUrl('/articles/chime/referral-steps.png'), absoluteUrl('/articles/chime/chime-building.png')],
+        mainEntityOfPage: pageUrl
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: { '@type': 'Answer', text: faq.answer }
+        }))
+      }
+    ]
   }
 
   return (
@@ -127,51 +139,50 @@ export default async function ChimeArticlePage() {
           <h1 className="article-page__title">{chimeArticle.title}</h1>
           <p className="article-page__meta">
             Updated{' '}
-            <time dateTime={published}>{new Date(published).toLocaleDateString('en-US', { dateStyle: 'long' })}</time>
+            <time dateTime={UPDATED}>
+              {new Date(UPDATED).toLocaleDateString('en-US', { dateStyle: 'long', timeZone: 'UTC' })}
+            </time>
           </p>
         </header>
 
         <ArticleReferralDisclosure />
         <p className="article-page__trademark-note">{CHIME_TRADEMARK_NOTICE}</p>
 
-        <section className="article-page__section" aria-labelledby="chime-bonus-guide-heading">
-          <h2 id="chime-bonus-guide">How this referral offer fits together</h2>
+        <section className="article-page__section" aria-labelledby="chime-bonus-guide">
+          <h2 id="chime-bonus-guide">What this page will and will not say</h2>
           <p className="article-page__lede">
-            This article explains how Chime referral offers are structured and what requirements usually matter. Chime is a
-            widely used digital banking brand in the United States, known for simple checking, early pay, and transparent
-            fees. We use example numbers for illustration only and link to Chime&apos;s published rules so you can verify
-            current details yourself.
+            This article explains Chime’s standard referral rules. It does not promise a payout, and it does not multiply
+            a per-friend amount into a four-figure total. The URL still uses an older slug so existing links keep working.
+            The rules below are the ones to verify on Chime.
+          </p>
+          <p>
+            A longer checklist is on the{' '}
+            <Link href="/guides/chime-referral-requirements">Chime referral requirements guide</Link>.
           </p>
         </section>
 
-        <section className="article-page__section" aria-labelledby="how-it-works-heading">
-          <h2 id="how-it-works">How It Works</h2>
+        <section className="article-page__section" aria-labelledby="how-it-works">
+          <h2 id="how-it-works">How the standard referral works</h2>
           <ArticlePartnerFigure
             articleSlug={SLUG}
             imageKey="referral_steps"
             src="/articles/chime/referral-steps.png"
-            alt="Chime invite screen showing referral link and step-by-step instructions"
+            alt="Chime invite screen showing a referral link and the steps Chime asks a new member to finish"
             width={605}
             height={340}
             sizes="(max-width: 640px) min(400px, 100vw), min(605px, calc(100vw - 48px))"
             priority
           />
-          <p>At a high level, the referral path looks like this:</p>
           <ul className="article-page__list">
-            <li>You join through a referral link and meet the new-member requirements in the current offer.</li>
-            <li>You share your personal invite link so friends can open accounts.</li>
-            <li>Each friend completes what Chime counts as a qualifying direct deposit, if the offer requires it.</li>
-            <li>Any offer benefit posts only when Chime confirms eligibility; amounts, timing, and caps follow the official terms.</li>
+            <li>The invited person opens an account from the current referral link.</li>
+            <li>They receive a qualifying direct deposit of at least $200 within 45 days.</li>
+            <li>They activate the Chime debit card. Chime has also described a 14-day window after that deposit for the physical card.</li>
+            <li>Chime confirms the steps. The referrer bonus is the amount set when that member enrolled, not a number this site guarantees.</li>
+            <li>Successful referrals are capped at 10 per calendar year.</li>
           </ul>
           <p>
-            Competition for banking and money apps in the United States is intense, and customer acquisition spending in
-            fintech runs high compared with many other sectors. Chime is a public company, and its regular filings show
-            multi-year revenue growth. That context helps explain why sign-up and referral promotions can exist alongside
-            the product.
-          </p>
-          <p>
-            None of that means an offer benefit is automatic for you. Current eligibility and timing always come from
-            Chime&apos;s official terms.
+            Payroll, government benefits, and similar ACH deposits are the kind of deposit Chime treats as qualifying.
+            Transfers from Venmo, PayPal, Cash App, Zelle, or a friend do not count as that direct deposit.
           </p>
           <ArticlePartnerFigure
             articleSlug={SLUG}
@@ -182,80 +193,63 @@ export default async function ChimeArticlePage() {
             height={404}
             sizes="(max-width: 640px) min(400px, 100vw), min(605px, calc(100vw - 48px))"
             partnerOfferCta
-            caption="Stick to Chime's published terms for your region. Tap the image to view offer details on Chime's site (opens in a new tab)."
+            caption="Confirm the live steps on Chime. The image opens Chime in a new tab."
           />
         </section>
 
-        <section className="article-page__section" aria-labelledby="referral-bonus-estimate-heading">
-          <h2 id="referral-bonus-estimate">Referral offer illustration</h2>
-          <p>
-            Use the illustration below to see how published amounts can combine. This is not a promise of approval,
-            payment, or eligibility. In one example where you open through a referral and <strong>two friends</strong> set
-            up qualifying direct deposits, the public structure we model lands around{' '}
-            <strong>${modeledTwoFriendTotalUsd.toLocaleString('en-US')}</strong> for you when you also count your own{' '}
-            <strong>${CHIME_DIRECT_DEPOSIT_BONUS_USD}</strong> direct deposit bonus as a new member who qualifies. You
-            Adjust the friend count and the direct deposit toggle to see how the illustration changes.
-          </p>
-          <p>
-            Chime has advertised up to <strong>${CHIME_REFERRER_PER_FRIEND_USD}</strong> per qualifying friend for you,{' '}
-            <strong>${CHIME_FRIEND_BONUS_USD}</strong> for each friend, and the separate{' '}
-            <strong>${CHIME_DIRECT_DEPOSIT_BONUS_USD}</strong> welcome bonus for you when direct deposit rules are met.
-            Promotions change, so treat the tool as a snapshot of the structure we describe on the page.
-          </p>
-          <div className="article-page__calculator-wrap">
-            <ChimeReferralCalculator articleSlug={SLUG} showHeading={false} showLead={false} />
-            <div className="article-page__calculator-cta">
-              <TrackedOutboundLink
-                href={CHIME_PARTNER_REFERRAL_URL}
-                className="category-store-cta article-page__offer-cta"
-                target="_blank"
-                rel="noopener noreferrer sponsored"
-                event="article_chime_partner_cta"
-                eventParams={{ article_slug: SLUG, cta_place: 'after_calculator' }}
-              >
-                View offer details
-              </TrackedOutboundLink>
-            </div>
-          </div>
-        </section>
-
-        <section className="article-page__section" aria-labelledby="requirements-heading">
+        <section className="article-page__section" aria-labelledby="requirements">
           <h2 id="requirements">Requirements</h2>
-          <p>
-            Before you rely on any estimate, confirm what the official invite terms require in your region and for this
-            offer window.
-          </p>
           <ul className="article-page__list">
-            <li>Confirm you are on the latest invite terms for your region and offer window.</li>
-            <li>Verify what counts as a qualifying direct deposit and the minimum amount.</li>
-            <li>Remember tax reporting. Bonuses may be reported as required by law.</li>
+            <li>Qualifying direct deposit of at least $200 within 45 days.</li>
+            <li>Debit card activation.</li>
+            <li>No more than 10 successful referrals in the calendar year.</li>
+            <li>Chime’s help center has described a $100 bonus for the invited member after those steps. Confirm it on the live page.</li>
+            <li>The referrer amount is variable. Do not budget a fixed figure from an expired promotion.</li>
           </ul>
+          <p>{FTC_AFFILIATE_DISCLOSURE}</p>
+          <p>
+            <TrackedOutboundLink
+              href={CHIME_PARTNER_REFERRAL_URL}
+              className="category-store-cta article-page__offer-cta"
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              event="article_chime_partner_cta"
+              eventParams={{ article_slug: SLUG, cta_place: 'requirements' }}
+            >
+              View offer details
+            </TrackedOutboundLink>
+          </p>
         </section>
 
-        <section className="article-page__section" aria-labelledby="important-to-understand-heading">
+        <section className="article-page__section" aria-labelledby="important-to-understand">
           <h2 id="important-to-understand">Important to understand</h2>
           <p>
-            The referral offer illustration is <strong>not</strong> a guarantee of what you will receive. It is an
-            informational aid that turns today&apos;s public offer outline into a quick example. Real outcomes depend on
-            approval, timing, and whether each person satisfies the rules.
+            Chime is a financial technology company, not a bank. Banking services are provided by partner banks.
+            BonusBridge is not affiliated with Chime. Bonuses can be taxable. None of the steps above pay out just
+            because an account was opened.
           </p>
-          <ul className="article-page__list">
-            <li>Treat the calculator as planning help, not a promise of approval or payout timing.</li>
-          </ul>
+        </section>
+
+        <section className="article-page__section" aria-labelledby="chime-faq">
+          <h2 id="chime-faq">Questions</h2>
+          {faqs.map((faq) => (
+            <div key={faq.question}>
+              <h3>{faq.question}</h3>
+              <p>{faq.answer}</p>
+            </div>
+          ))}
         </section>
 
         <section
           className="article-page__disclaimer app-surface-card"
-          aria-labelledby="editorial-legal-disclaimer-heading"
+          aria-labelledby="editorial-legal-disclaimer"
         >
           <h2 className="article-page__disclaimer-title" id="editorial-legal-disclaimer">
             Editorial & legal disclaimer
           </h2>
           <p>
             BonusBridge publishes independent educational summaries. We are not a bank, broker, or tax advisor, and we are
-            not affiliated with Chime. Chime is a financial technology company, not a bank. Banking services are provided
-            by partner banks. See Chime&apos;s site for current details. Offers change—always read the official terms.
-            BonusBridge may earn compensation when you use some partner links.
+            not affiliated with Chime. Offers change. Read Chime’s current help article before you share a number.
           </p>
           <p>
             <TrackedOutboundLink
@@ -266,7 +260,7 @@ export default async function ChimeArticlePage() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              See official invite-friends terms on Chime
+              See Chime’s standard referral help
             </TrackedOutboundLink>
           </p>
         </section>

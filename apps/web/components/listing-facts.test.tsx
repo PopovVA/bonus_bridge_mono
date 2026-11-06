@@ -25,7 +25,7 @@ describe('ListingFacts', () => {
   it('omits the promotion note and date when they are absent', () => {
     ;(globalThis as { React?: typeof React }).React = React
     const html = renderToStaticMarkup(
-      <ListingFacts facts={buildListingFacts({ slug: 'uber', terms: null, listingUpdatedAt: null })} />
+      <ListingFacts facts={buildListingFacts({ slug: 'rakuten', terms: null, listingUpdatedAt: null })} />
     )
     expect(html).not.toContain('Public referral')
     expect(html).not.toContain('Listing updated')

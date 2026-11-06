@@ -1,3 +1,5 @@
+import { programClaim, requirePublicReferralUrl } from '@/lib/referral-programs'
+
 export type HotCashbackOffer = {
   id: string
   brandName: string
@@ -18,11 +20,10 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     brandName: 'Rakuten',
     slug: 'rakuten',
     badgeText: 'Terms apply',
-    headline: 'Rakuten offer details and eligibility',
-    description:
-      'Learn about Rakuten new-member offer details, qualifying spend requirements, and current provider terms.',
+    headline: 'Rakuten welcome bonus varies',
+    description: programClaim('rakuten'),
     ctaText: 'See offer details',
-    href: 'https://www.rakuten.com/r/MVADIM7',
+    href: requirePublicReferralUrl('rakuten'),
     logoSrc: '/hot-cashback/logos/rakuten.svg'
   },
   {
@@ -30,47 +31,32 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     brandName: 'TopCashback',
     slug: 'topcashback',
     badgeText: 'Terms apply',
-    headline: 'TopCashback new-member offer details',
-    description:
-      'Review TopCashback new-member offer details, payout minimums, and eligibility on the provider site.',
+    headline: 'TopCashback $10 after $10',
+    description: programClaim('topcashback'),
     ctaText: 'Check eligibility',
-    href: 'https://www.topcashback.com/ref/member344836925437',
+    href: requirePublicReferralUrl('topcashback'),
     logoSrc: '/hot-cashback/logos/topcashback.png'
   },
   {
     id: 'hot-cashback-honey',
     brandName: 'Honey',
     slug: 'honey',
-    badgeText: 'Terms apply',
-    headline: 'Honey rewards eligibility explained',
-    description:
-      'Learn how Honey rewards and coupon tools work, including qualifying activity and PayPal/Honey terms.',
+    badgeText: 'Points, not cash',
+    headline: 'Honey pays points, not cash',
+    description: programClaim('honey'),
     ctaText: 'See offer details',
-    href: 'https://www.joinhoney.com/ref/nwpz6sw',
+    href: requirePublicReferralUrl('honey'),
     logoSrc: '/hot-cashback/logos/honey.svg'
-  },
-  {
-    id: 'hot-cashback-lemonade',
-    brandName: 'Lemonade',
-    slug: 'lemonade',
-    badgeText: 'Terms apply',
-    headline: 'Lemonade referral terms overview',
-    description:
-      'Review Lemonade referral offer details for eligible insurance products and provider requirements.',
-    ctaText: 'View provider terms',
-    href: 'https://lemonade.com/r/vadimpopov1',
-    logoSrc: '/hot-cashback/logos/lemonade.svg'
   },
   {
     id: 'hot-cashback-chime',
     brandName: 'Chime',
     slug: 'chime',
-    badgeText: 'Terms apply',
-    headline: 'Chime new-account offer details',
-    description:
-      'New account and qualifying direct deposit may be required — see Chime for current terms. Eligibility and amounts follow Chime.',
+    badgeText: '10 per year',
+    headline: 'Chime referral requirements',
+    description: programClaim('chime'),
     ctaText: 'View offer details',
-    href: 'https://www.chime.com/r/vadimpopov1/',
+    href: requirePublicReferralUrl('chime'),
     logoSrc: '/stores/chime.svg'
   }
 ]

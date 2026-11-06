@@ -16,6 +16,7 @@ import type { z } from 'zod'
 import { offerWithService, serviceWithCategory } from '@/lib/site-data-relations'
 import { HOME_CLIP_COUPONS, type HomeClipCoupon } from '@/lib/home-clip-coupons'
 import { HOT_CASHBACK_OFFERS, type HotCashbackOffer } from '@/lib/hot-cashback'
+import { isPublicStoreSlug, programClaim, requirePublicReferralUrl } from '@/lib/referral-programs'
 
 export type { HomeClipCoupon } from '@/lib/home-clip-coupons'
 export type { HotCashbackOffer } from '@/lib/hot-cashback'
@@ -70,12 +71,12 @@ const categories: Category[] = [
 
 /** Display order for stores inside each category (mega menu + category pages). */
 const CATEGORY_STORE_ORDER: Record<string, string[]> = {
-  auto: ['uber', 'lyft', 'lime', 'bird', 'lemonade'],
-  electronics: ['poshmark', 'rakuten', 'topcashback', 'honey'],
-  finance: ['chime', 'robinhood', 'public', 'klarna', 'lemonade'],
-  food: ['uber-eats', '7now'],
-  shopping: ['poshmark', 'rakuten', 'topcashback', 'honey'],
-  /* Empty order → alphabetical sort in `sortServicesForCategorySlug` (travel is a single store). */
+  auto: ['lyft'],
+  electronics: ['rakuten', 'topcashback', 'honey'],
+  finance: ['chime'],
+  food: [],
+  shopping: ['rakuten', 'topcashback', 'honey'],
+  /* Empty order → alphabetical sort in `sortServicesForCategorySlug`. */
   travel: []
 }
 
@@ -175,7 +176,7 @@ const services: Service[] = [
     categoryId: CAT.auto,
     website: 'https://www.uber.com/',
     description:
-      'Uber is a rideshare and mobility app that matches you with drivers for trips in cities worldwide. New riders often qualify for ride credit or discounts when they join through a referral. Savings, caps, and eligibility always follow Uber\'s current offer and terms in your area.',
+      'Uber is a rideshare app. BonusBridge does not publish a personal Uber referral link. Uber’s referral code policy is for personal, non-commercial sharing, not a public coupon listing.',
     logoSvg: undefined,
     logoSrc: '/brands/uber-logo.png',
     createdAt: ISO,
@@ -188,7 +189,7 @@ const services: Service[] = [
     categoryId: CAT.auto,
     website: 'https://www.lyft.com/',
     description:
-      'Lyft offers on-demand rides and bike or scooter rentals where available. Referral programs can credit new riders after qualifying trips. Check Lyft for the latest bonus rules, markets, and expiration details.',
+      'Lyft offers on-demand rides where available. A new rider may receive a market-specific credit after a first ride within 30 days. Lyft does not authorize one fixed dollar amount for every city. Confirm the credit in the Lyft app and in Lyft’s referral terms.',
     logoSvg: undefined,
     logoSrc: '/clip-coupons/lyft.svg',
     createdAt: ISO,
@@ -201,7 +202,7 @@ const services: Service[] = [
     categoryId: CAT.auto,
     website: 'https://www.li.me/',
     description:
-      'Lime operates shared electric scooters and bikes in participating cities. Promotions and referral perks vary by location and change over time — open an active Lime offer on BonusBridge to see the current sign-up or ride credit details.',
+      'Lime operates shared electric scooters and bikes in participating cities. BonusBridge does not list a Lime referral because US public-posting terms were not verified.',
     logoSvg: undefined,
     logoSrc: '/clip-coupons/lime.svg',
     createdAt: ISO,
@@ -214,7 +215,7 @@ const services: Service[] = [
     categoryId: CAT.auto,
     website: 'https://www.bird.co/',
     description:
-      'Bird runs shared electric scooters in participating cities. New-rider and referral perks change by market — open an active Bird offer on BonusBridge to see the current code or link and partner terms.',
+      'Bird runs shared electric scooters in participating cities. BonusBridge does not list a Bird referral because US public-posting terms were not found.',
     logoSvg:
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 26" aria-hidden="true"><text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="#13294B" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="22" font-weight="800" letter-spacing="-0.03em">Bird</text></svg>',
     createdAt: ISO,
@@ -228,7 +229,7 @@ const services: Service[] = [
     extraCategorySlugs: ['auto'],
     website: 'https://www.lemonade.com/',
     description:
-      'Lemonade sells renters, homeowners, pet, and car insurance through a digital-first experience in select states. Friends-and-family referrals may include gift cards or account credit when both sides qualify under Lemonade\'s program rules.',
+      'Lemonade sells digital insurance in select states. BonusBridge does not describe coverages or publish a referral. Only licensed agents may recommend a policy.',
     logoSvg: undefined,
     logoSrc: '/hot-cashback/logos/lemonade.svg',
     createdAt: ISO,
@@ -242,7 +243,7 @@ const services: Service[] = [
     extraCategorySlugs: ['shopping'],
     website: 'https://poshmark.com/',
     description:
-      'Poshmark is a social marketplace for secondhand clothing, accessories, and home goods. New members sometimes receive shopping credit through invite links; amounts and eligibility follow Poshmark\'s current referral terms.',
+      'Poshmark is a marketplace for secondhand clothing and home goods. BonusBridge does not publish a Poshmark referral because US advertising rules were not verified.',
     logoSvg: undefined,
     logoSrc: '/clip-coupons/poshmark.svg',
     createdAt: ISO,
@@ -256,7 +257,7 @@ const services: Service[] = [
     extraCategorySlugs: ['shopping'],
     website: 'https://www.rakuten.com/',
     description:
-      'Rakuten is a cash-back portal: start at Rakuten before you shop at partner retailers and review potential cash-back rates on qualifying purchases. New-member offer details are offered on a schedule defined by Rakuten.',
+      'Rakuten is a cash-back portal. Start at Rakuten before you shop partner stores. The welcome bonus varies by the active promo and typically requires a qualifying Cash Back purchase within 90 days. Amazon and certain categories are excluded.',
     logoSvg: undefined,
     logoSrc: '/hot-cashback/logos/rakuten.svg',
     createdAt: ISO,
@@ -270,7 +271,7 @@ const services: Service[] = [
     extraCategorySlugs: ['shopping'],
     website: 'https://www.topcashback.com/',
     description:
-      'TopCashback tracks purchases at thousands of stores and pays cash back on eligible orders. Sign-up and referral bonuses change over time; always confirm the latest payout rules on TopCashback before you shop.',
+      'TopCashback pays cash back on eligible orders. The referrer bonus is $10 after a new member reaches $10 in eligible Cash Back within 365 days. The invitee bonus depends on the active promo.',
     logoSvg: undefined,
     logoSrc: '/hot-cashback/logos/topcashback.png',
     createdAt: ISO,
@@ -284,7 +285,7 @@ const services: Service[] = [
     extraCategorySlugs: ['shopping'],
     website: 'https://www.joinhoney.com/',
     description:
-      'PayPal Honey (Honey) helps you find coupons and price history while you shop online. Invite rewards and Gold points programs are defined by Honey / PayPal and may require qualifying activity.',
+      'PayPal Honey finds coupons while you shop. Referral rewards are PayPal Rewards points, not instant cash. A referrer may receive 500 points after a friend’s eligible purchase confirms, often 60–90 days later.',
     logoSvg: undefined,
     logoSrc: '/hot-cashback/logos/honey.svg',
     createdAt: ISO,
@@ -297,7 +298,7 @@ const services: Service[] = [
     categoryId: CAT.finance,
     website: 'https://www.chime.com/',
     description:
-      'Chime is a financial technology company, not a bank; banking services are provided by partner banks. Referral offers may apply when friends open accounts and meet direct-deposit or other requirements Chime sets.',
+      'Chime is a financial technology company, not a bank. Banking services come from partner banks. A standard referral needs a qualifying direct deposit of at least $200 within 45 days and card activation. Successful referrals are capped at 10 per calendar year.',
     logoSvg: undefined,
     logoSrc: '/stores/chime.svg',
     createdAt: ISO,
@@ -310,7 +311,7 @@ const services: Service[] = [
     categoryId: CAT.finance,
     website: 'https://robinhood.com/',
     description:
-      'Robinhood offers commission-free trading of stocks, ETFs, options, and crypto in the U.S. New-user promos often include free fractional stock after you fund your account; limits and IRS reporting follow Robinhood\'s disclosures.',
+      'Robinhood offers brokerage accounts in the U.S. BonusBridge does not publish a Robinhood referral. The invite offer is for personal use with someone you know, not commercial pages.',
     logoSvg: undefined,
     logoSrc: '/clip-coupons/robinhood.svg',
     createdAt: ISO,
@@ -349,7 +350,7 @@ const services: Service[] = [
     categoryId: CAT.food,
     website: 'https://www.ubereats.com/',
     description:
-      'Uber Eats delivers meals and groceries from local restaurants and merchants. First-order and promo-code savings are subject to minimums, participating stores, and Uber Eats\' terms in your delivery zone.',
+      'Uber Eats delivers from local restaurants. BonusBridge does not publish an Uber Eats promo code. Uber’s referral policy is personal and non-commercial.',
     logoSvg: undefined,
     logoSrc: '/brands/ubereats-logo.png',
     createdAt: ISO,
@@ -362,7 +363,7 @@ const services: Service[] = [
     categoryId: CAT.food,
     website: 'https://www.7-eleven.com/',
     description:
-      '7NOW is 7-Eleven\'s delivery and pickup service for snacks, drinks, and everyday essentials where available. Promotional delivery fees and codes are set by 7-Eleven / franchise partners and change frequently.',
+      '7NOW is 7-Eleven’s delivery service where available. BonusBridge removed the previous link because attribution did not reliably carry a referral.',
     logoSvg: undefined,
     logoSrc: '/clip-coupons/7eleven.svg',
     createdAt: ISO,
@@ -375,7 +376,7 @@ const services: Service[] = [
     categoryId: CAT.travel,
     website: 'https://www.airbnb.com/',
     description:
-      'Airbnb lists short-term stays, long-term rentals, and experiences hosted by individuals worldwide. Guest and host referral credits are governed by Airbnb\'s referral program rules and may require qualifying bookings.',
+      'Airbnb lists stays and experiences. BonusBridge does not publish an Airbnb referral. The previous outbound link was the public homepage, not an invite.',
     logoSvg: undefined,
     logoSrc: '/stores/airbnb.svg',
     createdAt: ISO,
@@ -387,27 +388,13 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333301',
     serviceId: '22222222-2222-4222-8222-222222222210',
-    title: 'Chime new-account offer details',
-    previewText: 'New account and qualifying direct deposit may be required — amounts and eligibility are set by Chime.',
+    title: 'Chime referral requirements',
+    previewText: programClaim('chime'),
     couponCode: null,
-    bonusAmount: '$125',
-    description: 'Referral offer details and eligibility.',
-    referralUrl: 'https://www.chime.com/r/vadimpopov1/',
-    terms: 'Eligibility and amounts follow Chime.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333303',
-    serviceId: '22222222-2222-4222-8222-222222222201',
-    title: 'Uber new-rider offer details',
-    previewText: 'Review potential ride savings for new riders. Caps, timing, and eligibility follow Uber\'s current offer.',
-    couponCode: 'zfj232q2gjsx',
-    bonusAmount: '$25',
-    description: 'Referral credit when you qualify.',
-    referralUrl: 'https://referrals.uber.com/refer?id=zfj232q2gjsx',
-    terms: 'See Uber for eligibility and terms.',
+    bonusAmount: null,
+    description: 'Qualifying direct deposit, card activation, and a 10-referral yearly cap.',
+    referralUrl: requirePublicReferralUrl('chime'),
+    terms: 'Confirm the live checklist on Chime. Peer-to-peer transfers do not count as direct deposit.',
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO
@@ -415,69 +402,13 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333304',
     serviceId: '22222222-2222-4222-8222-222222222202',
-    title: 'Lyft new-rider offer details',
-    previewText: 'Review possible ride savings for new riders. Market rules and expiry follow Lyft’s current offer.',
+    title: 'Lyft market-specific rider credit',
+    previewText: programClaim('lyft'),
     couponCode: 'VADIM53422',
     bonusAmount: null,
     description: null,
-    referralUrl: 'https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc',
-    terms: 'Lyft terms apply.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333305',
-    serviceId: '22222222-2222-4222-8222-222222222203',
-    title: 'Lime sign-up credit details',
-    previewText: 'New riders get account credit after sign-up. Amount, markets, and expiry follow Lime’s current offer.',
-    couponCode: 'REGUD7BFJWT',
-    bonusAmount: null,
-    description: null,
-    referralUrl: 'https://lime.bike/referral_signin/REGUD7BFJWT',
-    terms: 'Subject to Lime promotions.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333306',
-    serviceId: '22222222-2222-4222-8222-222222222204',
-    title: 'Bird ride credit details',
-    previewText: 'New-rider credits may be available. Enter the code in the app after sign-up. Terms follow Bird.',
-    couponCode: 'X86GGD',
-    bonusAmount: null,
-    description: null,
-    referralUrl: 'https://links.bird.co/rKbyq2',
-    terms: 'Bird terms apply.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333307',
-    serviceId: '22222222-2222-4222-8222-222222222205',
-    title: 'Lemonade — renters and home insurance',
-    previewText: 'Digital insurance with referral offer details explained by provider terms.',
-    couponCode: null,
-    bonusAmount: '$10 gift card',
-    description: null,
-    referralUrl: 'https://lemonade.com/r/vadimpopov1',
-    terms: 'See Lemonade for offer details.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333308',
-    serviceId: '22222222-2222-4222-8222-222222222206',
-    title: 'Poshmark new-member credit details',
-    previewText: 'New-member credit may apply when you sign up with this code. Further rules and expiry follow Poshmark.',
-    couponCode: 'VADIMPOPOV',
-    bonusAmount: null,
-    description: null,
-    referralUrl: 'https://posh.mk/QW6tN2UJW1b',
-    terms: 'Poshmark terms apply.',
+    referralUrl: requirePublicReferralUrl('lyft'),
+    terms: 'See Lyft referral terms. Do not rely on a single nationwide dollar amount.',
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO
@@ -485,13 +416,13 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333309',
     serviceId: '22222222-2222-4222-8222-222222222207',
-    title: 'Rakuten cash-back offer details',
-    previewText: 'Shop through Rakuten for cash-back rates; new-member offer details are set by Rakuten.',
+    title: 'Rakuten welcome bonus varies',
+    previewText: programClaim('rakuten'),
     couponCode: null,
-    bonusAmount: '$50 bonus',
+    bonusAmount: null,
     description: null,
-    referralUrl: 'https://www.rakuten.com/r/MVADIM7',
-    terms: 'Rakuten program rules apply.',
+    referralUrl: requirePublicReferralUrl('rakuten'),
+    terms: 'Rakuten Refer-A-Friend terms. Amazon.com is excluded except narrow cases such as music.',
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO
@@ -499,13 +430,13 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333310',
     serviceId: '22222222-2222-4222-8222-222222222208',
-    title: 'TopCashback portal offer details',
-    previewText: 'Cash-back rates at thousands of stores — review current new-member offer details with TopCashback.',
+    title: 'TopCashback refer-a-friend details',
+    previewText: programClaim('topcashback'),
     couponCode: null,
-    bonusAmount: '$40 cashback',
+    bonusAmount: null,
     description: null,
-    referralUrl: 'https://www.topcashback.com/ref/member344836925437',
-    terms: 'TopCashback terms apply.',
+    referralUrl: requirePublicReferralUrl('topcashback'),
+    terms: 'TopCashback refer-a-friend terms. Many retailers are excluded from eligible Cash Back.',
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO
@@ -513,69 +444,13 @@ const offers: Offer[] = [
   {
     id: '33333333-3333-4333-8333-333333333311',
     serviceId: '22222222-2222-4222-8222-222222222209',
-    title: 'PayPal Honey coupons and rewards details',
-    previewText: 'Automatic coupon tools at checkout — open Honey to review current offer details.',
-    couponCode: null,
-    bonusAmount: '$10 cashback',
-    description: null,
-    referralUrl: 'https://www.joinhoney.com/ref/nwpz6sw',
-    terms: 'Honey / PayPal terms apply.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333312',
-    serviceId: '22222222-2222-4222-8222-222222222211',
-    title: 'Robinhood stock reward details',
-    previewText: 'Stock rewards may apply after sign-up and funding rules are met. Limits and terms are set by Robinhood.',
-    couponCode: 'vadimp-4f32ef3',
-    bonusAmount: '$5+ stock',
-    description: null,
-    referralUrl: 'https://join.robinhood.com/vadimp-4f32ef3',
-    terms: 'Robinhood offer terms.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333314',
-    serviceId: '22222222-2222-4222-8222-222222222214',
-    title: 'Uber Eats delivery offer details',
-    previewText: 'New accounts get delivery savings. Minimum spend and expiry follow Uber Eats.',
-    couponCode: 'eats-zywrn58e0v',
-    bonusAmount: null,
-    description: null,
-    referralUrl: 'https://ubereats.com/feed?promoCode=eats-zywrn58e0v',
-    terms: 'Uber Eats promotions vary by account and region.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333315',
-    serviceId: '22222222-2222-4222-8222-222222222215',
-    title: '7NOW delivery offer details',
-    previewText: 'A credit may apply on a qualifying order. Minimum spend and expiry follow 7Now’s current offer.',
-    couponCode: 'my1w2j',
-    bonusAmount: null,
-    description: null,
-    referralUrl: 'https://smart.link/370flfia27552?cp_0=my1w2j',
-    terms: '7NOW terms apply.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333316',
-    serviceId: '22222222-2222-4222-8222-222222222216',
-    title: 'Airbnb — stays and experiences',
-    previewText: 'Book homes and trips — see Airbnb for current referral or first-booking offers.',
+    title: 'PayPal Honey points, not cash',
+    previewText: programClaim('honey'),
     couponCode: null,
     bonusAmount: null,
     description: null,
-    referralUrl: 'https://www.airbnb.com/',
-    terms: 'Airbnb terms and regional rules apply.',
+    referralUrl: requirePublicReferralUrl('honey'),
+    terms: 'Honey help: points confirm after a friend’s eligible purchase, often in 60–90 days.',
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO
@@ -603,118 +478,71 @@ const heroSlides: HeroSlide[] = [
     sortOrder: 0,
     createdAt: ISO,
     updatedAt: ISO,
-    eyebrow: 'Informational offer guide',
-    headline: 'Chime new-account offer details',
+    eyebrow: 'Banking referral guide',
+    headline: 'Chime referral requirements',
     promoHighlight:
-      "Learn how to qualify — new accounts and qualifying direct deposit may be required. Tap the button to continue to Chime's site.",
+      'Qualifying direct deposit of at least $200 within 45 days, plus card activation. Cap: 10 successful referrals per calendar year.',
     subtext:
-      "Bonus terms may vary by campaign and region. Friends may have separate eligibility. BonusBridge is not Chime's website.",
-    termsLabel: 'See official terms',
-    termsUrl: 'https://www.chime.com/legal/all-policies/',
-    referralUrl: 'https://www.chime.com/r/vadimpopov1/',
-    ctaText: 'Continue to official site'
-  },
-  {
-    kind: 'uber',
-    id: 'ffffffff-ffff-4fff-8fff-fffffffffff1',
-    sortOrder: 1,
-    createdAt: ISO,
-    updatedAt: ISO,
-    eyebrow: 'Uber offer guide',
-    headline: 'Uber new-rider offer details',
-    promoHighlight:
-      'New to Uber? Review the current referral offer for errands, appointments, or visiting friends, then confirm terms on Uber.',
-    subtext:
-      "Uber is a simple, reliable way to get where you need to go. Savings and eligibility follow Uber's current referral offer and terms.",
-    termsLabel: 'Uber terms & help',
-    termsUrl: 'https://www.uber.com/legal/',
-    referralUrl: 'https://referrals.uber.com/refer?id=zfj232q2gjsx',
-    ctaText: 'See Uber details'
-  },
-  {
-    kind: 'coinbase',
-    id: 'cccccccc-cccc-4ccc-8ccc-cccccccccc01',
-    sortOrder: 2,
-    createdAt: ISO,
-    updatedAt: ISO,
-    eyebrow: 'Crypto offer guide',
-    headline: 'Coinbase promotional offer details',
-    promoHighlight:
-      'Open Coinbase to review current promotional terms before buying or trading.',
-    subtext: 'Reward caps and who qualifies are set by Coinbase. Read their latest terms before you trade.',
-    termsLabel: 'View terms',
-    termsUrl: 'https://www.coinbase.com/legal',
-    referralUrl: 'https://coinbase.com/join/F2XRWRL?src=ios-link',
-    ctaText: 'Check Coinbase terms'
-  },
-  {
-    kind: 'ubereats',
-    id: 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeee01',
-    sortOrder: 4,
-    createdAt: ISO,
-    updatedAt: ISO,
-    eyebrow: 'Uber Eats offer guide',
-    headline: 'Uber Eats delivery offer details',
-    promoHighlight:
-      'New to Uber Eats? Open the provider page to review minimum spend, eligibility, and expiry details.',
-    subtext:
-      'Delivery orders; minimum spend, eligibility, and expiry follow Uber Eats. Terms apply.',
-    termsLabel: 'Offer terms',
-    termsUrl: 'https://www.ubereats.com/legal',
-    referralUrl: 'https://ubereats.com/feed?promoCode=eats-zywrn58e0v',
-    ctaText: 'See Uber Eats details'
+      'The referrer bonus is set when a friend enrolls. It is not a guaranteed dollar total. Peer-to-peer transfers do not count. BonusBridge is not Chime.',
+    termsLabel: 'Chime referral help',
+    termsUrl: 'https://help.chime.com/what-is-chimes-standard-referral-program-eca42e30',
+    referralUrl: requirePublicReferralUrl('chime'),
+    ctaText: 'Continue to Chime'
   }
 ]
+
+const featuredLyft = services.find((service) => service.slug === 'lyft') as Service
+const featuredRakuten = services.find((service) => service.slug === 'rakuten') as Service
+const featuredChimeOffer = offers.find((offer) => offer.id === '33333333-3333-4333-8333-333333333301') as Offer
+const featuredRakutenOffer = offers.find((offer) => offer.id === '33333333-3333-4333-8333-333333333309') as Offer
 
 const featuredStores: FeaturedStoreWithStore[] = [
   {
     id: '44444444-4444-4444-8444-444444444401',
-    storeId: services[0]!.id,
+    storeId: featuredLyft.id,
     sortOrder: 0,
     createdAt: ISO,
     updatedAt: ISO,
-    store: serviceWithCategory(services[0]!, categories)
+    store: serviceWithCategory(featuredLyft, categories)
   },
   {
     id: '44444444-4444-4444-8444-444444444402',
-    storeId: services[1]!.id,
+    storeId: featuredRakuten.id,
     sortOrder: 1,
     createdAt: ISO,
     updatedAt: ISO,
-    store: serviceWithCategory(services[1]!, categories)
+    store: serviceWithCategory(featuredRakuten, categories)
   }
 ]
 
 const featuredOffers: FeaturedOfferWithOffer[] = [
   {
     id: '66666666-6666-4666-8666-666666666601',
-    offerId: offers[0]!.id,
+    offerId: featuredChimeOffer.id,
     sortOrder: 0,
     createdAt: ISO,
     updatedAt: ISO,
-    offer: offerWithService(offers[0]!, services, categories)
+    offer: offerWithService(featuredChimeOffer, services, categories)
   },
   {
     id: '66666666-6666-4666-8666-666666666602',
-    offerId: offers[1]!.id,
+    offerId: featuredRakutenOffer.id,
     sortOrder: 1,
     createdAt: ISO,
     updatedAt: ISO,
-    offer: offerWithService(offers[1]!, services, categories)
+    offer: offerWithService(featuredRakutenOffer, services, categories)
   }
 ]
 
 const monthlyTopOffers: MonthlyTopOffer[] = MonthlyTopOfferSchema.array().parse([
   {
     id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa02',
-    brandName: 'Robinhood',
-    slug: 'robinhood',
-    description:
-      'Stock rewards may apply after sign-up and funding rules are met. Limits and terms are set by Robinhood.',
-    ctaText: 'Check Robinhood terms',
-    href: 'https://join.robinhood.com/vadimp-4f32ef3',
-    logoSrc: '/clip-coupons/robinhood.svg',
-    imageSrc: '/top-offers/media/robinhood-promo.png',
+    brandName: 'TopCashback',
+    slug: 'topcashback',
+    description: programClaim('topcashback'),
+    ctaText: 'See TopCashback offer',
+    href: requirePublicReferralUrl('topcashback'),
+    logoSrc: '/hot-cashback/logos/topcashback.png',
     badgeText: 'Terms apply'
   }
 ])
@@ -737,6 +565,15 @@ export function megaMenuStoreImageSrc(service: Pick<Service, 'logoSrc'>): string
   return service.logoSrc ?? '/icon.svg'
 }
 
+/** Catalog JSON stores null instead of an omitted logo path. */
+export function catalogLogoSrc(logoSrc: string | null | undefined): string | null {
+  return logoSrc ?? null
+}
+
+function listedServices(): Service[] {
+  return services.filter((service) => isPublicStoreSlug(service.slug))
+}
+
 /** Categories A–Z, plus stores per category slug (for header mega menu). */
 export async function getStoresMegaMenu(): Promise<StoresMegaMenuPayload> {
   const sorted = categoriesSortedAlphabetically()
@@ -747,7 +584,7 @@ export async function getStoresMegaMenu(): Promise<StoresMegaMenuPayload> {
   }))
   const storesByCategorySlug: Record<string, StoresMegaMenuStore[]> = {}
   for (const cat of sorted) {
-    const inCat = services.filter((s) => serviceMatchesCategory(s, cat))
+    const inCat = listedServices().filter((s) => serviceMatchesCategory(s, cat))
     storesByCategorySlug[cat.slug] = sortServicesForCategorySlug(cat.slug, inCat).map((s) => ({
       slug: s.slug,
       name: s.name,
@@ -762,14 +599,14 @@ export async function getClientCatalog(): Promise<ClientCatalogPayload> {
   const sorted = categoriesSortedAlphabetically()
   const categoriesOut: ClientCatalogCategoryBrief[] = []
   for (const cat of sorted) {
-    const inCat = services.filter((s) => serviceMatchesCategory(s, cat))
+    const inCat = listedServices().filter((s) => serviceMatchesCategory(s, cat))
     const sortedStores = sortServicesForCategorySlug(cat.slug, inCat)
     const stores: ClientCatalogStoreBrief[] = sortedStores.map((svc) => {
       const svcOffers = offers.filter((o) => o.serviceId === svc.id && o.status === 'active')
       return {
         slug: svc.slug,
         name: svc.name,
-        logoSrc: svc.logoSrc == null ? null : svc.logoSrc,
+        logoSrc: catalogLogoSrc(svc.logoSrc),
         offers: svcOffers.map((o) => ({
           id: o.id,
           serviceSlug: svc.slug,
@@ -840,7 +677,7 @@ export function serviceMatchesSearchQuery(
 }
 
 export async function getServices(query?: { category?: string; q?: string }): Promise<Service[]> {
-  let list = [...services]
+  let list = listedServices()
   if (query?.category) {
     const cat = categories.find((c) => c.slug === query.category)
     list = cat ? list.filter((s) => serviceMatchesCategory(s, cat)) : []

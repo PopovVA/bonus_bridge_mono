@@ -255,8 +255,8 @@ describe('web routes', () => {
     expect(html).toContain('BonusBridge')
     expect(html).toContain('Privacy Policy')
     expect(html).toContain('Contact')
-    expect(html).toContain('independent informational website')
-    expect(html).toContain('We do not provide financial services')
+    expect(html).toContain('independent comparison and guide site')
+    expect(html).toContain('affiliate commission')
     expect(html).toContain('BonusBridge is operated by Apis Systems LLC (Texas, USA)')
     expect(html).toContain('support@bonusbridge.io')
     expect(html).toContain('child')
@@ -299,7 +299,7 @@ describe('web routes', () => {
     expect(html).toContain('Coupons')
     expect(html).toContain('Guides')
     expect(html).toContain('Contact')
-    expect(html).toContain('We do not provide financial services')
+    expect(html).toContain('affiliate commission')
   })
 
   it('renders default layout when getStoresMegaMenu fails', async () => {
@@ -322,34 +322,37 @@ describe('web routes', () => {
 
   it('renders chime article with structured data, partner links, terms link, and Explore more', async () => {
     const html = renderToStaticMarkup(await ChimeArticlePage())
-    expect(html).toContain('chime-referral-calculator-mock')
     expect(html).toContain('article-partner-figure-mock')
     expect(html).toContain('Explore more')
     expect(html).toContain('https://www.chime.com/r/vadimpopov1/')
-    expect(html).toContain('invite-friends-terms-and-conditions-300-sender')
+    expect(html).toContain('what-is-chimes-standard-referral-program')
     expect(html).toContain('application/ld+json')
-    expect(html).toContain('id="referral-bonus-estimate"')
+    expect(html).toContain('FAQPage')
+    expect(html).toContain('id="requirements"')
     expect(html).toContain('id="chime-bonus-guide"')
     expect(html).toContain('id="how-it-works"')
+    expect(html).toContain('10 per calendar year')
     expect(html).toContain('This guide explains how referral offers can work')
+    expect(html).not.toContain('$1,000')
+    expect(html).not.toContain('chime-referral-calculator')
   })
 
   it('chime article still renders when getServiceBySlug fails', async () => {
     vi.mocked(getServiceBySlug).mockRejectedValueOnce(new Error('down'))
     const html = renderToStaticMarkup(await ChimeArticlePage())
-    expect(html).toContain('chime-referral-calculator-mock')
+    expect(html).toContain('Chime Referral Rules and Annual Cap')
   })
 
   it('chime article still renders when getCategories fails', async () => {
     vi.mocked(getCategories).mockRejectedValueOnce(new Error('down'))
     const html = renderToStaticMarkup(await ChimeArticlePage())
-    expect(html).toContain('chime-referral-calculator-mock')
+    expect(html).toContain('Chime Referral Rules and Annual Cap')
   })
 
   it('chime article tolerates non-array getCategories result', async () => {
     vi.mocked(getCategories).mockResolvedValueOnce(undefined as never)
     const html = renderToStaticMarkup(await ChimeArticlePage())
-    expect(html).toContain('chime-referral-calculator-mock')
+    expect(html).toContain('Chime Referral Rules and Annual Cap')
   })
 
   it('chime article sets primaryCategorySlug when Chime store matches catalog categories', async () => {
@@ -371,7 +374,7 @@ describe('web routes', () => {
       categoryId: 'no-such-category'
     } as never)
     const html = renderToStaticMarkup(await ChimeArticlePage())
-    expect(html).toContain('chime-referral-calculator-mock')
+    expect(html).toContain('Chime Referral Rules and Annual Cap')
   })
 
   it('generateMetadata for chime article sets canonical and keywords', async () => {
@@ -507,8 +510,12 @@ describe('web routes', () => {
     expect(html).not.toContain('sponsored')
     expect(html).not.toContain('https://example.com/should-not-render')
     expect(html).not.toContain('See provider details')
-    expect(html).toContain('No active promo codes or offers for this store yet.')
+    expect(html).toContain('BonusBridge is not publishing a referral offer for this provider.')
     expect(html).toContain('March 1, 2026')
+    expect(html).toContain('/disclosures')
+    await expect(generateStoreMetadata({ params: Promise.resolve({ slug: 'klarna' }) })).resolves.toMatchObject({
+      robots: { index: false, follow: true }
+    })
   })
 
   it('store page still renders Top offers clip card when only promo-code offers exist', async () => {
@@ -643,7 +650,7 @@ describe('web routes', () => {
     expect(html).toContain('hot-cashback-card')
     expect(html).toContain('Terms apply')
     expect(html).toContain('See offer details')
-    expect(html).toContain('Learn about Rakuten new-member offer details')
+    expect(html).toContain('Welcome bonus varies')
     expect(html).toContain('clip-coupon-card__brand')
     expect(html).not.toContain('<article class="clip-coupon-card"')
     expect(html).not.toContain('No active promo codes or offers for this store yet.')

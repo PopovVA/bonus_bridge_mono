@@ -1,37 +1,20 @@
 import type { MetadataRoute } from 'next'
 import { absoluteUrl } from '@/app/seo'
-import { articleList } from '@/lib/articles/list'
-import { getCategories, getServices } from '@/lib/site-data'
+import { listPublicSitemapPaths } from '@/lib/public-sitemap'
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [categories, stores] = await Promise.all([getCategories().catch(() => []), getServices().catch(() => [])])
-
-  const articleRoutes: MetadataRoute.Sitemap = ['/articles', ...articleList.map((a) => `/articles/${a.slug}`)].map(
-    (path) => ({
-      url: absoluteUrl(path),
-      changeFrequency: 'weekly' as const,
-      priority: path === '/articles' ? 0.65 : 0.7
-    })
-  )
-
-  const baseRoutes: MetadataRoute.Sitemap = ['/', '/privacy-policy', '/terms-of-service', '/contact'].map((path) => ({
-    url: absoluteUrl(path),
-    changeFrequency: 'weekly',
-    priority: path === '/' ? 1 : 0.4
-  }))
-
-  const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
-    url: absoluteUrl(`/categories/${category.slug}`),
-    changeFrequency: 'daily',
-    priority: 0.7
-  }))
-
-  const storeRoutes: MetadataRoute.Sitemap = stores.map((store) => ({
-    url: absoluteUrl(`/stores/${store.slug}`),
-    changeFrequency: 'daily',
-    priority: 0.8
-  }))
-
-  return [...baseRoutes, ...articleRoutes, ...categoryRoutes, ...storeRoutes]
+function priorityFor(path: string): number {
+  if (path === '/') return 1
+  if (path.startsWith('/stores/')) return 0.8
+  if (path.startsWith('/guides/') || path.startsWith('/articles/') || path.startsWith('/categories/')) return 0.7
+  if (path === '/articles' || path === '/guides') return 0.65
+  return 0.4
 }
 
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const paths = await listPublicSitemapPaths()
+  return paths.map((path) => ({
+    url: absoluteUrl(path),
+    changeFrequency: 'weekly',
+    priority: priorityFor(path)
+  }))
+}

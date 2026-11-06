@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { absoluteUrl, pageSocialMetadata } from '@/app/seo'
 import { ListingFacts } from '@/components/listing-facts'
@@ -9,6 +10,8 @@ import { SiteDisclosure } from '@/components/site-disclosure'
 import { StoreTopOffers } from '@/components/store-top-offers'
 import { StoreRelatedPanel } from '@/components/store-related-panel'
 import { getCategories, getOffers, getServiceBySlug, megaMenuStoreImageSrc } from '@/lib/site-data'
+import { guidesForStore } from '@/lib/guides'
+import { getReferralProgram } from '@/lib/referral-programs'
 
 const STORE_PAGE_FALLBACK_BLURB =
   'This store is on BonusBridge so you can review referral and sign-up offer details in one place. Use the cards below to copy a code or link and open the provider page in a new tab.'
@@ -25,13 +28,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const blurb = store.description?.trim()
-  return pageSocialMetadata({
+  const meta = pageSocialMetadata({
     title: store.name,
     description: blurb
       ? `${blurb} Current bonus amounts are not verified on BonusBridge.`
       : `Informational page for ${store.name}. Current bonus amounts are not verified on BonusBridge.`,
     path: `/stores/${slug}`
   })
+  if (isNotPubliclyPromoted(slug)) {
+    return { ...meta, robots: { index: false, follow: true } }
+  }
+  return meta
 }
 
 export default async function StorePage({ params }: Props) {
@@ -50,6 +57,8 @@ export default async function StorePage({ params }: Props) {
   const storeOfferLogoSrc = megaMenuStoreImageSrc({ logoSrc: store.logoSrc ?? null })
   const aboutText = store.description?.trim() || STORE_PAGE_FALLBACK_BLURB
   const hidePublicReferral = isNotPubliclyPromoted(slug)
+  const program = getReferralProgram(slug)
+  const relatedGuides = guidesForStore(slug)
   const visibleCoupons = hidePublicReferral ? [] : coupons
   const primaryPromo = visibleCoupons[0]
   const openStoreUrl = primaryPromo?.referralUrl ?? null
@@ -106,20 +115,40 @@ export default async function StorePage({ params }: Props) {
           <div className="store-page-hero-about">
             <h2 className="store-page-about-heading">About this store</h2>
             <p className="store-page-about-body">{aboutText}</p>
+            <SiteDisclosure className="site-disclosure--store" />
             {openStoreUrl ? (
               <StorePageOpenPartnerLink href={openStoreUrl} storeSlug={slug}>
                 See provider details
               </StorePageOpenPartnerLink>
+            ) : null}
+            {program?.termsUrl ? (
+              <a className="store-page-provider-link" href={program.termsUrl} target="_blank" rel="noopener noreferrer">
+                Official program terms
+              </a>
             ) : null}
             {hidePublicReferral && store.website ? (
               <a className="store-page-provider-link" href={store.website} target="_blank" rel="noopener noreferrer">
                 Provider website
               </a>
             ) : null}
+            {hidePublicReferral ? (
+              <p className="store-page-about-body">
+                This page does not include a personal referral link.{' '}
+                <Link href="/disclosures">Read how we vet programs</Link>.
+              </p>
+            ) : null}
+            {relatedGuides.length > 0 ? (
+              <nav className="guide-page__links" aria-label="Related guides">
+                {relatedGuides.map((guide) => (
+                  <Link key={guide.slug} href={`/guides/${guide.slug}`}>
+                    {guide.h1}
+                  </Link>
+                ))}
+              </nav>
+            ) : null}
           </div>
         </div>
       </article>
-      <SiteDisclosure className="site-disclosure--store" />
 
       {visibleCoupons.length > 0 ? (
         <div className="store-top-offers-wrap clip-coupons-section store-page-clip-section">
@@ -138,7 +167,13 @@ export default async function StorePage({ params }: Props) {
       ) : null}
 
       {!hasMainOffers ? (
-        <EmptyState message="No active promo codes or offers for this store yet." />
+        <EmptyState
+          message={
+            hidePublicReferral
+              ? 'BonusBridge is not publishing a referral offer for this provider.'
+              : 'No active promo codes or offers for this store yet.'
+          }
+        />
       ) : null}
 
       <StoreRelatedPanel storeSlug={slug} primaryCategorySlug={primaryCategorySlug} />

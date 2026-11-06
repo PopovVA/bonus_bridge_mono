@@ -2,7 +2,7 @@
 
 Public SEO site with **fixed in-repo content** (no separate API or admin app).
 
-- `apps/web` — Next.js (`/`, `/articles`, `/articles/[slug]`, `/stores`, `/stores/[slug]`, `/coupons` → `/`, `/coupons/[id]` → `/stores/[slug]`) with Zod schemas in `apps/web/lib/schemas`. Store pages for Klarna and Public stay informational; their personal referral links are not published. Other inventory referral URLs are unchanged.
+- `apps/web` — Next.js (`/`, `/articles`, `/articles/[slug]`, `/guides`, `/guides/[slug]`, `/stores/[slug]`, `/cookies`, `/disclosures`, `/privacy` → `/privacy-policy`, `/coupons` → `/`, `/coupons/[id]` → `/stores/[slug]`) with Zod schemas in `apps/web/lib/schemas`. Public referral cards are limited to programs whose US terms allow an owned site (Rakuten, TopCashback, Lyft, Chime, PayPal Honey). Other inventory programs stay off the homepage, category grids, and sitemap. Old `/stores/<slug>` URLs for those programs render a noindex note without a personal referral link.
 
 **Content:** edit `apps/web/lib/site-data.ts` (categories, stores, coupons, hero slides, featured sections). Static images: `apps/web/public/`.
 
@@ -75,4 +75,4 @@ GitHub Actions: install, lint, test, web build.
 ## Version notes
 
 - **ESLint:** `apps/web` uses **ESLint 9.x** with `eslint-config-next`. **ESLint 10** is not yet supported by the Next.js ESLint preset and bundled plugins (see [vercel/next.js#91702](https://github.com/vercel/next.js/issues/91702)). Upgrade when `eslint-config-next` declares ESLint 10 compatibility.
-- **Footer:** legal links only (Privacy / Terms); social links are omitted until product needs them.
+- **Footer:** Privacy (`/privacy`), Cookie Notice, Disclosures, Guides, Terms, and Contact. The FTC referral disclosure is in the footer and next to outbound store links. Social links are omitted until product needs them.

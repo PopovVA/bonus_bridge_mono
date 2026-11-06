@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { TrackedLink } from '@/components/tracked-link'
 import { articleList } from '@/lib/articles/list'
+import { guideList } from '@/lib/guides'
 
 export const metadata: Metadata = {
   title: 'Informational Guides',
@@ -48,6 +49,19 @@ export default function ArticlesIndexPage() {
                   <span className="article-index__item-meta">{new Date(a.publishedAt).toLocaleDateString('en-US')}</span>
                   <span className="article-index__item-desc">{a.description}</span>
                 </span>
+              </span>
+            </TrackedLink>
+          </li>
+        ))}
+      </ul>
+      <h2 className="article-index__title">Comparison guides</h2>
+      <ul className="article-index__list">
+        {guideList.map((guide) => (
+          <li key={guide.slug} className="article-index__item">
+            <TrackedLink href={`/guides/${guide.slug}`} className="article-index__link" event="articles_list_open">
+              <span className="article-index__link-body">
+                <span className="article-index__item-title">{guide.h1}</span>
+                <span className="article-index__item-desc">{guide.description}</span>
               </span>
             </TrackedLink>
           </li>

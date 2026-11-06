@@ -14,45 +14,78 @@ import HomePage, { metadata as homeMetadata } from './(home)/page'
 import CategoryPage from './(default)/categories/[slug]/page'
 import StorePage from './(default)/stores/[slug]/page'
 import ChimeArticlePage from './(default)/articles/chime-1000-two-friends/page'
+import sitemap from './sitemap'
 import {
   getAllHotCashbackOffers,
   getClientCatalog,
   getHeroSlides,
   getHomeClipCoupons,
   getOffers,
+  getServiceBySlug,
   getServices,
   getTopMonthlyOffers
 } from '@/lib/site-data'
+import { referralPrograms, unlistedStoreSlugs } from '@/lib/referral-programs'
+import { listPublicSitemapPaths } from '@/lib/public-sitemap'
 
-/** The only referral destinations authorized for removal from public promotion. */
+/** Personal referral destinations that must not ship on public pages. */
 const REMOVED_REFERRAL_URLS = [
   'https://py.pl/29jzHS',
   'https://share.public.com/Vadim66923',
-  'https://invite.klarna.com/us/n33cxpeu/default-us'
-] as const
-
-const REMOVED_TOKENS = ['29jzHS', 'Vadim66923', 'n33cxpeu'] as const
-
-/** Every other destination from the affiliate inventory, unchanged. */
-const PRESERVED_REFERRAL_URLS = [
+  'https://invite.klarna.com/us/n33cxpeu/default-us',
   'https://referrals.uber.com/refer?id=zfj232q2gjsx',
   'https://ubereats.com/feed?promoCode=eats-zywrn58e0v',
-  'https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc',
   'https://lime.bike/referral_signin/REGUD7BFJWT',
   'https://links.bird.co/rKbyq2',
   'https://lemonade.com/r/vadimpopov1',
   'https://posh.mk/QW6tN2UJW1b',
+  'https://join.robinhood.com/vadimp-4f32ef3',
+  'https://smart.link/370flfia27552?cp_0=my1w2j',
+  'https://coinbase.com/join/F2XRWRL?src=ios-link'
+] as const
+
+const REMOVED_TOKENS = [
+  '29jzHS',
+  'Vadim66923',
+  'n33cxpeu',
+  'zfj232q2gjsx',
+  'eats-zywrn58e0v',
+  'REGUD7BFJWT',
+  'rKbyq2',
+  'lemonade.com/r/vadimpopov1',
+  'VADIMPOPOV',
+  'QW6tN2UJW1b',
+  'vadimp-4f32ef3',
+  'my1w2j',
+  '370flfia27552',
+  'F2XRWRL',
+  'X86GGD'
+] as const
+
+const PUBLIC_REFERRAL_URLS = [
+  'https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc',
   'https://www.rakuten.com/r/MVADIM7',
   'https://www.topcashback.com/ref/member344836925437',
   'https://www.joinhoney.com/ref/nwpz6sw',
-  'https://www.chime.com/r/vadimpopov1/',
-  'https://join.robinhood.com/vadimp-4f32ef3',
-  'https://smart.link/370flfia27552?cp_0=my1w2j',
-  'https://coinbase.com/join/F2XRWRL?src=ios-link',
-  'https://www.airbnb.com/'
+  'https://www.chime.com/r/vadimpopov1/'
 ] as const
 
 const ALLOWED_NON_INVENTORY = ['https://example.com']
+
+const UNLISTED_STORE_SLUGS = [
+  'public',
+  'klarna',
+  'paypal',
+  'robinhood',
+  'uber',
+  'uber-eats',
+  'lemonade',
+  'airbnb',
+  '7now',
+  'bird',
+  'lime',
+  'poshmark'
+] as const
 
 function walkSourceFiles(dir: string, acc: string[]) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -71,7 +104,7 @@ function walkSourceFiles(dir: string, acc: string[]) {
 }
 
 describe('public referral surfaces', () => {
-  it('keeps every other inventory URL and drops only the three removed promotions', async () => {
+  it('publishes only bucket-1 referral URLs on home data and the client catalog', async () => {
     const [offers, heroes, monthly, hot, clips, catalog] = await Promise.all([
       getOffers({ status: 'active' }),
       getHeroSlides(),
@@ -97,16 +130,56 @@ describe('public referral surfaces', () => {
     for (const url of REMOVED_REFERRAL_URLS) {
       expect(found.has(url)).toBe(false)
     }
-    for (const url of PRESERVED_REFERRAL_URLS) {
+    for (const url of PUBLIC_REFERRAL_URLS) {
       expect(found.has(url)).toBe(true)
     }
     const extras = [...found].filter(
-      (url) => !PRESERVED_REFERRAL_URLS.includes(url as (typeof PRESERVED_REFERRAL_URLS)[number]) && !ALLOWED_NON_INVENTORY.includes(url)
+      (url) =>
+        !PUBLIC_REFERRAL_URLS.includes(url as (typeof PUBLIC_REFERRAL_URLS)[number]) &&
+        !ALLOWED_NON_INVENTORY.includes(url)
     )
     expect(extras).toEqual([])
+
+    const publicSlugs = new Set(referralPrograms.filter((program) => program.publicOk).map((program) => program.slug))
+    for (const category of catalog.categories) {
+      for (const store of category.stores) {
+        expect(publicSlugs.has(store.slug)).toBe(true)
+      }
+    }
   })
 
-  it('does not leave the removed referral URLs in shipped source outside tests', () => {
+  it('keeps unlisted stores out of the sitemap, homepage, and category grids', async () => {
+    const paths = await listPublicSitemapPaths()
+    const entries = await sitemap()
+    const urls = entries.map((entry) => entry.url).join('\n')
+    for (const slug of UNLISTED_STORE_SLUGS) {
+      expect(paths).not.toContain(`/stores/${slug}`)
+      expect(urls).not.toContain(`/stores/${slug}`)
+    }
+    expect(paths).toContain('/stores/rakuten')
+    expect(paths).toContain('/stores/chime')
+    expect(paths).toContain('/guides/rakuten-vs-topcashback')
+    expect(paths).toContain('/cookies')
+    expect(paths).toContain('/disclosures')
+    expect(unlistedStoreSlugs()).toEqual(expect.arrayContaining([...UNLISTED_STORE_SLUGS]))
+
+    ;(globalThis as { React?: typeof React }).React = React
+    const home = renderToStaticMarkup(await HomePage())
+    const shopping = renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'shopping' }) }))
+    const finance = renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'finance' }) }))
+    const auto = renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'auto' }) }))
+    const grids = `${home}\n${shopping}\n${finance}\n${auto}`
+    expect(grids).not.toContain('/stores/uber')
+    expect(grids).not.toContain('/stores/robinhood')
+    expect(grids).not.toContain('/stores/klarna')
+    expect(grids).toContain('/stores/rakuten')
+    expect(grids).toContain('/stores/chime')
+    for (const token of REMOVED_TOKENS) {
+      expect(grids).not.toContain(token)
+    }
+  })
+
+  it('does not leave removed referral URLs in shipped source outside tests', () => {
     const repoRoot = path.resolve(import.meta.dirname, '../../..')
     const files: string[] = []
     walkSourceFiles(repoRoot, files)
@@ -120,16 +193,26 @@ describe('public referral surfaces', () => {
     expect(hits).toEqual([])
   })
 
-  it('renders home, category, store, and article HTML without the removed links', async () => {
+  it('renders home, category, store, and article HTML without removed links', async () => {
     ;(globalThis as { React?: typeof React }).React = React
     const services = await getServices()
     const chunks = [
       renderToStaticMarkup(await HomePage()),
       renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'finance' }) })),
-      renderToStaticMarkup(await ChimeArticlePage())
+      renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'shopping' }) })),
+      renderToStaticMarkup(await ChimeArticlePage()),
+      JSON.stringify(await getClientCatalog())
     ]
     for (const service of services) {
       chunks.push(renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: service.slug }) })))
+    }
+    for (const slug of unlistedStoreSlugs()) {
+      try {
+        await getServiceBySlug(slug)
+      } catch {
+        continue
+      }
+      chunks.push(renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug }) })))
     }
     const html = chunks.join('\n')
     for (const url of REMOVED_REFERRAL_URLS) {
@@ -142,12 +225,9 @@ describe('public referral surfaces', () => {
     expect(html).toContain('Referral guides and provider terms')
     expect(html).not.toContain('Open partner site?')
     expect(html).toContain('https://www.chime.com/r/vadimpopov1/')
-    expect(html).toContain('https://referrals.uber.com/refer?id=zfj232q2gjsx')
-    expect(html).toContain('https://coinbase.com/join/F2XRWRL?src=ios-link')
-    expect(html).toContain('https://www.airbnb.com/')
-    expect(html).toContain('https://www.klarna.com/')
-    expect(html).toContain('https://public.com/')
+    expect(html).toContain('https://www.rakuten.com/r/MVADIM7')
     expect(html).toContain('not publicly promoting a referral link')
+    expect(html).toContain('independent comparison and guide site')
     expect(homeMetadata.openGraph).toMatchObject({ siteName: 'BonusBridge' })
     expect(homeMetadata.alternates).toMatchObject({ canonical: '/' })
     expect(homeMetadata.title).toBe('Referral guides and provider terms')
