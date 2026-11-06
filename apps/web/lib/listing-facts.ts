@@ -1,17 +1,18 @@
 import { ListingFactsSchema, type ListingFacts } from '@/lib/schemas/listing-facts.schema'
+import { unlistedStoreSlugs } from '@/lib/referral-programs'
 
 /**
  * Store slugs whose personal referral links are not published on BonusBridge.
- * PayPal has no store route; the slug is listed so a future page cannot promote one by accident.
+ * Includes programs with no store route (PayPal) so a future page cannot promote one by accident.
  * This does not mark the businesses as unlawful or the links as technically dead.
  */
-export const NOT_PUBLICLY_PROMOTED_STORE_SLUGS = ['klarna', 'public', 'paypal'] as const
+export const NOT_PUBLICLY_PROMOTED_STORE_SLUGS = unlistedStoreSlugs()
 
 const LISTING_UPDATED_NOTE =
   'This is when the BonusBridge listing text was last edited. It is not a date when a bonus was verified.'
 
 export function isNotPubliclyPromoted(slug: string): boolean {
-  return (NOT_PUBLICLY_PROMOTED_STORE_SLUGS as readonly string[]).includes(slug)
+  return NOT_PUBLICLY_PROMOTED_STORE_SLUGS.includes(slug)
 }
 
 export function formatListingUpdated(iso: string | null | undefined): string | null {

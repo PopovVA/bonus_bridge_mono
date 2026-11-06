@@ -2,11 +2,13 @@ import { describe, expect, it } from 'vitest'
 import { buildListingFacts, formatListingUpdated, isNotPubliclyPromoted } from './listing-facts'
 
 describe('listing facts', () => {
-  it('treats klarna, public, and paypal as not publicly promoted', () => {
+  it('treats personal-only and unverified programs as not publicly promoted', () => {
     expect(isNotPubliclyPromoted('klarna')).toBe(true)
     expect(isNotPubliclyPromoted('public')).toBe(true)
     expect(isNotPubliclyPromoted('paypal')).toBe(true)
-    expect(isNotPubliclyPromoted('uber')).toBe(false)
+    expect(isNotPubliclyPromoted('uber')).toBe(true)
+    expect(isNotPubliclyPromoted('lyft')).toBe(false)
+    expect(isNotPubliclyPromoted('rakuten')).toBe(false)
   })
 
   it('formats a real timestamp and rejects empty or invalid values', () => {
@@ -19,12 +21,12 @@ describe('listing facts', () => {
 
   it('does not turn an unverified offer into a confirmed bonus', () => {
     const facts = buildListingFacts({
-      slug: 'uber',
-      terms: 'See Uber for eligibility and terms.',
+      slug: 'rakuten',
+      terms: 'See Rakuten for eligibility and terms.',
       listingUpdatedAt: '2026-03-01T12:00:00.000Z'
     })
     expect(facts.reviewState).toBe('unverified')
-    expect(facts.conditions).toContain('See Uber for eligibility and terms.')
+    expect(facts.conditions).toContain('See Rakuten for eligibility and terms.')
     expect(facts.conditions).toContain('not verified')
     expect(facts.promotionNote).toBeNull()
     expect(facts.listingUpdatedLabel).toBe('March 1, 2026')

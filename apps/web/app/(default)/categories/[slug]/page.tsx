@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { absoluteUrl, pageSocialMetadata } from '@/app/seo'
 import { notFound } from 'next/navigation'
 import { EmptyState } from '@/components/empty-state'
 import { TrackedLink } from '@/components/tracked-link'
 import type { Offer, Service } from '@/lib/schemas'
 import { getCategories, getOffers, getServices } from '@/lib/site-data'
+import { guidesForCategory } from '@/lib/guides'
 
 const CATEGORY_STORE_DESC_FALLBACK =
   'This store is on BonusBridge so you can browse active promo codes and partner offers on its store page.'
@@ -92,6 +94,7 @@ export default async function CategoryPage({ params }: Props) {
     getOffers({ category: slug, status: 'active' }).catch(() => [])
   ])
 
+  const relatedGuides = guidesForCategory(slug)
   const offersByService = new Map<string, Offer[]>()
   for (const o of offers) {
     const cur = offersByService.get(o.serviceId) ?? []
@@ -130,6 +133,15 @@ export default async function CategoryPage({ params }: Props) {
         </p>
       </header>
 
+      {relatedGuides.length > 0 ? (
+        <nav className="guide-page__links" aria-label="Related guides">
+          {relatedGuides.map((guide) => (
+            <Link key={guide.slug} href={`/guides/${guide.slug}`}>
+              {guide.h1}
+            </Link>
+          ))}
+        </nav>
+      ) : null}
       {stores.length === 0 ? (
         <EmptyState message="No stores in this category yet." />
       ) : (

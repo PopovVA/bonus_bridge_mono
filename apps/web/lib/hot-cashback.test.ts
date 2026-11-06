@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { programClaim } from '@/lib/referral-programs'
 import { getHotCashbackOfferByStoreSlug } from './hot-cashback'
 
 describe('getHotCashbackOfferByStoreSlug', () => {
@@ -6,9 +7,8 @@ describe('getHotCashbackOfferByStoreSlug', () => {
     const h = getHotCashbackOfferByStoreSlug('rakuten')
     expect(h?.badgeText).toBe('Terms apply')
     expect(h?.ctaText).toBe('See offer details')
-    expect(h?.description).toBe(
-      'Learn about Rakuten new-member offer details, qualifying spend requirements, and current provider terms.'
-    )
+    expect(h?.headline).toBe('Rakuten welcome bonus varies')
+    expect(h?.description).toBe(programClaim('rakuten'))
     expect(h?.href).toBe('https://www.rakuten.com/r/MVADIM7')
   })
 
@@ -16,14 +16,16 @@ describe('getHotCashbackOfferByStoreSlug', () => {
     expect(getHotCashbackOfferByStoreSlug('no-such-store')).toBeUndefined()
   })
 
-  it('does not keep a Public referral card in the curated list', () => {
+  it('does not keep an unlisted referral card in the curated list', () => {
     expect(getHotCashbackOfferByStoreSlug('public')).toBeUndefined()
     expect(getHotCashbackOfferByStoreSlug('klarna')).toBeUndefined()
+    expect(getHotCashbackOfferByStoreSlug('lemonade')).toBeUndefined()
   })
 
-  it('includes Chime with terms badge for Explore More', () => {
+  it('includes Chime with the annual-cap rules', () => {
     const c = getHotCashbackOfferByStoreSlug('chime')
-    expect(c?.badgeText).toBe('Terms apply')
-    expect(c?.headline).toBe('Chime new-account offer details')
+    expect(c?.badgeText).toBe('10 per year')
+    expect(c?.headline).toBe('Chime referral requirements')
+    expect(c?.description).toContain('10 per calendar year')
   })
 })

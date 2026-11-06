@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { LEGAL_CONTACT_EMAIL, LEGAL_DOCUMENT_LAST_UPDATED } from '@/lib/legal-site-meta'
+import Link from 'next/link'
+import { COMPLIANCE_PAGES_UPDATED, LEGAL_CONTACT_EMAIL } from '@/lib/legal-site-meta'
 import { absoluteUrl } from '@/app/seo'
 
 const path = '/privacy-policy'
@@ -25,7 +26,8 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyPage() {
-  const updated = new Date(LEGAL_DOCUMENT_LAST_UPDATED).toLocaleDateString('en-US', {
+  const updated = new Date(`${COMPLIANCE_PAGES_UPDATED}T12:00:00.000Z`).toLocaleDateString('en-US', {
+    timeZone: 'UTC',
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -79,15 +81,14 @@ export default function PrivacyPage() {
           understand how visitors use our pages. We may use third party analytics tools (such as Google Analytics) that
           collect information about use of the Site and generate aggregated or statistical reports. Those tools may set or
           read cookies or use similar identifiers on your device. Providers process information according to their own
-          privacy policies and terms.
+          privacy policies and terms. A separate <Link href="/cookies">Cookie Notice</Link> describes the banner, analytics, and
+          cookies that referral partners may set after you leave the Site.
         </p>
         <p>
-          <strong>How we communicate this for U.S. visitors.</strong> There is no single U.S. federal rule that requires
-          every website to show a stand-alone &quot;cookie banner&quot; or to obtain click-through consent before all analytics
-          cookies in the same way some jurisdictions outside the United States require. We describe our use of cookies and
-          analytics in this Privacy Policy and summarize choices that may apply to you in Section 6 (including state law
-          rights where available). If you are not in the United States, local laws may require different notices or consent
-          mechanisms.
+          <strong>How we communicate this for U.S. visitors.</strong> The site shows a short, non-blocking cookie notice
+          with links to this policy and the Cookie Notice. It does not lock the page. You can dismiss it. Details of
+          cookies and choices are in the Cookie Notice and in Section 6 (including state law rights where available). If
+          you are not in the United States, local laws may require different notices or consent mechanisms.
         </p>
         <p>
           You can control many cookies through your browser settings. Some browsers offer a &quot;Do Not Track&quot; setting. The

@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import { ClientCatalogProvider } from '@/components/client-catalog-provider'
+import { CookieNotice } from '@/components/cookie-notice'
 import { GoogleAnalytics } from '@/components/google-analytics'
 import { getSiteUrl } from '@/app/seo'
 import { getClientCatalog } from '@/lib/site-data'
@@ -35,6 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <GoogleAnalytics />
         <ClientCatalogProvider value={catalog}>{children}</ClientCatalogProvider>
+        <CookieNotice />
       </body>
     </html>
   )

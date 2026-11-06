@@ -1,18 +1,18 @@
 # BonusBridge Web
 
-Public SEO site (Next.js App Router). **Favicon:** `app/icon.svg` (BB monogram; edit in place to refresh). **Data is static** — edit `lib/site-data.ts` to change stores, coupons, hero promo copy/links, and home sections. Hero backgrounds and brand marks: `public/hero/`, `public/brands/`. Home category carousel: `public/categories/{slug}.svg`. **Top monthly offers:** copy/links, `badgeText`, and `imageSrc` in `getTopMonthlyOffers()` inside `lib/site-data.ts`. The published home row is Robinhood (`/clip-coupons/robinhood.svg`). Klarna and Public are not in that row.
+Public SEO site (Next.js App Router). **Favicon:** `app/icon.svg` (BB monogram; edit in place to refresh). **Data is static** — edit `lib/site-data.ts` to change stores, coupons, hero promo copy/links, and home sections. Hero backgrounds and brand marks: `public/hero/`, `public/brands/`. Home category carousel: `public/categories/{slug}.svg`. **Top monthly offers:** copy/links and `badgeText` in `getTopMonthlyOffers()` inside `lib/site-data.ts`. The published home row is TopCashback. Personal referral links for programs that do not allow a public website are not on the home page. Which programs may be public is `lib/referral-programs.ts` (`publicOk`).
 
 **Right-side promo images (swap these files to change art — keep names unless you change `imageSrc` in `site-data.ts`):**
 
-The home offer-details row currently publishes **Robinhood** only.
+The home offer-details row currently publishes **TopCashback** only (logo, no separate promo photo).
 
-| Offer | File on disk | `imageSrc` in data |
-| --- | --- | --- |
-| Robinhood | `apps/web/public/top-offers/media/robinhood-promo.png` | `/top-offers/media/robinhood-promo.png` |
+| Offer | Logo |
+| --- | --- |
+| TopCashback | `apps/web/public/hot-cashback/logos/topcashback.png` |
 
-Klarna and Public promo images may still be in `public/top-offers/`, but they are not used as referral cards.
+Older promo images may still be in `public/top-offers/`. They are not used as referral cards.
 
-**Promo art sizing:** on desktop (3-column grid) the right column is a **tall narrow strip** (~**150–190px** wide × ~**260–380px** tall in CSS, height grows with text). Klarna uses **`object-fit: cover`** (fills the strip; edges may crop) — prefer **portrait ~9:16 or 2:3**. **Public** uses **`object-fit: contain`** on a dark column background so a **wide landscape** banner stays **fully readable** (letterboxing OK). **Robinhood** uses **`object-fit: contain`** on a **neutral slate** column background (`#f1f5f9`) so letterboxing stays calm and the **wide landscape** wordmark stays **fully visible** (same idea as Public). If `imageSrc` is omitted, a neutral circular fallback is shown. On mobile the block is **full card width** with **min-height ~200px**.
+**Promo art sizing:** on desktop (3-column grid) the right column is a **tall narrow strip** (~**150–190px** wide × ~**260–380px** tall in CSS, height grows with text). If `imageSrc` is omitted, a neutral circular fallback is shown. On mobile the block is **full card width** with **min-height ~200px**. The current TopCashback card omits `imageSrc`.
 
 Use PNG or WebP/JPEG if you prefer: add the file under `public/top-offers/media/` and point `imageSrc` to it (e.g. `/top-offers/media/my-klarna.jpg`). Omit `imageSrc` to show the skeleton until an asset exists. Optional `badgeText` renders a small white promo pill with a price-tag icon (same stroke language as header icons) in the **top-right** corner of the card.
 
@@ -68,7 +68,11 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all host
 | `clip_dialog_open_tab` | Partner dialog — “Open in new tab” | — |
 | `explore_link_offer_cta` | Explore more — link-only offer CTA | `offer_id` |
 | `footer_privacy` | Footer — Privacy | — |
+| `footer_cookies` | Footer — Cookie Notice | — |
+| `footer_disclosures` | Footer — Disclosures | — |
+| `footer_guides` | Footer — Guides | — |
 | `footer_terms` | Footer — Terms | — |
+| `guide_outbound` | Guide page outbound referral link | `guide_slug` |
 | `store_card_click` | Store card component (if used) | `store_slug` |
 | `store_related_category` | “Explore more” category heading link | `category_slug` |
 | `category_view_store` | Category page — “View store” | `store_slug` |

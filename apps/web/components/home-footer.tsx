@@ -8,8 +8,17 @@ export function HomeFooter() {
         <p className="home-footer-disclaimer">{SITE_FOOTER_DISCLAIMER}</p>
         <p className="home-footer-operator">{SITE_OPERATOR_NOTICE}</p>
         <div className="home-footer-links">
-          <TrackedLink href="/privacy-policy" event="footer_privacy">
+          <TrackedLink href="/privacy" event="footer_privacy">
             Privacy Policy
+          </TrackedLink>
+          <TrackedLink href="/cookies" event="footer_cookies">
+            Cookie Notice
+          </TrackedLink>
+          <TrackedLink href="/disclosures" event="footer_disclosures">
+            Disclosures
+          </TrackedLink>
+          <TrackedLink href="/guides" event="footer_guides">
+            Guides
           </TrackedLink>
           <TrackedLink href="/terms-of-service" event="footer_terms">
             Terms of Service

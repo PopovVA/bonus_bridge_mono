@@ -8,21 +8,22 @@ afterEach(() => {
 })
 
 describe('getCuratedLinkCardCopyForExploreMore', () => {
-  it('uses the home monthly row for Robinhood and has no Klarna or Public referral card', () => {
-    const c = getCuratedLinkCardCopyForExploreMore('robinhood')
+  it('uses the home monthly row for TopCashback and has no Klarna or Public referral card', () => {
+    const c = getCuratedLinkCardCopyForExploreMore('topcashback')
     expect(c?.badgeText).toBe('Terms apply')
-    expect(c?.ctaText).toBe('Check Robinhood terms')
-    expect(c?.href).toBe('https://join.robinhood.com/vadimp-4f32ef3')
+    expect(c?.ctaText).toBe('See TopCashback offer')
+    expect(c?.href).toBe('https://www.topcashback.com/ref/member344836925437')
     expect(c?.headline).toBeNull()
     expect(getCuratedLinkCardCopyForExploreMore('klarna')).toBeNull()
     expect(getCuratedLinkCardCopyForExploreMore('public')).toBeNull()
+    expect(getCuratedLinkCardCopyForExploreMore('robinhood')).toBeNull()
   })
 
   it('uses partner-offer copy when slug is not in monthly row', () => {
     const c = getCuratedLinkCardCopyForExploreMore('rakuten')
     expect(c?.badgeText).toBe('Terms apply')
     expect(c?.ctaText).toBe('See offer details')
-    expect(c?.headline).toBe('Rakuten offer details and eligibility')
+    expect(c?.headline).toBe('Rakuten welcome bonus varies')
   })
 
   it('returns null when slug has no curated copy', () => {

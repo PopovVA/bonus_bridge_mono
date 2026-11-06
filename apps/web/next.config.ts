@@ -13,7 +13,12 @@ const nextConfig: NextConfig = {
       { source: '/offers/:path*', destination: '/coupons/:path*', permanent: true },
       { source: '/categories/food-dining', destination: '/categories/food', permanent: true },
       { source: '/privacy', destination: '/privacy-policy', permanent: true },
-      { source: '/terms', destination: '/terms-of-service', permanent: true }
+      { source: '/terms', destination: '/terms-of-service', permanent: true },
+      {
+        source: '/compare/rakuten-vs-topcashback',
+        destination: '/guides/rakuten-vs-topcashback',
+        permanent: true
+      }
     ]
   }
 }

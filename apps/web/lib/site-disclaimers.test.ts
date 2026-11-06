@@ -8,8 +8,9 @@ import {
 
 describe('site-disclaimers', () => {
   it('exports stable disclosure copy for footer, guides, and trademarks', () => {
-    expect(SITE_FOOTER_DISCLAIMER).toContain('independent informational website')
-    expect(SITE_FOOTER_DISCLAIMER).toContain('We do not provide financial services')
+    expect(SITE_FOOTER_DISCLAIMER).toContain('independent comparison and guide site')
+    expect(SITE_FOOTER_DISCLAIMER).toContain('affiliate commission')
+    expect(SITE_FOOTER_DISCLAIMER).toContain('no extra cost to you')
     expect(SITE_OPERATOR_NOTICE).toBe(
       'BonusBridge is operated by Apis Systems LLC (Texas, USA). Contact: support@bonusbridge.io'
     )

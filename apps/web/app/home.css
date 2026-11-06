@@ -3875,3 +3875,169 @@
     min-height: 44px;
   }
 }
+
+.guide-page {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.guide-page__crumbs {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.guide-page__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin: 12px 0 0;
+}
+
+.guide-page__links a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.guide-page__table-wrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.guide-page__caption {
+  caption-side: bottom;
+  text-align: left;
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.guide-page__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.guide-page__table th,
+.guide-page__table td {
+  border: 1px solid #e2e8f0;
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.guide-page__table th {
+  background: #f8fafc;
+  font-weight: 700;
+}
+
+.guide-page__faq {
+  margin: 0 0 16px;
+}
+
+.guide-page__faq h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.guide-page__cta-note {
+  margin: 0 0 12px;
+  color: #475569;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.guide-page__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cookie-notice {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.cookie-notice__text {
+  margin: 0;
+  flex: 1 1 16rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #334155;
+}
+
+.cookie-notice__dismiss {
+  border: 1px solid #0f172a;
+  background: #0f172a;
+  color: #fff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cookie-notice__dismiss:focus-visible {
+  outline: 2px solid #475569;
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .guide-page__table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .guide-page__table,
+  .guide-page__table tbody,
+  .guide-page__table tr,
+  .guide-page__table td {
+    display: block;
+    width: 100%;
+  }
+
+  .guide-page__table tr {
+    margin: 0 0 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .guide-page__table td {
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .guide-page__table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+}
