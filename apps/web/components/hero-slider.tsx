@@ -196,26 +196,26 @@ function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], k
   const headlineId = `hero-promo-${slide.id}-headline`
   const logoSrc = promoBrandLogoSrc(kind)
   return (
-    <div className={ui.panel} role="group" aria-labelledby={headlineId}>
-      <div className={ui.panelInner}>
-        <div className={ui.stack}>
+    <div className={`promo-panel ${ui.panel}`} data-brand={kind} role="group" aria-labelledby={headlineId}>
+      <div className={`promo-panel__inner ${ui.panelInner}`}>
+        <div className={`promo-stack ${ui.stack}`}>
           <div className={`hero-promo-brand-row hero-promo-brand-row--${kind}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="hero-promo-brand-logo" src={logoSrc} alt={ui.brandAlt} />
           </div>
-          {slide.eyebrow ? <p className={ui.eyebrow}>{slide.eyebrow}</p> : null}
-          <h2 id={headlineId} className={ui.headline}>
-            {moneyAccentSpans(slide.headline, ui.moneyAccent)}
+          {slide.eyebrow ? <p className={`promo-eyebrow ${ui.eyebrow}`}>{slide.eyebrow}</p> : null}
+          <h2 id={headlineId} className={`promo-headline ${ui.headline}`}>
+            {moneyAccentSpans(slide.headline, `promo-money ${ui.moneyAccent}`)}
           </h2>
           {slide.promoHighlight ? (
-            <p className={ui.promoHl}>{moneyAccentSpans(slide.promoHighlight, ui.moneyAccent)}</p>
+            <p className={`promo-highlight ${ui.promoHl}`}>{moneyAccentSpans(slide.promoHighlight, `promo-money ${ui.moneyAccent}`)}</p>
           ) : null}
-          <p className={ui.sub}>
-            {moneyAccentSpans(slide.subtext, ui.moneyAccent)}{' '}
+          <p className={`promo-sub ${ui.sub}`}>
+            {moneyAccentSpans(slide.subtext, `promo-money ${ui.moneyAccent}`)}{' '}
             {slide.termsUrl ? (
               <TrackedOutboundLink
                 href={slide.termsUrl}
-                className={ui.terms}
+                className={`promo-terms ${ui.terms}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 event="hero_terms_link"
@@ -229,7 +229,7 @@ function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], k
             <p className="hero-mobile-terms-wrap">
               <TrackedOutboundLink
                 href={slide.termsUrl}
-                className={ui.terms}
+                className={`promo-terms ${ui.terms}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 event="hero_terms_link"
@@ -241,7 +241,8 @@ function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], k
           ) : null}
           <TrackedOutboundLink
             href={slide.referralUrl}
-            className={ui.cta}
+            className={`promo-cta ${ui.cta}`}
+            data-magnetic
             target="_blank"
             rel="noopener noreferrer sponsored"
             event="hero_main_cta"
@@ -251,16 +252,16 @@ function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], k
           </TrackedOutboundLink>
           {slide.steps && slide.steps.length > 0 ? (
             <>
-              <h3 className={ui.stepsTitle}>{slide.stepsTitle ?? 'How it works'}</h3>
-              <ol className={ui.steps}>
+              <h3 className={`promo-steps-title ${ui.stepsTitle}`}>{slide.stepsTitle ?? 'How it works'}</h3>
+              <ol className={`promo-steps ${ui.steps}`}>
                 {slide.steps.map((step, i) => (
-                  <li key={i} className={ui.step}>
-                    <span className={ui.stepNum} aria-hidden>
+                  <li key={i} className={`promo-step ${ui.step}`}>
+                    <span className={`promo-step__num ${ui.stepNum}`} aria-hidden>
                       {i + 1}
                     </span>
-                    <div className={ui.stepBody}>
-                      <span className={ui.stepTitle}>{step.title}</span>
-                      {step.hint ? <span className={ui.stepHint}>{step.hint}</span> : null}
+                    <div className={`promo-step__body ${ui.stepBody}`}>
+                      <span className={`promo-step__title ${ui.stepTitle}`}>{step.title}</span>
+                      {step.hint ? <span className={`promo-step__hint ${ui.stepHint}`}>{step.hint}</span> : null}
                     </div>
                   </li>
                 ))}

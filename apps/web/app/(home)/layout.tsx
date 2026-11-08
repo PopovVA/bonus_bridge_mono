@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import '../home.css'
 import { HomeHeader } from '@/components/home-header'
+import { MobileCtaBar } from '@/components/mobile-cta-bar'
 import { HomeFooter } from '@/components/home-footer'
 import { getStoresMegaMenu, type StoresMegaMenuPayload } from '@/lib/site-data'
 
@@ -14,6 +15,7 @@ export default async function HomeLayout({ children }: { children: ReactNode }) 
       <HomeHeader megaMenu={megaMenu} />
       <main>{children}</main>
       <HomeFooter />
+      <MobileCtaBar />
     </div>
   )
 }
