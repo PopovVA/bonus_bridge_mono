@@ -17,11 +17,12 @@ import {
 } from '@/lib/site-data'
 import { homeStatsFromPaths } from '@/lib/home-stats'
 import { listPublicSitemapPaths } from '@/lib/public-sitemap'
+import { featuredSignupBonus } from '@/lib/signup-bonuses'
 
 export const metadata: Metadata = pageSocialMetadata({
   title: 'Referral guides and provider terms',
   description:
-    'Independent notes on referral links and coupons. Bonus amounts are not verified here and depend on the provider, your account, and your location.',
+    'Independent notes on referral links and coupons. Amounts are quoted from provider terms, can change, and depend on your account and location.',
   path: '/'
 })
 
@@ -42,13 +43,13 @@ export default async function HomePage() {
     name: 'BonusBridge',
     url: absoluteUrl('/'),
     description:
-      'Independent notes on referral links and coupons. Bonus amounts are not verified here and depend on the provider, your account, and your location.'
+      'Independent notes on referral links and coupons. Amounts are quoted from provider terms, can change, and depend on your account and location.'
   }
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <HomeHero stats={homeStatsFromPaths(sitemapPaths)} />
+      <HomeHero stats={homeStatsFromPaths(sitemapPaths)} bonus={featuredSignupBonus()} />
       <SiteDisclosure className="site-disclosure--home" />
 
       {heroSlides.length > 0 ? (

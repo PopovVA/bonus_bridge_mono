@@ -7,6 +7,7 @@ import { TrackedLink } from '@/components/tracked-link'
 import type { Offer, Service } from '@/lib/schemas'
 import { getCategories, getOffers, getPublishedCategories, getServices } from '@/lib/site-data'
 import { guidesForCategory } from '@/lib/guides'
+import { getSignupBonus } from '@/lib/signup-bonuses'
 
 const CATEGORY_STORE_DESC_FALLBACK =
   'This store is on BonusBridge so you can browse active promo codes and partner offers on its store page.'
@@ -161,6 +162,7 @@ export default async function CategoryPage({ params }: Props) {
           {stores.map((store) => {
             const storeOffers = offersByService.get(store.id) ?? []
             const blurb = store.description?.trim() || CATEGORY_STORE_DESC_FALLBACK
+            const bonus = getSignupBonus(store.slug)
             return (
               <article key={store.id} className="app-surface-card category-store-card">
                 <div className="category-store-row">
@@ -181,6 +183,11 @@ export default async function CategoryPage({ params }: Props) {
                             <span className="category-store-name">{store.name}</span>
                           </TrackedLink>
                         </h2>
+                        {bonus?.amount ? (
+                          <p className="category-store-bonus">
+                            <strong>{bonus.amount}</strong> {bonus.headline}
+                          </p>
+                        ) : null}
                         <p className="category-store-desc">{blurb}</p>
                         <p className="category-store-count default-muted-text">
                           {activeOfferCountLabel(storeOffers)}
@@ -189,7 +196,7 @@ export default async function CategoryPage({ params }: Props) {
                     </div>
                   </div>
                   <div className="category-store-row-cta" aria-hidden="true">
-                    <span className="category-store-cta">View store</span>
+                    <span className="category-store-cta">{bonus?.amount ? `Get ${bonus.amount}` : 'View store'}</span>
                   </div>
                 </div>
               </article>

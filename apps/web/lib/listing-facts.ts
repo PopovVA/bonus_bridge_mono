@@ -31,12 +31,16 @@ export function buildListingFacts(input: {
   slug: string
   terms?: string | null
   listingUpdatedAt?: string | null
+  /** Set when the page quotes an amount from the provider's own terms (see lib/signup-bonuses.ts). */
+  quotedAmountNote?: string | null
 }): ListingFacts {
   const notPromoted = isNotPubliclyPromoted(input.slug)
   const terms = input.terms?.trim() ?? ''
   const conditions = notPromoted
     ? 'This page does not promote a public referral bonus. Any provider offer, amount, or eligibility is not verified here.'
-    : terms
+    : input.quotedAmountNote
+      ? `${terms} ${input.quotedAmountNote}`.trim()
+      : terms
       ? `${terms} A current bonus amount is not verified on BonusBridge.`
       : 'Eligibility and amounts are set by the provider and can depend on your account. A current bonus amount is not verified on BonusBridge.'
 

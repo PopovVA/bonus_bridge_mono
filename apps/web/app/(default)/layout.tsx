@@ -3,6 +3,7 @@ import '../home.css'
 import { HomeFooter } from '@/components/home-footer'
 import { HomeHeader } from '@/components/home-header'
 import { MobileCtaBar } from '@/components/mobile-cta-bar'
+import { mobileBarBonus } from '@/lib/signup-bonuses'
 import { getStoresMegaMenu, type StoresMegaMenuPayload } from '@/lib/site-data'
 
 const emptyMega: StoresMegaMenuPayload = { categories: [], storesByCategorySlug: {} }
@@ -15,7 +16,7 @@ export default async function DefaultLayout({ children }: { children: ReactNode 
       <HomeHeader megaMenu={megaMenu} />
       <main className="default-main">{children}</main>
       <HomeFooter />
-      <MobileCtaBar />
+      <MobileCtaBar bonus={mobileBarBonus()} />
     </div>
   )
 }

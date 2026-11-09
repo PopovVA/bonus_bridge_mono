@@ -1001,6 +1001,11 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* The brand panel already shows the logo on phones */
+  .monthly-offer-card:has(.monthly-offer-card__brand-visual) .monthly-offer-card__logo-wrap {
+    display: none;
+  }
+
   .monthly-offer-card__media {
     order: -1;
     min-height: 140px;
@@ -1690,7 +1695,7 @@
     bottom: calc(12px + env(safe-area-inset-bottom));
     z-index: 80;
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    grid-template-columns: 1.5fr 1fr;
     gap: 8px;
     padding: 8px;
     border: 1px solid var(--line);
@@ -3044,4 +3049,121 @@
   .bridge__token {
     display: none;
   }
+}
+
+/* ==========================================================================
+   Sign-up bonus CTAs (amounts only where the provider's terms state one)
+   ========================================================================== */
+
+.bonus-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.bonus-cta--panel {
+  position: relative;
+  margin: 0 0 22px;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  border-radius: var(--radius);
+  background:
+    radial-gradient(420px 200px at 100% 0%, var(--accent-soft), transparent 70%),
+    var(--surface);
+  overflow: hidden;
+}
+
+.bonus-cta__lead {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+}
+
+.bonus-cta__amount {
+  color: var(--accent-ink);
+  font-size: clamp(2.6rem, 6vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.bonus-cta__headline {
+  color: var(--ink);
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.bonus-cta__condition {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--text);
+}
+
+.bonus-cta .btn {
+  margin-top: 6px;
+}
+
+.bonus-cta__fine,
+.hero__ctas .bonus-cta__fine {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.bonus-cta__fine a {
+  color: var(--muted);
+  text-decoration: underline;
+}
+
+.bonus-cta__fine a:hover {
+  color: var(--accent-ink);
+}
+
+.store-page-hero .bonus-cta--panel {
+  margin: 0 0 22px;
+}
+
+.article-page__section .bonus-cta--panel a.btn {
+  color: #101218;
+  text-decoration: none;
+}
+
+.article-page__section .bonus-cta--panel a.btn:hover {
+  color: var(--bg);
+}
+
+/* Amount line on category cards */
+.category-store-bonus {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.category-store-bonus strong {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.category-store-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mobile-cta__btn--accent {
+  font-weight: 800;
 }

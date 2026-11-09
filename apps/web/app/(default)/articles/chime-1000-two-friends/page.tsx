@@ -3,13 +3,15 @@ import Link from 'next/link'
 import { ArticlePartnerFigure } from '@/components/article-partner-figure'
 import { ArticleReferralDisclosure } from '@/components/article-referral-disclosure'
 import { ArticleViewTracker } from '@/components/article-view-tracker'
+import { BonusCta } from '@/components/bonus-cta'
 import { StoreRelatedPanel } from '@/components/store-related-panel'
 import { TrackedOutboundLink } from '@/components/tracked-link'
 import { absoluteUrl } from '@/app/seo'
-import { CHIME_INVITE_FRIENDS_TERMS_URL, CHIME_PARTNER_REFERRAL_URL } from '@/lib/chime-article-constants'
+import { CHIME_INVITE_FRIENDS_TERMS_URL } from '@/lib/chime-article-constants'
 import { articleList } from '@/lib/articles/list'
 import { CHIME_TRADEMARK_NOTICE, FTC_AFFILIATE_DISCLOSURE } from '@/lib/site-disclaimers'
 import { getCategories, getServiceBySlug } from '@/lib/site-data'
+import { requireSignupBonus } from '@/lib/signup-bonuses'
 
 const SLUG = 'chime-1000-two-friends'
 const UPDATED = '2026-11-05T18:00:00.000Z'
@@ -207,18 +209,7 @@ export default async function ChimeArticlePage() {
             <li>The referrer amount is variable. Do not budget a fixed figure from an expired promotion.</li>
           </ul>
           <p>{FTC_AFFILIATE_DISCLOSURE}</p>
-          <p>
-            <TrackedOutboundLink
-              href={CHIME_PARTNER_REFERRAL_URL}
-              className="category-store-cta article-page__offer-cta"
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-              event="article_chime_partner_cta"
-              eventParams={{ article_slug: SLUG, cta_place: 'requirements' }}
-            >
-              View offer details
-            </TrackedOutboundLink>
-          </p>
+          <BonusCta bonus={requireSignupBonus('chime')} place="article_chime_requirements" />
         </section>
 
         <section className="article-page__section" aria-labelledby="important-to-understand">

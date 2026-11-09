@@ -12,7 +12,7 @@ const STEPS = [
   },
   {
     title: 'Confirm on the provider site',
-    body: 'Eligibility, amounts, and timing are set by each provider. Bonus amounts are not verified here.'
+    body: 'Eligibility, amounts, and timing are set by each provider and can change. Read the official terms before you sign up.'
   }
 ]
 

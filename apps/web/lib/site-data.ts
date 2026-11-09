@@ -487,7 +487,7 @@ const heroSlides: HeroSlide[] = [
     termsLabel: 'Chime referral help',
     termsUrl: 'https://help.chime.com/what-is-chimes-standard-referral-program-eca42e30',
     referralUrl: requirePublicReferralUrl('chime'),
-    ctaText: 'Continue to Chime'
+    ctaText: 'Get $100 with Chime'
   }
 ]
 
@@ -540,7 +540,7 @@ const monthlyTopOffers: MonthlyTopOffer[] = MonthlyTopOfferSchema.array().parse(
     brandName: 'TopCashback',
     slug: 'topcashback',
     description: programClaim('topcashback'),
-    ctaText: 'See TopCashback offer',
+    ctaText: 'Join TopCashback',
     href: requirePublicReferralUrl('topcashback'),
     logoSrc: '/hot-cashback/logos/topcashback.png',
     badgeText: 'Terms apply'

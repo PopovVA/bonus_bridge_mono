@@ -153,3 +153,50 @@ describe('MobileCtaBar', () => {
     Object.defineProperty(window, 'scrollY', { value: 0, configurable: true })
   })
 })
+
+describe('bonus CTAs', () => {
+  it('renders the amount, condition, sponsored link and dated source', async () => {
+    const { BonusCta } = await import('@/components/bonus-cta')
+    const { requireSignupBonus } = await import('@/lib/signup-bonuses')
+    const chime = requireSignupBonus('chime')
+    const html = renderToStaticMarkup(<BonusCta bonus={chime} place="test" />)
+    expect(html).toContain('$100')
+    expect(html).toContain('Get $100 with Chime')
+    expect(html).toContain('rel="noopener noreferrer sponsored"')
+    expect(html).toContain('Checked Nov 9, 2026')
+    expect(html).toContain(`href="${chime.sourceUrl}"`)
+  })
+
+  it('omits the amount when the provider states none, and has an inline variant', async () => {
+    const { BonusCta } = await import('@/components/bonus-cta')
+    const { requireSignupBonus } = await import('@/lib/signup-bonuses')
+    const rakuten = requireSignupBonus('rakuten')
+    const panel = renderToStaticMarkup(<BonusCta bonus={rakuten} place="test" />)
+    expect(panel).not.toContain('bonus-cta__amount')
+    expect(panel).toContain('Join Rakuten')
+    const inline = renderToStaticMarkup(<BonusCta bonus={rakuten} place="test" variant="inline" />)
+    expect(inline).toContain('bonus-cta--inline')
+    expect(inline).not.toContain('bonus-cta__condition')
+  })
+
+  it('leads the hero with the featured bonus', async () => {
+    const { requireSignupBonus } = await import('@/lib/signup-bonuses')
+    const html = renderToStaticMarkup(
+      <HomeHero stats={{ guides: 1, stores: 1, categories: 1 }} bonus={requireSignupBonus('chime')} />
+    )
+    expect(html).toContain('Get $100 with Chime')
+    expect(html).toContain('Read the guides')
+    expect(html).not.toContain('Browse codes')
+  })
+
+  it('puts the bonus on the phone bar', () => {
+    mount(<MobileCtaBar bonus={{ slug: 'chime', amount: '$100', provider: 'Chime', referralUrl: 'https://x.test/r' }} />)
+    expect(host.innerHTML).toContain('Get $100 · Chime')
+    expect(host.innerHTML).toContain('href="https://x.test/r"')
+    expect(host.innerHTML).not.toContain('Codes')
+    Object.defineProperty(window, 'scrollY', { value: 5000, configurable: true })
+    act(() => window.dispatchEvent(new Event('scroll')))
+    expect(host.querySelector('a[href="https://x.test/r"]')?.getAttribute('tabindex')).toBeNull()
+    Object.defineProperty(window, 'scrollY', { value: 0, configurable: true })
+  })
+})
