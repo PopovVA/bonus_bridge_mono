@@ -166,7 +166,7 @@ export default async function ChimeArticlePage() {
           <ArticlePartnerFigure
             articleSlug={SLUG}
             imageKey="referral_steps"
-            src="/articles/chime/referral-steps.png"
+            src="/articles/chime/referral-steps.webp"
             alt="Chime invite screen showing a referral link and the steps Chime asks a new member to finish"
             width={605}
             height={340}
@@ -187,7 +187,7 @@ export default async function ChimeArticlePage() {
           <ArticlePartnerFigure
             articleSlug={SLUG}
             imageKey="building"
-            src="/articles/chime/chime-building.png"
+            src="/articles/chime/chime-building.webp"
             alt="Chime wordmark on a modern office building exterior"
             width={605}
             height={404}

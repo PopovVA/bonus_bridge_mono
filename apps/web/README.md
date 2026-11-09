@@ -99,6 +99,15 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all host
 
 Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](https://developers.brandfetch.com/register)) so the Uber Eats hero logo can load from `cdn.brandfetch.io/ubereats.com`. Without it, `/brands/ubereats-logo.png`. The Uber rides slide always uses `/brands/uber-logo.png`.
 
+## Look and motion
+
+- **Concept:** a bridge between the reader and the provider's own terms. Warm paper + ink type, one orange "cable" accent. Tokens for light and dark live at the top of `app/globals.css`; page and component styles are in `app/home.css`.
+- **Theme:** `components/theme-toggle.tsx` switches `data-theme` on `<html>` and stores the choice in `localStorage` (`bb-theme`). `THEME_INIT_SCRIPT` (`lib/theme.ts`) runs in `<head>` so the first paint already has the right theme. Where the View Transitions API exists, the new theme grows as a circle from the toggle.
+- **Motion:** load animations (split-word hero headline, bridge strokes drawing, card entrances) are CSS only. `components/site-motion.tsx` lazy-loads `gsap` + `ScrollTrigger` and `lenis` after hydration for scroll scenes (reveals, count-ups, parallax, marquee skew), smooth scrolling on desktop, cursor spotlight on cards and magnetic buttons (`data-magnetic`). The server HTML is complete without any of it.
+- **Reduced motion:** `prefers-reduced-motion: reduce` turns off Lenis and every GSAP scene, collapses CSS animations to their end state, and swaps the category marquee for a static wrap.
+- **Phones:** `components/mobile-cta-bar.tsx` shows a bottom bar (Guides / Codes) after the first screen; it hides over the footer and while the cookie notice is open.
+- **Hero numbers** come from `lib/home-stats.ts`, which counts pages in the public sitemap. Do not hard-code counts.
+
 ## Commands
 
 - `pnpm --filter web dev`

@@ -7,7 +7,7 @@ export const articleList: ArticleListItem[] = ArticleListSchema.parse([
     description:
       'Chime’s standard referral needs a $200 direct deposit within 45 days and card activation. Successful referrals are capped at 10 per calendar year.',
     publishedAt: '2026-04-10T12:00:00.000Z',
-    listImageSrc: '/articles/chime/chime-building.png'
+    listImageSrc: '/articles/chime/chime-building.webp'
   }
 ])
 

@@ -41,6 +41,8 @@ export default defineConfig({
         'components/use-clip-partner-offer-flow.ts',
         /* Embla + client effects: smoke-tested in hero-slider.test.tsx; v8 cannot execute hooks in SSR markup */
         'components/hero-slider.tsx',
+        /* Browser-only motion layer (GSAP/Lenis, pointer + scroll listeners); pure math lives in lib/motion-math.ts */
+        'components/site-motion.tsx',
         'components/store-card.tsx',
         'app/(home)/layout.tsx',
         '**/privacy-policy/page.tsx',

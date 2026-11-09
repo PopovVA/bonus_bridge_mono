@@ -1,17 +1,26 @@
 import './globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import { ClientCatalogProvider } from '@/components/client-catalog-provider'
 import { CookieNotice } from '@/components/cookie-notice'
 import { GoogleAnalytics } from '@/components/google-analytics'
+import { SiteMotion } from '@/components/site-motion'
 import { getSiteUrl } from '@/app/seo'
 import { getClientCatalog } from '@/lib/site-data'
+import { THEME_INIT_SCRIPT } from '@/lib/theme'
 
 const appSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-app',
   display: 'swap'
 })
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f4f1ea' },
+    { media: '(prefers-color-scheme: dark)', color: '#0c0e13' }
+  ]
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
@@ -32,11 +41,15 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const catalog = await getClientCatalog()
   return (
-    <html lang="en" className={appSans.variable}>
+    <html lang="en" className={appSans.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body>
         <GoogleAnalytics />
         <ClientCatalogProvider value={catalog}>{children}</ClientCatalogProvider>
         <CookieNotice />
+        <SiteMotion />
       </body>
     </html>
   )

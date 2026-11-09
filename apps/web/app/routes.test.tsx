@@ -23,6 +23,7 @@ vi.mock('@/lib/site-data', async (importOriginal) => {
 })
 
 vi.mock('next/navigation', () => ({
+  usePathname: vi.fn(() => '/'),
   permanentRedirect: vi.fn((url: string) => {
     throw new Error(`MOCK_REDIRECT:${url}`)
   }),
@@ -317,7 +318,7 @@ describe('web routes', () => {
     const html = renderToStaticMarkup(<ArticlesIndexPage />)
     expect(html).toContain('Informational Guides')
     expect(html).toContain('/articles/chime-1000-two-friends')
-    expect(html).toContain('chime-building.png')
+    expect(html).toContain('chime-building.webp')
   })
 
   it('renders chime article with structured data, partner links, terms link, and Explore more', async () => {
