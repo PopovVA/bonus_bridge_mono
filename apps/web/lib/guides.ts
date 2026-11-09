@@ -44,6 +44,7 @@ export type Guide = {
 }
 
 const UPDATED = '2026-11-05T18:00:00.000Z'
+const SEO_GUIDES_DATE = '2026-11-09T18:00:00.000Z'
 
 export const guideList: Guide[] = [
   {
@@ -509,19 +510,206 @@ export const guideList: Guide[] = [
       { href: 'https://www.topcashback.com/ref/member344836925437', label: 'TopCashback' },
       { href: 'https://www.joinhoney.com/ref/nwpz6sw', label: 'PayPal Honey' }
     ]
+  },
+  {
+    slug: 'topcashback-referral-program',
+    metaTitle: 'TopCashback Referral Program Explained | BonusBridge',
+    h1: 'TopCashback referral program: who gets the $10',
+    description:
+      'Who gets the $10, what counts toward the $10 Cash Back threshold, the 365-day window, and what TopCashback’s terms do not promise new members.',
+    publishedAt: SEO_GUIDES_DATE,
+    updatedAt: SEO_GUIDES_DATE,
+    sections: [
+      {
+        id: 'who-gets-what',
+        heading: 'Who gets what',
+        paragraphs: [
+          'TopCashback’s US referral terms pay the member who shares the link $10 Cash Back for each qualifying referral. The same terms do not state a fixed referral bonus for the new member. Any welcome offer you see when you join is set by TopCashback at that time.',
+          'If you join through the BonusBridge link and qualify, BonusBridge may receive that $10. You pay nothing extra.'
+        ],
+        bullets: [
+          'Referrer: $10 Cash Back per qualifying referral.',
+          'New member: no fixed amount in the referral terms.',
+          'TopCashback says the amount and the qualifying period are subject to change.'
+        ],
+        links: [{ href: 'https://www.topcashback.com/referrals/terms/', label: 'TopCashback referral terms' }]
+      },
+      {
+        id: 'qualifying',
+        heading: 'What makes a referral qualify',
+        paragraphs: [
+          'The new member clicks the referral link, signs up, verifies the account, and then earns at least $10 in eligible Cash Back within 365 days of joining.',
+          'Eligible is the key word. Purchases at excluded retailers do not count, and goodwill or bonus Cash Back does not count toward the $10.'
+        ],
+        bullets: [
+          'Sign up through the link itself, not a later visit to the home page.',
+          'Verify the account. An unverified account cannot qualify.',
+          'Only eligible Cash Back counts toward the $10.',
+          'The clock is 365 days from joining.'
+        ],
+        links: [{ href: '/guides/how-cashback-signup-bonuses-work', label: 'Pending versus payable Cash Back' }]
+      },
+      {
+        id: 'tracking',
+        heading: 'Make your purchases count',
+        paragraphs: [
+          'Cash Back only counts if the purchase tracks. Start each order from TopCashback, finish it in the same browser, and switch off other coupon or cash-back extensions for that checkout.',
+          'Pending Cash Back is not yet eligible. A return removes it, so the $10 can take longer than the first order.'
+        ],
+        bullets: [
+          'One portal or extension per order.',
+          'Keep the order confirmation email for missing Cash Back claims.',
+          'Check the store page on TopCashback for exclusions before you buy.'
+        ],
+        links: [{ href: '/guides/rakuten-vs-topcashback', label: 'Rakuten vs TopCashback' }]
+      }
+    ],
+    table: {
+      caption: 'TopCashback referral at a glance',
+      columns: ['Item', 'What the terms say'],
+      rows: [
+        ['Referrer reward', '$10 Cash Back per qualifying referral'],
+        ['New member reward', 'Not stated in the referral terms'],
+        ['Threshold', '$10 of eligible Cash Back'],
+        ['Window', '365 days from joining'],
+        ['Does not count', 'Excluded retailers, goodwill or bonus Cash Back'],
+        ['Can it change?', 'Yes, amount and period are subject to change']
+      ]
+    },
+    faqs: [
+      {
+        question: 'Do I get $10 for joining TopCashback through a referral link?',
+        answer:
+          'The referral terms pay the $10 to the member who shared the link. They do not state a fixed amount for the new member. Check TopCashback’s sign-up page for any welcome offer running when you join.'
+      },
+      {
+        question: 'How long do I have to reach $10 in Cash Back?',
+        answer: '365 days from the day you join, counting only eligible Cash Back.'
+      },
+      {
+        question: 'Does bonus Cash Back count toward the $10?',
+        answer: 'No. TopCashback’s terms exclude goodwill and bonus Cash Back, and purchases at excluded retailers.'
+      },
+      {
+        question: 'How does BonusBridge get paid?',
+        answer: FTC_AFFILIATE_DISCLOSURE
+      }
+    ],
+    related: [
+      { href: '/stores/topcashback', label: 'TopCashback' },
+      { href: '/guides/rakuten-vs-topcashback', label: 'Rakuten vs TopCashback' },
+      { href: '/guides/how-cashback-signup-bonuses-work', label: 'How cashback sign-up bonuses work' }
+    ],
+    outbound: [{ href: 'https://www.topcashback.com/ref/member344836925437', label: 'Join TopCashback' }]
+  },
+  {
+    slug: 'paypal-honey-referral-points',
+    metaTitle: 'PayPal Honey Referral Points Explained | BonusBridge',
+    h1: 'PayPal Honey referrals: points, not cash',
+    description:
+      'What the 500-point referral bonus is, who receives it, why it takes 60–90 days, and how Honey points differ from cash-back portals.',
+    publishedAt: SEO_GUIDES_DATE,
+    updatedAt: SEO_GUIDES_DATE,
+    sections: [
+      {
+        id: 'who-gets-what',
+        heading: 'Who gets what',
+        paragraphs: [
+          'PayPal Honey’s help page describes a 500-point referral bonus for the member who invites a friend. The friend signs up with the invite link and earns PayPal Rewards points on purchases. The page does not state a fixed referral amount for the new member.',
+          'The reward is PayPal Rewards points, not cash. If you join through the BonusBridge link, BonusBridge may receive the referral points.'
+        ],
+        bullets: [
+          'Referrer: 500 PayPal Rewards points.',
+          'New member: earns points on purchases; no fixed referral amount stated.',
+          'A limit on referral bonuses applies under Honey’s Terms of Use.'
+        ],
+        links: [{ href: 'https://help.joinhoney.com/article/33-can-i-refer-people-to-honey', label: 'PayPal Honey referral help' }]
+      },
+      {
+        id: 'timing',
+        heading: 'Why it takes 60–90 days',
+        paragraphs: [
+          'The referral bonus is paid after the friend’s points are confirmed. Points stay pending while the store’s return window runs, which Honey says is often 60 to 90 days.',
+          'A returned or cancelled order can remove the pending points, and with them the referral bonus.'
+        ],
+        bullets: [
+          'Pending points are not spendable yet.',
+          'Confirmed points can be redeemed under PayPal Rewards rules.',
+          'Keep the order confirmation until the points confirm.'
+        ],
+        links: [{ href: '/guides/how-cashback-signup-bonuses-work', label: 'Pending versus payable explained' }]
+      },
+      {
+        id: 'vs-portals',
+        heading: 'Honey points versus cash-back portals',
+        paragraphs: [
+          'Honey is a browser extension that finds coupon codes and can award PayPal Rewards points. Rakuten and TopCashback are cash-back portals that pay a share of the order.',
+          'Running two of these on one checkout often breaks tracking for both. Pick one tool per order.'
+        ],
+        bullets: [
+          'Points are not cash and follow PayPal Rewards redemption rules.',
+          'Disable other extensions when you start an order from a portal.',
+          'Compare portals before you choose which one to use for a big order.'
+        ],
+        links: [{ href: '/guides/best-cashback-portals-2026', label: 'US cashback portals compared' }]
+      }
+    ],
+    table: {
+      caption: 'PayPal Honey referral at a glance',
+      columns: ['Item', 'What Honey’s help page says'],
+      rows: [
+        ['Referrer reward', '500 PayPal Rewards points'],
+        ['New member reward', 'Points on purchases; no fixed referral amount stated'],
+        ['When it pays', 'After the friend’s points confirm, often 60–90 days'],
+        ['Limit', 'A cap on referral bonuses under the Terms of Use'],
+        ['Cash or points?', 'Points, not cash']
+      ]
+    },
+    faqs: [
+      {
+        question: 'Is the Honey referral bonus cash?',
+        answer: 'No. It is paid in PayPal Rewards points.'
+      },
+      {
+        question: 'How many points does a Honey referral give?',
+        answer:
+          'Honey’s help page lists a 500-point referral bonus for the member who invited the friend. It does not state a fixed referral amount for the new member.'
+      },
+      {
+        question: 'Why are my referral points still pending?',
+        answer:
+          'The bonus waits for the friend’s purchase points to confirm. That pending period is often 60 to 90 days, depending on the store.'
+      },
+      {
+        question: 'How does BonusBridge get paid?',
+        answer: FTC_AFFILIATE_DISCLOSURE
+      }
+    ],
+    related: [
+      { href: '/stores/honey', label: 'PayPal Honey' },
+      { href: '/guides/best-cashback-portals-2026', label: 'US cashback portals compared' },
+      { href: '/guides/how-cashback-signup-bonuses-work', label: 'How cashback sign-up bonuses work' }
+    ],
+    outbound: [{ href: 'https://www.joinhoney.com/ref/nwpz6sw', label: 'Join PayPal Honey' }]
   }
 ]
 
 const CATEGORY_GUIDE_SLUGS: Record<string, string[]> = {
-  shopping: ['rakuten-vs-topcashback', 'how-cashback-signup-bonuses-work', 'best-cashback-portals-2026'],
+  shopping: [
+    'rakuten-vs-topcashback',
+    'topcashback-referral-program',
+    'paypal-honey-referral-points',
+    'how-cashback-signup-bonuses-work',
+    'best-cashback-portals-2026'
+  ],
   electronics: ['rakuten-vs-topcashback', 'how-cashback-signup-bonuses-work', 'best-cashback-portals-2026'],
   finance: ['chime-referral-requirements', 'how-cashback-signup-bonuses-work']
 }
 
 const STORE_GUIDE_SLUGS: Record<string, string[]> = {
   rakuten: ['rakuten-vs-topcashback', 'how-cashback-signup-bonuses-work', 'best-cashback-portals-2026'],
-  topcashback: ['rakuten-vs-topcashback', 'how-cashback-signup-bonuses-work', 'best-cashback-portals-2026'],
-  honey: ['best-cashback-portals-2026', 'how-cashback-signup-bonuses-work'],
+  topcashback: ['topcashback-referral-program', 'rakuten-vs-topcashback', 'how-cashback-signup-bonuses-work'],
+  honey: ['paypal-honey-referral-points', 'best-cashback-portals-2026', 'how-cashback-signup-bonuses-work'],
   chime: ['chime-referral-requirements'],
   lyft: ['best-cashback-portals-2026']
 }

@@ -119,3 +119,38 @@ export function formatCheckedDate(iso: string): string {
     timeZone: 'UTC'
   })
 }
+
+export type StoreFaq = { question: string; answer: string }
+
+/** Search-intent title for a store page, e.g. "Chime referral bonus: $100 for new members". */
+export function storeSeoTitle(bonus: SignupBonus): string {
+  return bonus.amount
+    ? `${bonus.provider} referral bonus: ${bonus.amount} for new members`
+    : `${bonus.provider} referral program: terms explained`
+}
+
+export function storeSeoDescription(bonus: SignupBonus): string {
+  const lead = bonus.amount ? `${bonus.amount} ${bonus.headline}. ` : `${bonus.headline}. `
+  return `${lead}${bonus.condition} Official ${bonus.provider} terms linked.`
+}
+
+/** Three answers built only from the bonus record, so the FAQ never says more than the provider's terms. */
+export function storeFaqs(bonus: SignupBonus): StoreFaq[] {
+  const checked = formatCheckedDate(bonus.checkedAt)
+  return [
+    {
+      question: `How much do new members get from the ${bonus.provider} referral bonus?`,
+      answer: bonus.amount
+        ? `${bonus.provider}’s official terms state ${bonus.amount} ${bonus.headline}. Checked ${checked}. Amounts can change.`
+        : `${bonus.provider}’s official terms do not state a fixed amount for new members. ${bonus.headline}. Checked ${checked}.`
+    },
+    {
+      question: `What do I need to do to qualify?`,
+      answer: bonus.condition
+    },
+    {
+      question: `Where are the official ${bonus.provider} terms?`,
+      answer: `On ${bonus.provider}’s own site: ${bonus.sourceUrl}. BonusBridge may earn a referral bonus when you sign up through our link.`
+    }
+  ]
+}

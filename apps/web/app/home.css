@@ -3167,3 +3167,68 @@
 .mobile-cta__btn--accent {
   font-weight: 800;
 }
+
+/* Store page: keyword-bearing H1 tail and FAQ */
+.store-page-title__sub {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.42em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.store-faq {
+  margin-top: clamp(32px, 5vw, 56px);
+  padding: clamp(20px, 4vw, 36px);
+}
+
+.store-faq__title {
+  margin: 0 0 12px;
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.store-faq__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.store-faq__item:last-child {
+  border-bottom: 0;
+}
+
+.store-faq__item summary {
+  position: relative;
+  padding: 16px 40px 16px 0;
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.store-faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.store-faq__item summary::after {
+  content: '+';
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  color: var(--accent);
+  font-size: 1.4rem;
+  line-height: 1;
+  transform: translateY(-50%);
+  transition: rotate 0.35s var(--ease-spring);
+}
+
+.store-faq__item[open] summary::after {
+  rotate: 45deg;
+}
+
+.store-faq__item p {
+  margin: 0 0 16px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
