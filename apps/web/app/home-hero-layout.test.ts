@@ -24,3 +24,10 @@ describe('hero carousel alignment', () => {
     expect(css).toContain('right: var(--hero-arrow-inset)')
   })
 })
+
+describe('stores menu scroll lock', () => {
+  it('does not hide overflow on <html> while Lenis is stopped (breaks the sticky header)', () => {
+    const globals = readFileSync(path.join(process.cwd(), 'app/globals.css'), 'utf8')
+    expect(globals).not.toMatch(/\.lenis\.lenis-stopped\s*\{[^}]*overflow:\s*hidden/)
+  })
+})

@@ -182,9 +182,11 @@ html.lenis body {
   overscroll-behavior: contain;
 }
 
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
+/*
+ * No `overflow: hidden` on html while Lenis is stopped: the stores menu already
+ * locks scrolling on <body>. Hiding overflow on both makes <body> the scroll
+ * container, and the sticky header then sticks to <body> and leaves the screen.
+ */
 
 /* --------------------------------------------------------------------------
    Theme switch: the new theme grows as a circle from the toggle
