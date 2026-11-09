@@ -519,6 +519,25 @@ describe('web routes', () => {
     })
   })
 
+  it('store page with a stated bonus uses a search title, H1 tail and FAQ schema', async () => {
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's-chime',
+      name: 'Chime',
+      slug: 'chime',
+      description: 'Banking app.',
+      categoryId: 'c1',
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([])
+    await expect(generateStoreMetadata({ params: Promise.resolve({ slug: 'chime' }) })).resolves.toMatchObject({
+      title: 'Chime referral bonus: $100 for new members'
+    })
+    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'chime' }) }))
+    expect(html).toContain('store-page-title__sub')
+    expect(html).toContain('"@type":"FAQPage"')
+    expect(html).toContain('Questions about the Chime referral bonus')
+  })
+
   it('store page still renders Top offers clip card when only promo-code offers exist', async () => {
     vi.mocked(getServiceBySlug).mockResolvedValue({
       id: 's1',

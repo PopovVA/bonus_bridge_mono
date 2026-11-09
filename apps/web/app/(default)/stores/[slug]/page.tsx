@@ -3,7 +3,13 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { absoluteUrl, pageSocialMetadata } from '@/app/seo'
 import { ListingFacts } from '@/components/listing-facts'
-import { formatCheckedDate, getSignupBonus } from '@/lib/signup-bonuses'
+import {
+  formatCheckedDate,
+  getSignupBonus,
+  storeFaqs,
+  storeSeoDescription,
+  storeSeoTitle
+} from '@/lib/signup-bonuses'
 import { buildListingFacts, isNotPubliclyPromoted } from '@/lib/listing-facts'
 import { BonusCta } from '@/components/bonus-cta'
 import { EmptyState } from '@/components/empty-state'
@@ -30,11 +36,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const blurb = store.description?.trim()
+  const seoBonus = isNotPubliclyPromoted(slug) ? null : getSignupBonus(slug)
   const meta = pageSocialMetadata({
-    title: store.name,
-    description: blurb
-      ? `${blurb} Current bonus amounts are not verified on BonusBridge.`
-      : `Informational page for ${store.name}. Current bonus amounts are not verified on BonusBridge.`,
+    title: seoBonus ? storeSeoTitle(seoBonus) : store.name,
+    description: seoBonus
+      ? storeSeoDescription(seoBonus)
+      : blurb
+        ? `${blurb} Current bonus amounts are not verified on BonusBridge.`
+        : `Informational page for ${store.name}. Current bonus amounts are not verified on BonusBridge.`,
     path: `/stores/${slug}`
   })
   if (isNotPubliclyPromoted(slug)) {
@@ -62,6 +71,16 @@ export default async function StorePage({ params }: Props) {
   const program = getReferralProgram(slug)
   const bonus = hidePublicReferral ? null : getSignupBonus(slug)
   const relatedGuides = guidesForStore(slug)
+  const faqs = bonus ? storeFaqs(bonus) : []
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer }
+    }))
+  }
   const visibleCoupons = hidePublicReferral ? [] : coupons
   const primaryPromo = visibleCoupons[0]
   const openStoreUrl = primaryPromo?.referralUrl ?? null
@@ -89,6 +108,7 @@ export default async function StorePage({ params }: Props) {
       <article className="app-surface-card store-page-hero">
         <h1 id="store-page-heading" className="store-page-title">
           {store.name}
+          {bonus ? <span className="store-page-title__sub"> referral bonus</span> : null}
         </h1>
         {bonus ? <BonusCta bonus={bonus} place="store_page" /> : null}
         <ListingFacts facts={facts} />
@@ -181,6 +201,21 @@ export default async function StorePage({ params }: Props) {
               : 'No active promo codes or offers for this store yet.'
           }
         />
+      ) : null}
+
+      {faqs.length > 0 ? (
+        <section className="store-faq app-surface-card" aria-labelledby="store-faq-heading">
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+          <h2 id="store-faq-heading" className="store-faq__title">
+            Questions about the {store.name} referral bonus
+          </h2>
+          {faqs.map((faq) => (
+            <details key={faq.question} className="store-faq__item">
+              <summary>{faq.question}</summary>
+              <p>{faq.answer}</p>
+            </details>
+          ))}
+        </section>
       ) : null}
 
       <StoreRelatedPanel storeSlug={slug} primaryCategorySlug={primaryCategorySlug} />

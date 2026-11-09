@@ -18,10 +18,10 @@ function sample(overrides: Partial<Guide> = {}): Guide {
 }
 
 describe('guides', () => {
-  it('publishes four unique titles within the search-result limit', () => {
-    expect(guideList).toHaveLength(4)
+  it('publishes unique titles within the search-result limit', () => {
+    expect(guideList).toHaveLength(6)
     const titles = guideList.map((guide) => guide.metaTitle)
-    expect(new Set(titles).size).toBe(4)
+    expect(new Set(titles).size).toBe(6)
     for (const guide of guideList) {
       expect(guide.metaTitle.length).toBeLessThanOrEqual(60)
       expect(guide.h1.length).toBeGreaterThan(0)
