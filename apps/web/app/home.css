@@ -303,6 +303,7 @@
 .hero__stat {
   display: flex;
   flex-direction: column-reverse;
+  justify-content: flex-end;
   gap: 4px;
   padding: 0 clamp(18px, 3vw, 36px);
   border-left: 1px solid var(--line-strong);
