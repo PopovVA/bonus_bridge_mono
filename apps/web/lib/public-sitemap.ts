@@ -1,10 +1,10 @@
 import { articleList } from '@/lib/articles/list'
 import { guideList } from '@/lib/guides'
-import { getCategories, getServices } from '@/lib/site-data'
+import { getPublishedCategories, getServices } from '@/lib/site-data'
 
-/** Paths that belong in the public sitemap. Unlisted stores are omitted. */
+/** Paths that belong in the public sitemap. Unlisted stores and categories without stores are omitted. */
 export async function listPublicSitemapPaths(): Promise<string[]> {
-  const [categories, stores] = await Promise.all([getCategories(), getServices()])
+  const [categories, stores] = await Promise.all([getPublishedCategories(), getServices()])
 
   return [
     '/',

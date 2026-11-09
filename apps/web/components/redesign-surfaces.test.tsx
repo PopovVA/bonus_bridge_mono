@@ -90,14 +90,14 @@ describe('ThemeToggle', () => {
 
   it('grows the new theme from the button via a view transition', () => {
     const start = vi.fn((update: () => void) => update())
-    ;(document as Document & { startViewTransition?: unknown }).startViewTransition = start
+    ;(document as unknown as { startViewTransition?: unknown }).startViewTransition = start
     document.documentElement.dataset.theme = 'dark'
     mount(<ThemeToggle />)
     act(() => host.querySelector('button')!.click())
     expect(start).toHaveBeenCalledOnce()
     expect(document.documentElement.dataset.theme).toBe('light')
     expect(document.documentElement.style.getPropertyValue('--vt-r')).toMatch(/px$/)
-    delete (document as Document & { startViewTransition?: unknown }).startViewTransition
+    delete (document as unknown as { startViewTransition?: unknown }).startViewTransition
   })
 
   it('still switches when storage is blocked', () => {

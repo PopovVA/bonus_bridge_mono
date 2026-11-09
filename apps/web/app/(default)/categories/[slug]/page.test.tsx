@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 
 vi.mock('@/lib/site-data', () => ({
   getCategories: vi.fn(),
+  getPublishedCategories: vi.fn(),
   getServices: vi.fn(),
   getOffers: vi.fn()
 }))
@@ -17,7 +18,7 @@ vi.mock('next/navigation', () => ({
 }))
 
 import CategoryPage, { generateMetadata, generateStaticParams } from './page'
-import { getCategories, getOffers, getServices } from '@/lib/site-data'
+import { getCategories, getOffers, getPublishedCategories, getServices } from '@/lib/site-data'
 
 (globalThis as { React?: typeof React }).React = React
 
@@ -25,6 +26,43 @@ describe('category [slug] page', () => {
   beforeEach(() => {
     vi.mocked(getServices).mockResolvedValue([])
     vi.mocked(getOffers).mockResolvedValue([])
+    vi.mocked(getPublishedCategories).mockResolvedValue([
+      { id: 'c1', slug: 'electronics', name: 'Electronics' } as never,
+      { id: 'c2', slug: 'finance', name: 'Finance' } as never
+    ])
+  })
+
+  it('noindexes a category that has no listed stores', async () => {
+    vi.mocked(getCategories).mockResolvedValue([{ id: 'c9', slug: 'food', name: 'Food' } as never])
+    await expect(generateMetadata({ params: Promise.resolve({ slug: 'food' }) })).resolves.toMatchObject({
+      robots: { index: false, follow: true }
+    })
+    vi.mocked(getPublishedCategories).mockRejectedValue(new Error('down'))
+    await expect(generateMetadata({ params: Promise.resolve({ slug: 'food' }) })).resolves.toMatchObject({
+      robots: { index: false, follow: true }
+    })
+  })
+
+  it('points an empty category at the guides and categories that have stores', async () => {
+    vi.mocked(getCategories).mockResolvedValue([{ id: 'c1', slug: 'electronics', name: 'Electronics' } as never])
+    const html = renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'electronics' }) }))
+    expect(html).toContain('No electronics stores yet')
+    expect(html).toContain('href="/articles"')
+    expect(html).toContain('href="/categories/finance"')
+    expect(html).not.toContain('href="/categories/electronics"')
+    vi.mocked(getPublishedCategories).mockRejectedValue(new Error('down'))
+    const fallback = renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'electronics' }) }))
+    expect(fallback).toContain('href="/articles"')
+  })
+
+  it('makes each store card one stretched link', async () => {
+    vi.mocked(getCategories).mockResolvedValue([{ id: 'c1', slug: 'electronics', name: 'Electronics' } as never])
+    vi.mocked(getServices).mockResolvedValue([
+      { id: 's1', name: 'Shop', slug: 'shop', description: 'd', categoryId: 'c1' } as never
+    ])
+    const html = renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'electronics' }) }))
+    expect(html.match(/href="\/stores\/shop"/g)).toHaveLength(1)
+    expect(html).toContain('category-store-link')
   })
 
   it('generateStaticParams maps categories', async () => {

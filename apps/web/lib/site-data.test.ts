@@ -100,21 +100,19 @@ describe('site-data', () => {
 
   it('returns home category marquee chips in alphabetical order', async () => {
     const chips = await getHomeCategoryMarquee()
-    expect(chips.length).toBe(6)
-    expect(chips[0]?.slug).toBe('auto')
+    expect(chips.map((c) => c.slug)).toEqual(['auto', 'electronics', 'finance', 'shopping'])
     expect(chips[0]?.imageSrc).toBe('/categories/auto.svg')
     expect(chips[0]?.href).toBe('/categories/auto')
-    expect(chips.find((c) => c.slug === 'food')?.name).toBe('Food')
+    expect(chips.find((c) => c.slug === 'food')).toBeUndefined()
     const names = chips.map((c) => c.name)
     expect([...names].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(names)
   })
 
   it('returns stores mega menu categories A–Z with store icons', async () => {
     const menu = await getStoresMegaMenu()
-    expect(menu.categories.length).toBe(6)
-    expect(menu.categories[0]?.slug).toBe('auto')
+    expect(menu.categories.map((c) => c.slug)).toEqual(['auto', 'electronics', 'finance', 'shopping'])
     expect(menu.categories[0]?.imageSrc).toBe('/categories/auto.svg')
-    expect(menu.categories.find((c) => c.slug === 'food')?.imageSrc).toBe('/categories/food.svg')
+    expect(menu.categories.find((c) => c.slug === 'food')).toBeUndefined()
     const menuNames = menu.categories.map((c) => c.name)
     expect([...menuNames].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(menuNames)
     expect(menu.storesByCategorySlug.auto?.map((s) => s.slug)).toEqual(['lyft'])
@@ -125,13 +123,13 @@ describe('site-data', () => {
       'topcashback',
       'honey'
     ])
-    expect(menu.storesByCategorySlug.food).toEqual([])
-    expect(menu.storesByCategorySlug.travel).toEqual([])
+    expect(menu.storesByCategorySlug.food).toBeUndefined()
+    expect(menu.storesByCategorySlug.travel).toBeUndefined()
   })
 
   it('returns client catalog with stores and active offers per category', async () => {
     const catalog = await getClientCatalog()
-    expect(catalog.categories.length).toBe(6)
+    expect(catalog.categories.length).toBe(4)
     const finance = catalog.categories.find((c) => c.slug === 'finance')
     expect(finance?.stores.map((s) => s.slug)).toEqual(['chime'])
     const chime = finance?.stores.find((s) => s.slug === 'chime')
@@ -143,7 +141,7 @@ describe('site-data', () => {
     })
     const lyft = catalog.categories.find((c) => c.slug === 'auto')?.stores.find((s) => s.slug === 'lyft')
     expect(lyft?.logoSrc).toBe('/clip-coupons/lyft.svg')
-    expect(catalog.categories.find((c) => c.slug === 'food')?.stores).toEqual([])
+    expect(catalog.categories.find((c) => c.slug === 'food')).toBeUndefined()
     const slugs = catalog.categories.flatMap((category) => category.stores.map((store) => store.slug))
     expect(slugs).not.toContain('uber')
     expect(slugs).not.toContain('robinhood')
