@@ -1858,6 +1858,45 @@
   box-shadow: var(--shadow-lg);
 }
 
+.category-store-card {
+  cursor: pointer;
+}
+
+.category-store-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.category-store-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.category-store-link:focus-visible {
+  outline: none;
+}
+
+.category-store-link:focus-visible::after {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.category-store-card:hover .category-store-name {
+  color: var(--accent-ink);
+}
+
+.category-store-card:hover .category-store-cta {
+  color: #101218;
+  box-shadow: 0 14px 30px -14px var(--accent);
+}
+
+.category-store-card:hover .category-store-cta::before {
+  transform: translateY(0);
+}
+
 .category-store-row {
   display: flex;
   align-items: center;
@@ -2136,14 +2175,92 @@
   width: 100%;
 }
 
-/* Empty state */
-.empty-state,
-.empty {
-  padding: 32px;
-  border: 1px dashed var(--line-strong);
-  border-radius: var(--radius);
-  color: var(--muted);
+/* Empty state: a bridge missing its middle span */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: clamp(32px, 6vw, 64px) clamp(20px, 5vw, 56px);
   text-align: center;
+}
+
+.empty-state__art {
+  width: min(260px, 70%);
+  height: auto;
+  margin-bottom: 6px;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.empty-state__deck,
+.empty-state__tower {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+.empty-state__cable {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+
+.empty-state__gap {
+  stroke: var(--line-strong);
+  stroke-width: 3;
+  stroke-dasharray: 4 7;
+}
+
+.empty-state__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.empty-state__text {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--muted);
+}
+
+.empty-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.empty-state__chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease, translate 0.3s var(--ease-out);
+}
+
+.empty-state__chip:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  translate: 0 -2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .empty-state__gap {
+    animation: gap-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes gap-pulse {
+    50% {
+      opacity: 0.3;
+    }
+  }
 }
 
 /* ==========================================================================

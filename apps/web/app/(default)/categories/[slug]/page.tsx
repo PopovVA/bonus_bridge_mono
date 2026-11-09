@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { EmptyState } from '@/components/empty-state'
 import { TrackedLink } from '@/components/tracked-link'
 import type { Offer, Service } from '@/lib/schemas'
-import { getCategories, getOffers, getServices } from '@/lib/site-data'
+import { getCategories, getOffers, getPublishedCategories, getServices } from '@/lib/site-data'
 import { guidesForCategory } from '@/lib/guides'
 
 const CATEGORY_STORE_DESC_FALLBACK =
@@ -74,11 +74,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!cat) {
     return { title: 'Category', robots: { index: false, follow: false } }
   }
-  return pageSocialMetadata({
+  const published = await getPublishedCategories().catch(() => [])
+  const meta = pageSocialMetadata({
     title: `${cat.name} store guides`,
     description: `Informational ${cat.name} store pages on BonusBridge. Current bonuses are not verified. Eligibility depends on the provider, your account, and your location.`,
     path: `/categories/${slug}`
   })
+  /* A category without stores stays reachable by URL but should not be indexed. */
+  return published.some((c) => c.slug === slug) ? meta : { ...meta, robots: { index: false, follow: true } }
 }
 
 export default async function CategoryPage({ params }: Props) {
@@ -95,6 +98,8 @@ export default async function CategoryPage({ params }: Props) {
   ])
 
   const relatedGuides = guidesForCategory(slug)
+  const otherCategories =
+    stores.length === 0 ? (await getPublishedCategories().catch(() => [])).filter((c) => c.slug !== slug) : []
   const offersByService = new Map<string, Offer[]>()
   for (const o of offers) {
     const cur = offersByService.get(o.serviceId) ?? []
@@ -143,7 +148,14 @@ export default async function CategoryPage({ params }: Props) {
         </nav>
       ) : null}
       {stores.length === 0 ? (
-        <EmptyState message="No stores in this category yet." />
+        <EmptyState
+          title={`No ${cat.name.toLowerCase()} stores yet`}
+          message="No stores in this category yet. BonusBridge only lists providers whose terms we can link to. Try a category that has stores, or read the guides."
+          actions={[
+            { href: '/articles', label: 'Read the guides' },
+            ...otherCategories.map((c) => ({ href: `/categories/${c.slug}`, label: c.name }))
+          ]}
+        />
       ) : (
         <div className="category-stores-list">
           {stores.map((store) => {
@@ -159,7 +171,15 @@ export default async function CategoryPage({ params }: Props) {
                       </div>
                       <div className="category-store-head-text">
                         <h2 className="category-store-title">
-                          <span className="category-store-name">{store.name}</span>
+                          {/* Stretched link: the whole card is the click target, one link per card for screen readers */}
+                          <TrackedLink
+                            href={`/stores/${store.slug}`}
+                            className="category-store-link"
+                            event="category_view_store"
+                            eventParams={{ store_slug: store.slug }}
+                          >
+                            <span className="category-store-name">{store.name}</span>
+                          </TrackedLink>
                         </h2>
                         <p className="category-store-desc">{blurb}</p>
                         <p className="category-store-count default-muted-text">
@@ -168,15 +188,8 @@ export default async function CategoryPage({ params }: Props) {
                       </div>
                     </div>
                   </div>
-                  <div className="category-store-row-cta">
-                    <TrackedLink
-                      href={`/stores/${store.slug}`}
-                      className="category-store-cta"
-                      event="category_view_store"
-                      eventParams={{ store_slug: store.slug }}
-                    >
-                      View store
-                    </TrackedLink>
+                  <div className="category-store-row-cta" aria-hidden="true">
+                    <span className="category-store-cta">View store</span>
                   </div>
                 </div>
               </article>

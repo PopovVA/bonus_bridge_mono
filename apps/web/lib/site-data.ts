@@ -551,8 +551,19 @@ export async function getCategories(): Promise<Category[]> {
   return structuredClone(categoriesSortedAlphabetically())
 }
 
+/** Categories A–Z that hold at least one listed store. Empty ones stay reachable by URL but are not promoted. */
+function publishedCategoriesSorted(): Category[] {
+  const listed = listedServices()
+  return categoriesSortedAlphabetically().filter((cat) => listed.some((s) => serviceMatchesCategory(s, cat)))
+}
+
+/** Same as `getCategories()` minus categories with no listed stores (sitemap, menus, marquee). */
+export async function getPublishedCategories(): Promise<Category[]> {
+  return structuredClone(publishedCategoriesSorted())
+}
+
 export async function getHomeCategoryMarquee(): Promise<HomeCategoryChip[]> {
-  return categoriesSortedAlphabetically().map((c) => ({
+  return publishedCategoriesSorted().map((c) => ({
     slug: c.slug,
     name: c.name,
     imageSrc: `/categories/${c.slug}.svg`,
@@ -576,7 +587,7 @@ function listedServices(): Service[] {
 
 /** Categories A–Z, plus stores per category slug (for header mega menu). */
 export async function getStoresMegaMenu(): Promise<StoresMegaMenuPayload> {
-  const sorted = categoriesSortedAlphabetically()
+  const sorted = publishedCategoriesSorted()
   const marqueeCategories: StoresMegaMenuCategory[] = sorted.map((c) => ({
     slug: c.slug,
     name: c.name,
@@ -596,7 +607,7 @@ export async function getStoresMegaMenu(): Promise<StoresMegaMenuPayload> {
 
 /** Full category → store → active offer tree for `ClientCatalogProvider` (single fetch at root layout). */
 export async function getClientCatalog(): Promise<ClientCatalogPayload> {
-  const sorted = categoriesSortedAlphabetically()
+  const sorted = publishedCategoriesSorted()
   const categoriesOut: ClientCatalogCategoryBrief[] = []
   for (const cat of sorted) {
     const inCat = listedServices().filter((s) => serviceMatchesCategory(s, cat))
