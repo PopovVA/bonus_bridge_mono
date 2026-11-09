@@ -141,8 +141,16 @@ export function MonthlyTopOffers({
                 ) : offer.slug === 'robinhood' ? (
                   <div className="monthly-offer-card__robinhood-visual" aria-hidden="true" />
                 ) : (
-                  <div className="monthly-offer-card__skeleton" aria-hidden="true">
-                    <span className="monthly-offer-card__skeleton-shimmer" />
+                  <div className="monthly-offer-card__brand-visual" aria-hidden="true">
+                    <svg className="monthly-offer-card__brand-art" viewBox="0 0 400 120" focusable="false">
+                      <path d="M0 100 H400" />
+                      <path d="M110 112 V20 M290 112 V20" />
+                      <path className="is-cable" d="M0 70 Q60 60 110 20 Q200 120 290 20 Q340 60 400 70" />
+                    </svg>
+                    <span className="monthly-offer-card__brand-chip">
+                      {/* eslint-disable-next-line @next/next/no-img-element -- brand mark from /public */}
+                      <img src={offer.logoSrc} alt="" width={240} height={96} decoding="async" />
+                    </span>
                   </div>
                 )}
               </div>

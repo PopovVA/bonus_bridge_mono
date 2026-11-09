@@ -31,10 +31,11 @@ describe('MonthlyTopOffers', () => {
     expect(html).toContain('monthly-offer-card__badge-icon')
   })
 
-  it('renders skeleton when imageSrc is omitted', () => {
+  it('renders a brand panel with the logo when imageSrc is omitted', () => {
     ;(globalThis as { React?: typeof React }).React = React
     const html = renderToStaticMarkup(<MonthlyTopOffers offers={[baseOffer]} />)
-    expect(html).toContain('monthly-offer-card__skeleton')
+    expect(html).toContain('monthly-offer-card__brand-visual')
+    expect(html).not.toContain('monthly-offer-card__skeleton')
     expect(html).not.toContain('monthly-offer-card__media-img')
   })
 
