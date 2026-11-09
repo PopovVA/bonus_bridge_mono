@@ -3,7 +3,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { absoluteUrl, pageSocialMetadata } from '@/app/seo'
 import { ListingFacts } from '@/components/listing-facts'
+import { formatCheckedDate, getSignupBonus } from '@/lib/signup-bonuses'
 import { buildListingFacts, isNotPubliclyPromoted } from '@/lib/listing-facts'
+import { BonusCta } from '@/components/bonus-cta'
 import { EmptyState } from '@/components/empty-state'
 import { StorePageOpenPartnerLink } from '@/components/store-page-open-partner-link'
 import { SiteDisclosure } from '@/components/site-disclosure'
@@ -58,6 +60,7 @@ export default async function StorePage({ params }: Props) {
   const aboutText = store.description?.trim() || STORE_PAGE_FALLBACK_BLURB
   const hidePublicReferral = isNotPubliclyPromoted(slug)
   const program = getReferralProgram(slug)
+  const bonus = hidePublicReferral ? null : getSignupBonus(slug)
   const relatedGuides = guidesForStore(slug)
   const visibleCoupons = hidePublicReferral ? [] : coupons
   const primaryPromo = visibleCoupons[0]
@@ -66,7 +69,10 @@ export default async function StorePage({ params }: Props) {
   const facts = buildListingFacts({
     slug,
     terms: primaryPromo?.terms ?? null,
-    listingUpdatedAt: primaryPromo?.updatedAt ?? store.updatedAt
+    listingUpdatedAt: primaryPromo?.updatedAt ?? store.updatedAt,
+    quotedAmountNote: bonus?.amount
+      ? `The ${bonus.amount} above is quoted from ${bonus.provider}’s official terms, checked ${formatCheckedDate(bonus.checkedAt)}.`
+      : null
   })
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -84,6 +90,7 @@ export default async function StorePage({ params }: Props) {
         <h1 id="store-page-heading" className="store-page-title">
           {store.name}
         </h1>
+        {bonus ? <BonusCta bonus={bonus} place="store_page" /> : null}
         <ListingFacts facts={facts} />
         <div className="store-page-hero-grid">
           <div className="store-page-hero-main">
@@ -116,7 +123,7 @@ export default async function StorePage({ params }: Props) {
             <h2 className="store-page-about-heading">About this store</h2>
             <p className="store-page-about-body">{aboutText}</p>
             <SiteDisclosure className="site-disclosure--store" />
-            {openStoreUrl ? (
+            {openStoreUrl && !bonus ? (
               <StorePageOpenPartnerLink href={openStoreUrl} storeSlug={slug}>
                 See provider details
               </StorePageOpenPartnerLink>

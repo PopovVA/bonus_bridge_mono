@@ -323,6 +323,21 @@ html.lenis body {
   transform: translateX(4px);
 }
 
+.btn--accent,
+.mobile-cta__btn--accent {
+  --btn-bg: var(--accent);
+  --btn-fg: #101218;
+  box-shadow: 0 12px 28px -14px var(--accent);
+}
+
+.btn--accent::before {
+  background: var(--ink);
+}
+
+.btn--accent:hover {
+  color: var(--bg);
+}
+
 .btn--ghost,
 .clip-open-store-dialog__btn--ghost {
   --btn-bg: transparent;

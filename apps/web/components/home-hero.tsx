@@ -1,14 +1,18 @@
 import { ArrowRight } from 'lucide-react'
 import { BridgeArt } from '@/components/bridge-art'
 import { SplitWords } from '@/components/split-words'
+import { BonusButton, BonusFinePrint } from '@/components/bonus-cta'
 import { TrackedLink } from '@/components/tracked-link'
 import type { HomeStats } from '@/lib/home-stats'
+import type { SignupBonus } from '@/lib/signup-bonuses'
 
 type Props = {
   stats: HomeStats
+  /** Featured sign-up bonus with a stated amount; the hero leads with it when present. */
+  bonus?: SignupBonus | null
 }
 
-export function HomeHero({ stats }: Props) {
+export function HomeHero({ stats, bonus = null }: Props) {
   const items = [
     { label: 'Guides and explainers', value: stats.guides },
     { label: 'Store pages', value: stats.stores },
@@ -37,18 +41,28 @@ export function HomeHero({ stats }: Props) {
           </span>
         </h1>
         <p className="hero__lede">
-          Independent notes on partner links and coupons. Bonus amounts are not verified here. Eligibility depends on
-          the provider, your account, and where you live.
+          Independent notes on partner links and coupons. Amounts are quoted from each provider’s official terms and
+          can change. Eligibility depends on the provider, your account, and where you live.
         </p>
-        <div className="hero__ctas">
-          <TrackedLink href="/articles" className="btn btn--primary" data-magnetic event="home_hero_guides">
-            <span>Read the guides</span>
-            <ArrowRight size={18} strokeWidth={2.25} aria-hidden />
-          </TrackedLink>
-          <TrackedLink href="/#coupons" className="btn btn--ghost" data-magnetic event="home_hero_codes">
-            Browse codes
-          </TrackedLink>
-        </div>
+        {bonus ? (
+          <div className="hero__ctas">
+            <BonusButton bonus={bonus} place="home_hero" />
+            <TrackedLink href="/articles" className="btn btn--ghost" data-magnetic event="home_hero_guides">
+              Read the guides
+            </TrackedLink>
+            <BonusFinePrint bonus={bonus} />
+          </div>
+        ) : (
+          <div className="hero__ctas">
+            <TrackedLink href="/articles" className="btn btn--primary" data-magnetic event="home_hero_guides">
+              <span>Read the guides</span>
+              <ArrowRight size={18} strokeWidth={2.25} aria-hidden />
+            </TrackedLink>
+            <TrackedLink href="/#coupons" className="btn btn--ghost" data-magnetic event="home_hero_codes">
+              Browse codes
+            </TrackedLink>
+          </div>
+        )}
         <dl className="hero__stats">
           {items.map((item, i) => (
             <div key={item.label} className="hero__stat">

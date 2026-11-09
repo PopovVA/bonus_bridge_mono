@@ -22,7 +22,7 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     badgeText: 'Terms apply',
     headline: 'Rakuten welcome bonus varies',
     description: programClaim('rakuten'),
-    ctaText: 'See offer details',
+    ctaText: 'Join Rakuten',
     href: requirePublicReferralUrl('rakuten'),
     logoSrc: '/hot-cashback/logos/rakuten.svg'
   },
@@ -33,7 +33,7 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     badgeText: 'Terms apply',
     headline: 'TopCashback $10 after $10',
     description: programClaim('topcashback'),
-    ctaText: 'Check eligibility',
+    ctaText: 'Join TopCashback',
     href: requirePublicReferralUrl('topcashback'),
     logoSrc: '/hot-cashback/logos/topcashback.png'
   },
@@ -44,7 +44,7 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     badgeText: 'Points, not cash',
     headline: 'Honey pays points, not cash',
     description: programClaim('honey'),
-    ctaText: 'See offer details',
+    ctaText: 'Join PayPal Honey',
     href: requirePublicReferralUrl('honey'),
     logoSrc: '/hot-cashback/logos/honey.svg'
   },
@@ -52,10 +52,10 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     id: 'hot-cashback-chime',
     brandName: 'Chime',
     slug: 'chime',
-    badgeText: '10 per year',
+    badgeText: '$100 for new members',
     headline: 'Chime referral requirements',
     description: programClaim('chime'),
-    ctaText: 'View offer details',
+    ctaText: 'Get $100 with Chime',
     href: requirePublicReferralUrl('chime'),
     logoSrc: '/stores/chime.svg'
   }

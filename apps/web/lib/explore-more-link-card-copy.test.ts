@@ -11,7 +11,7 @@ describe('getCuratedLinkCardCopyForExploreMore', () => {
   it('uses the home monthly row for TopCashback and has no Klarna or Public referral card', () => {
     const c = getCuratedLinkCardCopyForExploreMore('topcashback')
     expect(c?.badgeText).toBe('Terms apply')
-    expect(c?.ctaText).toBe('See TopCashback offer')
+    expect(c?.ctaText).toBe('Join TopCashback')
     expect(c?.href).toBe('https://www.topcashback.com/ref/member344836925437')
     expect(c?.headline).toBeNull()
     expect(getCuratedLinkCardCopyForExploreMore('klarna')).toBeNull()
@@ -22,7 +22,7 @@ describe('getCuratedLinkCardCopyForExploreMore', () => {
   it('uses partner-offer copy when slug is not in monthly row', () => {
     const c = getCuratedLinkCardCopyForExploreMore('rakuten')
     expect(c?.badgeText).toBe('Terms apply')
-    expect(c?.ctaText).toBe('See offer details')
+    expect(c?.ctaText).toBe('Join Rakuten')
     expect(c?.headline).toBe('Rakuten welcome bonus varies')
   })
 

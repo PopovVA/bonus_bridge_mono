@@ -650,7 +650,7 @@ describe('web routes', () => {
     expect(html).toContain('Top offers')
     expect(html).toContain('hot-cashback-card')
     expect(html).toContain('Terms apply')
-    expect(html).toContain('See offer details')
+    expect(html).toContain('Join Rakuten')
     expect(html).toContain('Welcome bonus varies')
     expect(html).toContain('clip-coupon-card__brand')
     expect(html).not.toContain('<article class="clip-coupon-card"')

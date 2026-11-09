@@ -48,7 +48,7 @@ describe('site-data', () => {
     expect(list[0]?.href).toBe('https://www.topcashback.com/ref/member344836925437')
     expect(list[0]?.logoSrc).toBe('/hot-cashback/logos/topcashback.png')
     expect(list[0]?.badgeText).toBe('Terms apply')
-    expect(list[0]?.ctaText).toBe('See TopCashback offer')
+    expect(list[0]?.ctaText).toBe('Join TopCashback')
     expect(list[0]?.description).toContain('$10')
     expect(list[0]?.description).toContain('365 days')
   })

@@ -53,3 +53,13 @@ describe('listing facts', () => {
     expect(facts.region).toContain('does not state where')
   })
 })
+
+describe('buildListingFacts quoted amount', () => {
+  it('replaces the not-verified line when the page quotes an official amount', () => {
+    const facts = buildListingFacts({ slug: 'chime', terms: 'Rules.', quotedAmountNote: 'The $100 above is quoted.' })
+    expect(facts.conditions).toBe('Rules. The $100 above is quoted.')
+    expect(facts.conditions).not.toContain('not verified')
+    const noTerms = buildListingFacts({ slug: 'chime', quotedAmountNote: 'Quoted.' })
+    expect(noTerms.conditions).toBe('Quoted.')
+  })
+})
