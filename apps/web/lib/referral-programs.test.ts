@@ -27,9 +27,11 @@ describe('referral programs', () => {
     expect(listed.map((program) => program.slug).sort()).toEqual([
       'chime',
       'honey',
+      'lemonade',
       'lyft',
       'rakuten',
-      'topcashback'
+      'topcashback',
+      'visible'
     ])
     expect(unlistedStoreSlugs()).toContain('uber')
     expect(unlistedStoreSlugs()).toContain('paypal')

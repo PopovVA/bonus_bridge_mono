@@ -20,7 +20,7 @@ describe('signup bonuses', () => {
     expect(chime?.sourceUrl).toBe(getReferralProgram('chime')?.termsUrl)
     expect(chime?.referralUrl).toBe(getReferralProgram('chime')?.referralUrl)
     const withAmount = listSignupBonuses().filter((b) => b.amount)
-    expect(withAmount.map((b) => b.slug)).toEqual(['chime'])
+    expect(withAmount.map((b) => b.slug)).toEqual(['chime', 'visible'])
   })
 
   it('never quotes an amount for Lyft', () => {

@@ -61,6 +61,22 @@ const DRAFTS: SignupBonusDraft[] = [
     checkedAt: CHECKED
   },
   {
+    slug: 'visible',
+    amount: '$20',
+    headline: 'service credit for new Visible members',
+    condition: 'Activate a new Visible line with the Bring a Friend code. No cash value.',
+    ctaLabel: 'Get $20 with Visible',
+    checkedAt: '2026-11-10'
+  },
+  {
+    slug: 'lemonade',
+    amount: null,
+    headline: 'Reward not stated by Lemonade',
+    condition: 'Counts when you get a quote within 30 days; no purchase needed. Not in LA, MI, MS, WA, WV.',
+    ctaLabel: 'Visit Lemonade',
+    checkedAt: '2026-11-10'
+  },
+  {
     slug: 'lyft',
     amount: null,
     headline: 'New-rider credit varies by city',

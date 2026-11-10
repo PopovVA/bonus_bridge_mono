@@ -197,7 +197,7 @@ describe('web routes', () => {
     vi.mocked(getHotCashbackOffers).mockRejectedValue(new Error('down'))
     const html = renderToStaticMarkup(await HomePage())
     expect(html).not.toContain('monthly-offers-section')
-    expect(html).not.toContain('clip-coupons-section')
+    expect(html).not.toContain('id="coupons"')
     expect(html).not.toContain('hot-cashback-section')
   })
 

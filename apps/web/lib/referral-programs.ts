@@ -160,12 +160,26 @@ const RAW_PROGRAMS: ReferralProgram[] = [
   {
     slug: 'lemonade',
     name: 'Lemonade',
-    bucket: 2,
-    publicOk: false,
-    referralUrl: null,
+    bucket: 1,
+    publicOk: true,
+    referralUrl: 'https://lemonade.com/r/vadimpopov1',
     termsUrl: 'https://www.lemonade.com/terms-and-conditions-referral-program',
-    maxClaimText: 'Not listed. Unlicensed pages must not describe coverages or recommend a policy.',
-    disclosures: ['Insurance referral copy on a public comparison page is outside what we will publish.']
+    maxClaimText:
+      'Lemonade’s referral terms do not state a reward amount. A referral counts when a friend gets an insurance offer within 30 days; no purchase is required. Not available in LA, MI, MS, WA or WV.',
+    disclosures: [
+      'BonusBridge is not a licensed insurance agent. This page links to Lemonade and its referral terms; it does not describe coverage or recommend a policy.'
+    ]
+  },
+  {
+    slug: 'visible',
+    name: 'Visible',
+    bucket: 1,
+    publicOk: true,
+    referralUrl: 'https://www.visible.com/get/?69PW6WF',
+    termsUrl: 'https://www.visible.com/plans/bring-a-friend',
+    maxClaimText:
+      'A new Visible member who activates with a Bring a Friend code gets a $20 service credit. The member who shared the code also gets $20 per activation, up to 12 credits banked. Credits have no cash value.',
+    disclosures: ['Visible’s Bring a Friend page says the code can be shared with anyone.']
   },
   {
     slug: 'airbnb',
