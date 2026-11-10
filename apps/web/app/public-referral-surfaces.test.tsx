@@ -67,7 +67,8 @@ const PUBLIC_REFERRAL_URLS = [
   'https://www.joinhoney.com/ref/nwpz6sw',
   'https://www.chime.com/r/vadimpopov1/',
   'https://lemonade.com/r/vadimpopov1',
-  'https://www.visible.com/get/?69PW6WF'
+  'https://www.visible.com/get/?69PW6WF',
+  'https://americanexpress.com/en-us/referral/hilton-honors?ref=VADIMP2XC4&xl=cp10o6'
 ] as const
 
 const ALLOWED_NON_INVENTORY = ['https://example.com']

@@ -21,6 +21,8 @@ export type SignupBonus = {
   sourceUrl: string
   /** ISO date the source page was last read. */
   checkedAt: string
+  /** Who sets the terms when it is not the provider itself (e.g. the card issuer). */
+  setBy?: string
 }
 
 export type SignupBonusDraft = Omit<SignupBonus, 'referralUrl' | 'sourceUrl' | 'provider'>
@@ -74,6 +76,15 @@ const DRAFTS: SignupBonusDraft[] = [
     headline: 'Reward not stated by Lemonade',
     condition: 'Counts when you get a quote within 30 days; no purchase needed. Not in LA, MI, MS, WA, WV.',
     ctaLabel: 'Visit Lemonade',
+    checkedAt: '2026-11-10'
+  },
+  {
+    slug: 'amex-hilton-honors',
+    amount: null,
+    headline: 'Welcome offer shown on the Amex page',
+    condition: 'If approved, the offer, spend and deadline are the ones on the Amex referral page.',
+    ctaLabel: 'See the Amex offer',
+    setBy: 'American Express',
     checkedAt: '2026-11-10'
   },
   {
@@ -140,9 +151,10 @@ export type StoreFaq = { question: string; answer: string }
 
 /** Search-intent title for a store page, e.g. "Chime referral bonus: $100 for new members". */
 export function storeSeoTitle(bonus: SignupBonus): string {
-  return bonus.amount
-    ? `${bonus.provider} referral bonus: ${bonus.amount} for new members`
-    : `${bonus.provider} referral program: terms explained`
+  if (bonus.amount) return `${bonus.provider} referral bonus: ${bonus.amount} for new members`
+  const title = `${bonus.provider} referral program: terms explained`
+  /* Keep "<title> | BonusBridge" within ~60 characters for long provider names */
+  return title.length > 46 ? `${bonus.provider} referral and terms` : title
 }
 
 export function storeSeoDescription(bonus: SignupBonus): string {

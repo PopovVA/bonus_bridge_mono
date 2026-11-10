@@ -179,6 +179,14 @@ describe('bonus CTAs', () => {
     expect(inline).not.toContain('bonus-cta__condition')
   })
 
+  it('names the card issuer as the party that sets the terms', async () => {
+    const { BonusCta } = await import('@/components/bonus-cta')
+    const { requireSignupBonus } = await import('@/lib/signup-bonuses')
+    const html = renderToStaticMarkup(<BonusCta bonus={requireSignupBonus('amex-hilton-honors')} place="test" />)
+    expect(html).toContain('set by American Express')
+    expect(html).not.toContain('bonus-cta__amount')
+  })
+
   it('leads the hero with the featured bonus', async () => {
     const { requireSignupBonus } = await import('@/lib/signup-bonuses')
     const html = renderToStaticMarkup(

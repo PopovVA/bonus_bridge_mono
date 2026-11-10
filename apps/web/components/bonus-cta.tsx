@@ -14,7 +14,7 @@ type Props = {
 export function BonusFinePrint({ bonus }: { bonus: SignupBonus }) {
   return (
     <p className="bonus-cta__fine">
-      Terms apply and are set by {bonus.provider}. Checked {formatCheckedDate(bonus.checkedAt)}.{' '}
+      Terms apply and are set by {bonus.setBy ?? bonus.provider}. Checked {formatCheckedDate(bonus.checkedAt)}.{' '}
       <a href={bonus.sourceUrl} target="_blank" rel="noopener noreferrer">
         Official terms
       </a>

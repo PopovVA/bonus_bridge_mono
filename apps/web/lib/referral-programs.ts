@@ -171,6 +171,19 @@ const RAW_PROGRAMS: ReferralProgram[] = [
     ]
   },
   {
+    slug: 'amex-hilton-honors',
+    name: 'Hilton Honors Amex Card',
+    bucket: 1,
+    publicOk: true,
+    referralUrl: 'https://americanexpress.com/en-us/referral/hilton-honors?ref=VADIMP2XC4&xl=cp10o6',
+    termsUrl: 'https://www.americanexpress.com/en-us/referral',
+    maxClaimText:
+      'American Express does not state one fixed referral offer. An approved new Card Member may be eligible for the welcome offer shown on the referral page, with its own spend requirement and deadline. Approval is up to American Express.',
+    disclosures: [
+      'Rates, fees and offer terms are set by American Express. BonusBridge is not a lender and does not give credit advice.'
+    ]
+  },
+  {
     slug: 'visible',
     name: 'Visible',
     bucket: 1,

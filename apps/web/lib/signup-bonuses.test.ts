@@ -70,6 +70,7 @@ describe('signup bonuses', () => {
     const rakuten = requireSignupBonus('rakuten')
     expect(storeSeoTitle(chime)).toBe('Chime referral bonus: $100 for new members')
     expect(storeSeoTitle(rakuten)).toBe('Rakuten referral program: terms explained')
+    expect(storeSeoTitle(requireSignupBonus('amex-hilton-honors'))).toBe('Hilton Honors Amex Card referral and terms')
     expect(storeSeoDescription(chime)).toMatch(/^\$100 for new Chime members\. After a qualifying/)
     expect(storeSeoDescription(rakuten)).toMatch(/^New-member bonus set by Rakuten\. /)
     for (const b of listSignupBonuses()) {
