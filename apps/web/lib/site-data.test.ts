@@ -70,9 +70,10 @@ describe('site-data', () => {
     await expect(getMonthlyTopOfferForStoreSlug('uber')).resolves.toBeNull()
   })
 
-  it('returns a home clip coupon only for Lyft', async () => {
+  it('returns home clip coupons for Lyft and Visible', async () => {
     const list = await getHomeClipCoupons()
-    expect(list).toHaveLength(1)
+    expect(list.map((c) => c.id)).toEqual(['clip-lyft', 'clip-visible'])
+    expect(list.find((c) => c.id === 'clip-visible')?.code).toBe('69PW6WF')
     const lyft = list.find((c) => c.id === 'clip-lyft')
     expect(lyft?.code).toBe('VADIM53422')
     expect(lyft?.openUrl).toBe('https://www.lyft.com/i/VADIM53422?utm_medium=2pi_iacc')
@@ -115,9 +116,9 @@ describe('site-data', () => {
     expect(menu.categories.find((c) => c.slug === 'food')).toBeUndefined()
     const menuNames = menu.categories.map((c) => c.name)
     expect([...menuNames].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(menuNames)
-    expect(menu.storesByCategorySlug.auto?.map((s) => s.slug)).toEqual(['lyft'])
+    expect(menu.storesByCategorySlug.auto?.map((s) => s.slug)).toEqual(['lyft', 'lemonade'])
     expect(menu.storesByCategorySlug.auto?.[0]?.imageSrc).toBe('/clip-coupons/lyft.svg')
-    expect(menu.storesByCategorySlug.finance?.map((s) => s.slug)).toEqual(['chime'])
+    expect(menu.storesByCategorySlug.finance?.map((s) => s.slug)).toEqual(['chime', 'lemonade'])
     expect(menu.storesByCategorySlug.shopping?.map((s) => s.slug)).toEqual([
       'rakuten',
       'topcashback',
@@ -131,7 +132,7 @@ describe('site-data', () => {
     const catalog = await getClientCatalog()
     expect(catalog.categories.length).toBe(4)
     const finance = catalog.categories.find((c) => c.slug === 'finance')
-    expect(finance?.stores.map((s) => s.slug)).toEqual(['chime'])
+    expect(finance?.stores.map((s) => s.slug)).toEqual(['chime', 'lemonade'])
     const chime = finance?.stores.find((s) => s.slug === 'chime')
     expect(chime?.offers.some((o) => o.title.length > 0)).toBe(true)
     expect(chime?.offers[0]).toMatchObject({
@@ -181,10 +182,10 @@ describe('site-data', () => {
 
   it('filters services by category slug and query', async () => {
     const finance = await getServices({ category: 'finance' })
-    expect(finance.map((s) => s.slug)).toEqual(['chime'])
+    expect(finance.map((s) => s.slug)).toEqual(['chime', 'lemonade'])
     expect(finance.every((s) => s.categoryId === '11111111-1111-4111-8111-111111111101')).toBe(true)
     const auto = await getServices({ category: 'auto' })
-    expect(auto.map((s) => s.slug)).toEqual(['lyft'])
+    expect(auto.map((s) => s.slug)).toEqual(['lyft', 'lemonade'])
     const q = await getServices({ q: 'Klarna' })
     expect(q.some((s) => s.slug === 'klarna')).toBe(false)
     const byDescription = await getServices({ q: 'Cash back' })
@@ -201,11 +202,11 @@ describe('site-data', () => {
 
   it('filters offers by status, store slug, category', async () => {
     const active = await getOffers({ status: 'active' })
-    expect(active.length).toBe(6)
+    expect(active.length).toBe(8)
     const byStore = await getOffers({ status: 'active', service: 'chime' })
     expect(byStore.every((o) => o.serviceId === '22222222-2222-4222-8222-222222222210')).toBe(true)
     const byCat = await getOffers({ status: 'active', category: 'finance' })
-    expect(byCat.length).toBe(1)
+    expect(byCat.length).toBe(2)
   })
 
   it('returns offer by id or throws', async () => {

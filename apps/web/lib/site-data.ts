@@ -229,9 +229,22 @@ const services: Service[] = [
     extraCategorySlugs: ['auto'],
     website: 'https://www.lemonade.com/',
     description:
-      'Lemonade sells digital insurance in select states. BonusBridge does not describe coverages or publish a referral. Only licensed agents may recommend a policy.',
+      'Lemonade sells insurance online in select states. BonusBridge is not a licensed agent: this page links to Lemonade and its referral terms and does not describe coverage or recommend a policy.',
     logoSvg: undefined,
     logoSrc: '/hot-cashback/logos/lemonade.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222230',
+    name: 'Visible',
+    slug: 'visible',
+    categoryId: CAT.electronics,
+    website: 'https://www.visible.com/',
+    description:
+      'Visible is a prepaid phone plan that runs on Verizon’s network. New members who activate with a Bring a Friend code get a $20 service credit, per Visible’s terms.',
+    logoSvg: undefined,
+    logoSrc: '/brands/visible.svg',
     createdAt: ISO,
     updatedAt: ISO
   },
@@ -409,6 +422,34 @@ const offers: Offer[] = [
     description: null,
     referralUrl: requirePublicReferralUrl('lyft'),
     terms: 'See Lyft referral terms. Do not rely on a single nationwide dollar amount.',
+    status: 'active',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '33333333-3333-4333-8333-333333333330',
+    serviceId: '22222222-2222-4222-8222-222222222230',
+    title: 'Visible Bring a Friend: $20 service credit',
+    previewText: programClaim('visible'),
+    couponCode: '69PW6WF',
+    bonusAmount: null,
+    description: null,
+    referralUrl: requirePublicReferralUrl('visible'),
+    terms: 'Enter the code when you activate a new line. See Visible’s Bring a Friend terms.',
+    status: 'active',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '33333333-3333-4333-8333-333333333331',
+    serviceId: '22222222-2222-4222-8222-222222222205',
+    title: 'Lemonade referral link',
+    previewText: programClaim('lemonade'),
+    couponCode: null,
+    bonusAmount: null,
+    description: null,
+    referralUrl: requirePublicReferralUrl('lemonade'),
+    terms: 'See Lemonade’s referral program terms. BonusBridge does not describe coverage or recommend a policy.',
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO

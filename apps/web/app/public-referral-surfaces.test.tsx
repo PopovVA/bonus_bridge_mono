@@ -37,7 +37,6 @@ const REMOVED_REFERRAL_URLS = [
   'https://ubereats.com/feed?promoCode=eats-zywrn58e0v',
   'https://lime.bike/referral_signin/REGUD7BFJWT',
   'https://links.bird.co/rKbyq2',
-  'https://lemonade.com/r/vadimpopov1',
   'https://posh.mk/QW6tN2UJW1b',
   'https://join.robinhood.com/vadimp-4f32ef3',
   'https://smart.link/370flfia27552?cp_0=my1w2j',
@@ -52,7 +51,6 @@ const REMOVED_TOKENS = [
   'eats-zywrn58e0v',
   'REGUD7BFJWT',
   'rKbyq2',
-  'lemonade.com/r/vadimpopov1',
   'VADIMPOPOV',
   'QW6tN2UJW1b',
   'vadimp-4f32ef3',
@@ -67,7 +65,9 @@ const PUBLIC_REFERRAL_URLS = [
   'https://www.rakuten.com/r/MVADIM7',
   'https://www.topcashback.com/ref/member344836925437',
   'https://www.joinhoney.com/ref/nwpz6sw',
-  'https://www.chime.com/r/vadimpopov1/'
+  'https://www.chime.com/r/vadimpopov1/',
+  'https://lemonade.com/r/vadimpopov1',
+  'https://www.visible.com/get/?69PW6WF'
 ] as const
 
 const ALLOWED_NON_INVENTORY = ['https://example.com']
@@ -79,7 +79,6 @@ const UNLISTED_STORE_SLUGS = [
   'robinhood',
   'uber',
   'uber-eats',
-  'lemonade',
   'airbnb',
   '7now',
   'bird',

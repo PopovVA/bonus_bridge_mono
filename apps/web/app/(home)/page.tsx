@@ -18,6 +18,10 @@ import {
 import { homeStatsFromPaths } from '@/lib/home-stats'
 import { listPublicSitemapPaths } from '@/lib/public-sitemap'
 import { featuredSignupBonus } from '@/lib/signup-bonuses'
+import { livePromoCodes, toClipCoupon } from '@/lib/public-promo-codes'
+
+/** Rebuild hourly so expired promo codes drop off without a deploy. */
+export const revalidate = 3600
 
 export const metadata: Metadata = pageSocialMetadata({
   title: 'Referral guides and provider terms',
@@ -71,6 +75,13 @@ export default async function HomePage() {
       <HowItWorks />
 
       <HomeClipCoupons coupons={clipCoupons} />
+
+      <HomeClipCoupons
+        coupons={livePromoCodes().map(toClipCoupon)}
+        sectionId="promo-codes"
+        heading="Public promo codes"
+        subtitle="Codes the brands published themselves. BonusBridge earns nothing from these. Each one disappears when the offer ends."
+      />
 
       <HotCashback offers={hotCashbackOffers} />
     </>

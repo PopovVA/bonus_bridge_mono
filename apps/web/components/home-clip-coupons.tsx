@@ -8,9 +8,17 @@ import type { HomeClipCoupon } from '@/lib/home-clip-coupons'
 
 type Props = {
   coupons: HomeClipCoupon[]
+  sectionId?: string
+  heading?: string
+  subtitle?: string
 }
 
-export function HomeClipCoupons({ coupons }: Props) {
+export function HomeClipCoupons({
+  coupons,
+  sectionId = 'coupons',
+  heading = 'Codes and offer details',
+  subtitle = 'Tap a code to copy it, then confirm details and eligibility on the provider site.'
+}: Props) {
   const { toast, toastId, pending, runClipFlow, closeDialog, confirmOpenInNewTab } = useClipPartnerOfferFlow()
 
   const handleCodeClick = useCallback(
@@ -28,14 +36,12 @@ export function HomeClipCoupons({ coupons }: Props) {
 
   return (
     <>
-      <section id="coupons" className="clip-coupons-section" aria-labelledby="clip-coupons-heading">
+      <section id={sectionId} className="clip-coupons-section" aria-labelledby={`${sectionId}-heading`}>
         <div className="section-head clip-coupons-head">
-          <h2 id="clip-coupons-heading" className="section-title">
-            Codes and offer details
+          <h2 id={`${sectionId}-heading`} className="section-title">
+            {heading}
           </h2>
-          <p className="section-subtitle">
-            Tap a code to copy it, then confirm details and eligibility on the provider site.
-          </p>
+          <p className="section-subtitle">{subtitle}</p>
         </div>
         <div className="clip-coupons-grid">
           {coupons.map((c) => (
