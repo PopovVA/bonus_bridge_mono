@@ -101,7 +101,7 @@ describe('site-data', () => {
 
   it('returns home category marquee chips in alphabetical order', async () => {
     const chips = await getHomeCategoryMarquee()
-    expect(chips.map((c) => c.slug)).toEqual(['auto', 'electronics', 'finance', 'shopping'])
+    expect(chips.map((c) => c.slug)).toEqual(['auto', 'electronics', 'finance', 'shopping', 'travel'])
     expect(chips[0]?.imageSrc).toBe('/categories/auto.svg')
     expect(chips[0]?.href).toBe('/categories/auto')
     expect(chips.find((c) => c.slug === 'food')).toBeUndefined()
@@ -111,7 +111,7 @@ describe('site-data', () => {
 
   it('returns stores mega menu categories A–Z with store icons', async () => {
     const menu = await getStoresMegaMenu()
-    expect(menu.categories.map((c) => c.slug)).toEqual(['auto', 'electronics', 'finance', 'shopping'])
+    expect(menu.categories.map((c) => c.slug)).toEqual(['auto', 'electronics', 'finance', 'shopping', 'travel'])
     expect(menu.categories[0]?.imageSrc).toBe('/categories/auto.svg')
     expect(menu.categories.find((c) => c.slug === 'food')).toBeUndefined()
     const menuNames = menu.categories.map((c) => c.name)
@@ -125,12 +125,12 @@ describe('site-data', () => {
       'honey'
     ])
     expect(menu.storesByCategorySlug.food).toBeUndefined()
-    expect(menu.storesByCategorySlug.travel).toBeUndefined()
+    expect(menu.storesByCategorySlug.travel?.map((s) => s.slug)).toEqual(['amex-hilton-honors'])
   })
 
   it('returns client catalog with stores and active offers per category', async () => {
     const catalog = await getClientCatalog()
-    expect(catalog.categories.length).toBe(4)
+    expect(catalog.categories.length).toBe(5)
     const finance = catalog.categories.find((c) => c.slug === 'finance')
     expect(finance?.stores.map((s) => s.slug)).toEqual(['chime', 'lemonade'])
     const chime = finance?.stores.find((s) => s.slug === 'chime')
@@ -202,7 +202,7 @@ describe('site-data', () => {
 
   it('filters offers by status, store slug, category', async () => {
     const active = await getOffers({ status: 'active' })
-    expect(active.length).toBe(8)
+    expect(active.length).toBe(9)
     const byStore = await getOffers({ status: 'active', service: 'chime' })
     expect(byStore.every((o) => o.serviceId === '22222222-2222-4222-8222-222222222210')).toBe(true)
     const byCat = await getOffers({ status: 'active', category: 'finance' })

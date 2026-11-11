@@ -249,6 +249,19 @@ const services: Service[] = [
     updatedAt: ISO
   },
   {
+    id: '22222222-2222-4222-8222-222222222231',
+    name: 'Hilton Honors Amex Card',
+    slug: 'amex-hilton-honors',
+    categoryId: CAT.travel,
+    website: 'https://www.americanexpress.com/us/credit-cards/card/hilton-honors/',
+    description:
+      'The Hilton Honors American Express Card is a hotel rewards credit card issued by American Express. The welcome offer, rates and fees are set by Amex and shown on its referral page; approval is not guaranteed.',
+    logoSvg: undefined,
+    logoSrc: '/brands/amex-hilton-honors.svg',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
     id: '22222222-2222-4222-8222-222222222206',
     name: 'Poshmark',
     slug: 'poshmark',
@@ -450,6 +463,20 @@ const offers: Offer[] = [
     description: null,
     referralUrl: requirePublicReferralUrl('lemonade'),
     terms: 'See Lemonade’s referral program terms. BonusBridge does not describe coverage or recommend a policy.',
+    status: 'active',
+    createdAt: ISO,
+    updatedAt: ISO
+  },
+  {
+    id: '33333333-3333-4333-8333-333333333332',
+    serviceId: '22222222-2222-4222-8222-222222222231',
+    title: 'Hilton Honors Amex Card referral link',
+    previewText: programClaim('amex-hilton-honors'),
+    couponCode: null,
+    bonusAmount: null,
+    description: null,
+    referralUrl: requirePublicReferralUrl('amex-hilton-honors'),
+    terms: 'See the offer, rates and fees on the American Express referral page. Approval is up to American Express.',
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO

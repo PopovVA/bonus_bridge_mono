@@ -25,6 +25,7 @@ describe('referral programs', () => {
   it('keeps personal referral URLs only on bucket 1', () => {
     const listed = referralPrograms.filter((program) => program.publicOk)
     expect(listed.map((program) => program.slug).sort()).toEqual([
+      'amex-hilton-honors',
       'chime',
       'honey',
       'lemonade',
