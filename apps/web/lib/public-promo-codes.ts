@@ -21,6 +21,8 @@ export type PublicPromoCode = {
   checkedAt: string
   /** ISO timestamp when the brand says the offer ends; null when no end date is published. */
   expiresAt: string | null
+  /** Brand logo under /public; falls back to an initials tile. */
+  logoSrc?: string
 }
 
 export const UNDATED_TTL_DAYS = 30
@@ -35,6 +37,7 @@ export const PUBLIC_PROMO_CODES: PublicPromoCode[] = [
     code: 'THANKS2026',
     url: 'https://leetcode.com/subscribe/',
     source: 'LeetCode email newsletter',
+    logoSrc: '/brands/leetcode.svg',
     checkedAt: '2026-11-10',
     expiresAt: '2026-12-01T07:59:00Z'
   },
@@ -46,6 +49,7 @@ export const PUBLIC_PROMO_CODES: PublicPromoCode[] = [
     code: 'BLACKFRIDAY',
     url: 'https://www.visible.com/deals',
     source: 'Visible deals page',
+    logoSrc: '/brands/visible.svg',
     checkedAt: '2026-11-10',
     expiresAt: null
   },
@@ -57,6 +61,7 @@ export const PUBLIC_PROMO_CODES: PublicPromoCode[] = [
     code: 'HOLIDAYHACK',
     url: 'https://www.visible.com/deals',
     source: 'Visible deals page',
+    logoSrc: '/brands/visible.svg',
     checkedAt: '2026-11-10',
     expiresAt: null
   }
@@ -93,6 +98,6 @@ export function toClipCoupon(code: PublicPromoCode): HomeClipCoupon {
     blurb: `${code.blurb} Source: ${code.source}.`,
     code: code.code,
     openUrl: code.url,
-    logoSrc: monogramDataUri(code.brand)
+    logoSrc: code.logoSrc ?? monogramDataUri(code.brand)
   }
 }

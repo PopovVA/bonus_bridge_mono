@@ -54,4 +54,14 @@ describe('public promo codes', () => {
     expect(card.blurb).toBe('b. Source: newsletter.')
     expect(card.logoSrc.startsWith('data:image/svg+xml,')).toBe(true)
   })
+
+  it('uses the brand logo when there is one, and every logo file exists', async () => {
+    const { existsSync } = await import('node:fs')
+    const { join } = await import('node:path')
+    expect(toClipCoupon({ ...base, logoSrc: '/brands/x.svg' }).logoSrc).toBe('/brands/x.svg')
+    for (const code of PUBLIC_PROMO_CODES) {
+      expect(code.logoSrc).toMatch(/^\/brands\//)
+      expect(existsSync(join(process.cwd(), 'public', code.logoSrc!))).toBe(true)
+    }
+  })
 })
