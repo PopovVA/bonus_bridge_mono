@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { isAnalyticsEnabledForHostname, trackGtagEvent } from './gtag-track'
+import { isAnalyticsEnabledForHostname, trackGtagEvent, trackReferralClick } from './gtag-track'
 
 describe('isAnalyticsEnabledForHostname', () => {
   it('disables localhost hosts', () => {
@@ -88,6 +88,38 @@ describe('trackGtagEvent', () => {
     trackGtagEvent('no_location')
     expect(gtag).not.toHaveBeenCalled()
     expect(info).toHaveBeenCalledWith(expect.stringContaining('not sent because analytics is disabled'))
+  })
+
+  it('sends bonus_cta with the partner slug and the current path', () => {
+    const gtag = vi.fn()
+    vi.spyOn(console, 'info').mockImplementation(() => undefined)
+    Object.defineProperty(globalThis, 'window', {
+      value: { location: { hostname: 'bonusbridge.io', pathname: '/stores/chime' }, gtag } as unknown as Window,
+      configurable: true,
+      writable: true
+    })
+    trackReferralClick('chime', 'store_page', { guide_slug: 'chime-referral-requirements' })
+    expect(gtag).toHaveBeenCalledWith('event', 'bonus_cta', {
+      guide_slug: 'chime-referral-requirements',
+      store_slug: 'chime',
+      place: 'store_page',
+      page_path: '/stores/chime'
+    })
+  })
+
+  it('skips referral clicks when window is undefined', () => {
+    const prev = globalThis.window
+    Object.defineProperty(globalThis, 'window', {
+      value: undefined,
+      configurable: true,
+      writable: true
+    })
+    expect(() => trackReferralClick('chime', 'store_page')).not.toThrow()
+    Object.defineProperty(globalThis, 'window', {
+      value: prev,
+      configurable: true,
+      writable: true
+    })
   })
 
   it('returns early when window is undefined (SSR)', () => {

@@ -229,7 +229,7 @@ const services: Service[] = [
     extraCategorySlugs: ['auto'],
     website: 'https://www.lemonade.com/',
     description:
-      'Lemonade sells insurance online in select states. BonusBridge is not a licensed agent: this page links to Lemonade and its referral terms and does not describe coverage or recommend a policy.',
+      'Lemonade sells insurance online in select states. BonusBridge does not publish a Lemonade referral. Unlicensed persons cannot describe coverage or recommend a policy.',
     logoSvg: undefined,
     logoSrc: '/hot-cashback/logos/lemonade.svg',
     createdAt: ISO,
@@ -242,7 +242,7 @@ const services: Service[] = [
     categoryId: CAT.electronics,
     website: 'https://www.visible.com/',
     description:
-      'Visible is a prepaid phone plan that runs on Verizon’s network. New members who activate with a Bring a Friend code get a $20 service credit, per Visible’s terms.',
+      'Visible is a prepaid phone plan that runs on Verizon’s network. BonusBridge does not publish a Visible referral code because the program terms do not allow posting it on a public website.',
     logoSvg: undefined,
     logoSrc: '/brands/visible.svg',
     createdAt: ISO,
@@ -255,7 +255,7 @@ const services: Service[] = [
     categoryId: CAT.travel,
     website: 'https://www.americanexpress.com/us/credit-cards/card/hilton-honors/',
     description:
-      'The Hilton Honors American Express Card is a hotel rewards credit card issued by American Express. The welcome offer, rates and fees are set by Amex and shown on its referral page; approval is not guaranteed.',
+      'The Hilton Honors American Express Card is a hotel rewards credit card issued by American Express. BonusBridge does not publish a personal referral link for this card.',
     logoSvg: undefined,
     logoSrc: '/brands/amex-hilton-honors.svg',
     createdAt: ISO,
@@ -311,7 +311,7 @@ const services: Service[] = [
     extraCategorySlugs: ['shopping'],
     website: 'https://www.joinhoney.com/',
     description:
-      'PayPal Honey finds coupons while you shop. Referral rewards are PayPal Rewards points, not instant cash. A referrer may receive 500 points after a friend’s eligible purchase confirms, often 60–90 days later.',
+      'PayPal Honey finds coupons while you shop. Referral rewards are PayPal Rewards points, not instant cash. A referrer may receive 500 points after a friend’s eligible purchase confirms, often 60 to 90 days later.',
     logoSvg: undefined,
     logoSrc: '/hot-cashback/logos/honey.svg',
     createdAt: ISO,
@@ -440,48 +440,6 @@ const offers: Offer[] = [
     updatedAt: ISO
   },
   {
-    id: '33333333-3333-4333-8333-333333333330',
-    serviceId: '22222222-2222-4222-8222-222222222230',
-    title: 'Visible Bring a Friend: $20 service credit',
-    previewText: programClaim('visible'),
-    couponCode: '69PW6WF',
-    bonusAmount: null,
-    description: null,
-    referralUrl: requirePublicReferralUrl('visible'),
-    terms: 'Enter the code when you activate a new line. See Visible’s Bring a Friend terms.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333331',
-    serviceId: '22222222-2222-4222-8222-222222222205',
-    title: 'Lemonade referral link',
-    previewText: programClaim('lemonade'),
-    couponCode: null,
-    bonusAmount: null,
-    description: null,
-    referralUrl: requirePublicReferralUrl('lemonade'),
-    terms: 'See Lemonade’s referral program terms. BonusBridge does not describe coverage or recommend a policy.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
-    id: '33333333-3333-4333-8333-333333333332',
-    serviceId: '22222222-2222-4222-8222-222222222231',
-    title: 'Hilton Honors Amex Card referral link',
-    previewText: programClaim('amex-hilton-honors'),
-    couponCode: null,
-    bonusAmount: null,
-    description: null,
-    referralUrl: requirePublicReferralUrl('amex-hilton-honors'),
-    terms: 'See the offer, rates and fees on the American Express referral page. Approval is up to American Express.',
-    status: 'active',
-    createdAt: ISO,
-    updatedAt: ISO
-  },
-  {
     id: '33333333-3333-4333-8333-333333333309',
     serviceId: '22222222-2222-4222-8222-222222222207',
     title: 'Rakuten welcome bonus varies',
@@ -518,7 +476,7 @@ const offers: Offer[] = [
     bonusAmount: null,
     description: null,
     referralUrl: requirePublicReferralUrl('honey'),
-    terms: 'Honey help: points confirm after a friend’s eligible purchase, often in 60–90 days.',
+    terms: 'Honey help: points confirm after a friend’s eligible purchase, often in 60 to 90 days.',
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO
@@ -527,7 +485,7 @@ const offers: Offer[] = [
     id: '33333333-3333-4333-8333-333333333399',
     serviceId: 'ffffffff-ffff-4fff-8fff-ffffffffffff',
     title: 'Detached offer row',
-    previewText: 'No matching store id — omitted from category listings.',
+    previewText: 'No matching store id. Omitted from category listings.',
     couponCode: null,
     bonusAmount: null,
     description: null,

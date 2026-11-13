@@ -7,4 +7,4 @@ export const LEGAL_CONTACT_EMAIL = 'support@bonusbridge.io'
 export const LEGAL_DOCUMENT_LAST_UPDATED = '2026-04-10'
 
 /** Privacy, cookie, and referral-disclosure pages revised for the compliance pass. */
-export const COMPLIANCE_PAGES_UPDATED = '2026-11-05'
+export const COMPLIANCE_PAGES_UPDATED = '2026-11-13'

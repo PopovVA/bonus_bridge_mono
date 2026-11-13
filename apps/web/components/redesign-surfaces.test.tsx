@@ -182,7 +182,12 @@ describe('bonus CTAs', () => {
   it('names the card issuer as the party that sets the terms', async () => {
     const { BonusCta } = await import('@/components/bonus-cta')
     const { requireSignupBonus } = await import('@/lib/signup-bonuses')
-    const html = renderToStaticMarkup(<BonusCta bonus={requireSignupBonus('amex-hilton-honors')} place="test" />)
+    const html = renderToStaticMarkup(
+      <BonusCta
+        bonus={{ ...requireSignupBonus('rakuten'), setBy: 'American Express' }}
+        place="test"
+      />
+    )
     expect(html).toContain('set by American Express')
     expect(html).not.toContain('bonus-cta__amount')
   })

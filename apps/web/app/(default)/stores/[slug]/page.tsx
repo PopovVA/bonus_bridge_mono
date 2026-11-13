@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { absoluteUrl, pageSocialMetadata } from '@/app/seo'
+import { breadcrumbList } from '@/lib/page-json-ld'
 import { ListingFacts } from '@/components/listing-facts'
 import {
   formatCheckedDate,
@@ -85,21 +86,33 @@ export default async function StorePage({ params }: Props) {
   const primaryPromo = visibleCoupons[0]
   const openStoreUrl = primaryPromo?.referralUrl ?? null
   const hasMainOffers = visibleCoupons.length > 0
+  const checkedIso = bonus ? `${bonus.checkedAt}T12:00:00.000Z` : null
+  const category = categories.find((item) => item.id === store.categoryId)
+  const crumbs = [
+    { name: 'Home', path: '/' },
+    ...(category ? [{ name: category.name, path: `/categories/${category.slug}` }] : []),
+    { name: store.name, path: `/stores/${slug}` }
+  ]
   const facts = buildListingFacts({
     slug,
     terms: primaryPromo?.terms ?? null,
-    listingUpdatedAt: primaryPromo?.updatedAt ?? store.updatedAt,
+    listingUpdatedAt: checkedIso,
     quotedAmountNote: bonus?.amount
       ? `The ${bonus.amount} above is quoted from ${bonus.provider}’s official terms, checked ${formatCheckedDate(bonus.checkedAt)}.`
       : null
   })
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: `${store.name} on BonusBridge`,
-    description: aboutText,
-    url: absoluteUrl(`/stores/${slug}`),
-    dateModified: primaryPromo?.updatedAt ?? store.updatedAt
+    '@graph': [
+      breadcrumbList(crumbs),
+      {
+        '@type': 'WebPage',
+        name: `${store.name} on BonusBridge`,
+        description: aboutText,
+        url: absoluteUrl(`/stores/${slug}`),
+        ...(checkedIso ? { dateModified: checkedIso } : {})
+      }
+    ]
   }
 
   return (

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import type { ComponentProps, ComponentPropsWithoutRef } from 'react'
-import { trackGtagEvent, type GtagEventParams } from '@/lib/gtag-track'
+import { trackGtagEvent, trackReferralClick, type GtagEventParams } from '@/lib/gtag-track'
 
 type TrackedLinkProps = Omit<ComponentProps<typeof Link>, 'onClick'> & {
   event: string
@@ -26,15 +26,27 @@ export function TrackedLink({ event, eventParams, onClick, ...rest }: TrackedLin
 type TrackedOutboundLinkProps = ComponentPropsWithoutRef<'a'> & {
   event: string
   eventParams?: GtagEventParams
+  /** When set, the click is a referral CTA: `bonus_cta` with this partner slug and the current path. */
+  partnerSlug?: string
 }
 
 /** External `<a href="…">` with GA4 event on click. */
-export function TrackedOutboundLink({ event, eventParams, onClick, ...rest }: TrackedOutboundLinkProps) {
+export function TrackedOutboundLink({
+  event,
+  eventParams,
+  partnerSlug,
+  onClick,
+  ...rest
+}: TrackedOutboundLinkProps) {
   return (
     <a
       {...rest}
       onClick={(e) => {
-        trackGtagEvent(event, eventParams)
+        if (partnerSlug) {
+          trackReferralClick(partnerSlug, String(eventParams?.place ?? event), eventParams)
+        } else {
+          trackGtagEvent(event, eventParams)
+        }
         onClick?.(e)
       }}
     />

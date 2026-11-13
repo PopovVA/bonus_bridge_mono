@@ -5,6 +5,7 @@ import { ClipCouponCard } from '@/components/clip-coupon-card'
 import { ClipOpenStoreDialog } from '@/components/clip-open-store-dialog'
 import { useClipPartnerOfferFlow } from '@/components/use-clip-partner-offer-flow'
 import type { HomeClipCoupon } from '@/lib/home-clip-coupons'
+import { partnerSlugForReferralUrl } from '@/lib/referral-programs'
 
 type Props = {
   coupons: HomeClipCoupon[]
@@ -20,13 +21,6 @@ export function HomeClipCoupons({
   subtitle = 'Tap a code to copy it, then confirm details and eligibility on the provider site.'
 }: Props) {
   const { toast, toastId, pending, runClipFlow, closeDialog, confirmOpenInNewTab } = useClipPartnerOfferFlow()
-
-  const handleCodeClick = useCallback(
-    (c: HomeClipCoupon) => {
-      void runClipFlow(c.code, c.openUrl)
-    },
-    [runClipFlow]
-  )
 
   const handleGetOfferClick = useCallback((c: HomeClipCoupon) => {
     window.open(c.openUrl, '_blank', 'noopener,noreferrer')
@@ -44,21 +38,27 @@ export function HomeClipCoupons({
           <p className="section-subtitle">{subtitle}</p>
         </div>
         <div className="clip-coupons-grid">
-          {coupons.map((c) => (
-            <ClipCouponCard
-              key={c.id}
-              logoSrc={c.logoSrc}
-              brand={c.brand}
-              title={c.title}
-              blurb={c.blurb}
-              codeDisplay={c.code}
-              onCodeClick={() => handleCodeClick(c)}
-              onGetOfferClick={() => handleGetOfferClick(c)}
-              clipAriaLabel={`Copy code ${c.code}`}
-              analyticsPlace="home_clip"
-              analyticsItemId={c.id}
-            />
-          ))}
+          {coupons.map((c) => {
+            const partnerSlug = partnerSlugForReferralUrl(c.openUrl)
+            return (
+              <ClipCouponCard
+                key={c.id}
+                logoSrc={c.logoSrc}
+                brand={c.brand}
+                title={c.title}
+                blurb={c.blurb}
+                codeDisplay={c.code}
+                onCodeClick={() => {
+                  void runClipFlow(c.code, c.openUrl, partnerSlug)
+                }}
+                onGetOfferClick={() => handleGetOfferClick(c)}
+                clipAriaLabel={`Copy code ${c.code}`}
+                analyticsPlace="home_clip"
+                analyticsItemId={c.id}
+                analyticsPartnerSlug={partnerSlug ?? undefined}
+              />
+            )
+          })}
         </div>
       </section>
 

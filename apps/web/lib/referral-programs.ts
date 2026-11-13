@@ -94,7 +94,7 @@ const RAW_PROGRAMS: ReferralProgram[] = [
     referralUrl: 'https://www.joinhoney.com/ref/nwpz6sw',
     termsUrl: 'https://help.joinhoney.com/article/33-can-i-refer-people-to-honey',
     maxClaimText:
-      'Rewards are PayPal Rewards points, not instant cash. A referrer may receive 500 points after a friend’s eligible purchase confirms, often 60–90 days later.',
+      'Rewards are PayPal Rewards points, not instant cash. A referrer may receive 500 points after a friend’s eligible purchase confirms, often 60 to 90 days later.',
     disclosures: ['Point value and caps follow PayPal Honey’s terms. Do not describe the reward as cash.']
   },
   {
@@ -160,39 +160,38 @@ const RAW_PROGRAMS: ReferralProgram[] = [
   {
     slug: 'lemonade',
     name: 'Lemonade',
-    bucket: 1,
-    publicOk: true,
-    referralUrl: 'https://lemonade.com/r/vadimpopov1',
+    bucket: 2,
+    publicOk: false,
+    referralUrl: null,
     termsUrl: 'https://www.lemonade.com/terms-and-conditions-referral-program',
     maxClaimText:
-      'Lemonade’s referral terms do not state a reward amount. A referral counts when a friend gets an insurance offer within 30 days; no purchase is required. Not available in LA, MI, MS, WA or WV.',
+      'Not listed. Lemonade referral terms say unlicensed persons cannot describe coverages or recommend policies.',
     disclosures: [
-      'BonusBridge is not a licensed insurance agent. This page links to Lemonade and its referral terms; it does not describe coverage or recommend a policy.'
+      'Unlicensed persons cannot describe coverages or recommend a policy, so BonusBridge does not publish a Lemonade referral page.'
     ]
   },
   {
     slug: 'amex-hilton-honors',
     name: 'Hilton Honors Amex Card',
-    bucket: 1,
-    publicOk: true,
-    referralUrl: 'https://americanexpress.com/en-us/referral/hilton-honors?ref=VADIMP2XC4&xl=cp10o6',
+    bucket: 2,
+    publicOk: false,
+    referralUrl: null,
     termsUrl: 'https://www.americanexpress.com/en-us/referral',
     maxClaimText:
-      'American Express does not state one fixed referral offer. An approved new Card Member may be eligible for the welcome offer shown on the referral page, with its own spend requirement and deadline. Approval is up to American Express.',
+      'Not listed. American Express referral terms do not allow a personal referral link on a public website.',
     disclosures: [
-      'Rates, fees and offer terms are set by American Express. BonusBridge is not a lender and does not give credit advice.'
+      'Not listed. American Express referral terms do not allow a personal referral link on a public website.'
     ]
   },
   {
     slug: 'visible',
     name: 'Visible',
-    bucket: 1,
-    publicOk: true,
-    referralUrl: 'https://www.visible.com/get/?69PW6WF',
+    bucket: 2,
+    publicOk: false,
+    referralUrl: null,
     termsUrl: 'https://www.visible.com/plans/bring-a-friend',
-    maxClaimText:
-      'A new Visible member who activates with a Bring a Friend code gets a $20 service credit. The member who shared the code also gets $20 per activation, up to 12 credits banked. Credits have no cash value.',
-    disclosures: ['Visible’s Bring a Friend page says the code can be shared with anyone.']
+    maxClaimText: 'Not listed. Visible referral terms do not allow a personal code on a public website.',
+    disclosures: ['Not listed. Visible referral terms do not allow a personal code on a public website.']
   },
   {
     slug: 'airbnb',
@@ -295,4 +294,20 @@ const PUBLIC_CODES: Record<string, string> = {
 export function publicReferralCode(slug: string): string | null {
   if (!isPublicStoreSlug(slug)) return null
   return PUBLIC_CODES[slug] ?? null
+}
+
+/** Match a public referral URL back to its partner slug. Trailing slashes are ignored. */
+export function partnerSlugForReferralUrl(url: string): string | null {
+  const normalized = url.replace(/\/$/, '')
+  for (const program of referralPrograms) {
+    if (!program.referralUrl) continue
+    if (program.referralUrl.replace(/\/$/, '') === normalized) return program.slug
+  }
+  return null
+}
+
+export function requirePartnerSlugForReferralUrl(url: string): string {
+  const slug = partnerSlugForReferralUrl(url)
+  if (!slug) throw new Error(`No partner for referral URL`)
+  return slug
 }

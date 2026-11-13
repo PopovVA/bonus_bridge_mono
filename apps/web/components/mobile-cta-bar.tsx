@@ -41,6 +41,7 @@ export function MobileCtaBar({ bonus = null }: Props) {
           target="_blank"
           rel="noopener noreferrer sponsored"
           className="mobile-cta__btn mobile-cta__btn--accent"
+          partnerSlug={bonus.slug}
           event="bonus_cta"
           eventParams={{ store_slug: bonus.slug, place: 'mobile_bar' }}
           tabIndex={shown ? undefined : -1}

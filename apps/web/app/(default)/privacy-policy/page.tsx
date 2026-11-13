@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { COMPLIANCE_PAGES_UPDATED, LEGAL_CONTACT_EMAIL } from '@/lib/legal-site-meta'
 import { absoluteUrl } from '@/app/seo'
+import { indexPageJsonLd } from '@/lib/page-json-ld'
 
 const path = '/privacy-policy'
 
@@ -33,8 +34,17 @@ export default function PrivacyPage() {
     day: 'numeric'
   })
 
+  const jsonLd = indexPageJsonLd({
+    path,
+    name: 'Privacy Policy',
+    description:
+      'How BonusBridge collects, uses, and shares information when you use our website. California and U.S. privacy rights.',
+    dateModified: `${COMPLIANCE_PAGES_UPDATED}T12:00:00.000Z`
+  })
+
   return (
     <article className="legal-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <h1 className="legal-page__title">Privacy Policy</h1>
       <p className="legal-page__updated">Last updated: {updated}</p>
 
@@ -85,9 +95,9 @@ export default function PrivacyPage() {
           cookies that referral partners may set after you leave the Site.
         </p>
         <p>
-          <strong>How we communicate this for U.S. visitors.</strong> The site shows a short, non-blocking cookie notice
-          with links to this policy and the Cookie Notice. It does not lock the page. You can dismiss it. Details of
-          cookies and choices are in the Cookie Notice and in Section 6 (including state law rights where available). If
+          <strong>How we communicate this for U.S. visitors.</strong> The site shows a cookie banner before Google
+          Analytics loads. Accepting allows analytics cookies. Declining keeps analytics off. The banner does not lock
+          the page. Details are in the Cookie Notice and in Section 6 (including state law rights where available). If
           you are not in the United States, local laws may require different notices or consent mechanisms.
         </p>
         <p>

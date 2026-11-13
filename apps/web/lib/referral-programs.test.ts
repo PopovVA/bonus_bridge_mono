@@ -3,9 +3,11 @@ import {
   ReferralProgramSchema,
   getReferralProgram,
   isPublicStoreSlug,
+  partnerSlugForReferralUrl,
   programClaim,
   publicReferralCode,
   referralPrograms,
+  requirePartnerSlugForReferralUrl,
   requirePublicReferralUrl,
   unlistedStoreSlugs
 } from './referral-programs'
@@ -25,15 +27,17 @@ describe('referral programs', () => {
   it('keeps personal referral URLs only on bucket 1', () => {
     const listed = referralPrograms.filter((program) => program.publicOk)
     expect(listed.map((program) => program.slug).sort()).toEqual([
-      'amex-hilton-honors',
       'chime',
       'honey',
-      'lemonade',
       'lyft',
       'rakuten',
-      'topcashback',
-      'visible'
+      'topcashback'
     ])
+    expect(unlistedStoreSlugs()).toContain('lemonade')
+    expect(unlistedStoreSlugs()).toContain('visible')
+    expect(unlistedStoreSlugs()).toContain('amex-hilton-honors')
+    expect(getReferralProgram('visible')?.referralUrl).toBeNull()
+    expect(getReferralProgram('amex-hilton-honors')?.referralUrl).toBeNull()
     expect(unlistedStoreSlugs()).toContain('uber')
     expect(unlistedStoreSlugs()).toContain('paypal')
     expect(unlistedStoreSlugs()).not.toContain('rakuten')
@@ -44,6 +48,15 @@ describe('referral programs', () => {
   it('resolves public URLs and claims, and rejects unlisted slugs', () => {
     expect(requirePublicReferralUrl('rakuten')).toBe('https://www.rakuten.com/r/MVADIM7')
     expect(() => requirePublicReferralUrl('uber')).toThrow(/No public referral URL/)
+    expect(() => requirePublicReferralUrl('lemonade')).toThrow(/No public referral URL/)
+    expect(() => requirePublicReferralUrl('visible')).toThrow(/No public referral URL/)
+    expect(() => requirePublicReferralUrl('amex-hilton-honors')).toThrow(/No public referral URL/)
+    expect(getReferralProgram('lemonade')?.referralUrl).toBeNull()
+    expect(partnerSlugForReferralUrl('https://www.rakuten.com/r/MVADIM7')).toBe('rakuten')
+    expect(partnerSlugForReferralUrl('https://www.chime.com/r/vadimpopov1')).toBe('chime')
+    expect(partnerSlugForReferralUrl('https://example.com/nope')).toBeNull()
+    expect(requirePartnerSlugForReferralUrl('https://www.joinhoney.com/ref/nwpz6sw')).toBe('honey')
+    expect(() => requirePartnerSlugForReferralUrl('https://example.com/nope')).toThrow(/No partner/)
     expect(() => requirePublicReferralUrl('missing')).toThrow(/No public referral URL/)
     expect(programClaim('honey')).toContain('PayPal Rewards points')
     expect(() => programClaim('missing')).toThrow(/No referral program/)

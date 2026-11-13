@@ -512,7 +512,7 @@ describe('web routes', () => {
     expect(html).not.toContain('https://example.com/should-not-render')
     expect(html).not.toContain('See provider details')
     expect(html).toContain('BonusBridge is not publishing a referral offer for this provider.')
-    expect(html).toContain('March 1, 2026')
+    expect(html).not.toContain('March 1, 2026')
     expect(html).toContain('/disclosures')
     await expect(generateStoreMetadata({ params: Promise.resolve({ slug: 'klarna' }) })).resolves.toMatchObject({
       robots: { index: false, follow: true }
@@ -535,6 +535,9 @@ describe('web routes', () => {
     const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'chime' }) }))
     expect(html).toContain('store-page-title__sub')
     expect(html).toContain('"@type":"FAQPage"')
+    expect(html).toContain('BreadcrumbList')
+    expect(html).toContain('2026-11-09T12:00:00.000Z')
+    expect(html).toContain('November 9, 2026')
     expect(html).toContain('Questions about the Chime referral bonus')
   })
 
@@ -566,7 +569,7 @@ describe('web routes', () => {
     expect(html).toContain('clip-coupon-card')
     expect(html).toContain('Provider terms apply.')
     expect(html).toContain('A current bonus amount is not verified on BonusBridge.')
-    expect(html).toContain('March 1, 2026')
+    expect(html).not.toContain('March 1, 2026')
   })
 
   it('store page treats failed getCategories as empty categories list', async () => {

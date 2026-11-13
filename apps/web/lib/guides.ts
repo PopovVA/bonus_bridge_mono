@@ -228,7 +228,7 @@ export const guideList: Guide[] = [
         bullets: [
           'Pick one tool before checkout.',
           'Read whether the signup bonus requires a portal click specifically.',
-          'Points programs can take 60–90 days to confirm. Cash-back portals have their own pending clocks.'
+          'Points programs can take 60 to 90 days to confirm. Cash-back portals have their own pending clocks.'
         ],
         links: [
           { href: '/guides/best-cashback-portals-2026', label: '2026 portal comparison' },
@@ -424,7 +424,7 @@ export const guideList: Guide[] = [
         paragraphs: [
           'Rakuten fits shoppers who want in-store and online rates and a welcome bonus that changes with the promo. Plan on a qualifying Cash Back purchase within about 90 days, and do not assume Amazon pays.',
           'TopCashback fits shoppers who want a long window. The referrer side of the current promo is $10 after $10 of eligible Cash Back inside 365 days. Compare the merchant rate against Rakuten the same day.',
-          'PayPal Honey fits shoppers who want coupon tests and PayPal Rewards points. A referral may pay 500 points after a friend’s purchase confirms, often 60–90 days later. Do not describe that as instant cash, and do not stack Honey on top of another portal for the same order.'
+          'PayPal Honey fits shoppers who want coupon tests and PayPal Rewards points. A referral may pay 500 points after a friend’s purchase confirms, often 60 to 90 days later. Do not describe that as instant cash, and do not stack Honey on top of another portal for the same order.'
         ],
         bullets: [
           'Compare the rate for the exact store, not a homepage average.',
@@ -476,7 +476,7 @@ export const guideList: Guide[] = [
       rows: [
         ['Rakuten', 'Cash back plus a variable welcome bonus', 'Amazon exclusions and a roughly 90-day qualifying purchase'],
         ['TopCashback', 'Cash back; referrer $10 after a $10 eligible threshold', 'Many retailers excluded from the 365-day threshold'],
-        ['PayPal Honey', 'Coupons and PayPal Rewards points', '500 points is not cash and can take 60–90 days']
+        ['PayPal Honey', 'Coupons and PayPal Rewards points', '500 points is not cash and can take 60 to 90 days']
       ]
     },
     faqs: [
@@ -607,7 +607,7 @@ export const guideList: Guide[] = [
     metaTitle: 'PayPal Honey Referral Points Explained | BonusBridge',
     h1: 'PayPal Honey referrals: points, not cash',
     description:
-      'What the 500-point referral bonus is, who receives it, why it takes 60–90 days, and how Honey points differ from cash-back portals.',
+      'What the 500-point referral bonus is, who receives it, why it takes 60 to 90 days, and how Honey points differ from cash-back portals.',
     publishedAt: SEO_GUIDES_DATE,
     updatedAt: SEO_GUIDES_DATE,
     sections: [
@@ -627,7 +627,7 @@ export const guideList: Guide[] = [
       },
       {
         id: 'timing',
-        heading: 'Why it takes 60–90 days',
+        heading: 'Why it takes 60 to 90 days',
         paragraphs: [
           'The referral bonus is paid after the friend’s points are confirmed. Points stay pending while the store’s return window runs, which Honey says is often 60 to 90 days.',
           'A returned or cancelled order can remove the pending points, and with them the referral bonus.'
@@ -660,7 +660,7 @@ export const guideList: Guide[] = [
       rows: [
         ['Referrer reward', '500 PayPal Rewards points'],
         ['New member reward', 'Points on purchases; no fixed referral amount stated'],
-        ['When it pays', 'After the friend’s points confirm, often 60–90 days'],
+        ['When it pays', 'After the friend’s points confirm, often 60 to 90 days'],
         ['Limit', 'A cap on referral bonuses under the Terms of Use'],
         ['Cash or points?', 'Points, not cash']
       ]

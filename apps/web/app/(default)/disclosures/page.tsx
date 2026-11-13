@@ -76,8 +76,9 @@ export default function DisclosuresPage() {
           comes off the public site.
         </p>
         <p>
-          Old store URLs for unlisted programs stay reachable as plain explanations. They do not include a personal
-          referral link, and search engines are asked not to index them.
+          Old store URLs for unlisted programs, including Lemonade, Visible, and the Hilton Honors Amex Card, permanently
+          redirect to a live page. The empty food and travel categories do too. They are not in the sitemap and they do
+          not include a personal referral link.
         </p>
       </section>
       <section aria-labelledby="disclosures-listed">
@@ -106,6 +107,11 @@ export default function DisclosuresPage() {
           November 5, 2026: removed public referral cards whose terms are personal-only, unverified, or not actually
           referral links. Rewrote Rakuten, TopCashback, Lyft, Chime, and PayPal Honey copy to match those programs’
           published rules.
+        </p>
+        <p>
+          November 13, 2026: removed the Lemonade, Visible, and Hilton Honors Amex referral pages. Unlisted store URLs and
+          the empty food and travel categories now redirect to a live page. Analytics cookies load only after the cookie
+          banner is accepted.
         </p>
         <p>
           Read the <Link href="/guides">comparison guides</Link>, <Link href="/privacy">Privacy Policy</Link>, and{' '}

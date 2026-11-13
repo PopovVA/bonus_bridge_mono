@@ -3,7 +3,7 @@ import React from 'react'
 import { act } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { COOKIE_NOTICE_STORAGE_KEY } from '@/lib/cookie-notice'
+import { COOKIE_CONSENT_EVENT, COOKIE_CONSENT_STORAGE_KEY } from '@/lib/cookie-notice'
 import { CookieNotice } from './cookie-notice'
 
 describe('CookieNotice', () => {
@@ -25,8 +25,9 @@ describe('CookieNotice', () => {
     expect(renderToStaticMarkup(<CookieNotice />)).toBe('')
   })
 
-  it('shows the notice until it is dismissed', async () => {
+  it('asks for a choice and stores acceptance', async () => {
     ;(globalThis as { React?: typeof React }).React = React
+    const heard = viCookieEvent()
     host = document.createElement('div')
     document.body.appendChild(host)
     root = createRoot(host)
@@ -34,17 +35,34 @@ describe('CookieNotice', () => {
       root?.render(<CookieNotice />)
     })
     expect(host.textContent).toContain('Cookie Notice')
-    const button = host.querySelector('button')
-    expect(button).not.toBeNull()
+    expect(host.textContent).toContain('Accept')
+    const accept = [...host.querySelectorAll('button')].find((button) => button.textContent === 'Accept')
     await act(async () => {
-      button?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      accept?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
     })
-    expect(window.localStorage.getItem(COOKIE_NOTICE_STORAGE_KEY)).toBe('dismissed')
-    expect(host.textContent).not.toContain('Cookie Notice')
+    expect(window.localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY)).toBe('accepted')
+    expect(heard()).toBe(true)
+    expect(host.textContent).not.toContain('Accept')
   })
 
-  it('stays hidden when the notice was already dismissed', async () => {
-    window.localStorage.setItem(COOKIE_NOTICE_STORAGE_KEY, 'dismissed')
+  it('stores a decline', async () => {
+    ;(globalThis as { React?: typeof React }).React = React
+    host = document.createElement('div')
+    document.body.appendChild(host)
+    root = createRoot(host)
+    await act(async () => {
+      root?.render(<CookieNotice />)
+    })
+    const decline = [...host.querySelectorAll('button')].find((button) => button.textContent === 'Decline')
+    await act(async () => {
+      decline?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+    expect(window.localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY)).toBe('declined')
+    expect(host.textContent).not.toContain('Decline')
+  })
+
+  it('stays hidden when a choice was already saved', async () => {
+    window.localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, 'declined')
     ;(globalThis as { React?: typeof React }).React = React
     host = document.createElement('div')
     document.body.appendChild(host)
@@ -53,5 +71,18 @@ describe('CookieNotice', () => {
       root?.render(<CookieNotice />)
     })
     expect(host.textContent).not.toContain('Cookie Notice')
+    window.localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, 'accepted')
+    await act(async () => {
+      root?.render(<CookieNotice />)
+    })
+    expect(host.textContent).not.toContain('Accept')
   })
 })
+
+function viCookieEvent() {
+  let heard = false
+  window.addEventListener(COOKIE_CONSENT_EVENT, () => {
+    heard = true
+  })
+  return () => heard
+}

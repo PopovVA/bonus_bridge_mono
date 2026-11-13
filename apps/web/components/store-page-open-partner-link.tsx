@@ -17,8 +17,9 @@ export function StorePageOpenPartnerLink({ href, storeSlug, children }: Props) {
       target="_blank"
       rel="noopener noreferrer sponsored"
       className="store-page-open-store-btn"
-      event="store_page_open_partner"
-      eventParams={{ store_slug: storeSlug }}
+      partnerSlug={storeSlug}
+      event="bonus_cta"
+      eventParams={{ store_slug: storeSlug, place: 'store_page_open_partner' }}
     >
       {children}
     </TrackedOutboundLink>

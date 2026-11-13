@@ -1,13 +1,15 @@
 import type { Metadata } from 'next'
 import { LEGAL_CONTACT_EMAIL } from '@/lib/legal-site-meta'
 import { absoluteUrl } from '@/app/seo'
+import { indexPageJsonLd } from '@/lib/page-json-ld'
 
 const path = '/contact'
+const description =
+  'Contact BonusBridge: independent informational website about referral offers and provider terms. Email support for questions about the site.'
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description:
-    'Contact BonusBridge — independent informational website about referral offers and provider terms. Email support for questions about the site.',
+  description,
   alternates: {
     canonical: path
   },
@@ -17,16 +19,17 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Contact | BonusBridge',
-    description:
-      'Contact BonusBridge — independent informational website about referral offers and provider terms. Email support for questions about the site.',
+    description,
     url: absoluteUrl(path),
     type: 'website'
   }
 }
 
 export default function ContactPage() {
+  const jsonLd = indexPageJsonLd({ path, name: 'Contact', description })
   return (
     <article className="legal-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <h1 className="legal-page__title">Contact</h1>
       <p className="legal-page__notice">
         BonusBridge is an independent informational website. We summarize publicly described referral and promotional

@@ -19,7 +19,7 @@ describe('ListingFacts', () => {
     expect(html).toContain('Conditions')
     expect(html).toContain('Public referral')
     expect(html).toContain('March 1, 2026')
-    expect(html).toContain('not a date when a bonus was verified')
+    expect(html).toContain('last checked the provider terms')
   })
 
   it('omits the promotion note and date when they are absent', () => {

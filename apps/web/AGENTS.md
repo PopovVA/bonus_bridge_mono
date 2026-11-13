@@ -25,6 +25,7 @@ From repo root:
   - `/categories/[slug]`, `/stores/[slug]`, `/coupons/[id]` → permanent redirect to `/stores/[slug]` (index `/coupons` → `/`)
   - `/privacy` → `/privacy-policy`, `/cookies`, `/disclosures`, `/terms` → `/terms-of-service`
   - `/compare/rakuten-vs-topcashback` → `/guides/rakuten-vs-topcashback`
+  - Removed store URLs, including Lemonade, Visible, and Hilton Honors Amex, plus empty `/categories/food` and `/categories/travel`, 301 to a live page (`lib/legacy-redirects.ts`). `/llms.txt` lists the public sitemap paths.
 - Every SEO page should include title/meta, clear H1, and internal links where relevant.
 
 ## Data/typing

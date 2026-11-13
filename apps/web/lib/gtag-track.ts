@@ -35,3 +35,14 @@ export function trackGtagEvent(eventName: string, params?: GtagEventParams): voi
   gtag('event', eventName, cleaned ?? {})
   console.info(`[Analytics] Event "${eventName}" sent.`, cleaned ?? {})
 }
+
+/** One GA4 event for every outbound referral or affiliate CTA: partner, page, and control. */
+export function trackReferralClick(partnerSlug: string, place: string, extra?: GtagEventParams): void {
+  const pagePath = typeof window === 'undefined' ? undefined : window.location.pathname
+  trackGtagEvent('bonus_cta', {
+    ...extra,
+    store_slug: partnerSlug,
+    place,
+    page_path: pagePath
+  })
+}
