@@ -2,10 +2,12 @@
 
 import { useCallback, useId, useState } from 'react'
 import { tryWriteClipboard } from '@/lib/clip-partner-flow'
+import { trackGtagEvent, trackReferralClick } from '@/lib/gtag-track'
 
 export type ClipPartnerPending = {
   url: string
   copySucceeded: boolean
+  partnerSlug: string | null
 }
 
 const CLIP_TOAST_DURATION_MS = 15_000
@@ -22,14 +24,14 @@ export function useClipPartnerOfferFlow() {
 
   /** Copy value, toast, then show dialog — does not open a tab. */
   const runClipFlow = useCallback(
-    async (copyValue: string, openUrl: string) => {
+    async (copyValue: string, openUrl: string, partnerSlug?: string | null) => {
       const copySucceeded = await tryWriteClipboard(copyValue)
       if (copySucceeded) {
         showToast('Copied to clipboard.')
       } else {
-        showToast('Could not copy — select the code manually.')
+        showToast('Could not copy. Select the code manually.')
       }
-      setPending({ url: openUrl, copySucceeded })
+      setPending({ url: openUrl, copySucceeded, partnerSlug: partnerSlug ?? null })
     },
     [showToast]
   )
@@ -38,6 +40,11 @@ export function useClipPartnerOfferFlow() {
 
   const confirmOpenInNewTab = useCallback(() => {
     if (pending) {
+      if (pending.partnerSlug) {
+        trackReferralClick(pending.partnerSlug, 'clip_dialog_open_tab')
+      } else {
+        trackGtagEvent('clip_dialog_open_tab')
+      }
       window.open(pending.url, '_blank', 'noopener,noreferrer')
     }
     setPending(null)

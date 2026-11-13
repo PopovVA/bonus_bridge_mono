@@ -30,9 +30,11 @@ Port: `http://localhost:3000`
 
 ### Analytics (GA4)
 
-GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all hosts except local loopback (`localhost`, `127.0.0.1`, `::1`). Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` in `.env` if needed (see `.env.example`); default is `G-9GPFJN1LKC`. Events are sent with `gtag('event', …)` from `lib/gtag-track.ts`; internal and external links use `components/tracked-link.tsx` (`TrackedLink`, `TrackedOutboundLink`).
+GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) only after the visitor accepts the cookie banner, and only on hosts other than local loopback (`localhost`, `127.0.0.1`, `::1`). Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` in `.env` if needed (see `.env.example`); default is `G-9GPFJN1LKC`. Events are sent with `gtag('event', …)` from `lib/gtag-track.ts`; internal and external links use `components/tracked-link.tsx` (`TrackedLink`, `TrackedOutboundLink`).
 
-**`clip_copy_code` / `clip_get_offer`** also send `place` and `item_id` where the parent passes them (e.g. home clip grid, store page, explore-more clip cards).
+**Referral clicks.** Every outbound referral or affiliate CTA sends one `bonus_cta` event with `store_slug` (partner), `page_path` (the BonusBridge path, such as `/stores/chime`), and `place` (which control was used). Report clicks in GA4 Explore with those two dimensions. `place` values include `store_page`, `store_page_open_partner`, `mobile_bar`, `guide_outbound`, `hero_main_cta`, `monthly_offer_cta`, `hot_cashback_cta`, `explore_link_offer_cta`, `home_clip`, `explore_clip`, `clip_dialog_open_tab`, `article_partner_image`, `article_partner_cta`, and `article_chime_requirements`. There is no first-party click log: this app has no backend or edge counter.
+
+**`clip_copy_code`** still sends `place` and `item_id` when the parent passes them. A clip offer button with a partner slug sends `bonus_cta` instead of `clip_get_offer`. Opening the partner from the copy dialog sends `bonus_cta` with `place` `clip_dialog_open_tab` when the partner is known.
 
 | Event name | When it fires | Parameters |
 | --- | --- | --- |
@@ -43,8 +45,8 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all host
 | `article_view` | Article page mount (once) | `article_slug` |
 | `chime_calc_update` | Chime calculator inputs change (debounced) | `article_slug`, `friends`, `include_dd`, `your_total_usd` |
 | `article_chime_terms` | Chime official terms link in article | `article_slug` |
-| `article_chime_partner_image_click` | Tap a Chime article figure image (opens partner URL) | `article_slug`, `image_key` (`referral_steps` \| `building`) |
-| `article_chime_partner_cta` | Chime “View offer details” button (under figures or after calculator) | `article_slug`, `cta_place` (`under_building` \| `after_calculator`) |
+| `bonus_cta` | Chime article figure image | `store_slug` `chime`, `page_path`, `place` `article_partner_image`, `article_slug`, `image_key` |
+| `bonus_cta` | Chime “View offer details” under a figure | `store_slug` `chime`, `page_path`, `place` `article_partner_cta`, `cta_place` |
 | `header_nav_stores_open` | Open Stores menu | — |
 | `header_nav_stores_close_toggle` | Close Stores via the same toggle | — |
 | `header_nav_stores_close_backdrop` | Close Stores by clicking backdrop | — |
@@ -58,33 +60,34 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all host
 | `hero_carousel_next` | Hero next arrow | — |
 | `hero_carousel_dot` | Hero dot / slide index | `slide_index` |
 | `hero_terms_link` | Hero “terms” link | `slide_kind` |
-| `hero_main_cta` | Hero primary partner CTA | `slide_kind` |
-| `monthly_offer_cta` | Top monthly offer card CTA | `offer_slug` |
-| `hot_cashback_cta` | Hot cashback card CTA | `offer_slug` |
+| `bonus_cta` | Hero primary partner CTA | `store_slug`, `page_path`, `place` `hero_main_cta`, `slide_kind` |
+| `bonus_cta` | Top monthly offer card CTA | `store_slug`, `page_path`, `place` `monthly_offer_cta` |
+| `bonus_cta` | Hot cashback card CTA | `store_slug`, `page_path`, `place` `hot_cashback_cta` |
 | `home_category_chip` | Category marquee chip | `category_slug` |
 | `clip_copy_code` | Clip card — copy code / link | `place`, `item_id` (if set) |
-| `clip_get_offer` | Clip card — get offer | `place`, `item_id` (if set) |
-| `clip_dialog_not_now` | Partner dialog — “Not now” | — |
-| `clip_dialog_open_tab` | Partner dialog — “Open in new tab” | — |
-| `explore_link_offer_cta` | Explore more — link-only offer CTA | `offer_id` |
+| `clip_get_offer` | Clip card get-offer button when no partner slug is set | `place`, `item_id` (if set) |
+| `bonus_cta` | Clip card get-offer button when a partner slug is set | `store_slug`, `page_path`, `place`, `item_id` |
+| `clip_dialog_not_now` | Partner dialog, “Not now” | none |
+| `bonus_cta` | Partner dialog, “Open in new tab”, when the partner is known | `store_slug`, `page_path`, `place` `clip_dialog_open_tab` |
+| `bonus_cta` | Explore more link-only offer CTA | `store_slug`, `page_path`, `place` `explore_link_offer_cta`, `offer_id` |
 | `footer_privacy` | Footer — Privacy | — |
 | `footer_cookies` | Footer — Cookie Notice | — |
 | `footer_disclosures` | Footer — Disclosures | — |
 | `footer_guides` | Footer — Guides | — |
 | `footer_terms` | Footer — Terms | — |
-| `guide_outbound` | Guide page outbound referral link | `guide_slug` |
+| `bonus_cta` | Guide page outbound referral link | `store_slug`, `page_path`, `place` `guide_outbound`, `guide_slug` |
 | `store_card_click` | Store card component (if used) | `store_slug` |
 | `store_related_category` | “Explore more” category heading link | `category_slug` |
 | `category_view_store` | Category page — “View store” | `store_slug` |
-| `store_page_open_partner` | Store page — “See provider details” hero CTA | `store_slug` |
+| `bonus_cta` | Store page “See provider details” hero CTA | `store_slug`, `page_path`, `place` `store_page_open_partner` |
 
 ### SEO
 
 - `app/layout.tsx` sets global metadata (`metadataBase`, title template, default robots, canonical root).
-- Home, category, and store pages set their own titles, descriptions, canonicals, Open Graph, and Twitter summary tags via `pageSocialMetadata` in `app/seo.ts`. Share tags do not invent an image. Home has a visible H1. Store pages show the store name as a visible H1 plus region, conditions, and a listing-updated date. That date is a content edit, not a bonus verification. Bonus amounts are not described as verified.
-- Klarna (`/stores/klarna`) and Public (`/stores/public`) stay as informational routes. Their personal referral links and promotional CTAs are not published. Each page links to the provider's public website when that non-referral URL is in `site-data`. PayPal has no store route; its hero referral slide is not published. This is not a statement that those services are unlawful or that a link is technically dead.
-- `app/robots.ts` publishes robots rules and points to `/sitemap.xml`.
-- `app/sitemap.ts` includes `/`, `/privacy`, `/terms`, `/articles`, each entry in `lib/articles/list.ts`, all categories, and all store pages from `site-data`.
+- Home, category, and store pages set their own titles, descriptions, canonicals, Open Graph, and Twitter summary tags via `pageSocialMetadata` in `app/seo.ts`. Share tags do not invent an image. Home has a visible H1. Store pages show the store name as a visible H1 plus region, conditions, and a listing date. That date is the offer's `checkedAt` from `lib/signup-bonuses.ts` (when the provider terms were last read), not a hardcoded listing timestamp.
+- Removed store URLs (`/stores/public`, `/stores/klarna`, `/stores/robinhood`, `/stores/uber`, `/stores/uber-eats`, `/stores/lemonade`, `/stores/visible`, `/stores/amex-hilton-honors`, `/stores/airbnb`, `/stores/7now`, `/stores/bird`, `/stores/lime`, `/stores/poshmark`), `/categories/food` (including legacy `/categories/food-dining`), and the now-empty `/categories/travel` return **301** to a live page. They are not in the sitemap. PayPal and Coinbase have no store route. This is not a statement that those services are unlawful. Visible deal-page codes that the brand publishes to everyone stay on the home promo grid. They are not personal referral links.
+- `app/robots.ts` publishes robots rules and points to `/sitemap.xml`. `app/llms.txt/route.ts` serves `/llms.txt` from the same public path list.
+- `app/sitemap.ts` includes `/`, legal and contact pages, `/articles`, `/guides`, each article and guide, categories that have a listed store, and listed store pages.
 - Key routes set canonical metadata:
   - `/` in `app/(home)/page.tsx`
   - `/categories/[slug]` in `app/(default)/categories/[slug]/page.tsx`
@@ -94,8 +97,11 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) for all host
 - JSON-LD is rendered on:
   - `/` (`WebSite`)
   - `/categories/[slug]` (`CollectionPage` + `ItemList`)
-  - `/stores/[slug]` (`WebPage`)
-  - `/articles/chime-1000-two-friends` (`Article`)
+  - `/stores/[slug]` (`WebPage` + `BreadcrumbList`, and `FAQPage` when the store has a public bonus)
+  - `/articles` and `/guides` (`CollectionPage` + `BreadcrumbList` + `ItemList`)
+  - `/privacy-policy`, `/cookies`, `/terms-of-service`, `/contact` (`WebPage` + `BreadcrumbList`)
+  - `/articles/chime-1000-two-friends` and each guide (`Article` + `FAQPage` + `BreadcrumbList`)
+  - `/disclosures` (`Article` + `BreadcrumbList`)
 
 Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](https://developers.brandfetch.com/register)) so the Uber Eats hero logo can load from `cdn.brandfetch.io/ubereats.com`. Without it, `/brands/ubereats-logo.png`. The Uber rides slide always uses `/brands/uber-logo.png`.
 
@@ -118,9 +124,9 @@ Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](http
 ## Routes
 
 - `/articles` — **Informational Guides** index (URL unchanged); entries are validated with Zod (`ArticleListSchema` in `lib/schemas/article.schema.ts`) and listed from `lib/articles/list.ts`. Optional **`listImageSrc`** (public path) shows a thumbnail on the index card.
-- `/articles/chime-1000-two-friends` — Chime invite guide: **title + lede** (informational intro), referral-steps **`ArticlePartnerFigure`**, section **Referral offer illustration** with copy, then embedded **`ChimeReferralCalculator`** (`showHeading={false}` `showLead={false}` so the card has no duplicate title or rules blurb), **View offer details** (`cta_place: after_calculator`), building figure (with CTA), **Important to understand** checklist, and disclaimer. **`ArticleViewTracker`** fires `article_view`. **`GoogleAnalytics`** in root layout loads GA4 when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set and host is not localhost. On viewports wider than 640px, figures cap at **605px** width. JSON-LD `Article` uses `lib/articles/list.ts` title and description. Clickable figures → `CHIME_PARTNER_REFERRAL_URL` in `lib/chime-article-constants.ts`.
+- `/articles/chime-1000-two-friends` — Chime invite guide: **title + lede** (informational intro), referral-steps **`ArticlePartnerFigure`**, section **Referral offer illustration** with copy, then embedded **`ChimeReferralCalculator`** (`showHeading={false}` `showLead={false}` so the card has no duplicate title or rules blurb), **View offer details** (`cta_place: after_calculator`), building figure (with CTA), **Important to understand** checklist, and disclaimer. **`ArticleViewTracker`** fires `article_view`. **`GoogleAnalytics`** in root layout loads GA4 on a public host only after the cookie banner is accepted. On viewports wider than 640px, figures cap at **605px** width. JSON-LD `Article` uses `lib/articles/list.ts` title and description. Clickable figures → `CHIME_PARTNER_REFERRAL_URL` in `lib/chime-article-constants.ts`.
 - `/` — visible H1, affiliate disclosure, hero slider, offer details row (Robinhood only; Klarna, Public, and PayPal referral promotions are not published), category carousel, **clip-out promo grid** (8 codes in `lib/home-clip-coupons.ts`; assets e.g. `/brands/ubereats-logo.png`, `/clip-coupons/7eleven.svg`, `/clip-coupons/robinhood.svg`, `/clip-coupons/lyft.svg`, `/clip-coupons/lime.svg`, `/clip-coupons/bird.svg`, `/clip-coupons/poshmark.svg`). **Clip cards:** tapping the **code** copies it, shows a toast, then a **confirm dialog**; **See details** opens the partner URL in a new tab **immediately** (no dialog) — same pattern on store **Top offers** / **Explore more** clip rows (`useClipPartnerOfferFlow` + `ClipOpenStoreDialog`).
-- `/` — header: **Stores** (mega menu by category; first nav link after the logo; each category shows the same `/categories/{slug}.svg` tile as the carousel; slate/neutral hover/active chrome, no green), **Coupons** (anchor `#coupons` to the clip grid, hidden on narrow viewports to save space), **Guides** (`/articles`, to the right of Coupons on desktop), and a **store name search** (client-side filter over `useClientCatalog()` → links to `/stores/[slug]`). `/stores` and `/coupons` redirect to `/`. Legacy `/categories/food-dining` → `/categories/food`.
+- `/` — header: **Stores** (mega menu by category; first nav link after the logo; each category shows the same `/categories/{slug}.svg` tile as the carousel; slate/neutral hover/active chrome, no green), **Coupons** (anchor `#coupons` to the clip grid, hidden on narrow viewports to save space), **Guides** (`/articles`, to the right of Coupons on desktop), and a **store name search** (client-side filter over `useClientCatalog()` → links to `/stores/[slug]`). `/stores` and `/coupons` redirect to `/`. `/categories/food` and legacy `/categories/food-dining` 301 to `/categories/shopping`. `/categories/travel` 301s to `/disclosures` because it no longer has a listed store.
 - **Client catalog:** `getClientCatalog()` runs in `app/layout.tsx` and hydrates `ClientCatalogProvider` with categories → stores → active offers. `useClientCatalog()` / `StoreRelatedPanel` reuse this on store pages (and anywhere else you add client UI).
 - **`app/(default)/layout.tsx`** — same shell as home: `HomeHeader`, `HomeFooter`, `home.css` (`.default-main` content width 1280px; in-content links slate, not legacy green). App font: **Plus Jakarta Sans** via `next/font` on root `app/layout.tsx` (`--font-app`).
 - `/categories/[slug]` — stores in that category; each row shows a **larger logo tile** (image, inline `logoSvg`, or letter fallback), **title**, **short description** from `site-data` `description` (or a neutral fallback), **counts** of promo codes vs link-only offers, and one **View store** button to `/stores/[slug]`.

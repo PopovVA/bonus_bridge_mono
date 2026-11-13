@@ -1,37 +1,48 @@
 import { describe, expect, it } from 'vitest'
-import { COOKIE_NOTICE_STORAGE_KEY, dismissCookieNotice, isCookieNoticeDismissed } from './cookie-notice'
+import {
+  COOKIE_CONSENT_STORAGE_KEY,
+  readCookieConsent,
+  writeCookieConsent
+} from './cookie-notice'
 
-describe('cookie notice storage', () => {
-  it('reads a dismissed flag and treats other values as still visible', () => {
-    expect(isCookieNoticeDismissed({ getItem: () => 'dismissed' })).toBe(true)
-    expect(isCookieNoticeDismissed({ getItem: () => null })).toBe(false)
-    expect(isCookieNoticeDismissed({ getItem: () => 'later' })).toBe(false)
+describe('cookie consent storage', () => {
+  it('reads accepted and declined, and treats other values as undecided', () => {
+    expect(readCookieConsent({ getItem: () => 'accepted' })).toBe('accepted')
+    expect(readCookieConsent({ getItem: () => 'declined' })).toBe('declined')
+    expect(readCookieConsent({ getItem: () => null })).toBeNull()
+    expect(readCookieConsent({ getItem: () => 'dismissed' })).toBeNull()
   })
 
-  it('returns false when storage throws', () => {
+  it('returns null when storage throws', () => {
     expect(
-      isCookieNoticeDismissed({
+      readCookieConsent({
         getItem: () => {
           throw new Error('blocked')
         }
       })
-    ).toBe(false)
+    ).toBeNull()
   })
 
-  it('writes the dismissed flag and ignores storage failures', () => {
+  it('writes the choice and ignores storage failures', () => {
     let saved = ''
-    dismissCookieNotice({
-      setItem: (key, value) => {
-        saved = `${key}:${value}`
-      }
-    })
-    expect(saved).toBe(`${COOKIE_NOTICE_STORAGE_KEY}:dismissed`)
-    expect(() =>
-      dismissCookieNotice({
-        setItem: () => {
-          throw new Error('private')
+    writeCookieConsent(
+      {
+        setItem: (key, value) => {
+          saved = `${key}:${value}`
         }
-      })
+      },
+      'accepted'
+    )
+    expect(saved).toBe(`${COOKIE_CONSENT_STORAGE_KEY}:accepted`)
+    expect(() =>
+      writeCookieConsent(
+        {
+          setItem: () => {
+            throw new Error('private')
+          }
+        },
+        'declined'
+      )
     ).not.toThrow()
   })
 })

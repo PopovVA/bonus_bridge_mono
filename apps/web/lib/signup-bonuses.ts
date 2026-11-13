@@ -63,31 +63,6 @@ const DRAFTS: SignupBonusDraft[] = [
     checkedAt: CHECKED
   },
   {
-    slug: 'visible',
-    amount: '$20',
-    headline: 'service credit for new Visible members',
-    condition: 'Activate a new Visible line with the Bring a Friend code. No cash value.',
-    ctaLabel: 'Get $20 with Visible',
-    checkedAt: '2026-11-10'
-  },
-  {
-    slug: 'lemonade',
-    amount: null,
-    headline: 'Reward not stated by Lemonade',
-    condition: 'Counts when you get a quote within 30 days; no purchase needed. Not in LA, MI, MS, WA, WV.',
-    ctaLabel: 'Visit Lemonade',
-    checkedAt: '2026-11-10'
-  },
-  {
-    slug: 'amex-hilton-honors',
-    amount: null,
-    headline: 'Welcome offer shown on the Amex page',
-    condition: 'If approved, the offer, spend and deadline are the ones on the Amex referral page.',
-    ctaLabel: 'See the Amex offer',
-    setBy: 'American Express',
-    checkedAt: '2026-11-10'
-  },
-  {
     slug: 'lyft',
     amount: null,
     headline: 'New-rider credit varies by city',

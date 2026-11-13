@@ -40,7 +40,10 @@ const REMOVED_REFERRAL_URLS = [
   'https://posh.mk/QW6tN2UJW1b',
   'https://join.robinhood.com/vadimp-4f32ef3',
   'https://smart.link/370flfia27552?cp_0=my1w2j',
-  'https://coinbase.com/join/F2XRWRL?src=ios-link'
+  'https://coinbase.com/join/F2XRWRL?src=ios-link',
+  'https://lemonade.com/r/vadimpopov1',
+  'https://www.visible.com/get/?69PW6WF',
+  'https://americanexpress.com/en-us/referral/hilton-honors?ref=VADIMP2XC4&xl=cp10o6'
 ] as const
 
 const REMOVED_TOKENS = [
@@ -57,7 +60,10 @@ const REMOVED_TOKENS = [
   'my1w2j',
   '370flfia27552',
   'F2XRWRL',
-  'X86GGD'
+  'X86GGD',
+  'lemonade.com/r/',
+  '69PW6WF',
+  'VADIMP2XC4'
 ] as const
 
 const PUBLIC_REFERRAL_URLS = [
@@ -65,10 +71,7 @@ const PUBLIC_REFERRAL_URLS = [
   'https://www.rakuten.com/r/MVADIM7',
   'https://www.topcashback.com/ref/member344836925437',
   'https://www.joinhoney.com/ref/nwpz6sw',
-  'https://www.chime.com/r/vadimpopov1/',
-  'https://lemonade.com/r/vadimpopov1',
-  'https://www.visible.com/get/?69PW6WF',
-  'https://americanexpress.com/en-us/referral/hilton-honors?ref=VADIMP2XC4&xl=cp10o6'
+  'https://www.chime.com/r/vadimpopov1/'
 ] as const
 
 const ALLOWED_NON_INVENTORY = ['https://example.com']
@@ -84,7 +87,10 @@ const UNLISTED_STORE_SLUGS = [
   '7now',
   'bird',
   'lime',
-  'poshmark'
+  'poshmark',
+  'lemonade',
+  'visible',
+  'amex-hilton-honors'
 ] as const
 
 function walkSourceFiles(dir: string, acc: string[]) {
@@ -169,6 +175,9 @@ describe('public referral surfaces', () => {
     const finance = renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'finance' }) }))
     const auto = renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: 'auto' }) }))
     const grids = `${home}\n${shopping}\n${finance}\n${auto}`
+    expect(grids).not.toContain('/stores/lemonade')
+    expect(grids).not.toContain('/stores/visible')
+    expect(grids).not.toContain('/stores/amex-hilton-honors')
     expect(grids).not.toContain('/stores/uber')
     expect(grids).not.toContain('/stores/robinhood')
     expect(grids).not.toContain('/stores/klarna')
@@ -188,6 +197,9 @@ describe('public referral surfaces', () => {
       const text = fs.readFileSync(file, 'utf8')
       for (const token of REMOVED_TOKENS) {
         if (text.includes(token)) hits.push(`${path.relative(repoRoot, file)}:${token}`)
+      }
+      if (/sofi\.com/i.test(text) || text.includes('share.public.com')) {
+        hits.push(`${path.relative(repoRoot, file)}:personal-referral-host`)
       }
     }
     expect(hits).toEqual([])

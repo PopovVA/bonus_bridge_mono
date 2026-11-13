@@ -9,7 +9,7 @@ import { unlistedStoreSlugs } from '@/lib/referral-programs'
 export const NOT_PUBLICLY_PROMOTED_STORE_SLUGS = unlistedStoreSlugs()
 
 const LISTING_UPDATED_NOTE =
-  'This is when the BonusBridge listing text was last edited. It is not a date when a bonus was verified.'
+  'This is the date BonusBridge last checked the provider terms for this listing.'
 
 export function isNotPubliclyPromoted(slug: string): boolean {
   return NOT_PUBLICLY_PROMOTED_STORE_SLUGS.includes(slug)

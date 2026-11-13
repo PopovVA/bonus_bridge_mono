@@ -2,19 +2,20 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { absoluteUrl } from '@/app/seo'
 import { COMPLIANCE_PAGES_UPDATED, LEGAL_CONTACT_EMAIL } from '@/lib/legal-site-meta'
+import { indexPageJsonLd } from '@/lib/page-json-ld'
 
 const path = '/cookies'
+const description =
+  'How BonusBridge uses cookies, how referral links may set provider cookies, and how to control them in your browser.'
 
 export const metadata: Metadata = {
   title: { absolute: 'Cookie Notice | BonusBridge' },
-  description:
-    'How BonusBridge uses cookies, how referral links may set provider cookies, and how to control them in your browser.',
+  description,
   alternates: { canonical: path },
   robots: { index: true, follow: true },
   openGraph: {
     title: 'Cookie Notice | BonusBridge',
-    description:
-      'How BonusBridge uses cookies, how referral links may set provider cookies, and how to control them in your browser.',
+    description,
     url: absoluteUrl(path),
     type: 'website'
   }
@@ -28,19 +29,30 @@ export default function CookiesPage() {
     timeZone: 'UTC'
   })
 
+  const jsonLd = indexPageJsonLd({
+    path,
+    name: 'Cookie Notice',
+    description,
+    dateModified: `${COMPLIANCE_PAGES_UPDATED}T12:00:00.000Z`
+  })
+
   return (
     <article className="legal-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <h1 className="legal-page__title">Cookie Notice</h1>
       <p className="legal-page__updated">Last updated: {updated}</p>
       <p className="legal-page__notice">
         This notice explains cookies on BonusBridge. It is here so shopping-portal programs that allow a public website,
-        including TopCashback, can see a cookie policy next to our privacy policy. The notice does not block the site.
+        including TopCashback, can see a cookie policy next to our privacy policy. The banner does not lock the site.
       </p>
       <section aria-labelledby="cookies-what">
         <h2 id="cookies-what">Cookies we use</h2>
         <ul>
-          <li>Essential cookies that keep the site working, including a preference that remembers if you dismissed the cookie notice.</li>
-          <li>Analytics cookies, such as Google Analytics, that measure traffic in aggregate. They load on public hosts, not on local loopback during development.</li>
+          <li>A preference that remembers whether you accepted or declined analytics cookies.</li>
+          <li>
+            Analytics cookies, such as Google Analytics, that measure traffic in aggregate. They load on public hosts
+            only after you accept, and they do not load on local loopback during development.
+          </li>
         </ul>
       </section>
       <section aria-labelledby="cookies-referral">
@@ -54,9 +66,9 @@ export default function CookiesPage() {
       <section aria-labelledby="cookies-control">
         <h2 id="cookies-control">Your choices</h2>
         <p>
-          You can block or delete cookies in your browser settings. Blocking analytics cookies does not remove content
-          from the pages. Blocking all cookies may hide the memory of a dismissed notice, so the short banner can return
-          on a later visit.
+          You can block or delete cookies in your browser settings. Declining analytics in the banner, or blocking
+          analytics cookies, does not remove content from the pages. Blocking all cookies may hide the saved choice, so
+          the banner can return on a later visit.
         </p>
         <p>
           Privacy questions: <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>{LEGAL_CONTACT_EMAIL}</a>. See also the{' '}

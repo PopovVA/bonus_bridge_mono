@@ -30,6 +30,7 @@ export function BonusButton({ bonus, place, className = '' }: { bonus: SignupBon
       rel="noopener noreferrer sponsored"
       className={`btn btn--accent ${className}`.trim()}
       data-magnetic
+      partnerSlug={bonus.slug}
       event="bonus_cta"
       eventParams={{ store_slug: bonus.slug, place }}
     >

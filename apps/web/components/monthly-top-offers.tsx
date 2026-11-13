@@ -120,8 +120,9 @@ export function MonthlyTopOffers({
                   className="monthly-offer-card__cta"
                   target="_blank"
                   rel="noopener noreferrer sponsored"
-                  event="monthly_offer_cta"
-                  eventParams={{ offer_slug: offer.slug }}
+                  partnerSlug={offer.slug}
+                  event="bonus_cta"
+                  eventParams={{ offer_slug: offer.slug, place: 'monthly_offer_cta' }}
                 >
                   {offer.ctaText}
                 </TrackedOutboundLink>
@@ -131,7 +132,7 @@ export function MonthlyTopOffers({
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={offer.imageSrc}
-                    alt={`${offer.brandName} — offer highlights`}
+                    alt={`${offer.brandName}: offer highlights`}
                     width={280}
                     height={360}
                     className={mediaImgClass(offer.slug)}

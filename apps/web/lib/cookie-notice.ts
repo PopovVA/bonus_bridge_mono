@@ -1,16 +1,21 @@
-export const COOKIE_NOTICE_STORAGE_KEY = 'bb-cookie-notice'
+export const COOKIE_CONSENT_STORAGE_KEY = 'bb-cookie-consent'
+export const COOKIE_CONSENT_EVENT = 'bb-cookie-consent'
 
-export function isCookieNoticeDismissed(storage: Pick<Storage, 'getItem'>): boolean {
+export type CookieConsent = 'accepted' | 'declined'
+
+export function readCookieConsent(storage: Pick<Storage, 'getItem'>): CookieConsent | null {
   try {
-    return storage.getItem(COOKIE_NOTICE_STORAGE_KEY) === 'dismissed'
+    const value = storage.getItem(COOKIE_CONSENT_STORAGE_KEY)
+    if (value === 'accepted' || value === 'declined') return value
+    return null
   } catch {
-    return false
+    return null
   }
 }
 
-export function dismissCookieNotice(storage: Pick<Storage, 'setItem'>): void {
+export function writeCookieConsent(storage: Pick<Storage, 'setItem'>, value: CookieConsent): void {
   try {
-    storage.setItem(COOKIE_NOTICE_STORAGE_KEY, 'dismissed')
+    storage.setItem(COOKIE_CONSENT_STORAGE_KEY, value)
   } catch {
     /* Private mode can reject storage writes. The banner still closes in memory. */
   }

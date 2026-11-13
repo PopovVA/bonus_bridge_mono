@@ -76,8 +76,9 @@ export function HotCashback({
                 className="hot-cashback-card__cta"
                 target="_blank"
                 rel="noopener noreferrer sponsored"
-                event="hot_cashback_cta"
-                eventParams={{ offer_slug: offer.slug }}
+                partnerSlug={offer.slug}
+                event="bonus_cta"
+                eventParams={{ offer_slug: offer.slug, place: 'hot_cashback_cta' }}
               >
                 {offer.ctaText}
               </TrackedOutboundLink>

@@ -1746,7 +1746,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  width: min(520px, calc(100vw - 32px));
+  width: min(640px, calc(100vw - 32px));
   padding: 16px 16px 16px 20px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -1774,10 +1774,29 @@
   font-weight: 700;
 }
 
+.cookie-notice__actions {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  align-items: center;
+}
+
 .cookie-notice__dismiss {
   flex: none;
   min-height: 42px;
   padding: 0 18px;
+}
+
+.cookie-notice__decline {
+  flex: none;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 @media (max-width: 520px) {

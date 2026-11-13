@@ -6,6 +6,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { TrackedOutboundLink } from '@/components/tracked-link'
 import { trackGtagEvent } from '@/lib/gtag-track'
+import { partnerSlugForReferralUrl } from '@/lib/referral-programs'
 import type { HeroSlide } from '@/lib/schemas'
 
 /** Time each hero slide stays visible before auto-advance (ms). */
@@ -245,8 +246,9 @@ function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], k
             data-magnetic
             target="_blank"
             rel="noopener noreferrer sponsored"
-            event="hero_main_cta"
-            eventParams={{ slide_kind: kind }}
+            partnerSlug={partnerSlugForReferralUrl(slide.referralUrl) ?? undefined}
+            event="bonus_cta"
+            eventParams={{ place: 'hero_main_cta', slide_kind: kind }}
           >
             {slide.ctaText}
           </TrackedOutboundLink>

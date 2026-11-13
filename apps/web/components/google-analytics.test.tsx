@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { COOKIE_CONSENT_EVENT, COOKIE_CONSENT_STORAGE_KEY } from '@/lib/cookie-notice'
 import React from 'react'
 import { act } from 'react'
 import { createRoot } from 'react-dom/client'
@@ -21,9 +22,48 @@ vi.mock('next/script', () => ({
   }
 }))
 
+function stubWindow(hostname: string) {
+  const listeners = new Map<string, Set<() => void>>()
+  const store = new Map<string, string>()
+  const fake = {
+    location: { hostname },
+    localStorage: {
+      getItem: (key: string) => store.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        store.set(key, value)
+      }
+    },
+    addEventListener: (type: string, fn: () => void) => {
+      const set = listeners.get(type) ?? new Set()
+      set.add(fn)
+      listeners.set(type, set)
+    },
+    removeEventListener: (type: string, fn: () => void) => {
+      listeners.get(type)?.delete(fn)
+    },
+    dispatchEvent: (event: Event) => {
+      for (const fn of listeners.get(event.type) ?? []) fn()
+      return true
+    }
+  }
+  Object.defineProperty(globalThis, 'window', {
+    value: fake as unknown as Window,
+    configurable: true,
+    writable: true
+  })
+  return { store, listeners }
+}
+
 describe('GoogleAnalytics', () => {
+  const realWindow = globalThis.window
+
   afterEach(() => {
     vi.restoreAllMocks()
+    Object.defineProperty(globalThis, 'window', {
+      value: realWindow,
+      configurable: true,
+      writable: true
+    })
   })
 
   it('returns null when window is unavailable', async () => {
@@ -85,15 +125,11 @@ describe('GoogleAnalytics', () => {
     el.remove()
   })
 
-  it('renders gtag scripts on non-local host and logs enabled', async () => {
+  it('waits for consent on a public host and loads gtag only after acceptance', async () => {
     vi.resetModules()
     vi.stubEnv('NEXT_PUBLIC_GA_MEASUREMENT_ID', 'G-TESTID99')
     const info = vi.spyOn(console, 'info').mockImplementation(() => undefined)
-    Object.defineProperty(globalThis, 'window', {
-      value: { location: { hostname: 'bonusbridge.io' } } as unknown as Window,
-      configurable: true,
-      writable: true
-    })
+    const stub = stubWindow('bonusbridge.io')
     const { GoogleAnalytics } = await import('./google-analytics')
     ;(globalThis as { React?: typeof React }).React = React
     const el = document.createElement('div')
@@ -102,10 +138,19 @@ describe('GoogleAnalytics', () => {
     await act(async () => {
       root.render(<GoogleAnalytics />)
     })
+    expect(el.innerHTML).toBe('')
+    expect(info).toHaveBeenCalledWith('[Analytics] Waiting for cookie consent on host bonusbridge.io.')
+
+    stub.store.set(COOKIE_CONSENT_STORAGE_KEY, 'accepted')
+    await act(async () => {
+      window.dispatchEvent(new Event(COOKIE_CONSENT_EVENT))
+    })
     expect(el.innerHTML).toContain('id="google-analytics"')
     expect(el.innerHTML).toContain("gtag('config', 'G-TESTID99')")
+    expect(el.innerHTML).toContain("analytics_storage: 'granted'")
     expect(info).toHaveBeenCalledWith('[Analytics] Enabled on host bonusbridge.io. Measurement ID: G-TESTID99')
     root.unmount()
     el.remove()
+    expect(stub.listeners.get(COOKIE_CONSENT_EVENT)?.size ?? 0).toBe(0)
   })
 })

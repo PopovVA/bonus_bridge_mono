@@ -2,7 +2,7 @@
 import { LEGAL_CONTACT_EMAIL } from '@/lib/legal-site-meta'
 
 export const FTC_AFFILIATE_DISCLOSURE =
-  'BonusBridge is an independent comparison and guide site. We may earn a referral bonus or affiliate commission when you sign up through links on our pages, at no extra cost to you. Offer amounts, eligibility, and terms vary by time and location—always verify current details on the provider\'s official page.'
+  'BonusBridge is an independent comparison and guide site. We may earn a referral bonus or affiliate commission when you sign up through links on our pages, at no extra cost to you. Offer amounts, eligibility, and terms vary by time and location. Always verify current details on the provider\'s official page.'
 
 export const SITE_FOOTER_DISCLAIMER = FTC_AFFILIATE_DISCLOSURE
 

@@ -2,17 +2,28 @@ import type { Metadata } from 'next'
 import { TrackedLink } from '@/components/tracked-link'
 import { guideList } from '@/lib/guides'
 import { pageSocialMetadata } from '@/app/seo'
+import { indexPageJsonLd } from '@/lib/page-json-ld'
+
+const description =
+  'Side-by-side cash-back and referral guides. Amounts vary by provider, time, and location. Confirm the live offer before you sign up.'
 
 export const metadata: Metadata = pageSocialMetadata({
   title: 'Comparison guides',
-  description:
-    'Side-by-side cash-back and referral guides. Amounts vary by provider, time, and location. Confirm the live offer before you sign up.',
+  description,
   path: '/guides'
 })
 
 export default function GuidesIndexPage() {
+  const jsonLd = indexPageJsonLd({
+    path: '/guides',
+    name: 'Comparison guides',
+    description,
+    type: 'CollectionPage',
+    items: guideList.map((guide) => ({ name: guide.h1, path: `/guides/${guide.slug}` }))
+  })
   return (
     <section className="article-index">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <header className="article-index__header">
         <h1 className="article-index__title">Comparison guides</h1>
         <p className="article-index__intro">

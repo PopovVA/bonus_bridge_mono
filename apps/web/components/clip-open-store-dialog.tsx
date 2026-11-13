@@ -77,7 +77,6 @@ export function ClipOpenStoreDialog({
             type="button"
             className="clip-open-store-dialog__btn clip-open-store-dialog__btn--primary"
             onClick={() => {
-              trackGtagEvent('clip_dialog_open_tab')
               onConfirmOpen()
             }}
           >

@@ -58,7 +58,7 @@ export function StoreRelatedOfferCards({ offers, labelledBy }: Props) {
   const handleCodeClick = useCallback(
     (o: StoreRelatedOfferCard) => {
       const copyValue = o.couponCode?.trim() ? o.couponCode.trim() : o.referralUrl
-      void runClipFlow(copyValue, o.referralUrl)
+      void runClipFlow(copyValue, o.referralUrl, o.serviceSlug)
     },
     [runClipFlow]
   )
@@ -91,6 +91,9 @@ export function StoreRelatedOfferCards({ offers, labelledBy }: Props) {
                   onCodeClick={() => handleCodeClick(o)}
                   onGetOfferClick={() => handleGetOfferClick(o)}
                   clipAriaLabel={clipAriaLabel}
+                  analyticsPlace="explore_clip"
+                  analyticsPartnerSlug={o.serviceSlug}
+                  analyticsItemId={o.id}
                 />
               </li>
             )
@@ -134,8 +137,9 @@ export function StoreRelatedOfferCards({ offers, labelledBy }: Props) {
                     className="hot-cashback-card__cta"
                     target="_blank"
                     rel="noopener noreferrer sponsored"
-                    event="explore_link_offer_cta"
-                    eventParams={{ offer_id: o.id }}
+                    partnerSlug={o.serviceSlug}
+                    event="bonus_cta"
+                    eventParams={{ place: 'explore_link_offer_cta', offer_id: o.id }}
                   >
                     {ctaText}
                   </TrackedOutboundLink>

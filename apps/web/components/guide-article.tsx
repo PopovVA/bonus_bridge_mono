@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { TrackedOutboundLink } from '@/components/tracked-link'
 import { FTC_AFFILIATE_DISCLOSURE } from '@/lib/site-disclaimers'
 import { formatGuideDate, guideJsonLd, type Guide, type GuideLink } from '@/lib/guides'
+import { requirePartnerSlugForReferralUrl } from '@/lib/referral-programs'
 
 function GuideTextLink({ link }: { link: GuideLink }) {
   if (link.href.startsWith('/')) {
@@ -114,8 +115,9 @@ export function GuideArticle({ guide }: Props) {
               className="category-store-cta"
               target="_blank"
               rel="noopener noreferrer sponsored"
-              event="guide_outbound"
-              eventParams={{ guide_slug: guide.slug }}
+              partnerSlug={requirePartnerSlugForReferralUrl(link.href)}
+              event="bonus_cta"
+              eventParams={{ place: 'guide_outbound', guide_slug: guide.slug }}
             >
               {link.label}
             </TrackedOutboundLink>

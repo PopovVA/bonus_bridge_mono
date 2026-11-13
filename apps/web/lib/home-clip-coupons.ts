@@ -22,14 +22,5 @@ export const HOME_CLIP_COUPONS: HomeClipCoupon[] = [
     code: 'VADIM53422',
     openUrl: requirePublicReferralUrl('lyft'),
     logoSrc: '/clip-coupons/lyft.svg'
-  },
-  {
-    id: 'clip-visible',
-    brand: 'Visible',
-    title: '$20 credit on a new Visible line',
-    blurb: programClaim('visible'),
-    code: '69PW6WF',
-    openUrl: requirePublicReferralUrl('visible'),
-    logoSrc: '/brands/visible.svg'
   }
 ]

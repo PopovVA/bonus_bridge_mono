@@ -3,11 +3,14 @@ import Image from 'next/image'
 import { TrackedLink } from '@/components/tracked-link'
 import { articleList } from '@/lib/articles/list'
 import { guideList } from '@/lib/guides'
+import { indexPageJsonLd } from '@/lib/page-json-ld'
+
+const description =
+  'Independent guides to referral and sign-up offers. We explain eligibility, provider terms, and example scenarios.'
 
 export const metadata: Metadata = {
   title: 'Informational Guides',
-  description:
-    'Independent guides to referral and sign-up offers. We explain eligibility, provider terms, and example scenarios.',
+  description,
   alternates: {
     canonical: '/articles'
   },
@@ -18,8 +21,19 @@ export const metadata: Metadata = {
 }
 
 export default function ArticlesIndexPage() {
+  const jsonLd = indexPageJsonLd({
+    path: '/articles',
+    name: 'Informational Guides',
+    description,
+    type: 'CollectionPage',
+    items: [
+      ...articleList.map((article) => ({ name: article.title, path: `/articles/${article.slug}` })),
+      ...guideList.map((guide) => ({ name: guide.h1, path: `/guides/${guide.slug}` }))
+    ]
+  })
   return (
     <section className="article-index">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <header className="article-index__header">
         <h1 className="article-index__title">Informational Guides</h1>
         <p className="article-index__intro">

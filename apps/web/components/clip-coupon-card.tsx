@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Scissors } from 'lucide-react'
-import { trackGtagEvent } from '@/lib/gtag-track'
+import { trackGtagEvent, trackReferralClick } from '@/lib/gtag-track'
 
 export type ClipCouponCardProps = {
   logoSrc: string
@@ -23,6 +23,8 @@ export type ClipCouponCardProps = {
   analyticsPlace?: string
   /** GA4 `item_id` param (offer or coupon id). */
   analyticsItemId?: string
+  /** Partner slug for the outbound offer button. Sends `bonus_cta` with the current page path. */
+  analyticsPartnerSlug?: string
 }
 
 /** Tear-off promo card shell (styles: `home.css` `.clip-coupon-card*`). */
@@ -38,7 +40,8 @@ export function ClipCouponCard({
   clipButtonLabel = 'See details',
   getOfferAriaLabel = 'Open provider offer details in a new tab',
   analyticsPlace,
-  analyticsItemId
+  analyticsItemId,
+  analyticsPartnerSlug
 }: ClipCouponCardProps) {
   const analyticsParams =
     analyticsPlace || analyticsItemId
@@ -81,7 +84,11 @@ export function ClipCouponCard({
           type="button"
           className="clip-coupon-card__btn"
           onClick={() => {
-            trackGtagEvent('clip_get_offer', analyticsParams)
+            if (analyticsPartnerSlug) {
+              trackReferralClick(analyticsPartnerSlug, analyticsPlace ?? 'clip_get_offer', analyticsParams)
+            } else {
+              trackGtagEvent('clip_get_offer', analyticsParams)
+            }
             void onGetOfferClick()
           }}
           aria-label={getOfferAriaLabel}

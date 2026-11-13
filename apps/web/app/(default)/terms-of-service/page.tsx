@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { LEGAL_CONTACT_EMAIL, LEGAL_DOCUMENT_LAST_UPDATED } from '@/lib/legal-site-meta'
 import { absoluteUrl } from '@/app/seo'
+import { indexPageJsonLd } from '@/lib/page-json-ld'
 
 const path = '/terms-of-service'
 
@@ -31,8 +32,17 @@ export default function TermsPage() {
     day: 'numeric'
   })
 
+  const jsonLd = indexPageJsonLd({
+    path,
+    name: 'Terms of Service',
+    description:
+      'Terms governing use of BonusBridge. Informational content only. No guarantee of third party offers, payouts, or eligibility.',
+    dateModified: `${LEGAL_DOCUMENT_LAST_UPDATED}T12:00:00.000Z`
+  })
+
   return (
     <article className="legal-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <h1 className="legal-page__title">Terms of Service</h1>
       <p className="legal-page__updated">Last updated: {updated}</p>
 

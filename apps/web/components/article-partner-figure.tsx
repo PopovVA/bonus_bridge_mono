@@ -40,8 +40,9 @@ export function ArticlePartnerFigure({
         className="article-page__figure-link"
         target="_blank"
         rel="noopener noreferrer sponsored"
-        event="article_chime_partner_image_click"
-        eventParams={{ article_slug: articleSlug, image_key: imageKey }}
+        partnerSlug="chime"
+        event="bonus_cta"
+        eventParams={{ place: 'article_partner_image', article_slug: articleSlug, image_key: imageKey }}
         aria-label={`View offer details on the official site, ${alt}`}
       >
         <Image
@@ -62,8 +63,9 @@ export function ArticlePartnerFigure({
             className="category-store-cta article-page__offer-cta"
             target="_blank"
             rel="noopener noreferrer sponsored"
-            event="article_chime_partner_cta"
-            eventParams={{ article_slug: articleSlug, cta_place: `under_${imageKey}` }}
+            partnerSlug="chime"
+            event="bonus_cta"
+            eventParams={{ place: 'article_partner_cta', article_slug: articleSlug, cta_place: `under_${imageKey}` }}
           >
             View offer details
           </TrackedOutboundLink>
