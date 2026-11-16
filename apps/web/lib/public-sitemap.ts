@@ -1,6 +1,8 @@
 import { articleDocuments, getArticleDocument } from '@/lib/articles/chime-document'
 import { articleList } from '@/lib/articles/list'
 import { getGuideBySlug, guideList } from '@/lib/guides'
+import { latestPromoCheckedAt } from '@/lib/promo-entries'
+import { promos } from '@/lib/promos'
 import { getSignupBonus } from '@/lib/signup-bonuses'
 import { getPublishedCategories, getServices } from '@/lib/site-data'
 
@@ -17,6 +19,7 @@ export async function listPublicSitemapPaths(): Promise<string[]> {
     '/contact',
     '/articles',
     '/guides',
+    '/promos',
     ...articleList.map((article) => `/articles/${article.slug}`),
     ...guideList.map((guide) => `/guides/${guide.slug}`),
     ...categories.map((category) => `/categories/${category.slug}`),
@@ -40,6 +43,7 @@ export function lastModifiedForPath(path: string): string | undefined {
     ])
   }
   if (path.startsWith('/articles/')) return getArticleDocument(path.slice('/articles/'.length))?.updatedAt
+  if (path === '/promos') return latestPromoCheckedAt(promos)
   if (path.startsWith('/stores/')) {
     const bonus = getSignupBonus(path.slice('/stores/'.length))
     return bonus ? `${bonus.checkedAt}T12:00:00.000Z` : undefined

@@ -6,11 +6,12 @@ import { TrackedOutboundLink } from '@/components/tracked-link'
 type Props = {
   href: string
   storeSlug: string
+  offerId?: string
   children: ReactNode
 }
 
 /** Primary outbound CTA on the store page hero. */
-export function StorePageOpenPartnerLink({ href, storeSlug, children }: Props) {
+export function StorePageOpenPartnerLink({ href, storeSlug, offerId, children }: Props) {
   return (
     <TrackedOutboundLink
       href={href}
@@ -19,7 +20,7 @@ export function StorePageOpenPartnerLink({ href, storeSlug, children }: Props) {
       className="store-page-open-store-btn"
       partnerSlug={storeSlug}
       event="bonus_cta"
-      eventParams={{ store_slug: storeSlug, place: 'store_page_open_partner' }}
+      eventParams={{ store_slug: storeSlug, place: 'store_page_open_partner', offer_id: offerId }}
     >
       {children}
     </TrackedOutboundLink>

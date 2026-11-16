@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { isAnalyticsEnabledForHostname, trackGtagEvent, trackReferralClick } from './gtag-track'
+import { isAnalyticsEnabledForHostname, trackGtagEvent, trackPromoEvent, trackReferralClick } from './gtag-track'
 
 describe('isAnalyticsEnabledForHostname', () => {
   it('disables localhost hosts', () => {
@@ -115,6 +115,64 @@ describe('trackGtagEvent', () => {
       writable: true
     })
     expect(() => trackReferralClick('chime', 'store_page')).not.toThrow()
+    Object.defineProperty(globalThis, 'window', {
+      value: prev,
+      configurable: true,
+      writable: true
+    })
+  })
+
+  it('sends promo_copy and promo_click with the promo, store, page, place, and status', () => {
+    const gtag = vi.fn()
+    vi.spyOn(console, 'info').mockImplementation(() => undefined)
+    Object.defineProperty(globalThis, 'window', {
+      value: { location: { hostname: 'bonusbridge.io', pathname: '/promos' }, gtag } as unknown as Window,
+      configurable: true,
+      writable: true
+    })
+    trackPromoEvent('promo_copy', {
+      promoId: 'example-store-spring',
+      storeSlug: 'example-store',
+      place: 'promos_page',
+      promoStatus: 'active'
+    })
+    expect(gtag).toHaveBeenCalledWith('event', 'promo_copy', {
+      promo_id: 'example-store-spring',
+      store_slug: 'example-store',
+      page_path: '/promos',
+      place: 'promos_page',
+      promo_status: 'active'
+    })
+    trackPromoEvent('promo_click', {
+      promoId: 'example-store-spring',
+      storeSlug: 'rakuten',
+      place: 'store_page',
+      promoStatus: 'expired'
+    })
+    expect(gtag).toHaveBeenCalledWith('event', 'promo_click', {
+      promo_id: 'example-store-spring',
+      store_slug: 'rakuten',
+      page_path: '/promos',
+      place: 'store_page',
+      promo_status: 'expired'
+    })
+  })
+
+  it('skips promo events when window is undefined', () => {
+    const prev = globalThis.window
+    Object.defineProperty(globalThis, 'window', {
+      value: undefined,
+      configurable: true,
+      writable: true
+    })
+    expect(() =>
+      trackPromoEvent('promo_copy', {
+        promoId: 'example-store-spring',
+        storeSlug: 'example-store',
+        place: 'promos_page',
+        promoStatus: 'active'
+      })
+    ).not.toThrow()
     Object.defineProperty(globalThis, 'window', {
       value: prev,
       configurable: true,

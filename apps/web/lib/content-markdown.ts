@@ -8,6 +8,8 @@ import {
 import { getArticleBySlug } from '@/lib/articles/list'
 import { formatGuideDate, guideList, type Guide, type GuideLink, type GuideTable } from '@/lib/guides'
 import { isPublicStoreSlug, getReferralProgram } from '@/lib/referral-programs'
+import { renderPromosMarkdown, withStorePromoMarkdown } from '@/lib/promo-entries'
+import { promos } from '@/lib/promos'
 import { FTC_AFFILIATE_DISCLOSURE } from '@/lib/site-disclaimers'
 import { getOffers, getServiceBySlug, getServices } from '@/lib/site-data'
 import { formatCheckedDate, getSignupBonus, storeFaqs, type SignupBonus } from '@/lib/signup-bonuses'
@@ -171,18 +173,23 @@ export async function storeMarkdownBySlug(slug: string): Promise<string | null> 
   if (!isPublicStoreSlug(slug)) return null
   const store = await getServiceBySlug(slug)
   const offers = await getOffers({ service: slug, status: 'active' })
-  return renderStoreMarkdown({
-    name: store.name,
-    slug: store.slug,
-    description: store.description,
-    bonus: getSignupBonus(slug),
-    termsUrl: referralTermsUrl(slug),
-    offers: offers.map((offer) => ({
-      title: offer.title,
-      previewText: offer.previewText,
-      terms: offer.terms
-    }))
-  })
+  return withStorePromoMarkdown(
+    renderStoreMarkdown({
+      name: store.name,
+      slug: store.slug,
+      description: store.description,
+      bonus: getSignupBonus(slug),
+      termsUrl: referralTermsUrl(slug),
+      offers: offers.map((offer) => ({
+        title: offer.title,
+        previewText: offer.previewText,
+        terms: offer.terms
+      }))
+    }),
+    slug,
+    promos,
+    new Date()
+  )
 }
 
 export async function markdownByKind(kind: string, slug: string): Promise<string | null> {
@@ -203,7 +210,7 @@ export async function buildLlmsFullTxt(): Promise<string> {
   const chunks: string[] = [
     '# BonusBridge',
     '',
-    '> Full text of the public guides, articles, and store pages. Generated from the same records as the HTML pages.',
+    '> Full text of the public guides, articles, store pages, and the promo codes page. Generated from the same records as the HTML pages.',
     '',
     FTC_AFFILIATE_DISCLOSURE,
     ''
@@ -213,20 +220,27 @@ export async function buildLlmsFullTxt(): Promise<string> {
   for (const store of stores) {
     const offers = await getOffers({ service: store.slug, status: 'active' })
     chunks.push(
-      renderStoreMarkdown({
-        name: store.name,
-        slug: store.slug,
-        description: store.description,
-        bonus: getSignupBonus(store.slug),
-        termsUrl: referralTermsUrl(store.slug),
-        offers: offers.map((offer) => ({
-          title: offer.title,
-          previewText: offer.previewText,
-          terms: offer.terms
-        }))
-      }),
+      withStorePromoMarkdown(
+        renderStoreMarkdown({
+          name: store.name,
+          slug: store.slug,
+          description: store.description,
+          bonus: getSignupBonus(store.slug),
+          termsUrl: referralTermsUrl(store.slug),
+          offers: offers.map((offer) => ({
+            title: offer.title,
+            previewText: offer.previewText,
+            terms: offer.terms
+          }))
+        }),
+        store.slug,
+        promos,
+        new Date()
+      ),
       ''
     )
   }
+  const knownSlugs = new Set(stores.map((store) => store.slug))
+  chunks.push(renderPromosMarkdown(promos, new Date(), knownSlugs), '')
   return `${chunks.join('\n').replace(/\n{3,}/g, '\n\n').trim()}\n`
 }

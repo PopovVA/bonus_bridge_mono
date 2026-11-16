@@ -49,7 +49,7 @@ export function HomeClipCoupons({
                 blurb={c.blurb}
                 codeDisplay={c.code}
                 onCodeClick={() => {
-                  void runClipFlow(c.code, c.openUrl, partnerSlug)
+                  void runClipFlow(c.code, c.openUrl, partnerSlug, c.id)
                 }}
                 onGetOfferClick={() => handleGetOfferClick(c)}
                 clipAriaLabel={`Copy code ${c.code}`}

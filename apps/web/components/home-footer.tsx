@@ -3,6 +3,7 @@ import { SITE_FOOTER_DISCLAIMER, SITE_OPERATOR_NOTICE } from '@/lib/site-disclai
 
 const EXPLORE = [
   { href: '/articles', label: 'Guides', event: 'footer_articles' },
+  { href: '/promos', label: 'Promo codes', event: 'footer_promos' },
   { href: '/guides', label: 'Comparison guides', event: 'footer_guides' },
   { href: '/#coupons', label: 'Codes', event: 'footer_coupons' },
   { href: '/contact', label: 'Contact', event: 'footer_contact' }

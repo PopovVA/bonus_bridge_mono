@@ -5,6 +5,7 @@ import type { Offer } from '@/lib/schemas'
 import { ClipCouponCard } from '@/components/clip-coupon-card'
 import { ClipOpenStoreDialog } from '@/components/clip-open-store-dialog'
 import { useClipPartnerOfferFlow } from '@/components/use-clip-partner-offer-flow'
+import { partnerSlugForReferralUrl } from '@/lib/referral-programs'
 
 type Props = {
   storeName: string
@@ -21,7 +22,7 @@ export function StoreOfferClipCards({ storeName, storeLogoSrc, offers }: Props) 
   const handleCodeClick = useCallback(
     (offer: Offer) => {
       const copyValue = offer.couponCode?.trim() ? offer.couponCode.trim() : offer.referralUrl
-      void runClipFlow(copyValue, offer.referralUrl)
+      void runClipFlow(copyValue, offer.referralUrl, partnerSlugForReferralUrl(offer.referralUrl), offer.id)
     },
     [runClipFlow]
   )
@@ -53,6 +54,7 @@ export function StoreOfferClipCards({ storeName, storeLogoSrc, offers }: Props) 
               clipAriaLabel={clipAriaLabel}
               analyticsPlace="store_page"
               analyticsItemId={offer.id}
+              analyticsPartnerSlug={partnerSlugForReferralUrl(offer.referralUrl) ?? undefined}
             />
           )
         })}

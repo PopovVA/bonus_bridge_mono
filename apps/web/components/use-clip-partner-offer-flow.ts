@@ -8,6 +8,7 @@ export type ClipPartnerPending = {
   url: string
   copySucceeded: boolean
   partnerSlug: string | null
+  offerId: string | null
 }
 
 const CLIP_TOAST_DURATION_MS = 15_000
@@ -24,14 +25,19 @@ export function useClipPartnerOfferFlow() {
 
   /** Copy value, toast, then show dialog — does not open a tab. */
   const runClipFlow = useCallback(
-    async (copyValue: string, openUrl: string, partnerSlug?: string | null) => {
+    async (copyValue: string, openUrl: string, partnerSlug?: string | null, offerId?: string | null) => {
       const copySucceeded = await tryWriteClipboard(copyValue)
       if (copySucceeded) {
         showToast('Copied to clipboard.')
       } else {
         showToast('Could not copy. Select the code manually.')
       }
-      setPending({ url: openUrl, copySucceeded, partnerSlug: partnerSlug ?? null })
+      setPending({
+        url: openUrl,
+        copySucceeded,
+        partnerSlug: partnerSlug ?? null,
+        offerId: offerId ?? null
+      })
     },
     [showToast]
   )
@@ -40,10 +46,11 @@ export function useClipPartnerOfferFlow() {
 
   const confirmOpenInNewTab = useCallback(() => {
     if (pending) {
+      const offerParams = pending.offerId ? { offer_id: pending.offerId } : undefined
       if (pending.partnerSlug) {
-        trackReferralClick(pending.partnerSlug, 'clip_dialog_open_tab')
+        trackReferralClick(pending.partnerSlug, 'clip_dialog_open_tab', offerParams)
       } else {
-        trackGtagEvent('clip_dialog_open_tab')
+        trackGtagEvent('clip_dialog_open_tab', offerParams)
       }
       window.open(pending.url, '_blank', 'noopener,noreferrer')
     }

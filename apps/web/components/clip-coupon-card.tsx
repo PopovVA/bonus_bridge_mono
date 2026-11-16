@@ -47,7 +47,7 @@ export function ClipCouponCard({
     analyticsPlace || analyticsItemId
       ? {
           ...(analyticsPlace ? { place: analyticsPlace } : {}),
-          ...(analyticsItemId ? { item_id: analyticsItemId } : {})
+          ...(analyticsItemId ? { item_id: analyticsItemId, offer_id: analyticsItemId } : {})
         }
       : undefined
 

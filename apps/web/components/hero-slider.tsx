@@ -248,7 +248,7 @@ function renderPromoSlide(slide: PromoSlide, ui: (typeof PROMO_UI)[PromoKind], k
             rel="noopener noreferrer sponsored"
             partnerSlug={partnerSlugForReferralUrl(slide.referralUrl) ?? undefined}
             event="bonus_cta"
-            eventParams={{ place: 'hero_main_cta', slide_kind: kind }}
+            eventParams={{ place: 'hero_main_cta', slide_kind: kind, offer_id: slide.id }}
           >
             {slide.ctaText}
           </TrackedOutboundLink>

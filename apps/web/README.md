@@ -32,14 +32,17 @@ Port: `http://localhost:3000`
 
 GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) only after the visitor accepts the cookie banner, and only on hosts other than local loopback (`localhost`, `127.0.0.1`, `::1`). Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` in `.env` if needed (see `.env.example`); default is `G-9GPFJN1LKC`. Events are sent with `gtag('event', …)` from `lib/gtag-track.ts`; internal and external links use `components/tracked-link.tsx` (`TrackedLink`, `TrackedOutboundLink`).
 
-**Referral clicks.** Every outbound referral or affiliate CTA sends one `bonus_cta` event with `store_slug` (partner), `page_path` (the BonusBridge path, such as `/stores/chime`), and `place` (which control was used). Report clicks in GA4 Explore with those two dimensions. `place` values include `store_page`, `store_page_open_partner`, `mobile_bar`, `guide_outbound`, `hero_main_cta`, `monthly_offer_cta`, `hot_cashback_cta`, `explore_link_offer_cta`, `home_clip`, `explore_clip`, `clip_dialog_open_tab`, `article_partner_image`, `article_partner_cta`, and `article_chime_requirements`. There is no first-party click log: this app has no backend or edge counter.
+**Referral clicks.** Every outbound referral or affiliate CTA sends one `bonus_cta` event with `store_slug` (partner), `page_path` (the BonusBridge path, such as `/stores/chime`), and `place` (which control was used). When the offer or slide has an id, the same event also sends `offer_id`. Report clicks in GA4 Explore with those dimensions. `place` values include `store_page`, `store_page_open_partner`, `mobile_bar`, `guide_outbound`, `hero_main_cta`, `home_hero`, `monthly_offer_cta`, `hot_cashback_cta`, `explore_link_offer_cta`, `home_clip`, `explore_clip`, `clip_dialog_open_tab`, `article_partner_image`, `article_partner_cta`, and `article_chime_requirements`. Category pages do not link off-site: the card is an internal `category_view_store` click (`store_slug`), and the partner CTA is on the store page. There is no first-party click log: this app has no backend or edge counter.
 
-**`clip_copy_code`** still sends `place` and `item_id` when the parent passes them. A clip offer button with a partner slug sends `bonus_cta` instead of `clip_get_offer`. Opening the partner from the copy dialog sends `bonus_cta` with `place` `clip_dialog_open_tab` when the partner is known.
+**Promo codes.** Copying a code sends `promo_copy`. The official offer link sends `promo_click`. Both use `lib/gtag-track.ts` (`trackPromoEvent`) and include `promo_id`, `store_slug` (the public slug, or the store name slugified), `page_path`, `place` (`promos_page` or `store_page`), and `promo_status` (`active` or `expired`). Expired cards hide the copy button and the official link, so those events fire while the code is still active. A code that has not started yet is reported as `active`.
+
+**`clip_copy_code`** still sends `place`, `item_id`, and `offer_id` when the parent passes an id. A clip offer button with a partner slug sends `bonus_cta` instead of `clip_get_offer`. Opening the partner from the copy dialog sends `bonus_cta` with `place` `clip_dialog_open_tab` when the partner is known, plus `offer_id` when the coupon or offer has an id.
 
 | Event name | When it fires | Parameters |
 | --- | --- | --- |
 | `header_logo` | Click site title / logo | — |
 | `header_nav_coupons` | Click “Coupons” in header | — |
+| `header_nav_promos` | Click “Promos” in header | — |
 | `header_nav_articles` | Click “Guides” in header (URL `/articles`) | — |
 | `articles_list_open` | Open an article from `/articles` | — |
 | `article_view` | Article page mount (once) | `article_slug` |
@@ -60,34 +63,37 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) only after t
 | `hero_carousel_next` | Hero next arrow | — |
 | `hero_carousel_dot` | Hero dot / slide index | `slide_index` |
 | `hero_terms_link` | Hero “terms” link | `slide_kind` |
-| `bonus_cta` | Hero primary partner CTA | `store_slug`, `page_path`, `place` `hero_main_cta`, `slide_kind` |
-| `bonus_cta` | Top monthly offer card CTA | `store_slug`, `page_path`, `place` `monthly_offer_cta` |
-| `bonus_cta` | Hot cashback card CTA | `store_slug`, `page_path`, `place` `hot_cashback_cta` |
+| `bonus_cta` | Hero primary partner CTA | `store_slug`, `page_path`, `place` `hero_main_cta`, `slide_kind`, `offer_id` |
+| `bonus_cta` | Top monthly offer card CTA | `store_slug`, `page_path`, `place` `monthly_offer_cta`, `offer_id` |
+| `bonus_cta` | Hot cashback card CTA | `store_slug`, `page_path`, `place` `hot_cashback_cta`, `offer_id` |
 | `home_category_chip` | Category marquee chip | `category_slug` |
-| `clip_copy_code` | Clip card — copy code / link | `place`, `item_id` (if set) |
-| `clip_get_offer` | Clip card get-offer button when no partner slug is set | `place`, `item_id` (if set) |
-| `bonus_cta` | Clip card get-offer button when a partner slug is set | `store_slug`, `page_path`, `place`, `item_id` |
+| `clip_copy_code` | Clip card — copy code / link | `place`, `item_id`, `offer_id` (if set) |
+| `clip_get_offer` | Clip card get-offer button when no partner slug is set | `place`, `item_id`, `offer_id` (if set) |
+| `bonus_cta` | Clip card get-offer button when a partner slug is set | `store_slug`, `page_path`, `place`, `item_id`, `offer_id` |
 | `clip_dialog_not_now` | Partner dialog, “Not now” | none |
-| `bonus_cta` | Partner dialog, “Open in new tab”, when the partner is known | `store_slug`, `page_path`, `place` `clip_dialog_open_tab` |
+| `bonus_cta` | Partner dialog, “Open in new tab”, when the partner is known | `store_slug`, `page_path`, `place` `clip_dialog_open_tab`, `offer_id` (if set) |
+| `promo_copy` | Copy a promo code on `/promos` or a store page | `promo_id`, `store_slug`, `page_path`, `place` (`promos_page` or `store_page`), `promo_status` (`active` or `expired`) |
+| `promo_click` | Official promo offer link | `promo_id`, `store_slug`, `page_path`, `place` (`promos_page` or `store_page`), `promo_status` (`active` or `expired`) |
 | `bonus_cta` | Explore more link-only offer CTA | `store_slug`, `page_path`, `place` `explore_link_offer_cta`, `offer_id` |
 | `footer_privacy` | Footer — Privacy | — |
 | `footer_cookies` | Footer — Cookie Notice | — |
 | `footer_disclosures` | Footer — Disclosures | — |
 | `footer_guides` | Footer — Guides | — |
+| `footer_promos` | Footer — Promo codes | — |
 | `footer_terms` | Footer — Terms | — |
 | `bonus_cta` | Guide page outbound referral link | `store_slug`, `page_path`, `place` `guide_outbound`, `guide_slug` |
 | `store_card_click` | Store card component (if used) | `store_slug` |
 | `store_related_category` | “Explore more” category heading link | `category_slug` |
 | `category_view_store` | Category page — “View store” | `store_slug` |
-| `bonus_cta` | Store page “See provider details” hero CTA | `store_slug`, `page_path`, `place` `store_page_open_partner` |
+| `bonus_cta` | Store page “See provider details” hero CTA | `store_slug`, `page_path`, `place` `store_page_open_partner`, `offer_id` |
 
 ### SEO
 
 - `app/layout.tsx` sets global metadata (`metadataBase`, title template, default robots, canonical root).
 - Home, category, and store pages set their own titles, descriptions, canonicals, Open Graph, and Twitter summary tags via `pageSocialMetadata` in `app/seo.ts`. Share tags do not invent an image. Home has a visible H1. Store pages show the store name as a visible H1 plus region, conditions, and a listing date. That date is the offer's `checkedAt` from `lib/signup-bonuses.ts` (when the provider terms were last read), not a hardcoded listing timestamp.
 - Removed store URLs (`/stores/public`, `/stores/klarna`, `/stores/robinhood`, `/stores/uber`, `/stores/uber-eats`, `/stores/lemonade`, `/stores/visible`, `/stores/amex-hilton-honors`, `/stores/airbnb`, `/stores/7now`, `/stores/bird`, `/stores/lime`, `/stores/poshmark`), `/categories/food` (including legacy `/categories/food-dining`), and the now-empty `/categories/travel` return **301** to a live page. They are not in the sitemap. PayPal and Coinbase have no store route. This is not a statement that those services are unlawful. Visible deal-page codes that the brand publishes to everyone stay on the home promo grid. They are not personal referral links.
-- `app/robots.ts` publishes robots rules and points to `/sitemap.xml`. `app/llms.txt/route.ts` serves `/llms.txt` from the same public path list. `app/llms-full.txt/route.ts` serves the full markdown of every guide, article, and listed store. Each of those pages also responds at its URL plus `.md` (`Content-Type: text/markdown`) and links that file from `<link rel="alternate" type="text/markdown">`.
-- `app/sitemap.ts` includes `/`, legal and contact pages, `/articles`, `/guides`, each article and guide, categories that have a listed store, and listed store pages. Guides, articles, and stores include `lastmod` from the date the page copy or provider terms were last checked.
+- `app/robots.ts` publishes robots rules and points to `/sitemap.xml`. `app/llms.txt/route.ts` serves `/llms.txt` from the same public path list, including `/promos`. `app/llms-full.txt/route.ts` serves the full markdown of every guide, article, listed store, and the promo list. Each of those pages also responds at its URL plus `.md` (`Content-Type: text/markdown`) and links that file from `<link rel="alternate" type="text/markdown">`.
+- `app/sitemap.ts` includes `/`, legal and contact pages, `/articles`, `/guides`, `/promos`, each article and guide, categories that have a listed store, and listed store pages. Guides, articles, and stores include `lastmod` from the date the page copy or provider terms were last checked. `/promos` uses the latest `checkedAt` in `content/promos.json` when that file is not empty.
 - Key routes set canonical metadata:
   - `/` in `app/(home)/page.tsx`
   - `/categories/[slug]` in `app/(default)/categories/[slug]/page.tsx`
@@ -99,6 +105,7 @@ GA4 loads via `next/script` in `app/layout.tsx` (`GoogleAnalytics`) only after t
   - `/categories/[slug]` (`CollectionPage` + `ItemList`)
   - `/stores/[slug]` (`WebPage` + `BreadcrumbList`, and `FAQPage` when the store has a public bonus)
   - `/articles` and `/guides` (`CollectionPage` + `BreadcrumbList` + `ItemList`)
+  - `/promos` (`WebPage` + `BreadcrumbList`; no Offer or price markup)
   - `/privacy-policy`, `/cookies`, `/terms-of-service`, `/contact` (`WebPage` + `BreadcrumbList`)
   - `/articles/chime-1000-two-friends` and each guide (`Article` + `FAQPage` + `BreadcrumbList`)
   - `/disclosures` (`Article` + `BreadcrumbList`)
@@ -126,11 +133,12 @@ Optional: set `NEXT_PUBLIC_BRANDFETCH_CLIENT_ID` (see [Brandfetch Logo API](http
 - `/articles` — **Informational Guides** index (URL unchanged); entries are validated with Zod (`ArticleListSchema` in `lib/schemas/article.schema.ts`) and listed from `lib/articles/list.ts`. Optional **`listImageSrc`** (public path) shows a thumbnail on the index card.
 - `/articles/chime-1000-two-friends` — Chime invite guide: **title + lede** (informational intro), referral-steps **`ArticlePartnerFigure`**, section **Referral offer illustration** with copy, then embedded **`ChimeReferralCalculator`** (`showHeading={false}` `showLead={false}` so the card has no duplicate title or rules blurb), **View offer details** (`cta_place: after_calculator`), building figure (with CTA), **Important to understand** checklist, and disclaimer. **`ArticleViewTracker`** fires `article_view`. **`GoogleAnalytics`** in root layout loads GA4 on a public host only after the cookie banner is accepted. On viewports wider than 640px, figures cap at **605px** width. JSON-LD `Article` uses `lib/articles/list.ts` title and description. Clickable figures → `CHIME_PARTNER_REFERRAL_URL` in `lib/chime-article-constants.ts`.
 - `/` — visible H1, affiliate disclosure, hero slider, offer details row (Robinhood only; Klarna, Public, and PayPal referral promotions are not published), category carousel, **clip-out promo grid** (8 codes in `lib/home-clip-coupons.ts`; assets e.g. `/brands/ubereats-logo.png`, `/clip-coupons/7eleven.svg`, `/clip-coupons/robinhood.svg`, `/clip-coupons/lyft.svg`, `/clip-coupons/lime.svg`, `/clip-coupons/bird.svg`, `/clip-coupons/poshmark.svg`). **Clip cards:** tapping the **code** copies it, shows a toast, then a **confirm dialog**; **See details** opens the partner URL in a new tab **immediately** (no dialog) — same pattern on store **Top offers** / **Explore more** clip rows (`useClipPartnerOfferFlow` + `ClipOpenStoreDialog`).
-- `/` — header: **Stores** (mega menu by category; first nav link after the logo; each category shows the same `/categories/{slug}.svg` tile as the carousel; slate/neutral hover/active chrome, no green), **Coupons** (anchor `#coupons` to the clip grid, hidden on narrow viewports to save space), **Guides** (`/articles`, to the right of Coupons on desktop), and a **store name search** (client-side filter over `useClientCatalog()` → links to `/stores/[slug]`). `/stores` and `/coupons` redirect to `/`. `/categories/food` and legacy `/categories/food-dining` 301 to `/categories/shopping`. `/categories/travel` 301s to `/disclosures` because it no longer has a listed store.
+- `/` — header: **Stores** (mega menu by category; first nav link after the logo; each category shows the same `/categories/{slug}.svg` tile as the carousel; slate/neutral hover/active chrome, no green), **Promos** (`/promos`), **Coupons** (anchor `#coupons` to the clip grid, hidden on narrow viewports to save space), **Guides** (`/articles`, to the right of Coupons on desktop), and a **store name search** (client-side filter over `useClientCatalog()` → links to `/stores/[slug]`). `/stores` and `/coupons` redirect to `/`. `/categories/food` and legacy `/categories/food-dining` 301 to `/categories/shopping`. `/categories/travel` 301s to `/disclosures` because it no longer has a listed store.
+- `/promos` — promo codes and limited-time offers from `content/promos.json` (see `content/README.md`). The file starts empty. Active offers are listed first. Expired offers stay visible, grayed out, with no copy button and no official link. Status is computed on each request (the page revalidates hourly) and again in the browser, so a cached page grays an offer out after `expiresAt` without a new deploy. Store pages show that store's currently active promos. `/promos.md` is the markdown alternate.
 - **Client catalog:** `getClientCatalog()` runs in `app/layout.tsx` and hydrates `ClientCatalogProvider` with categories → stores → active offers. `useClientCatalog()` / `StoreRelatedPanel` reuse this on store pages (and anywhere else you add client UI).
 - **`app/(default)/layout.tsx`** — same shell as home: `HomeHeader`, `HomeFooter`, `home.css` (`.default-main` content width 1280px; in-content links slate, not legacy green). App font: **Plus Jakarta Sans** via `next/font` on root `app/layout.tsx` (`--font-app`).
 - `/categories/[slug]` — stores in that category; each row shows a **larger logo tile** (image, inline `logoSvg`, or letter fallback), **title**, **short description** from `site-data` `description` (or a neutral fallback), **counts** of promo codes vs link-only offers, and one **View store** button to `/stores/[slug]`.
-- `/stores/[slug]` — hero: large logo on the left, **About this store** + `See provider details` CTA on the right (uses this store’s first active `referralUrl` from `getOffers`) plus an affiliate disclosure below the hero. **Top offers** (single block): all active offers for that store — clip-style cards when `couponCode` is set, otherwise partner-offer link cards as **Explore more** (`StoreRelatedOfferCards` + `getCuratedLinkCardCopyForExploreMore`). Sort: **promo codes first**, then link-only offers. **Explore more** uses the same ordering for peer offers. Home `/` uses **Offer details this month** + **Partner offer guides** rows with `getHotCashbackOffers()` (slugs that appear in the monthly row are omitted from the partner-offer strip).
+- `/stores/[slug]` — hero: large logo on the left, **About this store** + `See provider details` CTA on the right (uses this store’s first active `referralUrl` from `getOffers`) plus an affiliate disclosure below the hero. Active rows from `content/promos.json` for this slug render above the offers. **Top offers** (single block): all active offers for that store — clip-style cards when `couponCode` is set, otherwise partner-offer link cards as **Explore more** (`StoreRelatedOfferCards` + `getCuratedLinkCardCopyForExploreMore`). Sort: **promo codes first**, then link-only offers. **Explore more** uses the same ordering for peer offers. Home `/` uses **Offer details this month** + **Partner offer guides** rows with `getHotCashbackOffers()` (slugs that appear in the monthly row are omitted from the partner-offer strip).
 - `/coupons/[id]` — **308 permanent redirect** to `/stores/[slug]` for the offer’s store (`getStoreSlugForOfferId` in `site-data.ts`); unknown ids → 404. Legacy `/offers/*` still rewrites to `/coupons/*` in `next.config.ts`.
 
 ## Types

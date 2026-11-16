@@ -14,6 +14,8 @@ describe('llms.txt', () => {
     expect(text).toContain('https://bonusbridge.io/guides/rakuten-referral-bonus-how-it-works')
     expect(text).toContain('https://bonusbridge.io/stores/user-interviews')
     expect(text).toContain('https://bonusbridge.io/llms-full.txt')
+    expect(text).toContain('https://bonusbridge.io/promos')
+    expect(text).toContain('https://bonusbridge.io/promos.md')
     expect(text).not.toContain('/stores/lemonade')
     expect(text).not.toContain('/stores/visible')
     expect(text).not.toContain('/stores/amex-hilton-honors')

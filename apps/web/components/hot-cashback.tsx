@@ -78,7 +78,7 @@ export function HotCashback({
                 rel="noopener noreferrer sponsored"
                 partnerSlug={offer.slug}
                 event="bonus_cta"
-                eventParams={{ offer_slug: offer.slug, place: 'hot_cashback_cta' }}
+                eventParams={{ offer_slug: offer.slug, place: 'hot_cashback_cta', offer_id: offer.id }}
               >
                 {offer.ctaText}
               </TrackedOutboundLink>
