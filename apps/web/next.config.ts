@@ -27,7 +27,8 @@ const nextConfig: NextConfig = {
       beforeFiles: [
         { source: '/guides/:slug.md', destination: '/markdown/guides/:slug' },
         { source: '/articles/:slug.md', destination: '/markdown/articles/:slug' },
-        { source: '/stores/:slug.md', destination: '/markdown/stores/:slug' }
+        { source: '/stores/:slug.md', destination: '/markdown/stores/:slug' },
+        { source: '/promos.md', destination: '/markdown/promos' }
       ]
     }
   }

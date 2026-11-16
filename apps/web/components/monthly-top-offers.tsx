@@ -122,7 +122,7 @@ export function MonthlyTopOffers({
                   rel="noopener noreferrer sponsored"
                   partnerSlug={offer.slug}
                   event="bonus_cta"
-                  eventParams={{ offer_slug: offer.slug, place: 'monthly_offer_cta' }}
+                  eventParams={{ offer_slug: offer.slug, place: 'monthly_offer_cta', offer_id: offer.id }}
                 >
                   {offer.ctaText}
                 </TrackedOutboundLink>

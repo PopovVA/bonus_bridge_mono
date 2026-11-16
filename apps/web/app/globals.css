@@ -484,16 +484,24 @@ html.lenis body {
   background: var(--surface-2);
 }
 
+.home-nav__cluster {
+  display: contents;
+}
+
 .home-nav--primary .stores-nav {
   order: 1;
 }
 
-.home-nav--primary .home-nav__coupons-link {
+.home-nav--primary .home-nav__promos-link {
   order: 2;
 }
 
-.home-nav--primary .home-nav__articles-link {
+.home-nav--primary .home-nav__coupons-link {
   order: 3;
+}
+
+.home-nav--primary .home-nav__articles-link {
+  order: 4;
 }
 
 .chevron {
@@ -841,12 +849,21 @@ html.lenis body {
     grid-area: logo;
   }
 
-  .home-nav__articles-link {
+  .home-nav__cluster {
+    display: flex;
     grid-area: guides;
     justify-self: end;
+    align-items: center;
   }
 
-  .home-nav--primary > .home-nav__coupons-link {
+  .home-nav__articles-link,
+  .home-nav__promos-link {
+    grid-area: auto;
+    justify-self: auto;
+    padding: 0 10px;
+  }
+
+  .home-nav__coupons-link {
     display: none;
   }
 

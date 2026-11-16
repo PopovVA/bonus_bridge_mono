@@ -22,10 +22,11 @@ From repo root:
 - Current URL structure:
   - `/` — home (hero, top monthly offers, category carousel, featured coupon cards)
   - `/guides`, `/guides/[slug]` — comparison and explainer pages
+  - `/promos` — promo codes from `content/promos.json` (also `/promos.md`)
   - `/categories/[slug]`, `/stores/[slug]`, `/coupons/[id]` → permanent redirect to `/stores/[slug]` (index `/coupons` → `/`)
   - `/privacy` → `/privacy-policy`, `/cookies`, `/disclosures`, `/terms` → `/terms-of-service`
   - `/compare/rakuten-vs-topcashback` → `/guides/rakuten-vs-topcashback`
-  - Removed store URLs, including Lemonade, Visible, and Hilton Honors Amex, plus empty `/categories/food` and `/categories/travel`, 301 to a live page (`lib/legacy-redirects.ts`). `/llms.txt` lists the public sitemap paths. `/llms-full.txt` and `*.md` alternates are generated from the same guide, article, and store records.
+  - Removed store URLs, including Lemonade, Visible, and Hilton Honors Amex, plus empty `/categories/food` and `/categories/travel`, 301 to a live page (`lib/legacy-redirects.ts`). `/llms.txt` lists the public sitemap paths. `/llms-full.txt` and `*.md` alternates are generated from the same guide, article, store, and promo records.
 - Every SEO page should include title/meta, clear H1, and internal links where relevant.
 
 ## Data/typing

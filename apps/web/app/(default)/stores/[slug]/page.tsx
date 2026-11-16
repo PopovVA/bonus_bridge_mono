@@ -18,9 +18,14 @@ import { StorePageOpenPartnerLink } from '@/components/store-page-open-partner-l
 import { SiteDisclosure } from '@/components/site-disclosure'
 import { StoreTopOffers } from '@/components/store-top-offers'
 import { StoreRelatedPanel } from '@/components/store-related-panel'
+import { PromoBoard } from '@/components/promo-board'
+import { activePromosForStore, toPromoCard } from '@/lib/promo-entries'
+import { promos } from '@/lib/promos'
 import { getCategories, getOffers, getServiceBySlug, megaMenuStoreImageSrc } from '@/lib/site-data'
 import { guidesForStore } from '@/lib/guides'
 import { getReferralProgram } from '@/lib/referral-programs'
+
+export const revalidate = 3600
 
 const STORE_PAGE_FALLBACK_BLURB =
   'This store is on BonusBridge so you can review referral and sign-up offer details in one place. Use the cards below to copy a code or link and open the provider page in a new tab.'
@@ -89,6 +94,8 @@ export default async function StorePage({ params }: Props) {
     }))
   }
   const visibleCoupons = hidePublicReferral ? [] : coupons
+  const promoNow = new Date()
+  const activeStorePromoItems = hidePublicReferral ? [] : activePromosForStore(slug, promos, promoNow)
   const primaryPromo = visibleCoupons[0]
   const openStoreUrl = primaryPromo?.referralUrl ?? null
   const hasMainOffers = visibleCoupons.length > 0
@@ -163,7 +170,7 @@ export default async function StorePage({ params }: Props) {
             <p className="store-page-about-body">{aboutText}</p>
             <SiteDisclosure className="site-disclosure--store" />
             {openStoreUrl && !bonus ? (
-              <StorePageOpenPartnerLink href={openStoreUrl} storeSlug={slug}>
+              <StorePageOpenPartnerLink href={openStoreUrl} storeSlug={slug} offerId={primaryPromo!.id}>
                 See provider details
               </StorePageOpenPartnerLink>
             ) : null}
@@ -212,7 +219,15 @@ export default async function StorePage({ params }: Props) {
         </div>
       ) : null}
 
-      {!hasMainOffers ? (
+      {activeStorePromoItems.length > 0 ? (
+        <PromoBoard
+          items={activeStorePromoItems.map((item) => toPromoCard(item, new Set([slug])))}
+          nowIso={promoNow.toISOString()}
+          mode="store"
+        />
+      ) : null}
+
+      {!hasMainOffers && activeStorePromoItems.length === 0 ? (
         <EmptyState
           message={
             hidePublicReferral

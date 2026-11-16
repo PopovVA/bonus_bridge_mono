@@ -141,6 +141,8 @@ describe('content markdown', () => {
     expect(await storeMarkdownBySlug('missing-store')).toBeNull()
     const full = await buildLlmsFullTxt()
     expect(full).toContain('# BonusBridge')
+    expect(full).toContain('# Promo codes and limited-time offers')
+    expect(full).toContain('No promo codes are listed right now.')
     expect(full).toContain('/guides/rakuten-referral-bonus-how-it-works')
     expect(full).toContain('/stores/user-interviews')
     expect(full).not.toContain(EM_DASH)

@@ -46,3 +46,25 @@ export function trackReferralClick(partnerSlug: string, place: string, extra?: G
     page_path: pagePath
   })
 }
+
+export type PromoTrackStatus = 'active' | 'expired'
+
+/** Copy or official-link click on a promo code card. Uses the same gtag path as `bonus_cta`. */
+export function trackPromoEvent(
+  eventName: 'promo_copy' | 'promo_click',
+  input: {
+    promoId: string
+    storeSlug: string
+    place: string
+    promoStatus: PromoTrackStatus
+  }
+): void {
+  const pagePath = typeof window === 'undefined' ? undefined : window.location.pathname
+  trackGtagEvent(eventName, {
+    promo_id: input.promoId,
+    store_slug: input.storeSlug,
+    page_path: pagePath,
+    place: input.place,
+    promo_status: input.promoStatus
+  })
+}

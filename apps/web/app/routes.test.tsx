@@ -2,6 +2,20 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 
+const { promoFixture } = vi.hoisted(() => ({
+  promoFixture: { items: [] as unknown[] }
+}))
+
+vi.mock('@/lib/promos', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/promos')>()
+  return {
+    ...actual,
+    get promos() {
+      return promoFixture.items as typeof actual.promos
+    }
+  }
+})
+
 vi.mock('@/lib/site-data', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/site-data')>()
   return {
@@ -102,6 +116,7 @@ vi.mocked(getClientCatalog).mockResolvedValue({ categories: [] })
 
 describe('web routes', () => {
   beforeEach(() => {
+    promoFixture.items = []
     vi.mocked(getAllHotCashbackOffers).mockReset()
     vi.mocked(getAllHotCashbackOffers).mockResolvedValue([])
     vi.mocked(getCategories).mockReset()
@@ -299,6 +314,9 @@ describe('web routes', () => {
     expect(html).toContain('Stores')
     expect(html).toContain('Coupons')
     expect(html).toContain('Guides')
+    expect(html).toContain('href="/promos"')
+    expect(html).toContain('Promos')
+    expect(html).toContain('Promo codes')
     expect(html).toContain('Contact')
     expect(html).toContain('affiliate commission')
   })
@@ -760,5 +778,72 @@ describe('web routes', () => {
     await expect(
       generateStoreMetadata({ params: Promise.resolve({ slug: 'store' }) })
     ).resolves.toMatchObject({ title: 'Store not found' })
+  })
+
+  it('shows active promo codes on a store page and hides the empty state', async () => {
+    promoFixture.items = [
+      {
+        id: 'store-spring',
+        store: 'Store',
+        storeSlug: 'store',
+        title: 'Spring welcome code',
+        code: 'SPRING20',
+        description: 'New customers save on the first order.',
+        terms: 'One use. US shoppers only.',
+        url: 'https://example.com/official-offer',
+        startsAt: null,
+        expiresAt: '2099-01-01T00:00:00Z',
+        source: 'brand newsletter',
+        checkedAt: '2026-11-16',
+        category: 'shopping'
+      }
+    ]
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's1',
+      name: 'Store',
+      slug: 'store',
+      categoryId: 'c1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([])
+    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'store' }) }))
+    expect(html).toContain('SPRING20')
+    expect(html).toContain('Promo codes')
+    expect(html).toContain('https://example.com/official-offer')
+    expect(html).toContain('Copy code')
+    expect(html).not.toContain('No active promo codes or offers for this store yet.')
+  })
+
+  it('keeps an expired promo code off the store page', async () => {
+    promoFixture.items = [
+      {
+        id: 'store-old',
+        store: 'Store',
+        storeSlug: 'store',
+        title: 'Old code',
+        code: 'OLDCODE',
+        description: 'This offer has ended.',
+        terms: 'Ended last year.',
+        url: 'https://example.com/old-offer',
+        startsAt: null,
+        expiresAt: '2000-01-01T00:00:00Z',
+        source: 'brand newsletter',
+        checkedAt: '2026-11-16',
+        category: null
+      }
+    ]
+    vi.mocked(getServiceBySlug).mockResolvedValue({
+      id: 's1',
+      name: 'Store',
+      slug: 'store',
+      categoryId: 'c1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    } as never)
+    vi.mocked(getOffers).mockResolvedValue([])
+    const html = renderToStaticMarkup(await StorePage({ params: Promise.resolve({ slug: 'store' }) }))
+    expect(html).not.toContain('OLDCODE')
+    expect(html).toContain('No active promo codes or offers for this store yet.')
   })
 })

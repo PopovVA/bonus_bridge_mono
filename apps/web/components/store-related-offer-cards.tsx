@@ -58,7 +58,7 @@ export function StoreRelatedOfferCards({ offers, labelledBy }: Props) {
   const handleCodeClick = useCallback(
     (o: StoreRelatedOfferCard) => {
       const copyValue = o.couponCode?.trim() ? o.couponCode.trim() : o.referralUrl
-      void runClipFlow(copyValue, o.referralUrl, o.serviceSlug)
+      void runClipFlow(copyValue, o.referralUrl, o.serviceSlug, o.id)
     },
     [runClipFlow]
   )
