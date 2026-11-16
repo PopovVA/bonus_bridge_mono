@@ -72,7 +72,7 @@ export default function CookiesPage() {
         </p>
         <p>
           Privacy questions: <a href={`mailto:${LEGAL_CONTACT_EMAIL}`}>{LEGAL_CONTACT_EMAIL}</a>. See also the{' '}
-          <Link href="/privacy">Privacy Policy</Link> and <Link href="/disclosures">referral disclosures</Link>.
+          <Link href="/privacy-policy">Privacy Policy</Link> and <Link href="/disclosures">referral disclosures</Link>.
         </p>
       </section>
     </article>

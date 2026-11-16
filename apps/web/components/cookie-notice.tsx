@@ -27,7 +27,7 @@ export function CookieNotice() {
       <p className="cookie-notice__text">
         BonusBridge uses a cookie to remember this choice. Analytics cookies load only if you accept. Referral links
         may set cookies on the provider site. Read the <Link href="/cookies">Cookie Notice</Link> and{' '}
-        <Link href="/privacy">Privacy Policy</Link>.
+        <Link href="/privacy-policy">Privacy Policy</Link>.
       </p>
       <div className="cookie-notice__actions">
         <button type="button" className="cookie-notice__decline" onClick={() => choose('declined')}>

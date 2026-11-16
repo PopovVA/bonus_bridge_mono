@@ -114,7 +114,7 @@ export default function DisclosuresPage() {
           banner is accepted.
         </p>
         <p>
-          Read the <Link href="/guides">comparison guides</Link>, <Link href="/privacy">Privacy Policy</Link>, and{' '}
+          Read the <Link href="/guides">comparison guides</Link>, <Link href="/privacy-policy">Privacy Policy</Link>, and{' '}
           <Link href="/cookies">Cookie Notice</Link>.
         </p>
       </section>
