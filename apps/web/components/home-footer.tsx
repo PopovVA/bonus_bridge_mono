@@ -9,7 +9,7 @@ const EXPLORE = [
 ]
 
 const LEGAL = [
-  { href: '/privacy', label: 'Privacy Policy', event: 'footer_privacy' },
+  { href: '/privacy-policy', label: 'Privacy Policy', event: 'footer_privacy' },
   { href: '/cookies', label: 'Cookie Notice', event: 'footer_cookies' },
   { href: '/disclosures', label: 'Disclosures', event: 'footer_disclosures' },
   { href: '/terms-of-service', label: 'Terms of Service', event: 'footer_terms' }
