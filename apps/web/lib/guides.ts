@@ -2,8 +2,9 @@
  * Long-tail comparison and explainer pages. Copy stays inside Bucket 1 terms:
  * no fixed Rakuten dollar guarantee, no Lyft dollar amount, Chime capped at 10/year.
  */
-import { FTC_AFFILIATE_DISCLOSURE } from '@/lib/site-disclaimers'
 import { absoluteUrl } from '@/app/seo'
+import { rakutenReferralBonusGuide, topcashbackReferralGuide } from '@/lib/guide-entries'
+import { FTC_AFFILIATE_DISCLOSURE } from '@/lib/site-disclaimers'
 
 export type GuideLink = {
   href: string
@@ -45,6 +46,7 @@ export type Guide = {
 
 const UPDATED = '2026-11-05T18:00:00.000Z'
 const SEO_GUIDES_DATE = '2026-11-09T18:00:00.000Z'
+const GUIDE_CHECKED = '2026-11-13T18:00:00.000Z'
 
 export const guideList: Guide[] = [
   {
@@ -54,7 +56,7 @@ export const guideList: Guide[] = [
     description:
       'Compare Rakuten and TopCashback signup bonuses, payout thresholds, exclusions, windows, and which cash-back portal fits a purchase.',
     publishedAt: UPDATED,
-    updatedAt: UPDATED,
+    updatedAt: GUIDE_CHECKED,
     sections: [
       {
         id: 'what-this-compares',
@@ -77,15 +79,17 @@ export const guideList: Guide[] = [
         id: 'bonuses',
         heading: 'Signup and referral bonuses',
         paragraphs: [
-          'Rakuten’s Refer-A-Friend terms allow a link on a site you own. The welcome bonus shown to a new member varies by the promo that is active when they join. It typically requires a qualifying Cash Back purchase within 90 days. Do not treat a single dollar figure as guaranteed across every visit.',
-          'TopCashback’s current refer-a-friend terms pay the referrer $10 after the new member has $10 in eligible Cash Back within 365 days. The invitee’s own signup bonus depends on the promo running that day. Many retailers do not count toward the $10.'
+          'Rakuten’s Refer-A-Friend terms allow a link on a site you own. The welcome bonus shown to a new member varies by the promo that is active when they join. It typically requires a qualifying Cash Back purchase within 90 days. Do not treat a single dollar figure as guaranteed across every visit. The Referral Site offer checked on Nov 13, 2026, including the $50 figure and its end date, is written up in the Rakuten referral bonus guide.',
+          'TopCashback’s refer-a-friend terms, checked Nov 13, 2026, pay the referrer $10 after the new member has $10 in eligible available Cash Back within 365 days. The invitee’s own signup bonus depends on the promo running that day. Many retailers do not count toward the $10. General site terms cap referral bonuses earned through comparison websites at $5 per referral unless TopCashback gives signed written consent.'
         ],
         bullets: [
-          'Rakuten window: qualifying Cash Back purchase, commonly within 90 days.',
-          'TopCashback window: $10 eligible Cash Back within 365 days for the referrer $10.',
+          'Rakuten window: qualifying Cash Back purchase, commonly within 90 days. The dated $50 offer is not a standing guarantee.',
+          'TopCashback window: $10 eligible available Cash Back within 365 days for the referrer $10.',
           'Neither bonus replaces reading the in-cart exclusions.'
         ],
         links: [
+          { href: '/guides/rakuten-referral-bonus-how-it-works', label: 'Rakuten referral bonus: how it works' },
+          { href: '/guides/topcashback-referral-program', label: 'TopCashback referral requirements' },
           { href: 'https://www.rakuten.com/help/article/referral-program-terms', label: 'Rakuten referral terms' },
           { href: 'https://www.topcashback.com/referrals/terms/', label: 'TopCashback referral terms' }
         ]
@@ -126,9 +130,9 @@ export const guideList: Guide[] = [
       caption: 'Rakuten and TopCashback side by side',
       columns: ['Topic', 'Rakuten', 'TopCashback'],
       rows: [
-        ['Referrer bonus', 'Varies with the active promo. Confirm on the signup page.', '$10 after the invitee reaches $10 eligible Cash Back'],
+        ['Referrer bonus', 'Varies with the active promo. The Nov 13, 2026 Referral Site offer was $50. Confirm before you rely on it.', '$10 after the invitee reaches $10 eligible available Cash Back'],
         ['Invitee bonus', 'Welcome offer varies. Not a fixed public guarantee.', 'Depends on the promo active at signup'],
-        ['Qualification window', 'Qualifying Cash Back purchase, typically within 90 days', '365 days to reach $10 eligible Cash Back'],
+        ['Qualification window', 'Qualifying Cash Back purchase, typically within 90 days', '365 days to reach $10 eligible available Cash Back'],
         ['Common exclusions', 'Amazon.com (with narrow exceptions) and non-qualifying categories', 'Many retailers excluded from eligible Cash Back'],
         ['Payout methods', 'PayPal, check, or gift card once payable and above the minimum', 'PayPal and other methods shown in the account'],
         ['Owned-site sharing', 'Allowed on pages you own and control', 'Allowed with privacy, cookie, and FTC notices']
@@ -143,7 +147,7 @@ export const guideList: Guide[] = [
       {
         question: 'When does the TopCashback referrer get $10?',
         answer:
-          'After the new member earns $10 in eligible Cash Back within 365 days. Pending or excluded purchases do not count. The invitee bonus is whatever promo was advertised when they joined.'
+          'After the new member earns $10 in eligible available Cash Back within 365 days. Pending or excluded purchases do not count. Comparison websites are capped at $5 per referral unless TopCashback gives signed written consent. The invitee bonus is whatever promo was advertised when they joined. Checked Nov 13, 2026.'
       },
       {
         question: 'Can I use Rakuten and TopCashback on the same order?',
@@ -157,6 +161,8 @@ export const guideList: Guide[] = [
       }
     ],
     related: [
+      { href: '/guides/rakuten-referral-bonus-how-it-works', label: 'Rakuten referral bonus: how it works' },
+      { href: '/guides/topcashback-referral-program', label: 'TopCashback referral requirements' },
       { href: '/guides/how-cashback-signup-bonuses-work', label: 'How cashback signup bonuses work' },
       { href: '/guides/best-cashback-portals-2026', label: 'Best US cashback portals for 2026' },
       { href: '/categories/shopping', label: 'Shopping stores' }
@@ -166,6 +172,7 @@ export const guideList: Guide[] = [
       { href: 'https://www.topcashback.com/ref/member344836925437', label: 'Open TopCashback' }
     ]
   },
+  rakutenReferralBonusGuide,
   {
     slug: 'how-cashback-signup-bonuses-work',
     metaTitle: 'How Cashback Sign-Up Bonuses Work | BonusBridge',
@@ -173,7 +180,7 @@ export const guideList: Guide[] = [
     description:
       'Pending versus payable cash back, excluded categories, portal clicks versus extensions, and why a referral bonus fails to track.',
     publishedAt: UPDATED,
-    updatedAt: UPDATED,
+    updatedAt: GUIDE_CHECKED,
     sections: [
       {
         id: 'two-kinds',
@@ -251,7 +258,7 @@ export const guideList: Guide[] = [
       {
         question: 'Why did my referral bonus stay at zero after a purchase?',
         answer:
-          'The order may still be pending, the store may be excluded, or another extension overwrote the click. Signup bonuses also ignore purchases outside the window, often 90 days at Rakuten and 365 days to reach TopCashback’s $10 eligible total.'
+          'The order may still be pending, the store may be excluded, or another extension overwrote the click. Signup bonuses also ignore purchases outside the window, often 90 days at Rakuten and 365 days to reach TopCashback’s $10 eligible available total.'
       },
       {
         question: 'Do coupon codes block cash back?',
@@ -269,6 +276,8 @@ export const guideList: Guide[] = [
       }
     ],
     related: [
+      { href: '/guides/rakuten-referral-bonus-how-it-works', label: 'Rakuten referral bonus: how it works' },
+      { href: '/guides/topcashback-referral-program', label: 'TopCashback referral requirements' },
       { href: '/guides/rakuten-vs-topcashback', label: 'Rakuten vs TopCashback' },
       { href: '/stores/rakuten', label: 'Rakuten' },
       { href: '/stores/topcashback', label: 'TopCashback' }
@@ -399,7 +408,7 @@ export const guideList: Guide[] = [
     description:
       'An honest 2026 look at Rakuten, TopCashback, and PayPal Honey, plus practical stacking rules that keep cash back from falling off.',
     publishedAt: UPDATED,
-    updatedAt: UPDATED,
+    updatedAt: GUIDE_CHECKED,
     sections: [
       {
         id: 'how-we-chose',
@@ -423,7 +432,7 @@ export const guideList: Guide[] = [
         heading: 'The portals',
         paragraphs: [
           'Rakuten fits shoppers who want in-store and online rates and a welcome bonus that changes with the promo. Plan on a qualifying Cash Back purchase within about 90 days, and do not assume Amazon pays.',
-          'TopCashback fits shoppers who want a long window. The referrer side of the current promo is $10 after $10 of eligible Cash Back inside 365 days. Compare the merchant rate against Rakuten the same day.',
+          'TopCashback fits shoppers who want a long window. The referrer side of the current promo is $10 after $10 of eligible available Cash Back inside 365 days. Comparison websites are capped at $5 per referral unless TopCashback gives signed written consent. Compare the merchant rate against Rakuten the same day.',
           'PayPal Honey fits shoppers who want coupon tests and PayPal Rewards points. A referral may pay 500 points after a friend’s purchase confirms, often 60 to 90 days later. Do not describe that as instant cash, and do not stack Honey on top of another portal for the same order.'
         ],
         bullets: [
@@ -475,7 +484,7 @@ export const guideList: Guide[] = [
       columns: ['Portal', 'You receive', 'Watch-out'],
       rows: [
         ['Rakuten', 'Cash back plus a variable welcome bonus', 'Amazon exclusions and a roughly 90-day qualifying purchase'],
-        ['TopCashback', 'Cash back; referrer $10 after a $10 eligible threshold', 'Many retailers excluded from the 365-day threshold'],
+        ['TopCashback', 'Cash back; referrer $10 after a $10 eligible available threshold', 'Many retailers excluded from the 365-day threshold. Comparison sites may be capped at $5'],
         ['PayPal Honey', 'Coupons and PayPal Rewards points', '500 points is not cash and can take 60 to 90 days']
       ]
     },
@@ -501,6 +510,8 @@ export const guideList: Guide[] = [
       }
     ],
     related: [
+      { href: '/guides/rakuten-referral-bonus-how-it-works', label: 'Rakuten referral bonus: how it works' },
+      { href: '/guides/topcashback-referral-program', label: 'TopCashback referral requirements' },
       { href: '/guides/rakuten-vs-topcashback', label: 'Rakuten vs TopCashback' },
       { href: '/categories/shopping', label: 'Shopping stores' },
       { href: '/categories/electronics', label: 'Electronics stores' }
@@ -511,97 +522,7 @@ export const guideList: Guide[] = [
       { href: 'https://www.joinhoney.com/ref/nwpz6sw', label: 'PayPal Honey' }
     ]
   },
-  {
-    slug: 'topcashback-referral-program',
-    metaTitle: 'TopCashback Referral Program Explained | BonusBridge',
-    h1: 'TopCashback referral program: who gets the $10',
-    description:
-      'Who gets the $10, what counts toward the $10 Cash Back threshold, the 365-day window, and what TopCashback’s terms do not promise new members.',
-    publishedAt: SEO_GUIDES_DATE,
-    updatedAt: SEO_GUIDES_DATE,
-    sections: [
-      {
-        id: 'who-gets-what',
-        heading: 'Who gets what',
-        paragraphs: [
-          'TopCashback’s US referral terms pay the member who shares the link $10 Cash Back for each qualifying referral. The same terms do not state a fixed referral bonus for the new member. Any welcome offer you see when you join is set by TopCashback at that time.',
-          'If you join through the BonusBridge link and qualify, BonusBridge may receive that $10. You pay nothing extra.'
-        ],
-        bullets: [
-          'Referrer: $10 Cash Back per qualifying referral.',
-          'New member: no fixed amount in the referral terms.',
-          'TopCashback says the amount and the qualifying period are subject to change.'
-        ],
-        links: [{ href: 'https://www.topcashback.com/referrals/terms/', label: 'TopCashback referral terms' }]
-      },
-      {
-        id: 'qualifying',
-        heading: 'What makes a referral qualify',
-        paragraphs: [
-          'The new member clicks the referral link, signs up, verifies the account, and then earns at least $10 in eligible Cash Back within 365 days of joining.',
-          'Eligible is the key word. Purchases at excluded retailers do not count, and goodwill or bonus Cash Back does not count toward the $10.'
-        ],
-        bullets: [
-          'Sign up through the link itself, not a later visit to the home page.',
-          'Verify the account. An unverified account cannot qualify.',
-          'Only eligible Cash Back counts toward the $10.',
-          'The clock is 365 days from joining.'
-        ],
-        links: [{ href: '/guides/how-cashback-signup-bonuses-work', label: 'Pending versus payable Cash Back' }]
-      },
-      {
-        id: 'tracking',
-        heading: 'Make your purchases count',
-        paragraphs: [
-          'Cash Back only counts if the purchase tracks. Start each order from TopCashback, finish it in the same browser, and switch off other coupon or cash-back extensions for that checkout.',
-          'Pending Cash Back is not yet eligible. A return removes it, so the $10 can take longer than the first order.'
-        ],
-        bullets: [
-          'One portal or extension per order.',
-          'Keep the order confirmation email for missing Cash Back claims.',
-          'Check the store page on TopCashback for exclusions before you buy.'
-        ],
-        links: [{ href: '/guides/rakuten-vs-topcashback', label: 'Rakuten vs TopCashback' }]
-      }
-    ],
-    table: {
-      caption: 'TopCashback referral at a glance',
-      columns: ['Item', 'What the terms say'],
-      rows: [
-        ['Referrer reward', '$10 Cash Back per qualifying referral'],
-        ['New member reward', 'Not stated in the referral terms'],
-        ['Threshold', '$10 of eligible Cash Back'],
-        ['Window', '365 days from joining'],
-        ['Does not count', 'Excluded retailers, goodwill or bonus Cash Back'],
-        ['Can it change?', 'Yes, amount and period are subject to change']
-      ]
-    },
-    faqs: [
-      {
-        question: 'Do I get $10 for joining TopCashback through a referral link?',
-        answer:
-          'The referral terms pay the $10 to the member who shared the link. They do not state a fixed amount for the new member. Check TopCashback’s sign-up page for any welcome offer running when you join.'
-      },
-      {
-        question: 'How long do I have to reach $10 in Cash Back?',
-        answer: '365 days from the day you join, counting only eligible Cash Back.'
-      },
-      {
-        question: 'Does bonus Cash Back count toward the $10?',
-        answer: 'No. TopCashback’s terms exclude goodwill and bonus Cash Back, and purchases at excluded retailers.'
-      },
-      {
-        question: 'How does BonusBridge get paid?',
-        answer: FTC_AFFILIATE_DISCLOSURE
-      }
-    ],
-    related: [
-      { href: '/stores/topcashback', label: 'TopCashback' },
-      { href: '/guides/rakuten-vs-topcashback', label: 'Rakuten vs TopCashback' },
-      { href: '/guides/how-cashback-signup-bonuses-work', label: 'How cashback sign-up bonuses work' }
-    ],
-    outbound: [{ href: 'https://www.topcashback.com/ref/member344836925437', label: 'Join TopCashback' }]
-  },
+  topcashbackReferralGuide,
   {
     slug: 'paypal-honey-referral-points',
     metaTitle: 'PayPal Honey Referral Points Explained | BonusBridge',
@@ -696,18 +617,29 @@ export const guideList: Guide[] = [
 
 const CATEGORY_GUIDE_SLUGS: Record<string, string[]> = {
   shopping: [
+    'rakuten-referral-bonus-how-it-works',
     'rakuten-vs-topcashback',
     'topcashback-referral-program',
     'paypal-honey-referral-points',
     'how-cashback-signup-bonuses-work',
     'best-cashback-portals-2026'
   ],
-  electronics: ['rakuten-vs-topcashback', 'how-cashback-signup-bonuses-work', 'best-cashback-portals-2026'],
+  electronics: [
+    'rakuten-referral-bonus-how-it-works',
+    'rakuten-vs-topcashback',
+    'how-cashback-signup-bonuses-work',
+    'best-cashback-portals-2026'
+  ],
   finance: ['chime-referral-requirements', 'how-cashback-signup-bonuses-work']
 }
 
 const STORE_GUIDE_SLUGS: Record<string, string[]> = {
-  rakuten: ['rakuten-vs-topcashback', 'how-cashback-signup-bonuses-work', 'best-cashback-portals-2026'],
+  rakuten: [
+    'rakuten-referral-bonus-how-it-works',
+    'rakuten-vs-topcashback',
+    'how-cashback-signup-bonuses-work',
+    'best-cashback-portals-2026'
+  ],
   topcashback: ['topcashback-referral-program', 'rakuten-vs-topcashback', 'how-cashback-signup-bonuses-work'],
   honey: ['paypal-honey-referral-points', 'best-cashback-portals-2026', 'how-cashback-signup-bonuses-work'],
   chime: ['chime-referral-requirements'],
@@ -748,37 +680,40 @@ export function formatGuideDate(iso: string): string {
 
 export function guideJsonLd(guide: Guide) {
   const pageUrl = absoluteUrl(`/guides/${guide.slug}`)
+  const graph: Record<string, unknown>[] = [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+        { '@type': 'ListItem', position: 2, name: 'Guides', item: absoluteUrl('/guides') },
+        { '@type': 'ListItem', position: 3, name: guide.h1, item: pageUrl }
+      ]
+    },
+    {
+      '@type': 'Article',
+      headline: guide.h1,
+      description: guide.description,
+      datePublished: guide.publishedAt,
+      dateModified: guide.updatedAt,
+      url: pageUrl,
+      author: { '@type': 'Organization', name: 'BonusBridge' },
+      publisher: { '@type': 'Organization', name: 'BonusBridge' },
+      mainEntityOfPage: pageUrl
+    }
+  ]
+  if (guide.faqs.length > 0) {
+    graph.push({
+      '@type': 'FAQPage',
+      mainEntity: guide.faqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: { '@type': 'Answer', text: faq.answer }
+      }))
+    })
+  }
   return {
     '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
-          { '@type': 'ListItem', position: 2, name: 'Guides', item: absoluteUrl('/guides') },
-          { '@type': 'ListItem', position: 3, name: guide.h1, item: pageUrl }
-        ]
-      },
-      {
-        '@type': 'Article',
-        headline: guide.h1,
-        description: guide.description,
-        datePublished: guide.publishedAt,
-        dateModified: guide.updatedAt,
-        url: pageUrl,
-        author: { '@type': 'Organization', name: 'BonusBridge' },
-        publisher: { '@type': 'Organization', name: 'BonusBridge' },
-        mainEntityOfPage: pageUrl
-      },
-      {
-        '@type': 'FAQPage',
-        mainEntity: guide.faqs.map((faq) => ({
-          '@type': 'Question',
-          name: faq.question,
-          acceptedAnswer: { '@type': 'Answer', text: faq.answer }
-        }))
-      }
-    ]
+    '@graph': graph
   }
 }
 

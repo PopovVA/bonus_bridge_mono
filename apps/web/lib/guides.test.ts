@@ -19,9 +19,9 @@ function sample(overrides: Partial<Guide> = {}): Guide {
 
 describe('guides', () => {
   it('publishes unique titles within the search-result limit', () => {
-    expect(guideList).toHaveLength(6)
+    expect(guideList).toHaveLength(7)
     const titles = guideList.map((guide) => guide.metaTitle)
-    expect(new Set(titles).size).toBe(6)
+    expect(new Set(titles).size).toBe(7)
     for (const guide of guideList) {
       expect(guide.metaTitle.length).toBeLessThanOrEqual(60)
       expect(guide.h1.length).toBeGreaterThan(0)
@@ -34,7 +34,8 @@ describe('guides', () => {
     expect(guidesForCategory('shopping').map((guide) => guide.slug)).toContain('rakuten-vs-topcashback')
     expect(guidesForCategory('finance').map((guide) => guide.slug)).toContain('chime-referral-requirements')
     expect(guidesForCategory('travel')).toEqual([])
-    expect(guidesForStore('rakuten').length).toBeGreaterThan(0)
+    expect(guidesForStore('rakuten').map((guide) => guide.slug)).toContain('rakuten-referral-bonus-how-it-works')
+    expect(guidesForStore('topcashback').map((guide) => guide.slug)).toContain('topcashback-referral-program')
     expect(guidesForStore('uber')).toEqual([])
     expect(definedGuides(['missing-guide', 'rakuten-vs-topcashback']).map((guide) => guide.slug)).toEqual([
       'rakuten-vs-topcashback'
@@ -48,6 +49,13 @@ describe('guides', () => {
     if (!guide) throw new Error('missing chime guide')
     const graph = guideJsonLd(guide)['@graph']
     expect(graph.map((node) => node['@type'])).toEqual(['BreadcrumbList', 'Article', 'FAQPage'])
+    const article = graph[1] as { datePublished: string; dateModified: string }
+    expect(article.datePublished).toBe(guide.publishedAt)
+    expect(article.dateModified).toBe(guide.updatedAt)
+    const withoutFaq = guideJsonLd({ ...guide, faqs: [] })
+    expect(withoutFaq['@graph'].map((node) => node['@type'])).toEqual(['BreadcrumbList', 'Article'])
+    expect(getGuideBySlug('rakuten-referral-bonus-how-it-works')?.description).toContain('$50')
+    expect(getGuideBySlug('topcashback-referral-program')?.description).toContain('$10')
   })
 
   it('rejects an invalid guide catalog', () => {

@@ -21,6 +21,8 @@ export type SignupBonus = {
   sourceUrl: string
   /** ISO date the source page was last read. */
   checkedAt: string
+  /** Search snippet when the on-page condition is longer than a meta description. */
+  summary?: string
   /** Who sets the terms when it is not the provider itself (e.g. the card issuer). */
   setBy?: string
 }
@@ -69,6 +71,17 @@ const DRAFTS: SignupBonusDraft[] = [
     condition: 'Check the credit shown in the Lyft app before your first ride.',
     ctaLabel: 'Join Lyft',
     checkedAt: CHECKED
+  },
+  {
+    slug: 'user-interviews',
+    amount: '$10',
+    headline: 'each after the new participant is selected for and completes their first study',
+    condition:
+      'The new participant must be a first-time User Interviews signup. Existing accounts do not qualify. The researcher decides who is selected, so there is no guarantee you will be picked. Some featured studies pay a $30 two-way bonus. Bonuses are paid via Tremendous. The program can be suspended any time.',
+    summary:
+      'Both get $10 after a new participant is selected and completes a first study. First-time signups only. Some studies pay $30 each. Official User Interviews terms linked.',
+    ctaLabel: 'Join User Interviews',
+    checkedAt: '2026-11-16'
   }
 ]
 
@@ -126,13 +139,21 @@ export type StoreFaq = { question: string; answer: string }
 
 /** Search-intent title for a store page, e.g. "Chime referral bonus: $100 for new members". */
 export function storeSeoTitle(bonus: SignupBonus): string {
-  if (bonus.amount) return `${bonus.provider} referral bonus: ${bonus.amount} for new members`
+  const suffix = ' | BonusBridge'
+  if (bonus.amount) {
+    const full = `${bonus.provider} referral bonus: ${bonus.amount} for new members`
+    if (full.length + suffix.length <= 60) return full
+    const compact = `${bonus.provider}: ${bonus.amount} referral bonus`
+    if (compact.length + suffix.length <= 60) return compact
+    return `${bonus.amount} referral bonus`
+  }
   const title = `${bonus.provider} referral program: terms explained`
   /* Keep "<title> | BonusBridge" within ~60 characters for long provider names */
   return title.length > 46 ? `${bonus.provider} referral and terms` : title
 }
 
 export function storeSeoDescription(bonus: SignupBonus): string {
+  if (bonus.summary) return bonus.summary
   const lead = bonus.amount ? `${bonus.amount} ${bonus.headline}. ` : `${bonus.headline}. `
   return `${lead}${bonus.condition} Official ${bonus.provider} terms linked.`
 }

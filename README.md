@@ -2,7 +2,7 @@
 
 Public SEO site with **fixed in-repo content** (no separate API or admin app).
 
-- `apps/web` — Next.js (`/`, `/articles`, `/articles/[slug]`, `/guides`, `/guides/[slug]`, `/stores/[slug]`, `/cookies`, `/disclosures`, `/privacy` → `/privacy-policy`, `/coupons` → `/`, `/coupons/[id]` → `/stores/[slug]`, `/llms.txt`) with Zod schemas in `apps/web/lib/schemas`. Public referral cards are limited to programs whose US terms allow an owned site (Rakuten, TopCashback, Lyft, Chime, and PayPal Honey). Lemonade, Visible, the Hilton Honors Amex Card, and the other removed programs are not in the catalog or the sitemap. Their old URLs return **301** to a live page (`apps/web/lib/legacy-redirects.ts`). Personal Public.com and SoFi referral links are not in the repo.
+- `apps/web` — Next.js (`/`, `/articles`, `/articles/[slug]`, `/guides`, `/guides/[slug]`, `/stores/[slug]`, `/cookies`, `/disclosures`, `/privacy` → `/privacy-policy`, `/coupons` → `/`, `/coupons/[id]` → `/stores/[slug]`, `/llms.txt`, `/llms-full.txt`) with Zod schemas in `apps/web/lib/schemas`. Guides, articles, and listed store pages also serve the same copy at the page URL plus `.md`. Public referral cards are limited to programs whose US terms allow an owned site (Rakuten, TopCashback, Lyft, Chime, and PayPal Honey). Lemonade, Visible, the Hilton Honors Amex Card, and the other removed programs are not in the catalog or the sitemap. Their old URLs return **301** to a live page (`apps/web/lib/legacy-redirects.ts`). Personal Public.com and SoFi referral links are not in the repo.
 
 **Content:** edit `apps/web/lib/site-data.ts` (categories, stores, coupons, hero slides, featured sections). Static images: `apps/web/public/`.
 

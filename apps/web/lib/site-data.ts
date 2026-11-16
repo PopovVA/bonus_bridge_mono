@@ -61,6 +61,13 @@ const categories: Category[] = [
     updatedAt: ISO
   },
   {
+    id: '11111111-1111-4111-8111-111111111110',
+    name: 'Side income',
+    slug: 'side-income',
+    createdAt: ISO,
+    updatedAt: '2026-11-16T12:00:00.000Z'
+  },
+  {
     id: '11111111-1111-4111-8111-111111111104',
     name: 'Travel',
     slug: 'travel',
@@ -76,6 +83,7 @@ const CATEGORY_STORE_ORDER: Record<string, string[]> = {
   finance: ['chime'],
   food: [],
   shopping: ['rakuten', 'topcashback', 'honey'],
+  'side-income': ['user-interviews'],
   /* Empty order → alphabetical sort in `sortServicesForCategorySlug`. */
   travel: []
 }
@@ -165,6 +173,7 @@ const CAT = {
   finance: '11111111-1111-4111-8111-111111111101',
   food: '11111111-1111-4111-8111-111111111103',
   shopping: '11111111-1111-4111-8111-111111111102',
+  sideIncome: '11111111-1111-4111-8111-111111111110',
   travel: '11111111-1111-4111-8111-111111111104'
 } as const
 
@@ -297,7 +306,7 @@ const services: Service[] = [
     extraCategorySlugs: ['shopping'],
     website: 'https://www.topcashback.com/',
     description:
-      'TopCashback pays cash back on eligible orders. The referrer bonus is $10 after a new member reaches $10 in eligible Cash Back within 365 days. The invitee bonus depends on the active promo.',
+      'TopCashback pays cash back on eligible orders. The referrer bonus is $10 after a new member reaches $10 in eligible available Cash Back within 365 days. The invitee bonus depends on the active promo. Comparison websites are capped at $5 per referral unless TopCashback gives signed written consent.',
     logoSvg: undefined,
     logoSrc: '/hot-cashback/logos/topcashback.png',
     createdAt: ISO,
@@ -407,6 +416,19 @@ const services: Service[] = [
     logoSrc: '/stores/airbnb.svg',
     createdAt: ISO,
     updatedAt: ISO
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222217',
+    name: 'User Interviews',
+    slug: 'user-interviews',
+    categoryId: CAT.sideIncome,
+    website: 'https://www.userinterviews.com/',
+    description:
+      'User Interviews pays people to take part in research studies. The general community referral pays $10 to the referrer and $10 to the new participant after that person is selected for and completes their first study. Some featured studies pay a $30 two-way bonus. The new participant must be a first-time User Interviews signup. Existing accounts do not qualify. The researcher chooses who is selected, so there is no guarantee you will be picked. Bonuses are paid via Tremendous. The program can be suspended any time.',
+    logoSvg: undefined,
+    logoSrc: '/stores/user-interviews.svg',
+    createdAt: '2026-11-16T12:00:00.000Z',
+    updatedAt: '2026-11-16T12:00:00.000Z'
   }
 ]
 
@@ -480,6 +502,21 @@ const offers: Offer[] = [
     status: 'active',
     createdAt: ISO,
     updatedAt: ISO
+  },
+  {
+    id: '33333333-3333-4333-8333-333333333312',
+    serviceId: '22222222-2222-4222-8222-222222222217',
+    title: 'User Interviews referral: $10 after a first study',
+    previewText: programClaim('user-interviews'),
+    couponCode: null,
+    bonusAmount: null,
+    description: null,
+    referralUrl: requirePublicReferralUrl('user-interviews'),
+    terms:
+      'Both get $10 after the new participant is selected for and completes a first study. First-time signups only. Some featured studies pay $30 each. Selection is not guaranteed. Paid via Tremendous. The program can be suspended. Checked Nov 16, 2026.',
+    status: 'active',
+    createdAt: '2026-11-16T12:00:00.000Z',
+    updatedAt: '2026-11-16T12:00:00.000Z'
   },
   {
     id: '33333333-3333-4333-8333-333333333399',
