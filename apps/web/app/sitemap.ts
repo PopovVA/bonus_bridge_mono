@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { absoluteUrl } from '@/app/seo'
-import { listPublicSitemapPaths } from '@/lib/public-sitemap'
+import { lastModifiedForPath, listPublicSitemapPaths } from '@/lib/public-sitemap'
 
 function priorityFor(path: string): number {
   if (path === '/') return 1
@@ -12,9 +12,13 @@ function priorityFor(path: string): number {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const paths = await listPublicSitemapPaths()
-  return paths.map((path) => ({
-    url: absoluteUrl(path),
-    changeFrequency: 'weekly',
-    priority: priorityFor(path)
-  }))
+  return paths.map((path) => {
+    const lastModified = lastModifiedForPath(path)
+    return {
+      url: absoluteUrl(path),
+      changeFrequency: 'weekly' as const,
+      priority: priorityFor(path),
+      ...(lastModified ? { lastModified } : {})
+    }
+  })
 }

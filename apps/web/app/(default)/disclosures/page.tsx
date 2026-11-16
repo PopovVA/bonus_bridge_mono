@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { absoluteUrl } from '@/app/seo'
-import { COMPLIANCE_PAGES_UPDATED } from '@/lib/legal-site-meta'
 import { FTC_AFFILIATE_DISCLOSURE } from '@/lib/site-disclaimers'
 import { referralPrograms, type ReferralProgram } from '@/lib/referral-programs'
 
+const DISCLOSURES_UPDATED = '2026-11-16'
 const path = '/disclosures'
 
 function TermsLink({ program }: { program: ReferralProgram }) {
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 }
 
 export default function DisclosuresPage() {
-  const updated = new Date(`${COMPLIANCE_PAGES_UPDATED}T12:00:00.000Z`).toLocaleDateString('en-US', {
+  const updated = new Date(`${DISCLOSURES_UPDATED}T12:00:00.000Z`).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -54,7 +54,7 @@ export default function DisclosuresPage() {
       {
         '@type': 'Article',
         headline: 'How BonusBridge vets referral programs',
-        dateModified: `${COMPLIANCE_PAGES_UPDATED}T12:00:00.000Z`,
+        dateModified: `${DISCLOSURES_UPDATED}T12:00:00.000Z`,
         author: { '@type': 'Organization', name: 'BonusBridge' },
         publisher: { '@type': 'Organization', name: 'BonusBridge' }
       }
@@ -112,6 +112,11 @@ export default function DisclosuresPage() {
           November 13, 2026: removed the Lemonade, Visible, and Hilton Honors Amex referral pages. Unlisted store URLs and
           the empty food and travel categories now redirect to a live page. Analytics cookies load only after the cookie
           banner is accepted.
+        </p>
+        <p>
+          November 16, 2026: added User Interviews under Side income. The public link is the general signup referral.
+          Both people get $10 after a new participant is selected and completes a first study. Some featured studies pay
+          $30 each. Checked the official participant referral article on that date.
         </p>
         <p>
           Read the <Link href="/guides">comparison guides</Link>, <Link href="/privacy-policy">Privacy Policy</Link>, and{' '}

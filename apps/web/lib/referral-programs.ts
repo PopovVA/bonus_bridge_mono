@@ -55,7 +55,7 @@ const RAW_PROGRAMS: ReferralProgram[] = [
     referralUrl: 'https://www.topcashback.com/ref/member344836925437',
     termsUrl: 'https://www.topcashback.com/referrals/terms/',
     maxClaimText:
-      'The referrer bonus is $10 once a new member reaches $10 in eligible Cash Back within 365 days. The invitee bonus depends on the active promo. Many retailers are excluded.',
+      'The referrer bonus is $10 once a new member reaches $10 in eligible available Cash Back within 365 days. The invitee bonus depends on the active promo. Many retailers are excluded. Comparison websites are capped at $5 per referral unless TopCashback gives signed written consent. Checked Nov 13, 2026.',
     disclosures: [
       'A public website may share this link when a privacy notice, cookie notice, and FTC disclosure are present.'
     ]
@@ -96,6 +96,20 @@ const RAW_PROGRAMS: ReferralProgram[] = [
     maxClaimText:
       'Rewards are PayPal Rewards points, not instant cash. A referrer may receive 500 points after a friend’s eligible purchase confirms, often 60 to 90 days later.',
     disclosures: ['Point value and caps follow PayPal Honey’s terms. Do not describe the reward as cash.']
+  },
+  {
+    slug: 'user-interviews',
+    name: 'User Interviews',
+    bucket: 1,
+    publicOk: true,
+    referralUrl: 'https://www.userinterviews.com/r/kdqtpxzqk',
+    termsUrl:
+      'https://support.userinterviews.com/hc/en-us/articles/51535883439379-Earn-money-with-our-participant-referral-program',
+    maxClaimText:
+      'Both people get $10 after a new participant is selected for and completes their first study. The new participant must be a first-time User Interviews signup. Existing accounts do not qualify. Selection is up to the researcher, so there is no guarantee of being picked. Some featured studies pay a $30 two-way bonus. Bonuses are paid via Tremendous. The program can be suspended any time. Checked Nov 16, 2026.',
+    disclosures: [
+      'The public link is the general signup referral. It is not a link to one featured study. The program can be suspended any time.'
+    ]
   },
   {
     slug: 'public',

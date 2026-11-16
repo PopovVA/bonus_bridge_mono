@@ -58,6 +58,17 @@ export const HOT_CASHBACK_OFFERS: HotCashbackOffer[] = [
     ctaText: 'Get $100 with Chime',
     href: requirePublicReferralUrl('chime'),
     logoSrc: '/stores/chime.svg'
+  },
+  {
+    id: 'hot-cashback-user-interviews',
+    brandName: 'User Interviews',
+    slug: 'user-interviews',
+    badgeText: 'Terms apply',
+    headline: '$10 after a first study',
+    description: programClaim('user-interviews'),
+    ctaText: 'Join User Interviews',
+    href: requirePublicReferralUrl('user-interviews'),
+    logoSrc: '/stores/user-interviews.svg'
   }
 ]
 

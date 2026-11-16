@@ -50,7 +50,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (isNotPubliclyPromoted(slug)) {
     return { ...meta, robots: { index: false, follow: true } }
   }
-  return meta
+  return {
+    ...meta,
+    alternates: {
+      canonical: `/stores/${slug}`,
+      types: { 'text/markdown': `/stores/${slug}.md` }
+    }
+  }
 }
 
 export default async function StorePage({ params }: Props) {

@@ -21,6 +21,15 @@ const nextConfig: NextConfig = {
       },
       ...legacyRedirectRules()
     ]
+  },
+  async rewrites() {
+    return {
+      beforeFiles: [
+        { source: '/guides/:slug.md', destination: '/markdown/guides/:slug' },
+        { source: '/articles/:slug.md', destination: '/markdown/articles/:slug' },
+        { source: '/stores/:slug.md', destination: '/markdown/stores/:slug' }
+      ]
+    }
   }
 }
 

@@ -27,7 +27,7 @@ import {
 describe('site-data', () => {
   it('returns categories in alphabetical order by name', async () => {
     const list = await getCategories()
-    expect(list.length).toBe(6)
+    expect(list.length).toBe(7)
     const names = list.map((c) => c.name)
     expect([...names].sort((a, b) => a.localeCompare(b, 'en'))).toEqual(names)
     expect(list[0]).toMatchObject({ slug: 'auto', name: 'Auto' })
@@ -37,6 +37,7 @@ describe('site-data', () => {
       'finance',
       'food',
       'shopping',
+      'side-income',
       'travel'
     ])
   })
@@ -84,7 +85,7 @@ describe('site-data', () => {
 
   it('returns hot cashback offers for home without the monthly duplicate', async () => {
     const list = await getHotCashbackOffers()
-    expect(list.map((row) => row.slug)).toEqual(['rakuten', 'honey', 'chime'])
+    expect(list.map((row) => row.slug)).toEqual(['rakuten', 'honey', 'chime', 'user-interviews'])
     expect(list[0]?.href).toBe('https://www.rakuten.com/r/MVADIM7')
     expect(list[1]?.href).toBe('https://www.joinhoney.com/ref/nwpz6sw')
     expect(list[2]?.href).toBe('https://www.chime.com/r/vadimpopov1/')
@@ -92,7 +93,7 @@ describe('site-data', () => {
 
   it('returns the full hot cashback list without unlisted referral cards', async () => {
     const list = await getAllHotCashbackOffers()
-    expect(list).toHaveLength(4)
+    expect(list).toHaveLength(5)
     expect(list.find((o) => o.slug === 'public')).toBeUndefined()
     expect(list.find((o) => o.slug === 'klarna')).toBeUndefined()
     expect(list.find((o) => o.slug === 'lemonade')).toBeUndefined()
@@ -101,7 +102,7 @@ describe('site-data', () => {
 
   it('returns home category marquee chips in alphabetical order', async () => {
     const chips = await getHomeCategoryMarquee()
-    expect(chips.map((c) => c.slug)).toEqual(['auto', 'electronics', 'finance', 'shopping'])
+    expect(chips.map((c) => c.slug)).toEqual(['auto', 'electronics', 'finance', 'shopping', 'side-income'])
     expect(chips[0]?.imageSrc).toBe('/categories/auto.svg')
     expect(chips[0]?.href).toBe('/categories/auto')
     expect(chips.find((c) => c.slug === 'food')).toBeUndefined()
@@ -111,7 +112,7 @@ describe('site-data', () => {
 
   it('returns stores mega menu categories A–Z with store icons', async () => {
     const menu = await getStoresMegaMenu()
-    expect(menu.categories.map((c) => c.slug)).toEqual(['auto', 'electronics', 'finance', 'shopping'])
+    expect(menu.categories.map((c) => c.slug)).toEqual(['auto', 'electronics', 'finance', 'shopping', 'side-income'])
     expect(menu.categories[0]?.imageSrc).toBe('/categories/auto.svg')
     expect(menu.categories.find((c) => c.slug === 'food')).toBeUndefined()
     const menuNames = menu.categories.map((c) => c.name)
@@ -131,7 +132,10 @@ describe('site-data', () => {
 
   it('returns client catalog with stores and active offers per category', async () => {
     const catalog = await getClientCatalog()
-    expect(catalog.categories.length).toBe(4)
+    expect(catalog.categories.length).toBe(5)
+    expect(catalog.categories.find((c) => c.slug === 'side-income')?.stores.map((s) => s.slug)).toEqual([
+      'user-interviews'
+    ])
     const finance = catalog.categories.find((c) => c.slug === 'finance')
     expect(finance?.stores.map((s) => s.slug)).toEqual(['chime'])
     const chime = finance?.stores.find((s) => s.slug === 'chime')
@@ -205,7 +209,7 @@ describe('site-data', () => {
 
   it('filters offers by status, store slug, category', async () => {
     const active = await getOffers({ status: 'active' })
-    expect(active.length).toBe(6)
+    expect(active.length).toBe(7)
     const byStore = await getOffers({ status: 'active', service: 'chime' })
     expect(byStore.every((o) => o.serviceId === '22222222-2222-4222-8222-222222222210')).toBe(true)
     const byCat = await getOffers({ status: 'active', category: 'finance' })

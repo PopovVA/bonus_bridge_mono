@@ -71,7 +71,8 @@ const PUBLIC_REFERRAL_URLS = [
   'https://www.rakuten.com/r/MVADIM7',
   'https://www.topcashback.com/ref/member344836925437',
   'https://www.joinhoney.com/ref/nwpz6sw',
-  'https://www.chime.com/r/vadimpopov1/'
+  'https://www.chime.com/r/vadimpopov1/',
+  'https://www.userinterviews.com/r/kdqtpxzqk'
 ] as const
 
 const ALLOWED_NON_INVENTORY = ['https://example.com']

@@ -21,13 +21,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: { absolute: guide.metaTitle },
     description: guide.description,
-    alternates: { canonical: `/guides/${guide.slug}` },
+    alternates: {
+      canonical: `/guides/${guide.slug}`,
+      types: { 'text/markdown': `/guides/${guide.slug}.md` }
+    },
     openGraph: {
       title: guide.metaTitle,
       description: guide.description,
       url: absoluteUrl(`/guides/${guide.slug}`),
       siteName: 'BonusBridge',
       type: 'article',
+      publishedTime: guide.publishedAt,
+      modifiedTime: guide.updatedAt,
       locale: 'en_US'
     },
     twitter: {

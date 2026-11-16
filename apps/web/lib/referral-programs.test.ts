@@ -31,7 +31,8 @@ describe('referral programs', () => {
       'honey',
       'lyft',
       'rakuten',
-      'topcashback'
+      'topcashback',
+      'user-interviews'
     ])
     expect(unlistedStoreSlugs()).toContain('lemonade')
     expect(unlistedStoreSlugs()).toContain('visible')
