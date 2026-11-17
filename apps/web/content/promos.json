@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "id": "crocs-black-friday-sale-2026",
+    "store": "Crocs",
+    "storeSlug": null,
+    "title": "Black Friday sale, up to 60% off select styles",
+    "code": null,
+    "description": "Crocs lists up to 60% off select styles online, no code needed. Prices shown on the sale page already include the discount.",
+    "terms": "Online at Crocs.com only, select styles, while supplies last. Cannot be combined with other offers. Ends Nov 29, 2026, 11:59 pm MT.",
+    "url": "https://www.crocs.com/c/sale",
+    "startsAt": null,
+    "expiresAt": "2026-11-29T23:59:00-07:00",
+    "source": "brand newsletter and crocs.com sale page",
+    "checkedAt": "2026-11-17",
+    "category": "shopping"
+  }
+]
