@@ -4,7 +4,7 @@ import { absoluteUrl } from '@/app/seo'
 import { FTC_AFFILIATE_DISCLOSURE } from '@/lib/site-disclaimers'
 import { referralPrograms, type ReferralProgram } from '@/lib/referral-programs'
 
-const DISCLOSURES_UPDATED = '2026-11-16'
+const DISCLOSURES_UPDATED = '2026-11-24'
 const path = '/disclosures'
 
 function TermsLink({ program }: { program: ReferralProgram }) {
@@ -117,6 +117,12 @@ export default function DisclosuresPage() {
           November 16, 2026: added User Interviews under Side income. The public link is the general signup referral.
           Both people get $10 after a new participant is selected and completes a first study. Some featured studies pay
           $30 each. Checked the official participant referral article on that date.
+        </p>
+        <p>
+          November 24, 2026: added Respondent under Side income. The public link is the general signup referral. The
+          referrer bonus is $20 after a brand-new user earns $75 or more and the payment status is PAID. Official terms
+          do not state a fixed signup bonus for the new participant. Checked the official participant referral policy on
+          that date.
         </p>
         <p>
           Read the <Link href="/guides">comparison guides</Link>, <Link href="/privacy-policy">Privacy Policy</Link>, and{' '}

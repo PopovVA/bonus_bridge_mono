@@ -31,6 +31,7 @@ describe('referral programs', () => {
       'honey',
       'lyft',
       'rakuten',
+      'respondent',
       'topcashback',
       'user-interviews'
     ])
@@ -64,6 +65,18 @@ describe('referral programs', () => {
     expect(isPublicStoreSlug('chime')).toBe(true)
     expect(isPublicStoreSlug('robinhood')).toBe(false)
     expect(isPublicStoreSlug('missing')).toBe(false)
+    const respondent = getReferralProgram('respondent')
+    expect(respondent?.bucket).toBe(1)
+    expect(respondent?.publicOk).toBe(true)
+    expect(respondent?.referralUrl).toBe('https://app.respondent.io/r/vadimpopov-df8f1e320c02')
+    expect(respondent?.termsUrl).toBe(
+      'https://help.respondent.io/en/articles/5464425-respondent-referral-policy-for-participants'
+    )
+    expect(programClaim('respondent').length).toBeLessThanOrEqual(500)
+    expect(programClaim('respondent')).toContain('$20')
+    expect(programClaim('respondent')).toContain('payment status PAID')
+    expect(programClaim('respondent')).toContain('no fixed signup bonus')
+    expect(programClaim('respondent')).toContain('Checked Nov 24, 2026')
     expect(publicReferralCode('lyft')).toBe('VADIM53422')
     expect(publicReferralCode('rakuten')).toBeNull()
     expect(publicReferralCode('uber')).toBeNull()

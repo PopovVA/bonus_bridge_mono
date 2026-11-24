@@ -5,7 +5,7 @@ import PromosPage, { metadata, PromosPageContent, revalidate } from './page'
 import { parsePromos } from '@/lib/schemas/promo.schema'
 
 describe('promos page', () => {
-  it('ships an empty checked list with seo, disclosure, and breadcrumbs', async () => {
+  it('ships the checked list with seo, disclosure, and breadcrumbs', async () => {
     ;(globalThis as { React?: typeof React }).React = React
     expect(revalidate).toBe(3600)
     expect(metadata.title).toBe('Promo codes and limited-time offers')
@@ -20,13 +20,13 @@ describe('promos page', () => {
     })
     const html = renderToStaticMarkup(await PromosPage())
     expect(html).toContain('<h1')
-    expect(html).toContain('No promo codes right now')
-    expect(html).toContain('Browse guides')
-    expect(html).toContain('href="/articles"')
+    expect(html).toContain('Crocs')
+    expect(html).toContain('Black Friday sale, up to 60% off select styles')
+    expect(html).not.toContain('No promo codes right now')
     expect(html).toContain('BreadcrumbList')
     expect(html).toContain('independent comparison and guide site')
     expect(html).not.toContain('"@type":"Offer"')
-    expect(html).not.toContain('promo-card')
+    expect(html).toContain('promo-card')
   })
 
   it('orders active offers ahead of later and expired ones', () => {
@@ -112,5 +112,15 @@ describe('promos page', () => {
     expect(html).toContain('promo-card--expired')
     expect(html).toContain('Starts Dec 1, 2026, 12:00 AM UTC')
     expect(html).not.toContain('"@type":"Offer"')
+  })
+
+  it('shows the empty state when nothing is listed', () => {
+    ;(globalThis as { React?: typeof React }).React = React
+    const html = renderToStaticMarkup(
+      <PromosPageContent items={[]} now={new Date('2026-11-16T18:00:00.000Z')} knownSlugs={new Set()} />
+    )
+    expect(html).toContain('No promo codes right now')
+    expect(html).toContain('Browse guides')
+    expect(html).toContain('href="/articles"')
   })
 })

@@ -72,7 +72,8 @@ const PUBLIC_REFERRAL_URLS = [
   'https://www.topcashback.com/ref/member344836925437',
   'https://www.joinhoney.com/ref/nwpz6sw',
   'https://www.chime.com/r/vadimpopov1/',
-  'https://www.userinterviews.com/r/kdqtpxzqk'
+  'https://www.userinterviews.com/r/kdqtpxzqk',
+  'https://app.respondent.io/r/vadimpopov-df8f1e320c02'
 ] as const
 
 const ALLOWED_NON_INVENTORY = ['https://example.com']

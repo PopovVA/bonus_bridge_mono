@@ -96,5 +96,15 @@ describe('signup bonuses', () => {
     expect(storeSeoTitle({ ...interviews, provider: 'A Very Long Provider Name That Will Not Fit', amount: '$10' })).toBe(
       '$10 referral bonus'
     )
+    const respondent = requireSignupBonus('respondent')
+    expect(respondent.amount).toBeNull()
+    expect(respondent.checkedAt).toBe('2026-11-24')
+    expect(respondent.ctaLabel).toBe('Join Respondent')
+    expect(respondent.referralUrl).toBe('https://app.respondent.io/r/vadimpopov-df8f1e320c02')
+    expect(respondent.sourceUrl).toContain('help.respondent.io')
+    expect(storeSeoTitle(respondent)).toBe('Respondent referral program: terms explained')
+    expect(storeSeoDescription(respondent)).toContain('No fixed signup bonus')
+    expect(storeSeoDescription(respondent).startsWith('$')).toBe(false)
+    expect(storeFaqs(respondent)[0]?.answer).toContain('do not state a fixed amount')
   })
 })

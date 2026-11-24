@@ -62,8 +62,10 @@ function card(overrides: Partial<PromoCardModel> = {}): PromoCardModel {
 }
 
 describe('promo file schema', () => {
-  it('loads an empty live file and accepts the documented example', () => {
-    expect(promos).toEqual([])
+  it('loads the live file and accepts the documented example', () => {
+    expect(promos.map((item) => item.id)).toEqual(['crocs-black-friday-sale-2026'])
+    expect(promos[0]?.store).toBe('Crocs')
+    expect(promos[0]?.code).toBeNull()
     const readme = fs.readFileSync(path.resolve(import.meta.dirname, '../content/README.md'), 'utf8')
     const match = readme.match(/```json\n([\s\S]*?)\n```/)
     if (!match) throw new Error('missing example')

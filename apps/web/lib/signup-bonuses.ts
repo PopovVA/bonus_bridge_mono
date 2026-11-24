@@ -82,6 +82,17 @@ const DRAFTS: SignupBonusDraft[] = [
       'Both get $10 after a new participant is selected and completes a first study. First-time signups only. Some studies pay $30 each. Official User Interviews terms linked.',
     ctaLabel: 'Join User Interviews',
     checkedAt: '2026-11-16'
+  },
+  {
+    slug: 'respondent',
+    amount: null,
+    headline: 'Referrer gets $20 after a new user earns $75 or more',
+    condition:
+      'The new user must be brand-new, earn $75 or more from completed studies, and the payment status must be PAID. Official terms do not state a fixed signup bonus for the new participant. Study incentives are set by the researcher. A separate $50 project referral applies when a new user completes a specific $100 or higher project, up to 5 bonuses per project. This page uses the general signup referral, not a project link. Paid as a Tremendous virtual gift card, typically within 7 to 10 business days. Self-referrals and previously deleted accounts do not qualify.',
+    summary:
+      'Referrer gets $20 after a new user earns $75 or more from completed studies and is paid. No fixed signup bonus for the new participant. Official Respondent terms linked.',
+    ctaLabel: 'Join Respondent',
+    checkedAt: '2026-11-24'
   }
 ]
 
