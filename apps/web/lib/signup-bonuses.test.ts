@@ -105,6 +105,7 @@ describe('signup bonuses', () => {
     expect(storeSeoTitle(respondent)).toBe('Respondent referral program: terms explained')
     expect(storeSeoDescription(respondent)).toContain('No fixed signup bonus')
     expect(storeSeoDescription(respondent).startsWith('$')).toBe(false)
+    expect(storeSeoDescription(respondent).length).toBeLessThanOrEqual(155)
     expect(storeFaqs(respondent)[0]?.answer).toContain('do not state a fixed amount')
   })
 })
