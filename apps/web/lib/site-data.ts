@@ -65,7 +65,7 @@ const categories: Category[] = [
     name: 'Side income',
     slug: 'side-income',
     createdAt: ISO,
-    updatedAt: '2026-11-16T12:00:00.000Z'
+    updatedAt: '2026-11-24T12:00:00.000Z'
   },
   {
     id: '11111111-1111-4111-8111-111111111104',
@@ -83,7 +83,7 @@ const CATEGORY_STORE_ORDER: Record<string, string[]> = {
   finance: ['chime'],
   food: [],
   shopping: ['rakuten', 'topcashback', 'honey'],
-  'side-income': ['user-interviews'],
+  'side-income': ['user-interviews', 'respondent'],
   /* Empty order → alphabetical sort in `sortServicesForCategorySlug`. */
   travel: []
 }
@@ -429,6 +429,19 @@ const services: Service[] = [
     logoSrc: '/stores/user-interviews.svg',
     createdAt: '2026-11-16T12:00:00.000Z',
     updatedAt: '2026-11-16T12:00:00.000Z'
+  },
+  {
+    id: '22222222-2222-4222-8222-222222222218',
+    name: 'Respondent',
+    slug: 'respondent',
+    categoryId: CAT.sideIncome,
+    website: 'https://www.respondent.io/',
+    description:
+      'Respondent pays people for research studies only when a researcher invites them and they attend or complete the study. Screeners are unpaid. Incentives are in USD and are set by the researcher. A 5% fulfillment fee applies, with a $1 minimum. Payout is a Tremendous virtual gift card, typically 7 to 10 business days after the researcher confirms attendance. The general signup referral pays the referrer $20 after a brand-new user earns $75 or more from completed studies and the payment status is PAID. Official terms do not state a fixed signup bonus for the new participant. A separate $50 project referral applies when a new user completes a specific $100 or higher project, up to 5 bonuses per project. This page uses the general signup referral, not a project link. Self-referrals and previously deleted accounts do not qualify.',
+    logoSvg: undefined,
+    logoSrc: '/stores/respondent.svg',
+    createdAt: '2026-11-24T12:00:00.000Z',
+    updatedAt: '2026-11-24T12:00:00.000Z'
   }
 ]
 
@@ -517,6 +530,21 @@ const offers: Offer[] = [
     status: 'active',
     createdAt: '2026-11-16T12:00:00.000Z',
     updatedAt: '2026-11-16T12:00:00.000Z'
+  },
+  {
+    id: '33333333-3333-4333-8333-333333333313',
+    serviceId: '22222222-2222-4222-8222-222222222218',
+    title: 'Respondent referral: $20 after $75 earned',
+    previewText: programClaim('respondent'),
+    couponCode: null,
+    bonusAmount: null,
+    description: null,
+    referralUrl: requirePublicReferralUrl('respondent'),
+    terms:
+      'Referrer gets $20 after a brand-new user earns $75 or more from completed studies and the payment status is PAID. Official terms do not state a fixed signup bonus for the new participant. Study incentives are set by the researcher. This page uses the general signup referral, not a project link. Paid as a Tremendous virtual gift card, typically within 7 to 10 business days. Self-referrals and previously deleted accounts do not qualify. Checked Nov 24, 2026.',
+    status: 'active',
+    createdAt: '2026-11-24T12:00:00.000Z',
+    updatedAt: '2026-11-24T12:00:00.000Z'
   },
   {
     id: '33333333-3333-4333-8333-333333333399',

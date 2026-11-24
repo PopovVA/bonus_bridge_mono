@@ -112,6 +112,20 @@ const RAW_PROGRAMS: ReferralProgram[] = [
     ]
   },
   {
+    slug: 'respondent',
+    name: 'Respondent',
+    bucket: 1,
+    publicOk: true,
+    referralUrl: 'https://app.respondent.io/r/vadimpopov-df8f1e320c02',
+    termsUrl:
+      'https://help.respondent.io/en/articles/5464425-respondent-referral-policy-for-participants',
+    maxClaimText:
+      'Referrer bonus: $20 after a brand-new user earns $75 or more from completed studies, payment status PAID. Official terms state no fixed signup bonus for the new participant. Researcher sets incentives. $50 project referral when a new user completes a specific $100 or higher project, up to 5 bonuses per project. Tremendous gift card, typically in 7 to 10 business days. Self-referrals and previously deleted accounts do not qualify. General signup referral, not a project link. Checked Nov 24, 2026.',
+    disclosures: [
+      'The public link is the general signup referral. It is not a project referral link. Self-referrals and previously deleted accounts do not qualify.'
+    ]
+  },
+  {
     slug: 'public',
     name: 'Public',
     bucket: 2,

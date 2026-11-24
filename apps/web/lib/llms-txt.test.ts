@@ -13,6 +13,7 @@ describe('llms.txt', () => {
     expect(text).toContain('https://bonusbridge.io/guides/chime-referral-requirements')
     expect(text).toContain('https://bonusbridge.io/guides/rakuten-referral-bonus-how-it-works')
     expect(text).toContain('https://bonusbridge.io/stores/user-interviews')
+    expect(text).toContain('https://bonusbridge.io/stores/respondent')
     expect(text).toContain('https://bonusbridge.io/llms-full.txt')
     expect(text).toContain('https://bonusbridge.io/promos')
     expect(text).toContain('https://bonusbridge.io/promos.md')
